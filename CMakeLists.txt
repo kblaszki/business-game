@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.20)
 
-project(business-game)
+project(business-game VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CXX_EXTENSIONS OFF)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
@@ -15,9 +19,16 @@ list(APPEND
 include(FetchSFML)
 add_subdirectory(src)
 
-if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    list(APPEND
+            BASE_COMPILE_FLAGS
+            "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-O3>"
+            "$<$<CXX_COMPILER_ID:MSVC>:/Ox>")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    list(APPEND
+            BASE_COMPILE_FLAGS
+            "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-g>"
+            "$<$<CXX_COMPILER_ID:MSVC>:/Zi>")
     include(CTest)
-    if (BUILD_TESTING)
-        add_subdirectory(test)
-    endif ()
-endif ()
+    add_subdirectory(tests)
+endif()
