@@ -1,7 +1,6 @@
-//
-// Created by Dev on 07.06.2022.
-//
-#include "SFML/Graphics.hpp"
+/* Created by kblaszki */
+
+#include <SFML/Graphics.hpp>
 
 int main() {
   sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");

@@ -1,8 +1,6 @@
-//
-// Created by Dev on 07.06.2022.
-//
+/* Created by kblaszki */
 
-#include "LibraryCode.h"
+#include "LibraryCode.hpp"
 
 int sum(int a, int b)
 {

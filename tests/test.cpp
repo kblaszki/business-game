@@ -1,7 +1,6 @@
-//
-// Created by Dev on 07.06.2022.
-//
-#include "../src/sum-library/LibraryCode.h"
+/* Created by kblaszki */
+
+#include <sum-library/LibraryCode.hpp>
 
 #include <gtest/gtest.h>
 
