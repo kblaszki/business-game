@@ -1,7 +1,7 @@
 //
 // Created by Dev on 07.06.2022.
 //
-#include "../src/LibraryCode.h"
+#include "../src/sum-library/LibraryCode.h"
 
 #include <gtest/gtest.h>
 
