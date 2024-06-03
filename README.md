@@ -78,15 +78,3 @@ Open a pull request with a description of your changes.
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](https://opensource.org/license/mit) file for details.
-
-
-### Wyjaśnienie struktury `README.md`:
-
-- **Installation**: Sekcja opisująca wymagania wstępne i sposób klonowania repozytorium.
-- **Building the Project**: Instrukcje dotyczące budowania projektu za pomocą `CMakePresets.json`.
-- **Running the Game**: Informacje na temat uruchamiania gry po zbudowaniu.
-- **Running the Tests**: Kroki dotyczące uruchamiania testów jednostkowych.
-- **Contributing**: Wskazówki dotyczące kontrybucji do projektu.
-- **License**: Informacje licencyjne.
-
-Ten plik `README.md` zapewnia kompletną dokumentację, która powinna być pomocna zarówno dla deweloperów, jak i użytkowników końcowych Twojego projektu.
