@@ -1,7 +1,7 @@
 /* Created by kblaszki */
 #pragma once
 
-#include "WindowI.hpp"
+#include <core/WindowI.hpp>
 
 #include <SFML/Graphics.hpp>
 #include <memory>
@@ -9,7 +9,7 @@
 class GameController
 {
 public:
-    GameController();
+    GameController(std::unique_ptr<WindowI>&& gameWindow);
 
     void run();
 private:

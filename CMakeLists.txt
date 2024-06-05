@@ -17,6 +17,8 @@ list(APPEND
         "$<$<CXX_COMPILER_ID:MSVC>:/W4;/WX>")
 
 include(FetchSFML)
+
+include_directories(src)
 add_subdirectory(src)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -30,5 +32,5 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
             "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-g>"
             "$<$<CXX_COMPILER_ID:MSVC>:/Zi>")
     include(CTest)
-    add_subdirectory(tests)
+    add_subdirectory(tests EXCLUDE_FROM_ALL)
 endif()

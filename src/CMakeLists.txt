@@ -2,8 +2,8 @@ add_subdirectory(sum-library)
 
 add_executable(game 
     main.cpp
-    GameController.cpp
-    WindowSFML.cpp
+    controllers/GameController.cpp
+    core/WindowSFML.cpp
 )
 target_compile_features(game PRIVATE cxx_std_20)
 target_compile_options(game PRIVATE ${BASE_COMPILE_FLAGS})

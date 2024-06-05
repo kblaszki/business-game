@@ -1,10 +1,9 @@
 /* Created by kblaszki */
 
 #include "GameController.hpp"
-#include "WindowSFML.hpp"
 
-GameController::GameController()
- : window{std::make_unique<WindowSFML>()}
+GameController::GameController(std::unique_ptr<WindowI>&& gameWindow)
+ : window{std::move(gameWindow)}
 {
 }
 

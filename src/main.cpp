@@ -1,10 +1,11 @@
 /* Created by kblaszki */
 
-#include "GameController.hpp"
+#include "controllers/GameController.hpp"
+#include "core/WindowSFML.hpp"
 
 int main()
 {
-    GameController game{};
+    GameController game{std::make_unique<WindowSFML>()};
     game.run();
 
     return EXIT_SUCCESS;
