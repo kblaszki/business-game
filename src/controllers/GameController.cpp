@@ -2,9 +2,21 @@
 
 #include "GameController.hpp"
 
+#include <SFML/Graphics.hpp>
+
 GameController::GameController(std::unique_ptr<WindowI>&& gameWindow)
  : window{std::move(gameWindow)}
+ , eventController{std::make_unique<EventController>(*window)}
 {
+    eventController->registerEventHandler(sf::Event::Closed, [this](const sf::Event&) {
+        window->close();
+    });
+    eventController->registerEventHandler(sf::Event::KeyPressed, [this](const sf::Event& event) {
+        if(sf::Keyboard::Escape == event.key.code)
+        {
+            window->close();
+        }
+    });
 }
 
 void GameController::run()
@@ -14,14 +26,7 @@ void GameController::run()
 
     while (window->isOpen())
     {
-        sf::Event event{};
-        while (window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed)
-            window->close();
-        }
-        if(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape) {
-            window->close();
-        }
+        eventController->handleEvents();
 
         window->clear();
         window->draw(shape);

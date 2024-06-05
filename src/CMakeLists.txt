@@ -2,6 +2,7 @@ add_subdirectory(sum-library)
 
 add_executable(game 
     main.cpp
+    controllers/EventController.cpp
     controllers/GameController.cpp
     core/WindowSFML.cpp
 )

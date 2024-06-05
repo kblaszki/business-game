@@ -1,9 +1,10 @@
 /* Created by kblaszki */
 #pragma once
 
+#include "EventController.hpp"
+
 #include <core/WindowI.hpp>
 
-#include <SFML/Graphics.hpp>
 #include <memory>
 
 class GameController
@@ -15,4 +16,5 @@ public:
 private:
 
     std::unique_ptr<WindowI> window;
+    std::unique_ptr<EventController> eventController;
 };
