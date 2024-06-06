@@ -2,6 +2,9 @@
 
 This is a 2D board game developed using the SFML library.
 
+Game name suggestions:
+ - Empire Legends - Capital Pursuit | namespace elcp
+
 ## Table of Contents
 
 - [Installation](#installation)
