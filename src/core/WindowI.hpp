@@ -1,14 +1,9 @@
 /* Created by kblaszki */
 #pragma once
 
+#include "EventCollectorI.hpp"
+
 #include <SFML/Graphics.hpp>
-
-struct EventCollectorI
-{
-    virtual ~EventCollectorI() = default;
-    virtual bool pollEvent(sf::Event& event) = 0;
-};
-
 struct WindowI : public EventCollectorI
 {
     virtual ~WindowI() = default;

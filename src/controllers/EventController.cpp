@@ -1,12 +1,14 @@
 /* Created by kblaszki */
 #include "EventController.hpp"
 
+#include <utils/EventPrinter.hpp>
+
 #include <iostream>
+#include <string>
 
 EventController::EventController(EventCollectorI& eventCollector)
  : eventCollector{eventCollector}
  , eventHandlers{}
- , newId{}
 {
 }
 
@@ -15,35 +17,29 @@ void EventController::handleEvents()
     sf::Event event{};
         while (eventCollector.pollEvent(event)) 
         {
-            std::cerr << "EVENT " << event.type << std::endl;
-            auto handlers = eventHandlers.find(event.type);
-            if(handlers not_eq eventHandlers.end())
+            std::cerr << to_string(event) << std::endl;
+            auto handler = eventHandlers.find(event.type);
+            if(eventHandlers.end() not_eq handler)
             {
-                for(const auto& handler : handlers->second)
-                {
-                    handler.second(event);
-                }
+                handler->second(event);
             }
         }
 }
 
-std::uint32_t EventController::registerEventHandler(const sf::Event::EventType eventType, std::function<void(const sf::Event&)>&& handler)
+void EventController::registerEventHandler(const sf::Event::EventType eventType, EventHandler&& handler)
 {
-    auto handlers = eventHandlers.find(eventType);
-    if(handlers not_eq eventHandlers.end())
+    if(eventHandlers.cend() not_eq eventHandlers.find(eventType))
     {
-        handlers->second.emplace(newId++, std::move(handler));
-        return newId - 1u;
+        throw std::runtime_error{"Can't register event:" + std::to_string(eventType) + " handler, because it already exists!"};
     }
-    eventHandlers.emplace(eventType, std::map<std::uint32_t, std::function<void(const sf::Event&)>>{{newId++, std::move(handler)}});
-    return newId - 1u;
+    eventHandlers.emplace(eventType, std::move(handler));
 }
 
-void EventController::unregisterEventHandler(const sf::Event::EventType eventType, const std::uint32_t id)
+void EventController::unregisterEventHandler(const sf::Event::EventType eventType)
 {
-    auto handlers = eventHandlers.find(eventType);
-    if(handlers not_eq eventHandlers.end())
+    if(eventHandlers.cend() == eventHandlers.find(eventType))
     {
-        handlers->second.erase(id);
+        throw std::runtime_error{"Can't unregister event:" + std::to_string(eventType) + " handler, because it not exists!"};
     }
+    eventHandlers.erase(eventType);
 }
