@@ -44,16 +44,17 @@ std::string to_string(const sf::Event& event)
 
 std::string to_string(const sf::Event::SizeEvent& event)
 {
-    return "width:" + std::to_string(event.width) + ", height:" + std::to_string(event.height);
+    return "width:" + std::to_string(event.width)
+           + ", height:" + std::to_string(event.height);
 }
 
 std::string to_string(const sf::Event::KeyEvent& event)
 {
-    return "key:" + sf::Keyboard::getDescription(event.scancode) 
-            + ", isAltPressed=:" + std::to_string(event.alt)
-            + ", isCtrlPressed=:" + std::to_string(event.control)
-            + ", isShiftPressed=:" + std::to_string(event.shift)
-            + ", isSystemPressed=:" + std::to_string(event.system);
+    return "key:" + sf::Keyboard::getDescription(event.scancode)
+           + ", isAltPressed=:" + std::to_string(event.alt)
+           + ", isCtrlPressed=:" + std::to_string(event.control)
+           + ", isShiftPressed=:" + std::to_string(event.shift)
+           + ", isSystemPressed=:" + std::to_string(event.system);
 }
 
 std::string to_string(const sf::Event::TextEvent& event)
@@ -92,23 +93,27 @@ std::string to_string(const sf::Event::MouseButtonEvent& event)
         default:
             mouseButton = "Unknow";
     }
-    return "button:" + mouseButton + ", x:" + std::to_string(event.x) + ", y:" + std::to_string(event.y);
+    return "button:" + mouseButton + ", x:" + std::to_string(event.x)
+           + ", y:" + std::to_string(event.y);
 }
 
 std::string to_string(const sf::Event::MouseWheelEvent& event)
 {
-    return "delta:" + std::to_string(event.delta) + ", x:" + std::to_string(event.x) + ", y:" + std::to_string(event.y);
+    return "delta:" + std::to_string(event.delta) + ", x:"
+           + std::to_string(event.x) + ", y:" + std::to_string(event.y);
 }
 
 std::string to_string(const sf::Event::MouseWheelScrollEvent& event)
 {
-    return "wheel:" + std::string{sf::Mouse::Wheel::HorizontalWheel == event.wheel ? "HorizontalWheel" : "VerticalWheel"}
-            + ", delta:" + std::to_string(event.delta)
-            + ", x:" + std::to_string(event.x)
-            + ", y:" + std::to_string(event.y);
+    return "wheel:"
+           + std::string{sf::Mouse::Wheel::HorizontalWheel == event.wheel
+                             ? "HorizontalWheel"
+                             : "VerticalWheel"}
+           + ", delta:" + std::to_string(event.delta) + ", x:"
+           + std::to_string(event.x) + ", y:" + std::to_string(event.y);
 }
 
-std::string to_string(const sf::Event::JoystickMoveEvent& event)
+std::string to_string(const sf::Event::JoystickMoveEvent&)
 {
     return ""; // TODO: Finish it ;)
 }

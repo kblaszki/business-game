@@ -13,6 +13,7 @@ struct EventControllerI
 
     virtual ~EventControllerI() = default;
     virtual void handleEvents() = 0;
-    virtual void registerEventHandler(sf::Event::EventType eventType, EventHandler&& handler) = 0;
+    virtual void registerEventHandler(sf::Event::EventType eventType,
+                                      EventHandler&& handler) = 0;
     virtual void unregisterEventHandler(sf::Event::EventType eventType) = 0;
 };

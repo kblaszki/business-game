@@ -13,8 +13,8 @@ public:
     GameController(std::unique_ptr<WindowI>&& gameWindow);
 
     void run();
-private:
 
+private:
     std::unique_ptr<WindowI> window;
     std::unique_ptr<EventController> eventController;
 };

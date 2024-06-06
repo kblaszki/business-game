@@ -1,0 +1,106 @@
+# clang-format
+# Created by kblaszki
+
+# Specify the coding style and language standard
+BasedOnStyle: LLVM
+Language: Cpp
+Standard: Cpp11
+
+# Indentation settings
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
+
+# Alignment settings
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignConsecutiveMacros: true
+AlignEscapedNewlines: Right
+AlignOperands: true
+AlignTrailingComments: true
+
+# Allow short forms on a single line
+AllowShortBlocksOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: All
+AllowShortLoopsOnASingleLine: false
+
+# Allow all elements on the next line
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+
+# Breaking settings
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: Yes
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeBraces: Custom
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializers: BeforeComma
+BreakInheritanceList: BeforeComma
+
+# Brace wrapping settings
+BraceWrapping:
+  AfterCaseLabel:        true
+  AfterClass:            true
+  AfterControlStatement: true
+  AfterEnum:             true
+  AfterFunction:         true
+  AfterNamespace:        true
+  AfterStruct:           true
+  AfterUnion:            true
+  BeforeCatch:           true
+  BeforeElse:            true
+  SplitEmptyFunction:    true
+
+# Spacing settings
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: Never
+SpaceBeforeRangeBasedForLoopColon: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInCStyleCastParentheses: false
+SpacesInContainerLiterals: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+
+# Include settings
+SortIncludes: true
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:       '^<(src|controllers|core|sum-library|utils)/'
+    Priority:    2
+  - Regex:       '^<SFML/'
+    Priority:    3
+  - Regex:       '^<(tests|mocks|stubs|unit_tests|component_tests)/'
+    Priority:    4
+  - Regex:       '^(<|"(gtest|gmock)/)'
+    Priority:    5
+  - Regex:       '<[[:alnum:].]+>'
+    Priority:    6
+  - Regex:       '^"'
+    Priority:    1
+
+# Other settings
+Cpp11BracedListStyle: true
+FixNamespaceComments: true
+NamespaceIndentation: None
+ObjCBinPackProtocolList: Never
+PointerAlignment: Left
+ReflowComments: true
+SortUsingDeclarations: true
+BinPackArguments: false
+BinPackParameters: false
+AccessModifierOffset: -4

@@ -13,7 +13,8 @@ public:
     EventController(EventCollectorI& eventCollector);
 
     void handleEvents() override;
-    void registerEventHandler(sf::Event::EventType eventType, EventHandler&& handler) override;
+    void registerEventHandler(sf::Event::EventType eventType,
+                              EventHandler&& handler) override;
     void unregisterEventHandler(sf::Event::EventType eventType) override;
 
 private:

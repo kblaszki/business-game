@@ -29,8 +29,16 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
     list(APPEND
             BASE_COMPILE_FLAGS
-            "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-g>"
+           "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-g>"
             "$<$<CXX_COMPILER_ID:MSVC>:/Zi>")
+
+    file(GLOB_RECURSE FORMAT_SOURCES "src/*.cpp" "src/*.hpp" "tests/*.cpp" "tests/*.hpp")
+    
+    add_custom_target(
+        format
+        COMMAND clang-format -i ${FORMAT_SOURCES}
+    )
+    
     include(CTest)
     add_subdirectory(tests EXCLUDE_FROM_ALL)
 endif()
