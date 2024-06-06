@@ -5,6 +5,7 @@ add_executable(game
     controllers/EventController.cpp
     controllers/GameController.cpp
     core/WindowSFML.cpp
+    utils/EventPrinter.cpp
 )
 target_compile_features(game PRIVATE cxx_std_20)
 target_compile_options(game PRIVATE ${BASE_COMPILE_FLAGS})
