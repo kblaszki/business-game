@@ -59,7 +59,7 @@ std::string to_string(const sf::Event::KeyEvent& event)
 
 std::string to_string(const sf::Event::TextEvent& event)
 {
-    return "unicode:" + event.unicode;
+    return "unicode:" + std::to_string(event.unicode);
 }
 
 std::string to_string(const sf::Event::MouseMoveEvent& event)

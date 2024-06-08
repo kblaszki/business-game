@@ -1,0 +1,32 @@
+---
+Checks: >
+  -*,
+  bugprone-*,        # Włącza wszystkie kontrole z kategorii bugprone
+  clang-analyzer-*,  # Włącza wszystkie kontrole analizatora Clang
+  performance-*,     # Włącza wszystkie kontrole z kategorii performance
+  readability-*,     # Włącza wszystkie kontrole z kategorii readability
+  modernize-*        # Włącza wszystkie kontrole z kategorii modernize
+WarningsAsErrors: '*'
+HeaderFilterRegex: '.*'
+AnalyzeTemporaryDtors: true
+CheckOptions:
+  - key:             readability-identifier-naming.VariableCase
+    value:           camelCase
+  - key:             readability-identifier-naming.ClassCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.FunctionCase
+    value:           camelCase
+  - key:             modernize-use-nullptr.NullMacros
+    value:           NULL
+  - key:             modernize-use-nullptr.ReplaceMacros
+    value:           true
+  - key:             modernize-use-auto.MinTypeNameLength
+    value:           5
+  - key:             performance-inefficient-vector-operation.CheckMove
+    value:           true
+  - key:             clang-analyzer-optin.performance.Padding
+    value:           true
+...
+
+ExcludePaths:
+  - build/*
