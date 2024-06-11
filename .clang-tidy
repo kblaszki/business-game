@@ -1,11 +1,11 @@
 ---
 Checks: >
   -*,
-  bugprone-*,        # Włącza wszystkie kontrole z kategorii bugprone
-  clang-analyzer-*,  # Włącza wszystkie kontrole analizatora Clang
-  performance-*,     # Włącza wszystkie kontrole z kategorii performance
-  readability-*,     # Włącza wszystkie kontrole z kategorii readability
-  modernize-*        # Włącza wszystkie kontrole z kategorii modernize
+  bugprone-*,
+  clang-analyzer-*,
+  performance-*,
+  readability-*,
+  modernize-*
 WarningsAsErrors: '*'
 HeaderFilterRegex: '.*'
 AnalyzeTemporaryDtors: true
