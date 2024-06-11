@@ -1,5 +1,3 @@
-add_subdirectory(sum-library)
-
 add_library(gameLib
     SHARED
         controllers/EventController.cpp

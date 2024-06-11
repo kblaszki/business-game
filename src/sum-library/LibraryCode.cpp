@@ -1,8 +1,0 @@
-/* Created by kblaszki */
-
-#include "LibraryCode.hpp"
-
-int sum(int a, int b)
-{
-    return a + b;
-}
