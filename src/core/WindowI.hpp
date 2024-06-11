@@ -4,10 +4,11 @@
 #include "EventCollectorI.hpp"
 
 #include <SFML/Graphics.hpp>
+
 struct WindowI : public EventCollectorI
 {
     virtual ~WindowI() = default;
-    virtual bool isOpen() = 0;
+    virtual bool isOpen() const = 0;
     virtual void close() = 0;
     virtual void clear(const sf::Color& color = sf::Color::Black) = 0;
     virtual void

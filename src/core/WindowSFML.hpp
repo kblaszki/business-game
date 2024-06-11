@@ -11,7 +11,7 @@ public:
     WindowSFML();
     ~WindowSFML() override = default;
 
-    bool isOpen() override;
+    bool isOpen() const override;
     void close() override;
     void clear(const sf::Color& color = sf::Color::Black) override;
     void

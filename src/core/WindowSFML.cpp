@@ -8,7 +8,7 @@ WindowSFML::WindowSFML()
     window.setFramerateLimit(60);
 }
 
-bool WindowSFML::isOpen()
+bool WindowSFML::isOpen() const
 {
     return window.isOpen();
 }
