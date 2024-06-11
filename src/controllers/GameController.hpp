@@ -1,7 +1,7 @@
 /* Created by kblaszki */
 #pragma once
 
-#include "EventController.hpp"
+#include "EventControllerI.hpp"
 
 #include <core/WindowI.hpp>
 
@@ -10,11 +10,12 @@
 class GameController
 {
 public:
-    GameController(std::unique_ptr<WindowI>&& gameWindow);
+    GameController(std::unique_ptr<WindowI>&& gameWindow,
+                   std::unique_ptr<EventControllerI>&& eventController);
 
     void run();
 
 private:
     std::unique_ptr<WindowI> window;
-    std::unique_ptr<EventController> eventController;
+    std::unique_ptr<EventControllerI> eventController;
 };

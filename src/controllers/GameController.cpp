@@ -4,9 +4,11 @@
 
 #include <SFML/Graphics.hpp>
 
-GameController::GameController(std::unique_ptr<WindowI>&& gameWindow)
+GameController::GameController(
+    std::unique_ptr<WindowI>&& gameWindow,
+    std::unique_ptr<EventControllerI>&& gameEventController)
     : window{std::move(gameWindow)}
-    , eventController{std::make_unique<EventController>(*window)}
+    , eventController{std::move(gameEventController)}
 {
     eventController->registerEventHandler(
         sf::Event::Closed, [this](const sf::Event&) { window->close(); });
