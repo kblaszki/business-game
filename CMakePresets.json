@@ -48,6 +48,12 @@
         "configurePreset": "release",
         "description": "Build with Release configuration"
       }
+    ],
+    "testPresets": [
+      {
+        "name": "debug",
+        "configurePreset": "debug"
+      }
     ]
   }
   
