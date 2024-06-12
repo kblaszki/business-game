@@ -9,6 +9,7 @@
 #include <gtest/gtest.h>
 
 using namespace ::testing;
+
 class GameControllerShould : public Test
 {
 public:
