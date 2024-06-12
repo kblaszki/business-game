@@ -16,23 +16,27 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         compiler: [clang, gcc]
         include:
-        - os: windows-latest
-          compiler: clang
-        - os: ubuntu-latest
-          compiler: gcc
+          - os: windows-latest
+            compiler: clang
+          - os: ubuntu-latest
+            compiler: gcc
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Ninja
-        if: runner.os != 'Windows'
+      - name: Set up CMake
+        uses: aminya/setup-cmake@v1.9
+
+      - name: Set up Ninja on Linux
+        if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install -y ninja-build
 
-      - name: Set up Compiler
+      - name: Set up Clang on Windows
         if: matrix.os == 'windows-latest' && matrix.compiler == 'clang'
         run: choco install llvm --version=12.0.0
-      - name: Set up Compiler
+
+      - name: Set up GCC on Ubuntu
         if: matrix.os == 'ubuntu-latest' && matrix.compiler == 'gcc'
         run: sudo apt-get install -y gcc g++ ninja-build
 
