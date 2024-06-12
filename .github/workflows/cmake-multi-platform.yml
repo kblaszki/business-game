@@ -14,12 +14,15 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        compiler: [clang, gcc]
         include:
           - os: windows-latest
-            compiler: clang
+            compiler: llvm
+            c_compiler: clang
+            cpp_compiler: clang++
           - os: ubuntu-latest
             compiler: gcc
+            c_compiler: gcc
+            cpp_compiler: g++
 
     steps:
       - name: Checkout repository
@@ -29,11 +32,11 @@ jobs:
         uses: aminya/setup-cpp@v1
         with:
           compiler: ${{ matrix.compiler }}
-          cmakeVersion: latest
-          buildTools: ninja
+          cmake: true
+          ninja: true
 
       - name: Configure CMake
-        run: cmake --preset debug -DCMAKE_C_COMPILER=${{ matrix.compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}++
+        run: cmake --preset debug -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
 
       - name: Build
         run: cmake --build --preset debug
