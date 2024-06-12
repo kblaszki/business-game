@@ -15,11 +15,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         compiler: [clang, gcc]
-      exclude:
+        include:
         - os: windows-latest
-          compiler: gcc
-        - os: ubuntu-latest
           compiler: clang
+        - os: ubuntu-latest
+          compiler: gcc
 
     steps:
       - name: Checkout repository
