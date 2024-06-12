@@ -25,20 +25,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up CMake
-        uses: aminya/setup-cmake@v1.9
-
-      - name: Set up Ninja on Linux
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install -y ninja-build
-
-      - name: Set up Clang on Windows
-        if: matrix.os == 'windows-latest' && matrix.compiler == 'clang'
-        run: choco install llvm --version=12.0.0
-
-      - name: Set up GCC on Ubuntu
-        if: matrix.os == 'ubuntu-latest' && matrix.compiler == 'gcc'
-        run: sudo apt-get install -y gcc g++ ninja-build
+      - name: Set up C++ environment
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          cmakeVersion: latest
+          buildTools: ninja
 
       - name: Configure CMake
         run: cmake --preset debug -DCMAKE_C_COMPILER=${{ matrix.compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}++
