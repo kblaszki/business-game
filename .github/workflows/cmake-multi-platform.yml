@@ -65,7 +65,7 @@ jobs:
         run: cmake --preset debug -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
 
       - name: Build
-        run: cmake --build --preset debug
+        run: cmake --build --preset debug --target controllers_test
 
       - name: Test
         run: ctest --preset debug
