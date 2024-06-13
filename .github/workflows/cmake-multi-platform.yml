@@ -48,7 +48,11 @@ jobs:
             libfreetype6-dev \
             libglew-dev \
             libjpeg-dev \
-            libsndfile1-dev
+            libsndfile1-dev \
+            libxcursor-dev \
+            libx11-dev \
+            libxrender-dev \
+            libxi-dev
             
       - name: Set up C++ environment
         uses: aminya/setup-cpp@v1
