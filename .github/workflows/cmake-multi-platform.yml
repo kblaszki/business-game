@@ -33,6 +33,10 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Install OpenGL libraries (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev mesa-common-dev
+
       - name: Set up C++ environment
         uses: aminya/setup-cpp@v1
         with:
