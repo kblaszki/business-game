@@ -17,9 +17,9 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         include:
           - os: windows-latest
-            compiler: gcc
-            c_compiler: gcc
-            cpp_compiler: g++
+            compiler: msvc
+            c_compiler: cl
+            cpp_compiler: cl
           - os: ubuntu-latest
             compiler: llvm
             c_compiler: clang
