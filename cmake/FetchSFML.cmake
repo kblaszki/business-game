@@ -1,7 +1,7 @@
 include(FetchContent)
 
 FetchContent_Declare(sfml
-        GIT_REPOSITORY git@github.com:SFML/SFML.git
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
         GIT_TAG 2.6.1)
 FetchContent_GetProperties(sfml)
 if (NOT sfml_POPULATED)
