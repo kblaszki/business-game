@@ -40,6 +40,8 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+      with:
+        ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Get CMake and Ninja
       uses: lukka/get-cmake@latest
@@ -84,10 +86,12 @@ jobs:
         echo "Using $(which ccache)"
         ccache --version
 
-    - name: Set up SSH keys
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
 
     - name: Configure CMake
       run: cmake --preset debug -DCMAKE_VERBOSE_MAKEFILE=ON ${{matrix.platform.flags}}
