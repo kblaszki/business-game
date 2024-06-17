@@ -33,7 +33,7 @@ jobs:
       matrix:
         platform:
         - { name: Windows MinGW, os: windows-2022, flags: -DSFML_USE_MESA3D=TRUE -DCMAKE_CXX_COMPILER=g++ -GNinja }
-        - { name: Linux GCC, os: ubuntu-22.04, flags: -GNinja }
+        - { name: Linux GCC, os: ubuntu-22.04, flags: -DOPENAL_LIBRARY=/usr/lib/x86_64-linux-gnu/libopenal.so -DOPENAL_INCLUDE_DIR=/usr/include/AL -GNinja }
         type:
         - { name: Debug }
 
@@ -73,6 +73,11 @@ jobs:
         fluxbox \
         ccache \
         gcovr
+
+    - name: Verify OpenAL installation
+      if: runner.os == 'Linux'
+      run: |
+        dpkg -L libopenal-dev
     
     - name: Remove ALSA Library
       if: runner.os == 'Linux'
