@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: environment-${{github.ref}}
+  cancel-in-progress: true
+
+env:
+  DISPLAY: ":99" # Display number to use for the X server
+  GALLIUM_DRIVER: llvmpipe # Use Mesa 3D software OpenGL renderer
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: ${{ matrix.platform.name }} ${{ matrix.type.name }}
+    runs-on: ${{ matrix.platform.os }}
+
+    env:
+      CMAKE_CXX_COMPILER_LAUNCHER: ccache # Use ccache to cache C++ compiler output
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+        - { name: Windows MinGW, os: windows-2022, flags: -DSFML_USE_MESA3D=TRUE -DCMAKE_CXX_COMPILER=g++ -GNinja }
+        - { name: Linux GCC, os: ubuntu-22.04, flags: -GNinja }
+        type:
+        - { name: Debug }
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Get CMake and Ninja
+      uses: lukka/get-cmake@latest
+      with:
+        cmakeVersion: ${{ runner.os == 'Windows' && '3.25' || '3.22' }}
+        ninjaVersion: latest
+
+    - name: Install Linux Dependencies
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update && sudo apt-get install xorg-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libdrm-dev libgbm-dev xvfb fluxbox ccache gcovr
+
+    - name: Remove ALSA Library
+      if: runner.os == 'Linux'
+      run: sudo apt-get remove -y libasound2
+
+    - name: Setup CCache
+      uses: hendrikmuhs/ccache-action@v1.2.12
+      with:
+        verbose: 2
+        key: ${{ matrix.platform.name }}-${{ matrix.type.name }}
+
+    - name: Cache MinGW
+      if: matrix.platform.name == 'Windows MinGW'
+      id: mingw-cache
+      uses: actions/cache@v4
+      with:
+        path: "C:\\Program Files\\mingw64"
+        key: winlibs-x86_64-posix-seh-gcc-12.2.0-llvm-16.0.0-mingw-w64msvcrt-10.0.0-r5
+
+    - name: Install MinGW
+      if: matrix.platform.name == 'Windows MinGW' && steps.mingw-cache.outputs.cache-hit != 'true'
+      run: |
+        curl -Lo mingw64.zip https://github.com/brechtsanders/winlibs_mingw/releases/download/12.2.0-16.0.0-10.0.0-msvcrt-r5/winlibs-x86_64-posix-seh-gcc-12.2.0-llvm-16.0.0-mingw-w64msvcrt-10.0.0-r5.zip
+        unzip -qq -d "C:\\Program Files" mingw64.zip
+
+    - name: Add MinGW to PATH and remove MinGW-supplied CCache
+      if: runner.os == 'Windows'
+      run: |
+        echo "C:\\Program Files\\mingw64\\bin" >> $GITHUB_PATH
+        rm -f "C:\\Program Files\\mingw64\\bin\\ccache.exe"
+        echo "Using $(which ccache)"
+        ccache --version
+
+    - name: Configure CMake
+      run: cmake --preset debug -DCMAKE_VERBOSE_MAKEFILE=ON ${{matrix.platform.flags}}
+
+    - name: Build
+      run: cmake --build --preset debug --target controllers_test
+
+    - name: Test
+      run: ctest --preset debug
