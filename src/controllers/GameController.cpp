@@ -2,8 +2,6 @@
 
 #include "GameController.hpp"
 
-#include <SFML/Graphics.hpp>
-
 GameController::GameController(
     std::unique_ptr<WindowI>&& gameWindow,
     std::unique_ptr<EventControllerI>&& gameEventController)
