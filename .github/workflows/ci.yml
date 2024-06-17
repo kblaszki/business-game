@@ -50,8 +50,30 @@ jobs:
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
       run: |
-        sudo apt-get update && sudo apt-get install libopenal-dev xorg-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libdrm-dev libgbm-dev xvfb fluxbox ccache gcovr
-
+        sudo apt-get update
+        sudo apt-get install -y \
+        libgl1-mesa-dev \
+        libegl1-mesa-dev \
+        libudev-dev \
+        libopenal-dev \
+        libdrm-dev \
+        libgbm-dev \
+        libvorbis-dev \
+        libflac-dev \
+        libxrandr-dev \
+        libfreetype6-dev \
+        libglew-dev \
+        libjpeg-dev \
+        libsndfile1-dev \
+        libxcursor-dev \
+        libx11-dev \
+        libxrender-dev \
+        libxi-dev \
+        xvfb \
+        fluxbox \
+        ccache \
+        gcovr
+    
     - name: Remove ALSA Library
       if: runner.os == 'Linux'
       run: sudo apt-get remove -y libasound2
