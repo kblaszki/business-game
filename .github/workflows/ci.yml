@@ -112,7 +112,13 @@ jobs:
         ccache --version
 
     - name: Prepare Test
-      run: Xvfb $DISPLAY -screen 0 640x480x24 && sleep 5
+      run: |
+        set -e
+        # Start up Xvfb and fluxbox to host display tests
+        if [ "${{ runner.os }}" == "Linux" ]; then
+          Xvfb $DISPLAY -screen 0 640x480x24 &
+          sleep 5
+        fi
 
     - name: Configure CMake
       run: cmake --preset debug -DCMAKE_VERBOSE_MAKEFILE=ON ${{matrix.platform.flags}}
