@@ -111,6 +111,9 @@ jobs:
         echo "Using $(which ccache)"
         ccache --version
 
+    - name: Prepare Test
+      run: Xvfb $DISPLAY -screen 0 640x480x24 && sleep 5
+
     - name: Configure CMake
       run: cmake --preset debug -DCMAKE_VERBOSE_MAKEFILE=ON ${{matrix.platform.flags}}
 
