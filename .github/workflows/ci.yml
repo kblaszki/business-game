@@ -111,7 +111,13 @@ jobs:
         echo "Using $(which ccache)"
         ccache --version
 
-    - name: Prepare Test
+    - name: Configure CMake - Debug
+      run: cmake --preset debug -DCMAKE_VERBOSE_MAKEFILE=ON ${{matrix.platform.flags}}
+
+    - name: Build Tests
+      run: cmake --build --preset debug --target controllers_test
+
+    - name: Prepare Tests
       run: |
         set -e
         # Start up Xvfb and fluxbox to host display tests
@@ -120,11 +126,11 @@ jobs:
           sleep 5
         fi
 
-    - name: Configure CMake
-      run: cmake --preset debug -DCMAKE_VERBOSE_MAKEFILE=ON ${{matrix.platform.flags}}
-
-    - name: Build
-      run: cmake --build --preset debug --target controllers_test
-
-    - name: Test
+    - name: Run Tests
       run: ctest --preset debug
+
+    - name: Configure CMake - Release
+      run: cmake --preset release -DCMAKE_VERBOSE_MAKEFILE=ON ${{matrix.platform.flags}}
+
+    - name: Build Game
+      run: cmake --build --preset release --target game
