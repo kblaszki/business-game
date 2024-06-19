@@ -50,8 +50,7 @@ cmake --preset debug
 2. Build the project:
 
 ```sh
-cd ./build/release || cd ./build/debug
-cmake --build .
+cmake --build --preset debug/release --target game
 ```
 
 ## Running the Game
@@ -68,7 +67,7 @@ Build the project with the debug preset as described in the Building the Project
 Run the tests executable located in the build directory. For example:
 
 ```sh
-./build/debug/bin/some_tests.exe
+ctest --preset debug
 ```
 ## Contributing
 Contributions are welcome! Please follow these steps to contribute:
