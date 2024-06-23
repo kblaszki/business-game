@@ -52,7 +52,10 @@
   "testPresets": [
     {
       "name": "debug",
-      "configurePreset": "debug"
+      "configurePreset": "debug",
+      "execution": {
+        "timeout": 30
+      }
     }
   ]
 }
