@@ -1,3 +1,6 @@
+/* Created by kblaszki */
+#pragma once
+
 #include <functional>
 #include <iostream>
 #include <list>
@@ -10,9 +13,9 @@ public:
     using iterator = typename std::list<T>::iterator;
     using const_iterator = typename std::list<T>::const_iterator;
 
-    UnRegisterer add(T&& value)
+    UnRegisterer emplace(T&& value)
     {
-        auto it = elements.emplace_back(std::forward<T>(value));
+        auto it = elements.emplace(elements.end(), std::forward<T>(value));
         return [this, it]() { elements.erase(it); };
     }
 
@@ -37,5 +40,5 @@ public:
     }
 
 private:
-    std::list<T> elements;
+    std::list<T> elements{};
 };

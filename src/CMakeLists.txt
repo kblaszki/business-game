@@ -2,7 +2,11 @@ add_library(gameLib
     SHARED
         controllers/EventController.cpp
         controllers/GameController.cpp
+        
         core/WindowSFML.cpp
+
+        managers/ClosedEventManager.cpp
+
         utils/EventPrinter.cpp
 )
 target_compile_features(gameLib PRIVATE cxx_std_20)
