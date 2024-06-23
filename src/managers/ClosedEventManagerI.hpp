@@ -7,12 +7,13 @@
 
 #include <functional>
 
-struct ClosedEventManagerI : public EventManagerI
+template<>
+struct EventManager<sf::Event::Closed> : public EventManagerI
 {
     static constexpr sf::Event::EventType EVENT_TYPE = sf::Event::Closed;
 
     using ClosedHandler = std::function<void()>;
     using ClosedHandlerUnRegisterer = ManagedList<ClosedHandler>::UnRegisterer;
 
-    virtual ClosedHandlerUnRegisterer registerClosedHandler(ClosedHandler&& handler) = 0;
+    virtual ClosedHandlerUnRegisterer registerHandler(ClosedHandler&& handler) = 0;
 };

@@ -10,18 +10,19 @@ template<typename T>
 concept HasEventType = requires {
     { T::EVENT_TYPE } -> std::convertible_to<sf::Event::EventType>;
 };
+template<typename T>
+concept IsBaseOfEventManager = HasEventType<T> && std::is_base_of_v<EventManager<T::EVENT_TYPE>, T>;
 
 class EventManagers
 {
 public:
     virtual ~EventManagers() = default;
 
-    template<typename EventManager>
-    EventManager& get()
-        requires HasEventType<EventManager>
+    template<sf::Event::EventType EVENT_TYPE>
+    EventManager<EVENT_TYPE>& get()
     {
 
-        return static_cast<EventManager&>(get(EventManager::EVENT_TYPE));
+        return static_cast<EventManager<EVENT_TYPE>&>(get(EVENT_TYPE));
     }
 
 protected:
@@ -41,29 +42,29 @@ protected:
 class LordOfEventManagers : public EventManagers
 {
 public:
-    template<typename EventManager, typename... Args>
+    template<typename EVENT_MANAGER, typename... Args>
     void emplace(Args&&... args)
-        requires HasEventType<EventManager>
+        requires IsBaseOfEventManager<EVENT_MANAGER>
     {
 
-        auto eventManager = std::make_unique<EventManager>(std::forward<Args>(args)...);
-        auto manager = eventManagers.find(EventManager::EVENT_TYPE);
+        auto eventManager = std::make_unique<EVENT_MANAGER>(std::forward<Args>(args)...);
+        auto manager = eventManagers.find(EVENT_MANAGER::EVENT_TYPE);
         if(eventManagers.end() not_eq manager)
         {
             throw std::runtime_error("Event manager already exists");
         }
-        eventManagers.emplace(EventManager::EVENT_TYPE, std::move(eventManager));
+        eventManagers.emplace(EVENT_MANAGER::EVENT_TYPE, std::move(eventManager));
     }
 
-    template<typename EventManager>
-    void emplace(std::unique_ptr<EventManager>&& eventManager)
-        requires HasEventType<EventManager>
+    template<typename EVENT_MANAGER>
+    void emplace(std::unique_ptr<EVENT_MANAGER>&& eventManager)
+        requires IsBaseOfEventManager<EVENT_MANAGER>
     {
-        auto manager = eventManagers.find(EventManager::EVENT_TYPE);
+        auto manager = eventManagers.find(EVENT_MANAGER::EVENT_TYPE);
         if(eventManagers.end() not_eq manager)
         {
             throw std::runtime_error("Event manager already exists");
         }
-        eventManagers.emplace(EventManager::EVENT_TYPE, std::move(eventManager));
+        eventManagers.emplace(EVENT_MANAGER::EVENT_TYPE, std::move(eventManager));
     }
 };

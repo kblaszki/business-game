@@ -5,7 +5,7 @@
 
 #include <unordered_map>
 
-class KeyReleasedManager : public KeyReleasedManagerI
+class KeyReleasedManager : public EventManager<sf::Event::KeyReleased>
 {
 public:
     void handleEvent(const sf::Event& event) override;

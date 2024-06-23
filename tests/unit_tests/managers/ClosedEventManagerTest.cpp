@@ -17,14 +17,14 @@ protected:
 
 TEST_F(ClosedEventManagerShould, properlyRegisterClosedEventHandler)
 {
-    EXPECT_NO_THROW(closedEventManager.registerClosedHandler([this]() { actionMock.doAction(); }));
+    EXPECT_NO_THROW(closedEventManager.registerHandler([this]() { actionMock.doAction(); }));
 }
 
 TEST_F(ClosedEventManagerShould, properlyHandleClosedEvent)
 {
     EXPECT_CALL(actionMock, doAction()).Times(1);
 
-    EXPECT_NO_THROW(closedEventManager.registerClosedHandler([this]() { actionMock.doAction(); }));
+    EXPECT_NO_THROW(closedEventManager.registerHandler([this]() { actionMock.doAction(); }));
 
     sf::Event closedEvent{};
     closedEvent.type = sf::Event::Closed;

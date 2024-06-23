@@ -5,7 +5,7 @@
 
 #include <gmock/gmock.h>
 
-struct KeyPressedManagerMock : public KeyPressedManagerI
+struct KeyPressedManagerMock : public EventManager<sf::Event::KeyPressed>
 {
     MOCK_METHOD(void, handleEvent, (const sf::Event&), (override));
     MOCK_METHOD(KeyPressedHandlerUnRegisterer,

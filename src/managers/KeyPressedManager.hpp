@@ -5,7 +5,7 @@
 
 #include <unordered_map>
 
-class KeyPressedManager : public KeyPressedManagerI
+class KeyPressedManager : public EventManager<sf::Event::KeyPressed>
 {
 public:
     void handleEvent(const sf::Event& event) override;

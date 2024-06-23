@@ -3,7 +3,8 @@
 #include <controllers/EventController.hpp>
 
 #include <mocks/core/EventCollectorMock.hpp>
-#include <mocks/managers/EventManagerMock.hpp>
+#include <mocks/managers/ClosedEventManagerMock.hpp>
+#include <mocks/managers/KeyPressedManagerMock.hpp>
 
 #include <gtest/gtest.h>
 
@@ -18,9 +19,9 @@ protected:
 
 TEST_F(EventControllerShould, throwRuntimeErrorWhenTrySecondTimeRegisterHandlerForTheSameEvent)
 {
-    EXPECT_NO_THROW(eventController.emplace<EventManagerMock<sf::Event::Closed>>());
+    EXPECT_NO_THROW(eventController.emplace<ClosedEventManagerMock>());
 
-    EXPECT_THROW(eventController.emplace<EventManagerMock<sf::Event::Closed>>(), std::runtime_error);
+    EXPECT_THROW(eventController.emplace<ClosedEventManagerMock>(), std::runtime_error);
 }
 
 TEST_F(EventControllerShould, handleCorrectlyEvent)
@@ -34,17 +35,14 @@ TEST_F(EventControllerShould, handleCorrectlyEvent)
         }))
         .WillOnce(Return(false));
 
-    std::unique_ptr<EventManagerMock<sf::Event::Closed>> closedEventManagerMock =
-        std::make_unique<EventManagerMock<sf::Event::Closed>>();
-    std::unique_ptr<EventManagerMock<sf::Event::KeyPressed>> keyPressedEventManagerMock =
-        std::make_unique<EventManagerMock<sf::Event::KeyPressed>>();
+    auto closedEventManagerMock = std::make_unique<ClosedEventManagerMock>();
+    auto keyPressedManagerMock = std::make_unique<KeyPressedManagerMock>();
 
     EXPECT_CALL(*closedEventManagerMock, handleEvent(_)).Times(1);
-    EXPECT_CALL(*keyPressedEventManagerMock, handleEvent(_)).Times(0);
+    EXPECT_CALL(*keyPressedManagerMock, handleEvent(_)).Times(0);
 
-    EXPECT_NO_THROW(eventController.emplace<EventManagerMock<sf::Event::Closed>>(std::move(closedEventManagerMock)));
-    EXPECT_NO_THROW(
-        eventController.emplace<EventManagerMock<sf::Event::KeyPressed>>(std::move(keyPressedEventManagerMock)));
+    EXPECT_NO_THROW(eventController.emplace<ClosedEventManagerMock>(std::move(closedEventManagerMock)));
+    EXPECT_NO_THROW(eventController.emplace<KeyPressedManagerMock>(std::move(keyPressedManagerMock)));
 
     eventController.handleEvents();
 }

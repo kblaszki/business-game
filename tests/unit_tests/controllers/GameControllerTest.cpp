@@ -5,7 +5,8 @@
 
 #include <mocks/controllers/EventControllerMock.hpp>
 #include <mocks/core/WindowMock.hpp>
-#include <mocks/managers/EventManagerMock.hpp>
+#include <mocks/managers/ClosedEventManagerMock.hpp>
+#include <mocks/managers/KeyPressedManagerMock.hpp>
 
 #include <gtest/gtest.h>
 
@@ -15,16 +16,16 @@ class GameControllerShould : public Test
 {
 public:
     GameControllerShould()
-        : closedEventManagerMock{std::make_unique<StrictMock<EventManagerMock<sf::Event::Closed>>>()}
-        , keyPressedManagerMock{std::make_unique<StrictMock<EventManagerMock<sf::Event::KeyPressed>>>()}
+        : closedEventManagerMock{std::make_unique<StrictMock<ClosedEventManagerMock>>()}
+        , keyPressedManagerMock{std::make_unique<StrictMock<KeyPressedManagerMock>>()}
         , windowMock{std::make_unique<StrictMock<WindowMock>>()}
         , eventController{std::make_unique<EventController>(*windowMock)}
     {
     }
 
 protected:
-    std::unique_ptr<StrictMock<EventManagerMock<sf::Event::Closed>>> closedEventManagerMock;
-    std::unique_ptr<StrictMock<EventManagerMock<sf::Event::KeyPressed>>> keyPressedManagerMock;
+    std::unique_ptr<StrictMock<ClosedEventManagerMock>> closedEventManagerMock;
+    std::unique_ptr<StrictMock<KeyPressedManagerMock>> keyPressedManagerMock;
     std::unique_ptr<StrictMock<WindowMock>> windowMock;
     std::unique_ptr<EventController> eventController;
 };
@@ -59,7 +60,7 @@ TEST_F(GameControllerShould, closeWindowAfterClickingTheExitButton)
     EXPECT_CALL(*closedEventManagerMock, handleEvent(_))
         .Times(1)
         .WillOnce(Invoke([window = windowMock.get()](const sf::Event&) { window->close(); }));
-    eventController->emplace<StrictMock<EventManagerMock<sf::Event::Closed>>>(std::move(closedEventManagerMock));
+    eventController->emplace<StrictMock<ClosedEventManagerMock>>(std::move(closedEventManagerMock));
 
     GameController game{std::move(windowMock), std::move(eventController)};
     game.run();
@@ -90,7 +91,7 @@ TEST_F(GameControllerShould, closeWindowAfterEscapeKeyPressed)
                 window->close();
             }
         }));
-    eventController->emplace<StrictMock<EventManagerMock<sf::Event::KeyPressed>>>(std::move(keyPressedManagerMock));
+    eventController->emplace<StrictMock<KeyPressedManagerMock>>(std::move(keyPressedManagerMock));
 
     GameController game{std::move(windowMock), std::move(eventController)};
     game.run();

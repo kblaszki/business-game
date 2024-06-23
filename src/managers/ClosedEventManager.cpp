@@ -10,7 +10,7 @@ void ClosedEventManager::handleEvent(const sf::Event& /*event*/)
     }
 }
 
-ClosedEventManager::ClosedHandlerUnRegisterer ClosedEventManager::registerClosedHandler(ClosedHandler&& handler)
+ClosedEventManager::ClosedHandlerUnRegisterer ClosedEventManager::registerHandler(ClosedHandler&& handler)
 {
     return closedHandlers.emplace(std::move(handler));
 }
