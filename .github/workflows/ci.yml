@@ -115,7 +115,7 @@ jobs:
       run: cmake --preset debug -DCMAKE_VERBOSE_MAKEFILE=ON ${{matrix.platform.flags}}
 
     - name: Build Tests
-      run: cmake --build --preset debug --target controllers_test
+      run: cmake --build --preset debug --target build_ut
 
     - name: Prepare Tests
       run: |
