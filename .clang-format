@@ -7,6 +7,7 @@ Language: Cpp
 Standard: Cpp11
 
 # Indentation settings
+ColumnLimit: 120
 IndentWidth: 4
 TabWidth: 4
 UseTab: Never
@@ -80,7 +81,7 @@ SpacesInSquareBrackets: false
 SortIncludes: true
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:       '^<(src|controllers|core|sum-library|utils)/'
+  - Regex:       '^<(src|controllers|core|managers|utils)/'
     Priority:    2
   - Regex:       '^<SFML/'
     Priority:    3

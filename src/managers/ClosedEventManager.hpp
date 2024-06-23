@@ -7,8 +7,7 @@ class ClosedEventManager : public ClosedEventManagerI
 {
 public:
     void handleEvent(const sf::Event& event) override;
-    ClosedHandlerUnRegisterer
-    registerClosedHandler(ClosedHandler&& handler) override;
+    ClosedHandlerUnRegisterer registerClosedHandler(ClosedHandler&& handler) override;
 
 private:
     ManagedList<ClosedHandler> closedHandlers;

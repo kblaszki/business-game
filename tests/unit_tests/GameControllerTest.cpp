@@ -15,30 +15,23 @@ class GameControllerShould : public Test
 {
 public:
     GameControllerShould()
-        : closedEventManagerMock{std::make_unique<
-              StrictMock<EventManagerMock<sf::Event::Closed>>>()}
-        , keyPressedManagerMock{std::make_unique<
-              StrictMock<EventManagerMock<sf::Event::KeyPressed>>>()}
+        : closedEventManagerMock{std::make_unique<StrictMock<EventManagerMock<sf::Event::Closed>>>()}
+        , keyPressedManagerMock{std::make_unique<StrictMock<EventManagerMock<sf::Event::KeyPressed>>>()}
         , windowMock{std::make_unique<StrictMock<WindowMock>>()}
         , eventController{std::make_unique<EventController>(*windowMock)}
     {
     }
 
 protected:
-    std::unique_ptr<StrictMock<EventManagerMock<sf::Event::Closed>>>
-        closedEventManagerMock;
-    std::unique_ptr<StrictMock<EventManagerMock<sf::Event::KeyPressed>>>
-        keyPressedManagerMock;
+    std::unique_ptr<StrictMock<EventManagerMock<sf::Event::Closed>>> closedEventManagerMock;
+    std::unique_ptr<StrictMock<EventManagerMock<sf::Event::KeyPressed>>> keyPressedManagerMock;
     std::unique_ptr<StrictMock<WindowMock>> windowMock;
     std::unique_ptr<EventController> eventController;
 };
 
 TEST_F(GameControllerShould, doOneIterationCorrectly)
 {
-    EXPECT_CALL(*windowMock, isOpen())
-        .Times(2)
-        .WillOnce(Return(true))
-        .WillOnce(Return(false));
+    EXPECT_CALL(*windowMock, isOpen()).Times(2).WillOnce(Return(true)).WillOnce(Return(false));
     EXPECT_CALL(*windowMock, pollEvent(_)).Times(1).WillOnce(Return(false));
     EXPECT_CALL(*windowMock, clear(_)).Times(1);
     EXPECT_CALL(*windowMock, draw(_, _)).Times(1);
@@ -50,10 +43,7 @@ TEST_F(GameControllerShould, doOneIterationCorrectly)
 
 TEST_F(GameControllerShould, closeWindowAfterClickingTheExitButton)
 {
-    EXPECT_CALL(*windowMock, isOpen())
-        .Times(2)
-        .WillOnce(Return(true))
-        .WillOnce(Return(false));
+    EXPECT_CALL(*windowMock, isOpen()).Times(2).WillOnce(Return(true)).WillOnce(Return(false));
     EXPECT_CALL(*windowMock, pollEvent(_))
         .Times(2)
         .WillOnce(Invoke([](sf::Event& event) {
@@ -68,11 +58,8 @@ TEST_F(GameControllerShould, closeWindowAfterClickingTheExitButton)
 
     EXPECT_CALL(*closedEventManagerMock, handleEvent(_))
         .Times(1)
-        .WillOnce(Invoke([window = windowMock.get()](const sf::Event&) {
-            window->close();
-        }));
-    eventController->emplace<StrictMock<EventManagerMock<sf::Event::Closed>>>(
-        std::move(closedEventManagerMock));
+        .WillOnce(Invoke([window = windowMock.get()](const sf::Event&) { window->close(); }));
+    eventController->emplace<StrictMock<EventManagerMock<sf::Event::Closed>>>(std::move(closedEventManagerMock));
 
     GameController game{std::move(windowMock), std::move(eventController)};
     game.run();
@@ -80,10 +67,7 @@ TEST_F(GameControllerShould, closeWindowAfterClickingTheExitButton)
 
 TEST_F(GameControllerShould, closeWindowAfterEscapeKeyPressed)
 {
-    EXPECT_CALL(*windowMock, isOpen())
-        .Times(2)
-        .WillOnce(Return(true))
-        .WillOnce(Return(false));
+    EXPECT_CALL(*windowMock, isOpen()).Times(2).WillOnce(Return(true)).WillOnce(Return(false));
     EXPECT_CALL(*windowMock, pollEvent(_))
         .Times(2)
         .WillOnce(Invoke([](sf::Event& event) {
@@ -106,9 +90,7 @@ TEST_F(GameControllerShould, closeWindowAfterEscapeKeyPressed)
                 window->close();
             }
         }));
-    eventController
-        ->emplace<StrictMock<EventManagerMock<sf::Event::KeyPressed>>>(
-            std::move(keyPressedManagerMock));
+    eventController->emplace<StrictMock<EventManagerMock<sf::Event::KeyPressed>>>(std::move(keyPressedManagerMock));
 
     GameController game{std::move(windowMock), std::move(eventController)};
     game.run();

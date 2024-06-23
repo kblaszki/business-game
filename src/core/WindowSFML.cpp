@@ -23,8 +23,7 @@ void WindowSFML::clear(const sf::Color& color)
     window.clear(color);
 }
 
-void WindowSFML::draw(const sf::Drawable& drawable,
-                      const sf::RenderStates& states)
+void WindowSFML::draw(const sf::Drawable& drawable, const sf::RenderStates& states)
 {
     window.draw(drawable, states);
 }

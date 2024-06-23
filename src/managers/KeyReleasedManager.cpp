@@ -14,9 +14,8 @@ void KeyReleasedManager::handleEvent(const sf::Event& event)
     }
 }
 
-KeyReleasedManager::KeyReleasedHandlerUnRegisterer
-KeyReleasedManager::registerHandler(sf::Keyboard::Key key,
-                                    KeyReleasedHandler&& handler)
+KeyReleasedManager::KeyReleasedHandlerUnRegisterer KeyReleasedManager::registerHandler(sf::Keyboard::Key key,
+                                                                                       KeyReleasedHandler&& handler)
 {
     return keyReleasedHandlers[key].emplace(std::move(handler));
 }

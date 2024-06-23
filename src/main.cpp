@@ -13,11 +13,9 @@ int main()
     eventController->emplace<ClosedEventManager>();
     eventController->emplace<KeyPressedManager>();
 
-    eventController->get<ClosedEventManagerI>().registerClosedHandler(
-        [&window]() { window->close(); });
+    eventController->get<ClosedEventManagerI>().registerClosedHandler([&window]() { window->close(); });
     eventController->get<KeyPressedManagerI>().registerHandler(
-        sf::Keyboard::Escape,
-        [&window](const sf::Event::KeyEvent&) { window->close(); });
+        sf::Keyboard::Escape, [&window](const sf::Event::KeyEvent&) { window->close(); });
 
     GameController game{std::move(window), std::move(eventController)};
     game.run();

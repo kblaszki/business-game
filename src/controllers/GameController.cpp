@@ -2,9 +2,8 @@
 
 #include "GameController.hpp"
 
-GameController::GameController(
-    std::unique_ptr<WindowI>&& gameWindow,
-    std::unique_ptr<EventControllerI>&& gameEventController)
+GameController::GameController(std::unique_ptr<WindowI>&& gameWindow,
+                               std::unique_ptr<EventControllerI>&& gameEventController)
     : window{std::move(gameWindow)}
     , eventController{std::move(gameEventController)}
 {

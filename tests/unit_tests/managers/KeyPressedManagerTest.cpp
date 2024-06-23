@@ -17,18 +17,16 @@ protected:
 
 TEST_F(KeyPressedManagerShould, properlyRegisterKeyPressedHandler)
 {
-    EXPECT_NO_THROW(keyPressedManager.registerHandler(
-        sf::Keyboard::Enter,
-        [this](const sf::Event::KeyEvent&) { actionMock.doAction(); }));
+    EXPECT_NO_THROW(keyPressedManager.registerHandler(sf::Keyboard::Enter,
+                                                      [this](const sf::Event::KeyEvent&) { actionMock.doAction(); }));
 }
 
 TEST_F(KeyPressedManagerShould, properlyHandleKeyPressedEvent)
 {
     EXPECT_CALL(actionMock, doAction()).Times(1);
 
-    EXPECT_NO_THROW(keyPressedManager.registerHandler(
-        sf::Keyboard::Enter,
-        [this](const sf::Event::KeyEvent&) { actionMock.doAction(); }));
+    EXPECT_NO_THROW(keyPressedManager.registerHandler(sf::Keyboard::Enter,
+                                                      [this](const sf::Event::KeyEvent&) { actionMock.doAction(); }));
 
     sf::Event keyPressedEvent{};
     keyPressedEvent.type = sf::Event::KeyPressed;

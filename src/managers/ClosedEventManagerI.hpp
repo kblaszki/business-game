@@ -14,6 +14,5 @@ struct ClosedEventManagerI : public EventManagerI
     using ClosedHandler = std::function<void()>;
     using ClosedHandlerUnRegisterer = ManagedList<ClosedHandler>::UnRegisterer;
 
-    virtual ClosedHandlerUnRegisterer
-    registerClosedHandler(ClosedHandler&& handler) = 0;
+    virtual ClosedHandlerUnRegisterer registerClosedHandler(ClosedHandler&& handler) = 0;
 };

@@ -35,8 +35,7 @@ protected:
         return *manager->second;
     }
 
-    std::unordered_map<sf::Event::EventType, std::unique_ptr<EventManagerI>>
-        eventManagers;
+    std::unordered_map<sf::Event::EventType, std::unique_ptr<EventManagerI>> eventManagers;
 };
 
 class LordOfEventManagers : public EventManagers
@@ -47,15 +46,13 @@ public:
         requires HasEventType<EventManager>
     {
 
-        auto eventManager =
-            std::make_unique<EventManager>(std::forward<Args>(args)...);
+        auto eventManager = std::make_unique<EventManager>(std::forward<Args>(args)...);
         auto manager = eventManagers.find(EventManager::EVENT_TYPE);
         if(eventManagers.end() not_eq manager)
         {
             throw std::runtime_error("Event manager already exists");
         }
-        eventManagers.emplace(EventManager::EVENT_TYPE,
-                              std::move(eventManager));
+        eventManagers.emplace(EventManager::EVENT_TYPE, std::move(eventManager));
     }
 
     template<typename EventManager>
@@ -67,7 +64,6 @@ public:
         {
             throw std::runtime_error("Event manager already exists");
         }
-        eventManagers.emplace(EventManager::EVENT_TYPE,
-                              std::move(eventManager));
+        eventManagers.emplace(EventManager::EVENT_TYPE, std::move(eventManager));
     }
 };

@@ -10,8 +10,7 @@
 class GameController
 {
 public:
-    GameController(std::unique_ptr<WindowI>&& gameWindow,
-                   std::unique_ptr<EventControllerI>&& eventController);
+    GameController(std::unique_ptr<WindowI>&& gameWindow, std::unique_ptr<EventControllerI>&& eventController);
 
     void run();
 

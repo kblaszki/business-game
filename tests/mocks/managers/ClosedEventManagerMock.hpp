@@ -8,8 +8,5 @@
 struct ClosedEventManagerMock : public ClosedEventManagerI
 {
     MOCK_METHOD(void, handleEvent, (const sf::Event&), (override));
-    MOCK_METHOD(ClosedHandlerUnRegisterer,
-                registerClosedHandler,
-                (ClosedHandler && handler),
-                (override));
+    MOCK_METHOD(ClosedHandlerUnRegisterer, registerClosedHandler, (ClosedHandler && handler), (override));
 };

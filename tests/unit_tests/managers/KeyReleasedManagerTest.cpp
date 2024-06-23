@@ -17,18 +17,16 @@ protected:
 
 TEST_F(KeyReleasedManagerShould, properlyRegisterKeyReleasedHandler)
 {
-    EXPECT_NO_THROW(keyReleasedManager.registerHandler(
-        sf::Keyboard::Enter,
-        [this](const sf::Event::KeyEvent&) { actionMock.doAction(); }));
+    EXPECT_NO_THROW(keyReleasedManager.registerHandler(sf::Keyboard::Enter,
+                                                       [this](const sf::Event::KeyEvent&) { actionMock.doAction(); }));
 }
 
 TEST_F(KeyReleasedManagerShould, properlyHandleKeyReleasedEvent)
 {
     EXPECT_CALL(actionMock, doAction()).Times(1);
 
-    EXPECT_NO_THROW(keyReleasedManager.registerHandler(
-        sf::Keyboard::Enter,
-        [this](const sf::Event::KeyEvent&) { actionMock.doAction(); }));
+    EXPECT_NO_THROW(keyReleasedManager.registerHandler(sf::Keyboard::Enter,
+                                                       [this](const sf::Event::KeyEvent&) { actionMock.doAction(); }));
 
     sf::Event keyReleasedEvent{};
     keyReleasedEvent.type = sf::Event::KeyReleased;
