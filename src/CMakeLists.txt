@@ -7,6 +7,7 @@ add_library(gameLib
 
         managers/ClosedEventManager.cpp
         managers/KeyPressedManager.cpp
+        managers/KeyReleasedManager.cpp
 
         utils/EventPrinter.cpp
 )
