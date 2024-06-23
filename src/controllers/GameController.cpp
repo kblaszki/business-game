@@ -8,15 +8,6 @@ GameController::GameController(
     : window{std::move(gameWindow)}
     , eventController{std::move(gameEventController)}
 {
-    eventController->registerEventHandler(
-        sf::Event::Closed, [this](const sf::Event&) { window->close(); });
-    eventController->registerEventHandler(
-        sf::Event::KeyPressed, [this](const sf::Event& event) {
-            if(sf::Keyboard::Escape == event.key.code)
-            {
-                window->close();
-            }
-        });
 }
 
 void GameController::run()

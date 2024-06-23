@@ -3,7 +3,7 @@
 #include <controllers/EventController.hpp>
 
 #include <mocks/core/EventCollectorMock.hpp>
-#include <mocks/utils/ActionMock.hpp>
+#include <mocks/managers/EventManagerMock.hpp>
 
 #include <gtest/gtest.h>
 
@@ -13,53 +13,21 @@ class EventControllerShould : public Test
 {
 protected:
     StrictMock<EventCollectorMock> eventCollectorMock{};
-    StrictMock<ActionMock> closeActionMock{};
     EventController eventController{eventCollectorMock};
 };
-
-TEST_F(EventControllerShould, properlyRegisterEventHandler)
-{
-    EXPECT_NO_THROW(eventController.registerEventHandler(
-        sf::Event::Closed,
-        [this](const sf::Event&) { closeActionMock.doAction(); }));
-}
 
 TEST_F(EventControllerShould,
        throwRuntimeErrorWhenTrySecondTimeRegisterHandlerForTheSameEvent)
 {
-    EXPECT_NO_THROW(eventController.registerEventHandler(
-        sf::Event::Closed,
-        [this](const sf::Event&) { closeActionMock.doAction(); }));
+    EXPECT_NO_THROW(
+        eventController.emplace<EventManagerMock<sf::Event::Closed>>());
 
-    EXPECT_THROW(eventController.registerEventHandler(
-                     sf::Event::Closed,
-                     [this](const sf::Event&) { closeActionMock.doAction(); }),
+    EXPECT_THROW(eventController.emplace<EventManagerMock<sf::Event::Closed>>(),
                  std::runtime_error);
-}
-
-TEST_F(EventControllerShould,
-       throwExceptionWhenTryUnregisterNotRegisteredEventHandler)
-{
-    EXPECT_THROW(eventController.unregisterEventHandler(sf::Event::Closed),
-                 std::runtime_error);
-}
-
-TEST_F(EventControllerShould, properlyUnregisterEventHandler)
-{
-    EXPECT_NO_THROW(eventController.registerEventHandler(
-        sf::Event::Closed,
-        [this](const sf::Event&) { closeActionMock.doAction(); }));
-
-    EXPECT_NO_THROW(eventController.unregisterEventHandler(sf::Event::Closed));
-
-    EXPECT_NO_THROW(eventController.registerEventHandler(
-        sf::Event::Closed,
-        [this](const sf::Event&) { closeActionMock.doAction(); }));
 }
 
 TEST_F(EventControllerShould, handleCorrectlyEvent)
 {
-    StrictMock<ActionMock> keyPressedActionMock{};
 
     EXPECT_CALL(eventCollectorMock, pollEvent(_))
         .Times(2)
@@ -68,15 +36,23 @@ TEST_F(EventControllerShould, handleCorrectlyEvent)
             return true;
         }))
         .WillOnce(Return(false));
-    EXPECT_CALL(closeActionMock, doAction()).Times(1);
-    EXPECT_CALL(keyPressedActionMock, doAction()).Times(0);
 
-    EXPECT_NO_THROW(eventController.registerEventHandler(
-        sf::Event::Closed,
-        [this](const sf::Event&) { closeActionMock.doAction(); }));
-    EXPECT_NO_THROW(eventController.registerEventHandler(
-        sf::Event::KeyPressed,
-        [&](const sf::Event&) { keyPressedActionMock.doAction(); }));
+    std::unique_ptr<EventManagerMock<sf::Event::Closed>>
+        closedEventManagerMock =
+            std::make_unique<EventManagerMock<sf::Event::Closed>>();
+    std::unique_ptr<EventManagerMock<sf::Event::KeyPressed>>
+        keyPressedEventManagerMock =
+            std::make_unique<EventManagerMock<sf::Event::KeyPressed>>();
+
+    EXPECT_CALL(*closedEventManagerMock, handleEvent(_)).Times(1);
+    EXPECT_CALL(*keyPressedEventManagerMock, handleEvent(_)).Times(0);
+
+    EXPECT_NO_THROW(
+        eventController.emplace<EventManagerMock<sf::Event::Closed>>(
+            std::move(closedEventManagerMock)));
+    EXPECT_NO_THROW(
+        eventController.emplace<EventManagerMock<sf::Event::KeyPressed>>(
+            std::move(keyPressedEventManagerMock)));
 
     eventController.handleEvents();
 }
