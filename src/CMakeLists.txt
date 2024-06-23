@@ -6,6 +6,7 @@ add_library(gameLib
         core/WindowSFML.cpp
 
         managers/ClosedEventManager.cpp
+        managers/KeyPressedManager.cpp
 
         utils/EventPrinter.cpp
 )
