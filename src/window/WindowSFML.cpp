@@ -3,7 +3,7 @@
 #include "WindowSFML.hpp"
 
 WindowSFML::WindowSFML()
-    : window{sf::VideoMode(200, 200), "Business game", sf::Style::Default}
+    : window{sf::VideoMode(1280, 720), "Business game", sf::Style::Default}
 {
     window.setFramerateLimit(60);
 }

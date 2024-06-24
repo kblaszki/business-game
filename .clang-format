@@ -81,7 +81,7 @@ SpacesInSquareBrackets: false
 SortIncludes: true
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:       '^<(src|controllers|core|managers|utils)/'
+  - Regex:       '^<(src|controllers|core|managers|screens|utils|window)/'
     Priority:    2
   - Regex:       '^<SFML/'
     Priority:    3

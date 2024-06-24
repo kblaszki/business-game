@@ -1,7 +1,7 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <core/EventCollectorI.hpp>
+#include <window/EventCollectorI.hpp>
 
 #include <gmock/gmock.h>
 

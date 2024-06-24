@@ -1,7 +1,7 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <core/WindowI.hpp>
+#include <window/WindowI.hpp>
 
 #include <gmock/gmock.h>
 
