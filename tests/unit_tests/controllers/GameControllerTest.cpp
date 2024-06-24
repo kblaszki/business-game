@@ -4,9 +4,10 @@
 #include <controllers/GameController.hpp>
 
 #include <mocks/controllers/EventControllerMock.hpp>
-#include <mocks/core/WindowMock.hpp>
+#include <mocks/controllers/ScreenControllerMock.hpp>
 #include <mocks/managers/ClosedEventManagerMock.hpp>
 #include <mocks/managers/KeyPressedManagerMock.hpp>
+#include <mocks/window/WindowMock.hpp>
 
 #include <gtest/gtest.h>
 
@@ -16,7 +17,8 @@ class GameControllerShould : public Test
 {
 public:
     GameControllerShould()
-        : closedEventManagerMock{std::make_unique<StrictMock<ClosedEventManagerMock>>()}
+        : screenControllerMock{std::make_unique<StrictMock<ScreenControllerMock>>()}
+        , closedEventManagerMock{std::make_unique<StrictMock<ClosedEventManagerMock>>()}
         , keyPressedManagerMock{std::make_unique<StrictMock<KeyPressedManagerMock>>()}
         , windowMock{std::make_unique<StrictMock<WindowMock>>()}
         , eventController{std::make_unique<EventController>(*windowMock)}
@@ -24,6 +26,7 @@ public:
     }
 
 protected:
+    std::unique_ptr<StrictMock<ScreenControllerMock>> screenControllerMock;
     std::unique_ptr<StrictMock<ClosedEventManagerMock>> closedEventManagerMock;
     std::unique_ptr<StrictMock<KeyPressedManagerMock>> keyPressedManagerMock;
     std::unique_ptr<StrictMock<WindowMock>> windowMock;
@@ -34,11 +37,10 @@ TEST_F(GameControllerShould, doOneIterationCorrectly)
 {
     EXPECT_CALL(*windowMock, isOpen()).Times(2).WillOnce(Return(true)).WillOnce(Return(false));
     EXPECT_CALL(*windowMock, pollEvent(_)).Times(1).WillOnce(Return(false));
-    EXPECT_CALL(*windowMock, clear(_)).Times(1);
-    EXPECT_CALL(*windowMock, draw(_, _)).Times(1);
-    EXPECT_CALL(*windowMock, display()).Times(1);
+    EXPECT_CALL(*screenControllerMock, update()).Times(1);
+    EXPECT_CALL(*screenControllerMock, display()).Times(1);
 
-    GameController game{std::move(windowMock), std::move(eventController)};
+    GameController game{std::move(windowMock), std::move(eventController), std::move(screenControllerMock)};
     game.run();
 }
 
@@ -53,16 +55,15 @@ TEST_F(GameControllerShould, closeWindowAfterClickingTheExitButton)
         }))
         .WillOnce(Return(false));
     EXPECT_CALL(*windowMock, close()).Times(1);
-    EXPECT_CALL(*windowMock, clear(_)).Times(1);
-    EXPECT_CALL(*windowMock, draw(_, _)).Times(1);
-    EXPECT_CALL(*windowMock, display()).Times(1);
+    EXPECT_CALL(*screenControllerMock, update()).Times(1);
+    EXPECT_CALL(*screenControllerMock, display()).Times(1);
 
     EXPECT_CALL(*closedEventManagerMock, handleEvent(_))
         .Times(1)
         .WillOnce(Invoke([window = windowMock.get()](const sf::Event&) { window->close(); }));
     eventController->emplace<StrictMock<ClosedEventManagerMock>>(std::move(closedEventManagerMock));
 
-    GameController game{std::move(windowMock), std::move(eventController)};
+    GameController game{std::move(windowMock), std::move(eventController), std::move(screenControllerMock)};
     game.run();
 }
 
@@ -79,9 +80,8 @@ TEST_F(GameControllerShould, closeWindowAfterEscapeKeyPressed)
         }))
         .WillOnce(Return(false));
     EXPECT_CALL(*windowMock, close()).Times(1);
-    EXPECT_CALL(*windowMock, clear(_)).Times(1);
-    EXPECT_CALL(*windowMock, draw(_, _)).Times(1);
-    EXPECT_CALL(*windowMock, display()).Times(1);
+    EXPECT_CALL(*screenControllerMock, update()).Times(1);
+    EXPECT_CALL(*screenControllerMock, display()).Times(1);
 
     EXPECT_CALL(*keyPressedManagerMock, handleEvent(_))
         .Times(1)
@@ -93,6 +93,6 @@ TEST_F(GameControllerShould, closeWindowAfterEscapeKeyPressed)
         }));
     eventController->emplace<StrictMock<KeyPressedManagerMock>>(std::move(keyPressedManagerMock));
 
-    GameController game{std::move(windowMock), std::move(eventController)};
+    GameController game{std::move(windowMock), std::move(eventController), std::move(screenControllerMock)};
     game.run();
 }

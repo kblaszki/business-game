@@ -2,9 +2,10 @@
 
 #include <controllers/EventController.hpp>
 #include <controllers/GameController.hpp>
-#include <core/WindowSFML.hpp>
+#include <controllers/ScreenController.hpp>
 #include <managers/ClosedEventManager.hpp>
 #include <managers/KeyPressedManager.hpp>
+#include <window/WindowSFML.hpp>
 
 int main()
 {
@@ -17,7 +18,9 @@ int main()
     eventController->get<sf::Event::KeyPressed>().registerHandler(
         sf::Keyboard::Escape, [&window](const sf::Event::KeyEvent&) { window->close(); });
 
-    GameController game{std::move(window), std::move(eventController)};
+    auto stageController = std::make_unique<ScreenController>(*eventController, *window);
+
+    GameController game{std::move(window), std::move(eventController), std::move(stageController)};
     game.run();
 
     return EXIT_SUCCESS;

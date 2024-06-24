@@ -3,8 +3,8 @@
 
 #include "EventControllerI.hpp"
 
-#include <core/EventCollectorI.hpp>
 #include <managers/EventManagers.hpp>
+#include <window/EventCollectorI.hpp>
 
 class EventController
     : public EventControllerI

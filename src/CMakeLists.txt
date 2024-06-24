@@ -2,14 +2,19 @@ add_library(gameLib
     SHARED
         controllers/EventController.cpp
         controllers/GameController.cpp
-        
-        core/WindowSFML.cpp
+        controllers/ScreenController.cpp
+
+        entities/Player.cpp
 
         managers/ClosedEventManager.cpp
         managers/KeyPressedManager.cpp
         managers/KeyReleasedManager.cpp
 
+        screens/MenuScreen.cpp
+        
         utils/EventPrinter.cpp
+        
+        window/WindowSFML.cpp
 )
 target_compile_features(gameLib PRIVATE cxx_std_20)
 target_compile_options(gameLib PRIVATE ${BASE_COMPILE_FLAGS})

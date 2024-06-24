@@ -2,9 +2,9 @@
 
 #include <controllers/EventController.hpp>
 
-#include <mocks/core/EventCollectorMock.hpp>
 #include <mocks/managers/ClosedEventManagerMock.hpp>
 #include <mocks/managers/KeyPressedManagerMock.hpp>
+#include <mocks/window/EventCollectorMock.hpp>
 
 #include <gtest/gtest.h>
 

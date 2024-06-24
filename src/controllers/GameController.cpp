@@ -2,24 +2,22 @@
 
 #include "GameController.hpp"
 
-GameController::GameController(std::unique_ptr<WindowI>&& gameWindow,
-                               std::unique_ptr<EventControllerI>&& gameEventController)
-    : window{std::move(gameWindow)}
-    , eventController{std::move(gameEventController)}
+GameController::GameController(std::unique_ptr<WindowI>&& window,
+                               std::unique_ptr<EventControllerI>&& eventController,
+                               std::unique_ptr<ScreenControllerI>&& screenController)
+    : window{std::move(window)}
+    , eventController{std::move(eventController)}
+    , screenController{std::move(screenController)}
 {
 }
 
 void GameController::run()
 {
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-
     while(window->isOpen())
     {
         eventController->handleEvents();
 
-        window->clear();
-        window->draw(shape);
-        window->display();
+        screenController->update();
+        screenController->display();
     }
 }
