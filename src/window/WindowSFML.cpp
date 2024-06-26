@@ -6,6 +6,7 @@ WindowSFML::WindowSFML()
     : window{sf::VideoMode(1280, 720), "Business game", sf::Style::Default}
 {
     window.setFramerateLimit(60);
+    window.setKeyRepeatEnabled(false);
 }
 
 bool WindowSFML::isOpen() const

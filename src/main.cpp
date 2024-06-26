@@ -5,6 +5,7 @@
 #include <controllers/ScreenController.hpp>
 #include <managers/ClosedEventManager.hpp>
 #include <managers/KeyPressedManager.hpp>
+#include <managers/KeyReleasedManager.hpp>
 #include <window/WindowSFML.hpp>
 
 int main()
@@ -13,6 +14,7 @@ int main()
     auto eventController = std::make_unique<EventController>(*window);
     eventController->emplace<ClosedEventManager>();
     eventController->emplace<KeyPressedManager>();
+    eventController->emplace<KeyReleasedManager>();
 
     eventController->get<sf::Event::Closed>().registerHandler([&window]() { window->close(); });
     eventController->get<sf::Event::KeyPressed>().registerHandler(

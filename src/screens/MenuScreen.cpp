@@ -8,7 +8,10 @@ MenuScreen::MenuScreen(EventManagers& eventManagers, ScreenRendererI& screenRend
 {
 }
 
-void MenuScreen::update() {}
+void MenuScreen::update()
+{
+    player.update();
+}
 
 void MenuScreen::display()
 {
