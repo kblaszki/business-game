@@ -6,6 +6,7 @@
 #include <managers/EventManagers.hpp>
 #include <window/ScreenRendererI.hpp>
 
+#include <entities/Button.hpp>
 #include <entities/Player.hpp>
 
 class MenuScreen : public ScreenI
@@ -18,5 +19,6 @@ public:
 
 private:
     Player player;
+    Button button;
     ScreenRendererI& screenRenderer;
 };

@@ -4,6 +4,7 @@ add_library(gameLib
         controllers/GameController.cpp
         controllers/ScreenController.cpp
 
+        entities/Button.cpp
         entities/Player.cpp
 
         managers/ClosedEventManager.cpp
@@ -25,3 +26,13 @@ add_executable(game main.cpp)
 target_compile_features(game PRIVATE cxx_std_20)
 target_compile_options(game PRIVATE ${BASE_COMPILE_FLAGS})
 target_link_libraries(game PRIVATE gameLib)
+
+set(RESOURCES_DIRECTORY "${CMAKE_SOURCE_DIR}/resources")
+set(RESOURCES_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources")
+
+add_custom_command(
+    TARGET game PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${RESOURCES_DIRECTORY} ${RESOURCES_OUTPUT_DIRECTORY}
+    COMMENT "Copying the resources directory to the build directory"
+)
