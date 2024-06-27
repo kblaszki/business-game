@@ -6,6 +6,7 @@
 #include <managers/ClosedEventManager.hpp>
 #include <managers/KeyPressedManager.hpp>
 #include <managers/KeyReleasedManager.hpp>
+#include <managers/MouseMovedManager.hpp>
 #include <window/WindowSFML.hpp>
 
 int main()
@@ -15,6 +16,7 @@ int main()
     eventController->emplace<ClosedEventManager>();
     eventController->emplace<KeyPressedManager>();
     eventController->emplace<KeyReleasedManager>();
+    eventController->emplace<MouseMovedManager>();
 
     eventController->get<sf::Event::Closed>().registerHandler([&window]() { window->close(); });
     eventController->get<sf::Event::KeyPressed>().registerHandler(
