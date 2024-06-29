@@ -2,8 +2,8 @@
 
 #include <controllers/EventController.hpp>
 
-#include <mocks/managers/ClosedEventManagerMock.hpp>
-#include <mocks/managers/KeyPressedManagerMock.hpp>
+#include <mocks/managers/GameExitManagerMock.hpp>
+#include <mocks/managers/KeyboardManagerMock.hpp>
 #include <mocks/window/EventCollectorMock.hpp>
 
 #include <gtest/gtest.h>
@@ -19,9 +19,9 @@ protected:
 
 TEST_F(EventControllerShould, throwRuntimeErrorWhenTrySecondTimeRegisterHandlerForTheSameEvent)
 {
-    EXPECT_NO_THROW(eventController.emplace<ClosedEventManagerMock>());
+    EXPECT_NO_THROW(eventController.emplace<StrictMock<GameExitManagerMock>>());
 
-    EXPECT_THROW(eventController.emplace<ClosedEventManagerMock>(), std::runtime_error);
+    EXPECT_THROW(eventController.emplace<StrictMock<GameExitManagerMock>>(), std::runtime_error);
 }
 
 TEST_F(EventControllerShould, handleCorrectlyEvent)
@@ -35,14 +35,14 @@ TEST_F(EventControllerShould, handleCorrectlyEvent)
         }))
         .WillOnce(Return(false));
 
-    auto closedEventManagerMock = std::make_unique<ClosedEventManagerMock>();
-    auto keyPressedManagerMock = std::make_unique<KeyPressedManagerMock>();
+    auto gameExitManagerMock = std::make_unique<StrictMock<GameExitManagerMock>>();
+    auto keyboardManagerMock = std::make_unique<StrictMock<KeyboardManagerMock>>();
 
-    EXPECT_CALL(*closedEventManagerMock, handleEvent(_)).Times(1);
-    EXPECT_CALL(*keyPressedManagerMock, handleEvent(_)).Times(0);
+    EXPECT_CALL(*gameExitManagerMock, handleEvent(_)).Times(1);
+    EXPECT_CALL(*keyboardManagerMock, handleEvent(_)).Times(0);
 
-    EXPECT_NO_THROW(eventController.emplace<ClosedEventManagerMock>(std::move(closedEventManagerMock)));
-    EXPECT_NO_THROW(eventController.emplace<KeyPressedManagerMock>(std::move(keyPressedManagerMock)));
+    EXPECT_NO_THROW(eventController.emplace(std::move(gameExitManagerMock)));
+    EXPECT_NO_THROW(eventController.emplace(std::move(keyboardManagerMock)));
 
     eventController.handleEvents();
 }

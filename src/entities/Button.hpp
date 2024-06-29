@@ -1,8 +1,7 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <managers/EventManagers.hpp>
-#include <managers/MouseMovedManagerI.hpp>
+#include <managers/MouseManagerI.hpp>
 #include <window/DrawerI.hpp>
 
 #include <SFML/Graphics.hpp>
@@ -10,7 +9,7 @@
 class Button
 {
 public:
-    Button(EventManagers& eventManagers,
+    Button(MouseManagerI& mouseManager,
            const std::string& text,
            sf::Vector2f position,
            sf::Vector2f size,

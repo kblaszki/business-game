@@ -19,6 +19,7 @@ public:
 
 private:
     Player player;
-    Button button;
+    Button buttonStart;
+    Button buttonExit;
     ScreenRendererI& screenRenderer;
 };

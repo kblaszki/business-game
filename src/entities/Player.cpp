@@ -2,10 +2,7 @@
 
 #include "Player.hpp"
 
-#include <managers/KeyPressedManager.hpp>
-#include <managers/KeyReleasedManager.hpp>
-
-Player::Player(EventManagers& eventManagers)
+Player::Player(KeyboardManagerI& keyboardManager)
 {
 
     shape.setPointCount(4);
@@ -17,22 +14,46 @@ Player::Player(EventManagers& eventManagers)
 
     shape.setFillColor(sf::Color::Green);
 
-    eventManagers.get<sf::Event::KeyPressed>().registerHandler(sf::Keyboard::Left,
-                                                               [this](const sf::Event::KeyEvent&) { moveLeft = true; });
-    eventManagers.get<sf::Event::KeyPressed>().registerHandler(
-        sf::Keyboard::Right, [this](const sf::Event::KeyEvent&) { moveRight = true; });
-    eventManagers.get<sf::Event::KeyPressed>().registerHandler(sf::Keyboard::Down,
-                                                               [this](const sf::Event::KeyEvent&) { moveDown = true; });
-    eventManagers.get<sf::Event::KeyPressed>().registerHandler(sf::Keyboard::Up,
-                                                               [this](const sf::Event::KeyEvent&) { moveUp = true; });
-    eventManagers.get<sf::Event::KeyReleased>().registerHandler(
-        sf::Keyboard::Left, [this](const sf::Event::KeyEvent&) { moveLeft = false; });
-    eventManagers.get<sf::Event::KeyReleased>().registerHandler(
-        sf::Keyboard::Right, [this](const sf::Event::KeyEvent&) { moveRight = false; });
-    eventManagers.get<sf::Event::KeyReleased>().registerHandler(
-        sf::Keyboard::Down, [this](const sf::Event::KeyEvent&) { moveDown = false; });
-    eventManagers.get<sf::Event::KeyReleased>().registerHandler(sf::Keyboard::Up,
-                                                                [this](const sf::Event::KeyEvent&) { moveUp = false; });
+    keyboardManager.registerKeyHandler(sf::Keyboard::Left, [this](const KeyStatus status, const sf::Event::KeyEvent&) {
+        if(KeyStatus::Pressed == status)
+        {
+            moveLeft = true;
+        }
+        else
+        {
+            moveLeft = false;
+        }
+    });
+    keyboardManager.registerKeyHandler(sf::Keyboard::Right, [this](const KeyStatus status, const sf::Event::KeyEvent&) {
+        if(KeyStatus::Pressed == status)
+        {
+            moveRight = true;
+        }
+        else
+        {
+            moveRight = false;
+        }
+    });
+    keyboardManager.registerKeyHandler(sf::Keyboard::Down, [this](const KeyStatus status, const sf::Event::KeyEvent&) {
+        if(KeyStatus::Pressed == status)
+        {
+            moveDown = true;
+        }
+        else
+        {
+            moveDown = false;
+        }
+    });
+    keyboardManager.registerKeyHandler(sf::Keyboard::Up, [this](const KeyStatus status, const sf::Event::KeyEvent&) {
+        if(KeyStatus::Pressed == status)
+        {
+            moveUp = true;
+        }
+        else
+        {
+            moveUp = false;
+        }
+    });
 }
 
 void Player::update()

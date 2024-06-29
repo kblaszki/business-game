@@ -7,10 +7,10 @@ add_library(gameLib
         entities/Button.cpp
         entities/Player.cpp
 
-        managers/ClosedEventManager.cpp
-        managers/KeyPressedManager.cpp
-        managers/KeyReleasedManager.cpp
-        managers/MouseMovedManager.cpp
+        managers/EventManagerOf.cpp
+        managers/GameExitManager.cpp
+        managers/KeyboardManager.cpp
+        managers/MouseManager.cpp
 
         screens/MenuScreen.cpp
         

@@ -2,7 +2,7 @@
 
 #include "Button.hpp"
 
-Button::Button(EventManagers& eventManagers,
+Button::Button(MouseManagerI& mouseManager,
                const std::string& text,
                sf::Vector2f position,
                sf::Vector2f size,
@@ -29,7 +29,7 @@ Button::Button(EventManagers& eventManagers,
     buttonText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
     buttonText.setPosition(position.x + size.x / 2.0f, position.y + size.y / 2.0f);
 
-    eventManagers.get<sf::Event::MouseMoved>().registerHandler([this](const auto& mouseMovedEvent) {
+    mouseManager.registerMoveHandler([this](const auto& mouseMovedEvent) {
         sf::Vector2f mousePosition(mouseMovedEvent.x, mouseMovedEvent.y);
         if(shape.getGlobalBounds().contains(mousePosition))
         {

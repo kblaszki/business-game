@@ -1,7 +1,7 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <managers/EventManagers.hpp>
+#include <managers/KeyboardManagerI.hpp>
 #include <window/DrawerI.hpp>
 
 #include <SFML/Graphics.hpp>
@@ -9,7 +9,7 @@
 class Player
 {
 public:
-    Player(EventManagers& eventManagers);
+    Player(KeyboardManagerI& keyboardManager);
 
     void update();
     void draw(DrawerI& drawer) const;

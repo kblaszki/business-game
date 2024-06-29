@@ -24,10 +24,9 @@ add_unit_test(controllers_test
 
 add_unit_test(managers_test
     SOURCES
-        managers/ClosedEventManagerTest.cpp
-        managers/KeyPressedManagerTest.cpp
-        managers/KeyReleasedManagerTest.cpp
-        managers/MouseMovedManagerTest.cpp
+        managers/GameExitManagerTest.cpp
+        managers/KeyboardManagerTest.cpp
+        managers/MouseManagerTest.cpp
     DEPENDENCIES 
         gameLib
 )
