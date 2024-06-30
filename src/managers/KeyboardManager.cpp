@@ -11,7 +11,7 @@ void KeyboardManager::handleEvent(const sf::Event& event)
         case sf::Event::KeyReleased:
             return handleKeyEvent(KeyStatus::Released, event.key);
         case sf::Event::TextEntered:
-
+            return handleTextEvent(event.text);
         default:
             break;
     }

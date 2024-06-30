@@ -47,7 +47,7 @@ TEST_F(KeyboardManagerShould, properlyHandleKeyPressedEvent)
     keyboardManager.handleEvent(keyPressedEvent);
 }
 
-TEST_F(KeyboardManagerShould, properlyHandleKeyReleaseEvent)
+TEST_F(KeyboardManagerShould, properlyHandleKeyReleasedEvent)
 {
     EXPECT_CALL(keyReleasedActionMock, doAction()).Times(1);
 
@@ -60,7 +60,7 @@ TEST_F(KeyboardManagerShould, properlyHandleKeyReleaseEvent)
                                                        }));
 
     sf::Event keyPressedEvent{};
-    keyPressedEvent.type = sf::Event::KeyPressed;
+    keyPressedEvent.type = sf::Event::KeyReleased;
     keyPressedEvent.key.code = sf::Keyboard::Enter;
     keyPressedEvent.key.scancode = sf::Keyboard::Scancode::Enter;
     keyboardManager.handleEvent(keyPressedEvent);
