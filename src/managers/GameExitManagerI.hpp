@@ -8,9 +8,9 @@
 #include <functional>
 
 template<>
-struct EventManager<EventManagerOf::GameExit> : public EventManagerI
+struct EventManager<ManagerOf::GameExit> : public EventManagerI
 {
-    static constexpr EventManagerOf EVENT_MANAGER_TYPE = EventManagerOf::GameExit;
+    static constexpr ManagerOf MANAGER_TYPE = ManagerOf::GameExit;
 
     using ExitHandler = std::function<void()>;
     using ExitUnRegisterer = ManagedList<ExitHandler>::UnRegisterer;
@@ -18,4 +18,4 @@ struct EventManager<EventManagerOf::GameExit> : public EventManagerI
     virtual ExitUnRegisterer registerExitHandler(ExitHandler&& handler) = 0;
 };
 
-using GameExitManagerI = EventManager<EventManagerOf::GameExit>;
+using GameExitManagerI = EventManager<ManagerOf::GameExit>;

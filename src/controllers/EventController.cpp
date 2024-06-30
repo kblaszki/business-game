@@ -18,7 +18,7 @@ void EventController::handleEvents()
     while(eventCollector.pollEvent(event))
     {
         std::cerr << to_string(event) << std::endl;
-        auto eventManager = eventManagers.find(getEventManagerOf(event.type));
+        auto eventManager = eventManagers.find(getManagerOf(event.type));
         if(eventManagers.end() not_eq eventManager)
         {
             eventManager->second->handleEvent(event);

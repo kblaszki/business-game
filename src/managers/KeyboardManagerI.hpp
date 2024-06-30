@@ -14,9 +14,9 @@ enum class KeyStatus
 };
 
 template<>
-struct EventManager<EventManagerOf::Keyboard> : public EventManagerI
+struct EventManager<ManagerOf::Keyboard> : public EventManagerI
 {
-    static constexpr EventManagerOf EVENT_MANAGER_TYPE = EventManagerOf::Keyboard;
+    static constexpr ManagerOf MANAGER_TYPE = ManagerOf::Keyboard;
 
     using KeyHandler = std::function<void(KeyStatus, const sf::Event::KeyEvent&)>;
     using KeyUnRegisterer = ManagedList<KeyHandler>::UnRegisterer;
@@ -28,4 +28,4 @@ struct EventManager<EventManagerOf::Keyboard> : public EventManagerI
     virtual TextUnRegisterer registerTextHandler(TextHandler&& handler) = 0;
 };
 
-using KeyboardManagerI = EventManager<EventManagerOf::Keyboard>;
+using KeyboardManagerI = EventManager<ManagerOf::Keyboard>;

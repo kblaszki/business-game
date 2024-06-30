@@ -3,7 +3,7 @@
 
 #include <SFML/Window/Event.hpp>
 
-enum class EventManagerOf
+enum class ManagerOf
 {
     None,
     GameExit,
@@ -15,4 +15,4 @@ enum class EventManagerOf
     Sensor
 };
 
-EventManagerOf getEventManagerOf(sf::Event::EventType event);
+ManagerOf getManagerOf(sf::Event::EventType event);

@@ -7,7 +7,7 @@ add_library(gameLib
         entities/Button.cpp
         entities/Player.cpp
 
-        managers/EventManagerOf.cpp
+        managers/ManagerOf.cpp
         managers/GameExitManager.cpp
         managers/KeyboardManager.cpp
         managers/MouseManager.cpp
