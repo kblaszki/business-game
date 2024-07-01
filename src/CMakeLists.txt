@@ -7,6 +7,8 @@ add_library(gameLib
         entities/Button.cpp
         entities/Player.cpp
 
+        handlers/OnHoverHandler.cpp
+
         managers/ManagerOf.cpp
         managers/GameExitManager.cpp
         managers/KeyboardManager.cpp

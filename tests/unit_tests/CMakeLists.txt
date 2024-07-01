@@ -22,6 +22,13 @@ add_unit_test(controllers_test
         gameLib
 )
 
+add_unit_test(handlers_test
+    SOURCES
+        handlers/OnHoverHandlerTest.cpp
+    DEPENDENCIES 
+        gameLib
+)
+
 add_unit_test(managers_test
     SOURCES
         managers/GameExitManagerTest.cpp
