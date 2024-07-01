@@ -8,9 +8,10 @@ Button::Button(MouseManagerI& mouseManager,
                sf::Vector2f size,
                sf::Color idleColor,
                sf::Color hoverColor)
-    : idleColor(idleColor)
+    : OnHoverHandler(mouseManager)
+    , OnClickHandler(mouseManager, sf::Mouse::Button::Left)
+    , idleColor(idleColor)
     , hoverColor(hoverColor)
-    , isHovered(false)
 {
     shape.setPosition(position);
     shape.setSize(size);
@@ -28,20 +29,6 @@ Button::Button(MouseManagerI& mouseManager,
     sf::FloatRect textRect = buttonText.getLocalBounds();
     buttonText.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
     buttonText.setPosition(position.x + size.x / 2.0f, position.y + size.y / 2.0f);
-
-    mouseManager.registerMoveHandler([this](const auto& mouseMovedEvent) {
-        sf::Vector2f mousePosition(mouseMovedEvent.x, mouseMovedEvent.y);
-        if(shape.getGlobalBounds().contains(mousePosition))
-        {
-            shape.setFillColor(this->hoverColor);
-            isHovered = true;
-        }
-        else
-        {
-            shape.setFillColor(this->idleColor);
-            isHovered = false;
-        }
-    });
 }
 
 void Button::update()
@@ -53,4 +40,32 @@ void Button::draw(DrawerI& drawer) const
 {
     drawer.draw(shape);
     drawer.draw(buttonText);
+}
+
+void Button::onHover()
+{
+    shape.setFillColor(this->hoverColor);
+}
+
+void Button::onHoverOut()
+{
+    shape.setFillColor(this->idleColor);
+}
+
+void Button::onClick()
+{
+    shape.setFillColor(sf::Color::Black);
+}
+
+void Button::onUnClick(bool isHovered)
+{
+    if(isHovered)
+    {
+        shape.setFillColor(sf::Color::Cyan);
+    }
+}
+
+bool Button::isHover(int x, int y) const
+{
+    return shape.getGlobalBounds().contains(x, y);
 }

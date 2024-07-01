@@ -1,8 +1,9 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <gmock/gmock.h>
 #include <handlers/OnClickHandler.hpp>
+
+#include <gmock/gmock.h>
 
 struct OnClickHandlerMock : public OnClickHandler
 {

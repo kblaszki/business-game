@@ -1,8 +1,9 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <gmock/gmock.h>
 #include <handlers/OnHoverHandler.hpp>
+
+#include <gmock/gmock.h>
 
 struct OnHoverHandlerMock : public OnHoverHandler
 {

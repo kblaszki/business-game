@@ -3,11 +3,10 @@
 
 #include "ScreenI.hpp"
 
-#include <managers/EventManagers.hpp>
-#include <window/ScreenRendererI.hpp>
-
 #include <entities/Button.hpp>
 #include <entities/Player.hpp>
+#include <managers/EventManagers.hpp>
+#include <window/ScreenRendererI.hpp>
 
 class MenuScreen : public ScreenI
 {
