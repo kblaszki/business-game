@@ -7,6 +7,7 @@ add_library(gameLib
         entities/Button.cpp
         entities/Player.cpp
 
+        handlers/OnClickHandler.cpp
         handlers/OnHoverHandler.cpp
 
         managers/ManagerOf.cpp

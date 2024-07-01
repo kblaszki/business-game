@@ -24,6 +24,7 @@ add_unit_test(controllers_test
 
 add_unit_test(handlers_test
     SOURCES
+        handlers/OnClickHandlerTest.cpp
         handlers/OnHoverHandlerTest.cpp
     DEPENDENCIES 
         gameLib
