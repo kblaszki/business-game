@@ -2,12 +2,23 @@
 
 #include "GameExitManager.hpp"
 
-void GameExitManager::handleEvent(const sf::Event& /*event*/)
+GameExitManager::GameExitManager(WindowCloserI& windowCloser)
+    : windowCloser{windowCloser}
 {
+}
+
+void GameExitManager::close()
+{
+    windowCloser.close();
     for(auto& handle: gameExitHandlers)
     {
         handle();
     }
+}
+
+void GameExitManager::handleEvent(const sf::Event& /*event*/)
+{
+    close();
 }
 
 GameExitManager::ExitUnRegisterer GameExitManager::registerExitHandler(ExitHandler&& handler)

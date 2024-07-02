@@ -4,11 +4,14 @@
 #include "EventManagerI.hpp"
 
 #include <utils/ManagedList.hpp>
+#include <window/WindowCloserI.hpp>
 
 #include <functional>
 
 template<>
-struct EventManager<ManagerOf::GameExit> : public EventManagerI
+struct EventManager<ManagerOf::GameExit>
+    : public EventManagerI
+    , public WindowCloserI
 {
     static constexpr ManagerOf MANAGER_TYPE = ManagerOf::GameExit;
 

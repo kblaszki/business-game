@@ -3,6 +3,7 @@
 #include <managers/GameExitManager.hpp>
 
 #include <mocks/utils/ActionMock.hpp>
+#include <mocks/window/WindowMock.hpp>
 
 #include <gtest/gtest.h>
 
@@ -11,8 +12,9 @@ using namespace ::testing;
 class GameExitManagerShould : public Test
 {
 protected:
+    StrictMock<WindowMock> windowMock{};
     StrictMock<ActionMock> actionMock{};
-    GameExitManager gameExitManager{};
+    GameExitManager gameExitManager{windowMock};
 };
 
 TEST_F(GameExitManagerShould, properlyRegisterClosedEventHandler)

@@ -7,6 +7,7 @@
 
 struct GameExitManagerMock : public GameExitManagerI
 {
+    MOCK_METHOD(void, close, (), (override));
     MOCK_METHOD(void, handleEvent, (const sf::Event&), (override));
     MOCK_METHOD(ExitUnRegisterer, registerExitHandler, (ExitHandler && handler), (override));
 };
