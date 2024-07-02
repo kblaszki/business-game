@@ -1,9 +1,10 @@
 /* Created by kblaszki */
 #pragma once
 
-struct ScreenControllerI
+#include <screens/ScreenUpdaterI.hpp>
+
+struct ScreenControllerI : public ScreenUpdaterI
 {
-    virtual ~ScreenControllerI() = default;
     virtual void update() = 0;
     virtual void display() = 0;
 };
