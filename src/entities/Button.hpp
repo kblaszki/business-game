@@ -20,11 +20,34 @@ public:
            const std::string& text,
            sf::Vector2f position,
            sf::Vector2f size,
-           sf::Color idleColor,
-           sf::Color hoverColor);
+           std::function<void()> onClickAction);
 
     void update() override;
     void draw(DrawerI& drawer) const override;
+
+    void setOnClick(std::function<void()> onClickAction)
+    {
+        this->onClickAction = onClickAction;
+    }
+
+    void setFont(const std::string& fontPath)
+    {
+        if(not font.loadFromFile(fontPath))
+        {
+            std::cerr << "Error loading font\n";
+        }
+        buttonText.setFont(font);
+    }
+
+    void setHoverColor(sf::Color color)
+    {
+        this->hoverColor = color;
+    }
+
+    void setIdleColor(sf::Color color)
+    {
+        this->idleColor = color;
+    }
 
 protected:
     void onHover() override;
@@ -34,6 +57,7 @@ protected:
     bool isHover(int x, int y) const override;
 
 private:
+    std::function<void()> onClickAction;
     sf::RectangleShape shape;
     sf::Color idleColor;
     sf::Color hoverColor;

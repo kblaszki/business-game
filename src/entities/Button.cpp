@@ -6,12 +6,12 @@ Button::Button(MouseManagerI& mouseManager,
                const std::string& text,
                sf::Vector2f position,
                sf::Vector2f size,
-               sf::Color idleColor,
-               sf::Color hoverColor)
+               std::function<void()> onClickAction)
     : OnHoverHandler(mouseManager)
     , OnClickHandler(mouseManager, sf::Mouse::Button::Left)
-    , idleColor(idleColor)
-    , hoverColor(hoverColor)
+    , onClickAction{onClickAction}
+    , idleColor{sf::Color::Red}
+    , hoverColor{sf::Color::Green}
 {
     shape.setPosition(position);
     shape.setSize(size);
@@ -55,6 +55,10 @@ void Button::onHoverOut()
 void Button::onClick()
 {
     shape.setFillColor(sf::Color::Black);
+    if(onClickAction)
+    {
+        onClickAction();
+    }
 }
 
 void Button::onUnClick(bool isHovered)
