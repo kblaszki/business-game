@@ -1,6 +1,8 @@
 /* Created by kblaszki */
 #pragma once
 
+#include "EntityI.hpp"
+
 #include <handlers/OnClickHandler.hpp>
 #include <handlers/OnHoverHandler.hpp>
 #include <managers/MouseManagerI.hpp>
@@ -9,7 +11,8 @@
 #include <SFML/Graphics.hpp>
 
 class Button
-    : protected OnHoverHandler
+    : public EntityI
+    , protected OnHoverHandler
     , protected OnClickHandler
 {
 public:
@@ -20,8 +23,8 @@ public:
            sf::Color idleColor,
            sf::Color hoverColor);
 
-    void update();
-    void draw(DrawerI& drawer) const;
+    void update() override;
+    void draw(DrawerI& drawer) const override;
 
 protected:
     void onHover() override;

@@ -1,18 +1,20 @@
 /* Created by kblaszki */
 #pragma once
 
+#include "EntityI.hpp"
+
 #include <managers/KeyboardManagerI.hpp>
 #include <window/DrawerI.hpp>
 
 #include <SFML/Graphics.hpp>
 
-class Player
+class Player : public EntityI
 {
 public:
     Player(KeyboardManagerI& keyboardManager);
 
-    void update();
-    void draw(DrawerI& drawer) const;
+    void update() override;
+    void draw(DrawerI& drawer) const override;
 
 private:
     sf::ConvexShape shape{};
