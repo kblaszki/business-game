@@ -3,10 +3,12 @@
 
 #include "EventCollectorI.hpp"
 #include "ScreenRendererI.hpp"
-#include "WindowControlI.hpp"
+#include "WindowCloserI.hpp"
+#include "WindowOpenerI.hpp"
 
 struct WindowI
-    : public WindowControlI
+    : public WindowOpenerI
+    , public WindowCloserI
     , public ScreenRendererI
     , public EventCollectorI
 {
