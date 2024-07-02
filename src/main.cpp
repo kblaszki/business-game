@@ -12,16 +12,15 @@ int main()
 {
     auto window = std::make_unique<WindowSFML>();
     auto eventController = std::make_unique<EventController>(*window);
-    eventController->emplace<GameExitManager>();
+    eventController->emplace<GameExitManager>(*window);
     eventController->emplace<KeyboardManager>();
     eventController->emplace<MouseManager>();
 
-    eventController->get<ManagerOf::GameExit>().registerExitHandler([&window]() { window->close(); });
     eventController->get<ManagerOf::Keyboard>().registerKeyHandler(
-        sf::Keyboard::Escape, [&window](const KeyStatus status, const sf::Event::KeyEvent&) {
+        sf::Keyboard::Escape, [&w = *window](const KeyStatus status, const sf::Event::KeyEvent&) {
             if(KeyStatus::Released == status)
             {
-                window->close();
+                w.close();
             }
         });
 

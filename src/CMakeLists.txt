@@ -15,6 +15,7 @@ add_library(gameLib
         managers/KeyboardManager.cpp
         managers/MouseManager.cpp
 
+        screens/GameScreen.cpp
         screens/MenuScreen.cpp
         
         utils/EventPrinter.cpp

@@ -2,34 +2,39 @@
 
 #include "MenuScreen.hpp"
 
-#include <managers/KeyboardManagerI.hpp>
+#include "GameScreen.hpp"
+
+#include <entities/Button.hpp>
+#include <managers/GameExitManagerI.hpp>
 #include <managers/MouseManagerI.hpp>
 
-MenuScreen::MenuScreen(EventManagers& eventManagers, ScreenRendererI& screenRenderer)
-    : player{eventManagers.get<ManagerOf::Keyboard>()}
-    , buttonStart{eventManagers.get<ManagerOf::Mouse>(),
-                  "Start",
-                  {100, 100},
-                  {100, 50},
-                  sf::Color::Red,
-                  sf::Color::Green}
-    , buttonExit{eventManagers.get<ManagerOf::Mouse>(), "Exit", {100, 300}, {100, 50}, sf::Color::Red, sf::Color::Green}
-    , screenRenderer{screenRenderer}
+MenuScreen::MenuScreen(EventManagers& eventManagers, ScreenRendererI& screenRenderer, ScreenUpdaterI& screenUpdater)
+    : screenRenderer{screenRenderer}
 {
+    entities.emplace_back(std::make_unique<Button>(
+        eventManagers.get<ManagerOf::Mouse>(), "Start", sf::Vector2f(100, 100), sf::Vector2f(100, 50), [&]() {
+            screenUpdater.setScreen(std::make_unique<GameScreen>(eventManagers, screenRenderer, screenUpdater));
+        }));
+    entities.emplace_back(std::make_unique<Button>(
+        eventManagers.get<ManagerOf::Mouse>(), "Exit", sf::Vector2f(100, 300), sf::Vector2f(100, 50), [&]() {
+            eventManagers.get<ManagerOf::GameExit>().close();
+        }));
 }
 
 void MenuScreen::update()
 {
-    buttonStart.update();
-    buttonExit.update();
-    player.update();
+    for(auto& entity: entities)
+    {
+        entity->update();
+    }
 }
 
 void MenuScreen::display()
 {
     screenRenderer.clear();
-    buttonStart.draw(screenRenderer);
-    buttonExit.draw(screenRenderer);
-    player.draw(screenRenderer);
+    for(auto& entity: entities)
+    {
+        entity->draw(screenRenderer);
+    }
     screenRenderer.display();
 }

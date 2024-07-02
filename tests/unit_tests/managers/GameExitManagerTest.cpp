@@ -24,6 +24,7 @@ TEST_F(GameExitManagerShould, properlyRegisterClosedEventHandler)
 
 TEST_F(GameExitManagerShould, properlyHandleClosedEvent)
 {
+    EXPECT_CALL(windowMock, close()).Times(1);
     EXPECT_CALL(actionMock, doAction()).Times(1);
 
     EXPECT_NO_THROW(gameExitManager.registerExitHandler([this]() { actionMock.doAction(); }));

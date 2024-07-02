@@ -2,23 +2,24 @@
 #pragma once
 
 #include "ScreenI.hpp"
+#include "ScreenUpdaterI.hpp"
 
-#include <entities/Button.hpp>
-#include <entities/Player.hpp>
+#include <entities/EntityI.hpp>
 #include <managers/EventManagers.hpp>
 #include <window/ScreenRendererI.hpp>
+
+#include <memory>
+#include <vector>
 
 class MenuScreen : public ScreenI
 {
 public:
-    MenuScreen(EventManagers& eventManagers, ScreenRendererI& screenRenderer);
+    MenuScreen(EventManagers& eventManagers, ScreenRendererI& screenRenderer, ScreenUpdaterI& screenUpdater);
 
     void update() override;
     void display() override;
 
 private:
-    Player player;
-    Button buttonStart;
-    Button buttonExit;
+    std::vector<std::unique_ptr<EntityI>> entities;
     ScreenRendererI& screenRenderer;
 };
