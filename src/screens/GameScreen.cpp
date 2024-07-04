@@ -2,13 +2,13 @@
 
 #include "GameScreen.hpp"
 
-#include <entities/Player.hpp>
+#include <entities/Paddle.hpp>
 #include <managers/KeyboardManagerI.hpp>
 
 GameScreen::GameScreen(EventManagers& eventManagers, ScreenRendererI& screenRenderer, ScreenUpdaterI& /*screenUpdater*/)
     : screenRenderer{screenRenderer}
 {
-    entities.emplace_back(std::make_unique<Player>(eventManagers.get<ManagerOf::Keyboard>()));
+    entities.emplace_back(std::make_unique<Paddle>(eventManagers.get<ManagerOf::Keyboard>()));
 }
 
 void GameScreen::update()

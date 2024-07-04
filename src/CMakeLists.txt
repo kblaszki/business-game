@@ -5,6 +5,7 @@ add_library(gameLib
         controllers/ScreenController.cpp
 
         entities/Button.cpp
+        entities/Paddle.cpp
         entities/Player.cpp
 
         handlers/OnClickHandler.cpp
