@@ -15,44 +15,16 @@ Player::Player(KeyboardManagerI& keyboardManager)
     shape.setFillColor(sf::Color::Green);
 
     keyboardManager.registerKeyHandler(sf::Keyboard::Left, [this](const KeyStatus status, const sf::Event::KeyEvent&) {
-        if(KeyStatus::Pressed == status)
-        {
-            moveLeft = true;
-        }
-        else
-        {
-            moveLeft = false;
-        }
+        moveLeft = KeyStatus::Pressed == status;
     });
     keyboardManager.registerKeyHandler(sf::Keyboard::Right, [this](const KeyStatus status, const sf::Event::KeyEvent&) {
-        if(KeyStatus::Pressed == status)
-        {
-            moveRight = true;
-        }
-        else
-        {
-            moveRight = false;
-        }
+        moveRight = KeyStatus::Pressed == status;
     });
     keyboardManager.registerKeyHandler(sf::Keyboard::Down, [this](const KeyStatus status, const sf::Event::KeyEvent&) {
-        if(KeyStatus::Pressed == status)
-        {
-            moveDown = true;
-        }
-        else
-        {
-            moveDown = false;
-        }
+        moveDown = KeyStatus::Pressed == status;
     });
     keyboardManager.registerKeyHandler(sf::Keyboard::Up, [this](const KeyStatus status, const sf::Event::KeyEvent&) {
-        if(KeyStatus::Pressed == status)
-        {
-            moveUp = true;
-        }
-        else
-        {
-            moveUp = false;
-        }
+        moveUp = KeyStatus::Pressed == status;
     });
 }
 
