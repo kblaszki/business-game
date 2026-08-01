@@ -9,7 +9,7 @@ related_code:
 related_docs:
   - ../reference/source-layout.md
   - ./design-decisions.md
-keywords: [roadmap, direction, prototype, board game, business, WIP, status]
+keywords: [roadmap, direction, prototype, board game, business, WIP, status, refactoring]
 last_reviewed: 2026-08-01
 ---
 
@@ -30,3 +30,7 @@ The longer-term intent is a business / board-style game (working name ideas like
 - `src/managers/EntitiesManagerI.hpp` — a collision/entities-management interface sketch with no implementation.
 
 Treat these as direction hints, not finished building blocks. When you start using or completing one, wire it into the build and update the relevant reference docs plus `docs/index.md`.
+
+## Refactoring plan
+
+A full architecture/stack audit with a phased refactoring checklist (SFML 3.1 migration, correctness fixes, engine fundamentals) lives in [mvp/refactoring-roadmap.md](../../mvp/refactoring-roadmap.md).
