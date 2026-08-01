@@ -12,13 +12,15 @@ related_code:
 related_docs:
   - ../reference/interfaces.md
   - ../reference/architecture.md
+  - ./sfml/index.md
+  - ./sfml/game-architecture.md
 keywords: [design, rationale, interface segregation, dependency injection, ISP, scene stack, fixed timestep, ResourceManager]
 last_reviewed: 2026-08-01
 ---
 
 # Design decisions
 
-Why the code looks the way it does. For "what exists", see the reference docs.
+Why the code looks the way it does. For "what exists", see the reference docs. For SFML-oriented background (loops, events, screens), see the [SFML 3.1 knowledge base](./sfml/index.md).
 
 ## Interfaces everywhere (`*I`)
 

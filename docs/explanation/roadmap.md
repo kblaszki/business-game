@@ -8,6 +8,7 @@ related_code:
 related_docs:
   - ../reference/source-layout.md
   - ./design-decisions.md
+  - ./sfml/index.md
 keywords: [roadmap, direction, prototype, board game, business, status, refactoring]
 last_reviewed: 2026-08-01
 ---
@@ -16,7 +17,7 @@ last_reviewed: 2026-08-01
 
 ## Where it is now
 
-A working SFML 3 prototype: menu with Start/Exit, and an **Arkanoid v1** session in `GameScreen` (paddle, ball, brick grid, 3 lives, win/lose back to menu). Engine plumbing includes window abstraction, typed event routing, a scene stack, resource caching, fixed-timestep updates, and letterboxed resize handling.
+A working SFML 3 prototype: menu with Start/Exit, and an **Arkanoid v1** session in `GameScreen` (paddle, ball, brick grid, 3 lives, win/lose back to menu). Engine plumbing includes window abstraction, typed event routing, a scene stack, resource caching, fixed-timestep updates, and letterboxed resize handling. SFML-oriented concepts and recommended patterns: [explanation/sfml/](./sfml/index.md).
 
 ## Where it is going
 

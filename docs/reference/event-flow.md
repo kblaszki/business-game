@@ -13,11 +13,14 @@ related_docs:
   - ./interfaces.md
   - ./architecture.md
   - ../how-to/add-event-manager.md
+  - ../explanation/sfml/events.md
 keywords: [events, managers, handlers, polling, ManagerOf, dispatch]
 last_reviewed: 2026-08-01
 ---
 
 # Event flow reference
+
+How SFML 3 events are classified and dispatched **in this repository**. Conceptual background (`pollEvent`, `getIf` vs `handleEvents`, events vs real-time input): [SFML events](../explanation/sfml/events.md).
 
 ## From SFML event to handler
 

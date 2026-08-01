@@ -48,6 +48,15 @@ flowchart TD
 | [reference/event-flow.md](reference/event-flow.md) | reference | events, managers, handlers, polling |
 | [explanation/design-decisions.md](explanation/design-decisions.md) | explanation | interfaces, DI, ISP, rationale |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, prototype, board game, WIP |
+| [explanation/sfml/index.md](explanation/sfml/index.md) | explanation | SFML 3.1 knowledge base map |
+| [explanation/sfml/overview-and-platforms.md](explanation/sfml/overview-and-platforms.md) | explanation | SFML modules, platforms, 3.1 features |
+| [explanation/sfml/events.md](explanation/sfml/events.md) | explanation | SFML events, pollEvent, input models |
+| [explanation/sfml/game-architecture.md](explanation/sfml/game-architecture.md) | explanation | game loop, timestep, layering on SFML |
+| [explanation/sfml/screens-pause-levels.md](explanation/sfml/screens-pause-levels.md) | explanation | scene stack, pause, levels |
+
+## SFML knowledge
+
+Conceptual guides for SFML 3.1 and typical 2D game structure live under [explanation/sfml/](explanation/sfml/index.md). They explain the library and common patterns; project-specific facts stay in `reference/` and `how-to/`.
 
 ## Maintenance
 
