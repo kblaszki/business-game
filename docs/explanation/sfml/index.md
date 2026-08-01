@@ -31,7 +31,7 @@ business-game pins SFML via FetchContent at tag `3.1.0` ([cmake/FetchSFML.cmake]
 1. [Overview and platforms](./overview-and-platforms.md) — modules, platforms, what 3.1 added, what SFML is not
 2. [Events](./events.md) — `pollEvent`, type-safe events, real-time input, how this project routes them
 3. [Game architecture](./game-architecture.md) — loop, fixed timestep, layering, resources, views
-4. [Screens, pause, and levels](./screens-pause-levels.md) — scene stack, overlays, level transitions
+4. [Screens, pause, and levels](./screens-pause-levels.md) — scene stack, overlays, level transitions (deeper overlay patterns: [game-dev/overlay-screens.md](../game-dev/overlay-screens.md))
 
 ## How these pages relate to project docs
 

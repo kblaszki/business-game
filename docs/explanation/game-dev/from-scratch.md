@@ -138,6 +138,8 @@ Rules of thumb:
 - Draw **bottom to top** so overlays composite correctly.
 - Defer stack changes if a callback on the current state would destroy that state mid-call.
 
+For a full pause walkthrough (idle animation vs frozen sim, input ownership, nested dialogs), see [overlay-screens.md](./overlay-screens.md).
+
 ## 6. Resources
 
 - Load critical assets at startup or on a loading screen; **fail loudly** if a required font/texture is missing.

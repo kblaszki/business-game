@@ -57,6 +57,7 @@ flowchart TD
 | [explanation/game-dev/from-scratch.md](explanation/game-dev/from-scratch.md) | explanation | build a game from scratch with SFML |
 | [explanation/game-dev/multithreading.md](explanation/game-dev/multithreading.md) | explanation | SFML threading analysis |
 | [explanation/game-dev/bibliography.md](explanation/game-dev/bibliography.md) | explanation | game-dev sources and references |
+| [explanation/game-dev/overlay-screens.md](explanation/game-dev/overlay-screens.md) | explanation | pause overlays, push/pop, update A/B |
 
 ## SFML knowledge
 
@@ -64,7 +65,7 @@ Conceptual guides for SFML 3.1 and typical 2D game structure live under [explana
 
 ## Game development practices (external)
 
-Repository-agnostic C++/SFML from-scratch practices, bibliography, and multithreading analysis: [explanation/game-dev/](explanation/game-dev/index.md). Use as an external baseline when comparing this project later.
+Repository-agnostic C++/SFML from-scratch practices, overlay/pause patterns, bibliography, and multithreading analysis: [explanation/game-dev/](explanation/game-dev/index.md). Use as an external baseline when comparing this project later.
 
 ## Maintenance
 

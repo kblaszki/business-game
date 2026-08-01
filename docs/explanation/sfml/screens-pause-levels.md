@@ -14,13 +14,14 @@ related_docs:
   - ../../how-to/add-screen.md
   - ../../reference/architecture.md
   - ../design-decisions.md
+  - ../game-dev/overlay-screens.md
 keywords: [SFML, screens, scene stack, pause, overlay, levels, replaceScreen, pushScreen, win lose]
 last_reviewed: 2026-08-01
 ---
 
 # Screens, pause, and levels
 
-Games change “mode” often: title menu, playing, paused, victory, next stage. SFML has no built-in scene system — you implement one. This page covers the stack model used in business-game and practical recipes for pause and level flow.
+Games change “mode” often: title menu, playing, paused, victory, next stage. SFML has no built-in scene system — you implement one. This page covers the stack model used in business-game and practical recipes for pause and level flow. A deeper, repository-agnostic walkthrough of overlays (update models A/B, input ownership, nested dialogs) is in [game-dev/overlay-screens.md](../game-dev/overlay-screens.md).
 
 ## Scene stack model
 
@@ -75,6 +76,24 @@ Recipe to add a screen type: [add-screen.md](../../how-to/add-screen.md).
 2. `GameScreen::update` stops running because it is no longer top — ball and enemies freeze “for free.”
 3. `display` still draws the game under a translucent panel if the controller draws the whole stack.
 4. Resume: `popScreen()`. Quit to menu: `replaceScreen(MenuScreen(...))` from the pause UI.
+
+### Advanced pause walkthrough
+
+Intended player-facing flow (not all wired in code yet):
+
+1. **Playing** — stack is `[GameScreen]`. Paddle input and ball/brick sim run in `GameScreen::update`. Escape should mean “pause,” not quit the process.
+2. **Enter pause** — `pushScreen(PauseScreen)`. Stack becomes `[GameScreen, PauseScreen]`. `GameScreen` stays alive (bricks, lives, ball position preserved).
+3. **While paused** — `ScreenController` updates only the top screen (`PauseScreen`): menu navigation works. It still **draws** every screen bottom-up, so the level remains visible under the overlay. Under **model A** (current controller behavior), the level does not receive `update`, so even cosmetic idle animation would freeze on the last frame. **Model B** (visual tick on screens below top) would allow idle-only motion; see [overlay-screens.md](../game-dev/overlay-screens.md).
+4. **Input caveat** — skipping `GameScreen::update` does not by itself disable `Paddle`’s keyboard handlers registered on the global `KeyboardManager`. A real pause must gate, unregister, or otherwise stop gameplay input while the overlay is top.
+5. **Resume** — `popScreen()` destroys `PauseScreen`; `GameScreen` is top again and accepts events / sim as before.
+6. **Quit to menu** — from pause UI, `replaceScreen(MenuScreen(...))` clears the stack (level destroyed).
+
+```mermaid
+flowchart TD
+  Game[GameScreen] -->|pushScreen Pause| StackPaused["stack: Game then Pause"]
+  StackPaused -->|popScreen Resume| Game
+  StackPaused -->|replaceScreen Quit| Menu[MenuScreen]
+```
 
 ### Focus loss
 
@@ -144,16 +163,32 @@ Keep transition flags (`transitioning`) if a single frame might otherwise double
 
 **Implemented today**
 
-- `ScreenController` scene stack: `pushScreen` / `popScreen` / `replaceScreen`, deferred apply, top-only update, bottom-up draw — see [architecture.md](../../reference/architecture.md) and [design-decisions.md](../design-decisions.md).
+- `ScreenController` scene stack: `pushScreen` / `popScreen` / `replaceScreen`, deferred apply, **model A** top-only `update`, bottom-up `display` — see [architecture.md](../../reference/architecture.md) and [design-decisions.md](../design-decisions.md). Relevant loop:
+
+```cpp
+// ScreenController::update — only top screen
+screenStack.back()->update(dt);
+
+// ScreenController::display — every screen, bottom-up
+for (auto& screen : screenStack)
+    screen->display();
+```
+
 - `MenuScreen` → `GameScreen` via `replaceScreen` on Start.
 - Arkanoid session: 3 lives; 0 lives or 0 bricks → `replaceScreen(MenuScreen)` (no result overlay yet).
 - Escape in `main.cpp` closes the window globally (not pause).
+- No `PauseScreen` yet. `Paddle` registers Left/Right on `KeyboardManager` for the lifetime of `GameScreen` — those handlers would still run under a naive pause push unless gated.
+
+**Toward model B later (docs only — not implemented)**
+
+If idle animation under pause is needed: extend `ScreenI` with something like `updateVisual(dt)`, and have the controller call `updateVisual` on every screen below the top while calling full `update` only on the top. Keep physics/AI/win-lose out of `updateVisual`.
 
 **Recommended next steps when polishing**
 
 1. `PauseScreen` pushed from the game; move Escape handling so playing → pause, pause → pop (or quit to menu), menu → exit.
-2. Optional `FocusLost` → push pause (or set a paused overlay once).
-3. Win/lose overlay before returning to menu.
-4. Levels: construct `GameScreen` with a level index / descriptor and rebuild the brick grid; use `replaceScreen` between stages.
+2. Cut gameplay input while pause is top (gate handlers or scoped unregister).
+3. Optional `FocusLost` → push pause (or set a paused overlay once).
+4. Win/lose overlay before returning to menu.
+5. Levels: construct `GameScreen` with a level index / descriptor and rebuild the brick grid; use `replaceScreen` between stages.
 
 Back to the [knowledge base index](./index.md).
