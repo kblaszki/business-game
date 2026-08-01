@@ -31,8 +31,8 @@ Interfaces use the `*I` suffix and are usually `struct`s with a virtual destruct
 
 | Interface | Methods | Notes |
 |-----------|---------|-------|
-| `EntityI` | `update()`, `draw(DrawerI&) const` | Base for all game objects |
-| `ScreenI` | `update()`, `display()` | Base for screens |
+| `EntityI` | `update(float dt)`, `draw(DrawerI&) const` | Base for all game objects; `dt` in seconds |
+| `ScreenI` | `update(float dt)`, `display()` | Base for screens |
 | `ScreenUpdaterI` | `setScreen(unique_ptr<ScreenI>&&)` | Implemented by `ScreenController`; screens request transitions through it |
 
 ## Window (interface segregation)
@@ -62,7 +62,7 @@ Screens receive a `ScreenRendererI&` (clear + draw + display); entities receive 
 | `MouseManagerI` | `Mouse` | `registerMoveHandler`, `registerButtonHandler(button, handler)`, `registerScrollHandler`, `registerStatusHandler` |
 | `GameExitManagerI` | `GameExit` | `registerExitHandler(handler)`; also a `WindowCloserI` |
 
-Handler registration returns an `UnRegisterer` (from `ManagedList`) that removes the handler when destroyed — store it to control lifetime (see `OnClickHandler`).
+Handler registration is `[[nodiscard]]` and returns a move-only `UnRegisterer` (from `ManagedList`) that removes the handler in its destructor — store it as a member (see `Paddle`, `OnClickHandler`).
 
 `EventManagers` resolves managers by type: `get<ManagerOf::Keyboard>()` returns the typed manager or throws if missing. `LordOfEventManagers` adds `emplace<T>()` to install a manager (throws on duplicate). Both are constrained by the `IsBaseOfEventManager` concept.
 

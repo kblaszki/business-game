@@ -11,11 +11,11 @@ GameScreen::GameScreen(EventManagers& eventManagers, ScreenRendererI& screenRend
     entities.emplace_back(std::make_unique<Paddle>(eventManagers.get<ManagerOf::Keyboard>()));
 }
 
-void GameScreen::update()
+void GameScreen::update(float dt)
 {
     for(auto& entity: entities)
     {
-        entity->update();
+        entity->update(dt);
     }
 }
 

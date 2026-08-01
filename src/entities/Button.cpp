@@ -31,10 +31,7 @@ Button::Button(MouseManagerI& mouseManager,
     buttonText.setPosition(position + size / 2.0f);
 }
 
-void Button::update()
-{
-    // Add any additional logic here
-}
+void Button::update(float /*dt*/) {}
 
 void Button::draw(DrawerI& drawer) const
 {

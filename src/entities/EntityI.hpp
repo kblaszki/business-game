@@ -8,6 +8,6 @@ class EntityI
 public:
     virtual ~EntityI() = default;
 
-    virtual void update() = 0;
+    virtual void update(float dt) = 0;
     virtual void draw(DrawerI& drawer) const = 0;
 };

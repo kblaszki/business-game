@@ -23,8 +23,3 @@ OnHoverHandler::OnHoverHandler(MouseManagerI& mouseManager)
     })}
 {
 }
-
-OnHoverHandler::~OnHoverHandler()
-{
-    unregisterHandler();
-}

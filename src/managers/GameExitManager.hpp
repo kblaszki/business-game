@@ -12,7 +12,7 @@ public:
 
     void close() override;
     void handleEvent(const sf::Event& event) override;
-    ExitUnRegisterer registerExitHandler(ExitHandler&& handler) override;
+    [[nodiscard]] ExitUnRegisterer registerExitHandler(ExitHandler&& handler) override;
 
 private:
     ManagedList<ExitHandler> gameExitHandlers;

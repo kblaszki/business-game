@@ -15,14 +15,14 @@ void ScreenController::setScreen(std::unique_ptr<ScreenI>&& screen)
     newScreen = std::move(screen);
 }
 
-void ScreenController::update()
+void ScreenController::update(float dt)
 {
     if(newScreen)
     {
         currentScreen = std::move(newScreen);
         newScreen = nullptr;
     }
-    currentScreen->update();
+    currentScreen->update(dt);
 }
 
 void ScreenController::display()

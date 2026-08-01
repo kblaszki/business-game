@@ -23,11 +23,11 @@ These patterns are exactly what you want when building on SFML: keep the library
 The API invites this bug: unregistration is opt-in instead of automatic.
 
 ```
-- [ ] Make unregistration RAII: replace ManagedList<T>::UnRegisterer with a move-only handle that calls the eraser in its destructor (or wrap in a small ScopedRegistration type)
-- [ ] Mark the register methods [[nodiscard]] on every manager interface
-- [ ] Store the handles as members in Paddle (and any future entity registering handlers)
-- [ ] Keep OnClickHandler/OnHoverHandler storing the handle; delete their now-redundant manual destructor calls
-- [ ] Add a unit test: destroy an entity, fire the event, assert no handler runs
+- [x] Make unregistration RAII: replace ManagedList<T>::UnRegisterer with a move-only handle that calls the eraser in its destructor (or wrap in a small ScopedRegistration type)
+- [x] Mark the register methods [[nodiscard]] on every manager interface
+- [x] Store the handles as members in Paddle (and any future entity registering handlers)
+- [x] Keep OnClickHandler/OnHoverHandler storing the handle; delete their now-redundant manual destructor calls
+- [x] Add a unit test: destroy an entity, fire the event, assert no handler runs
 ```
 
 ### 2. No delta time / fixed timestep (gameplay, HIGH)
@@ -35,11 +35,11 @@ The API invites this bug: unregistration is opt-in instead of automatic.
 `GameController::run()` does `handleEvents / update / display` with no clock. `Paddle::update()` moves a fixed 10 px per frame, so game speed is dictated by `setFramerateLimit(60)` in `WindowSFML`. On a machine where vsync/limit behaves differently, gameplay speed changes.
 
 ```
-- [ ] Add sf::Clock to the game loop; compute dt each iteration
-- [ ] Change EntityI::update() and ScreenI::update() to update(float dt) (seconds)
-- [ ] Express Paddle speed in px/s (e.g. 600.f * dt)
-- [ ] Prefer a fixed timestep with accumulator (update in constant steps, render freely) so future physics/collisions stay deterministic
-- [ ] Keep the framerate limit only as a render cap, not as the source of game speed
+- [x] Add sf::Clock to the game loop; compute dt each iteration
+- [x] Change EntityI::update() and ScreenI::update() to update(float dt) (seconds)
+- [x] Express Paddle speed in px/s (e.g. 600.f * dt)
+- [x] Prefer a fixed timestep with accumulator (update in constant steps, render freely) so future physics/collisions stay deterministic
+- [x] Keep the framerate limit only as a render cap, not as the source of game speed
 ```
 
 ### 3. Resource loading: each `Button` loads a font from disk (resources, MEDIUM)

@@ -4,7 +4,7 @@ One-off audit of business-game, written 2026-08-01. Standalone artifact — the 
 
 ## Verdict
 
-The architecture is fundamentally sound for an SFML game — interface segregation, dependency injection, and testability are already in place and should be kept. The stack is outdated in two places: SFML 2.6.1 (current line is 3.1.0) and GoogleTest 1.14 (current 1.17), plus a deprecated CMake FetchContent pattern. Migration to SFML 3.1 is recommended and its cost is contained because SFML touches only a handful of files. Four correctness issues need fixing regardless of the migration: a dangling-handler bug in `Paddle`, no delta time in the game loop, per-instance font loading from a CWD-relative path, and per-event logging to stderr. A full rewrite is not warranted; the phased refactor below is.
+The architecture is fundamentally sound for an SFML game — interface segregation, dependency injection, and testability are already in place and should be kept. Phases 1–3 are done (build modernization, SFML 3.1, RAII handlers + fixed timestep). Remaining gaps are game-engine fundamentals (resource cache, scene stack) and dead/WIP code decisions in phase 4. A full rewrite is not warranted; the phased refactor below is.
 
 ## Documents
 
@@ -27,7 +27,7 @@ The architecture is fundamentally sound for an SFML game — interface segregati
 |------|-------|
 | Architecture foundations (ISP, DI, tests) | Good — keep |
 | SFML version | 3.1.0 (phase 2 done 2026-08-01) |
-| Build system | 3 fixes needed (phase 1) |
-| Correctness | 1 real bug + 2 traps (phase 3) |
-| Game-engine fundamentals (dt, resources, scene stack) | Missing (phases 3–4) |
+| Build system | Done (phase 1) |
+| Correctness (RAII handlers, fixed dt, no event spam) | Done (phase 3, 2026-08-01) |
+| Game-engine fundamentals (resources, scene stack) | Missing (phase 4) |
 | Dead/WIP code (Player, Ball, EntitiesManagerI) | Decision required (phase 4) |

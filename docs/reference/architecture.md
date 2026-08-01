@@ -49,18 +49,25 @@ flowchart LR
 ## Game loop (in `src/controllers/GameController.cpp`)
 
 ```cpp
+// Fixed timestep (1/60 s) with accumulator; frame time from sf::Clock (injectable in tests).
 while(window->isOpen())
 {
+    accumulator += clampedFrameTime;
     eventController->handleEvents();
-    screenController->update();
+    while(accumulator >= FIXED_DT)
+    {
+        screenController->update(FIXED_DT);
+        accumulator -= FIXED_DT;
+    }
     screenController->display();
 }
 ```
 
 - `handleEvents()` polls SFML events and routes each to the matching manager (see [event-flow.md](./event-flow.md)).
-- `ScreenController::update()` first applies a pending screen swap, then updates the current screen.
+- `ScreenController::update(float dt)` first applies a pending screen swap, then updates the current screen with `dt` (seconds).
 - `ScreenController::display()` clears, draws entities, and displays via the `ScreenRendererI`.
+- Framerate limit on the window is only a render cap; gameplay speed comes from the fixed timestep.
 
 ## Screen switching
 
-`ScreenController` implements `ScreenUpdaterI`. A screen requests a transition with `setScreen(...)`; the controller stores it in `newScreen` and swaps it in on the next `update()` (deferred swap, so a screen never deletes itself mid-callback). Rationale in [design-decisions.md](../explanation/design-decisions.md).
+`ScreenController` implements `ScreenUpdaterI`. A screen requests a transition with `setScreen(...)`; the controller stores it in `newScreen` and swaps it in on the next `update(dt)` (deferred swap, so a screen never deletes itself mid-callback). Rationale in [design-decisions.md](../explanation/design-decisions.md).

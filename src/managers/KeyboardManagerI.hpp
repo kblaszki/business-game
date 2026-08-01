@@ -24,8 +24,8 @@ struct EventManager<ManagerOf::Keyboard> : public EventManagerI
     using TextHandler = std::function<void(const sf::Event::TextEntered&)>;
     using TextUnRegisterer = ManagedList<TextHandler>::UnRegisterer;
 
-    virtual KeyUnRegisterer registerKeyHandler(sf::Keyboard::Key key, KeyHandler&& handler) = 0;
-    virtual TextUnRegisterer registerTextHandler(TextHandler&& handler) = 0;
+    [[nodiscard]] virtual KeyUnRegisterer registerKeyHandler(sf::Keyboard::Key key, KeyHandler&& handler) = 0;
+    [[nodiscard]] virtual TextUnRegisterer registerTextHandler(TextHandler&& handler) = 0;
 };
 
 using KeyboardManagerI = EventManager<ManagerOf::Keyboard>;

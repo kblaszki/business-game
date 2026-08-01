@@ -7,10 +7,10 @@ class MouseManager : public MouseManagerI
 {
 public:
     void handleEvent(const sf::Event& event) override;
-    MoveUnRegisterer registerMoveHandler(MoveHandler&& handler) override;
-    ButtonUnRegisterer registerButtonHandler(sf::Mouse::Button button, ButtonHandler&& handler) override;
-    ScrollUnRegisterer registerScrollHandler(ScrollHandler&& handler) override;
-    StatusUnRegisterer registerStatusHandler(StatusHandler&& handler) override;
+    [[nodiscard]] MoveUnRegisterer registerMoveHandler(MoveHandler&& handler) override;
+    [[nodiscard]] ButtonUnRegisterer registerButtonHandler(sf::Mouse::Button button, ButtonHandler&& handler) override;
+    [[nodiscard]] ScrollUnRegisterer registerScrollHandler(ScrollHandler&& handler) override;
+    [[nodiscard]] StatusUnRegisterer registerStatusHandler(StatusHandler&& handler) override;
 
 private:
     void handleMouseMoveEvent(const sf::Event::MouseMoved& event);

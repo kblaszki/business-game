@@ -2,21 +2,65 @@
 #pragma once
 
 #include <functional>
-#include <iostream>
 #include <list>
+#include <utility>
 
 template<typename T>
 class ManagedList
 {
 public:
-    using UnRegisterer = std::function<void()>;
+    class UnRegisterer
+    {
+    public:
+        UnRegisterer() = default;
+
+        explicit UnRegisterer(std::function<void()> eraser)
+            : eraser{std::move(eraser)}
+        {
+        }
+
+        ~UnRegisterer()
+        {
+            if(eraser)
+            {
+                eraser();
+            }
+        }
+
+        UnRegisterer(UnRegisterer&& other) noexcept
+            : eraser{std::move(other.eraser)}
+        {
+            other.eraser = nullptr;
+        }
+
+        UnRegisterer& operator=(UnRegisterer&& other) noexcept
+        {
+            if(this != &other)
+            {
+                if(eraser)
+                {
+                    eraser();
+                }
+                eraser = std::move(other.eraser);
+                other.eraser = nullptr;
+            }
+            return *this;
+        }
+
+        UnRegisterer(const UnRegisterer&) = delete;
+        UnRegisterer& operator=(const UnRegisterer&) = delete;
+
+    private:
+        std::function<void()> eraser;
+    };
+
     using iterator = typename std::list<T>::iterator;
     using const_iterator = typename std::list<T>::const_iterator;
 
-    UnRegisterer emplace(T&& value)
+    [[nodiscard]] UnRegisterer emplace(T&& value)
     {
         auto it = elements.emplace(elements.end(), std::forward<T>(value));
-        return [this, it]() { elements.erase(it); };
+        return UnRegisterer{[this, it]() { elements.erase(it); }};
     }
 
     iterator begin()

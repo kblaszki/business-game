@@ -9,8 +9,8 @@ class KeyboardManager : public KeyboardManagerI
 {
 public:
     void handleEvent(const sf::Event& event) override;
-    KeyUnRegisterer registerKeyHandler(sf::Keyboard::Key key, KeyHandler&& handler) override;
-    TextUnRegisterer registerTextHandler(TextHandler&& handler) override;
+    [[nodiscard]] KeyUnRegisterer registerKeyHandler(sf::Keyboard::Key key, KeyHandler&& handler) override;
+    [[nodiscard]] TextUnRegisterer registerTextHandler(TextHandler&& handler) override;
 
 private:
     void handleKeyEvent(KeyStatus status, const sf::Event::KeyPressed& event);

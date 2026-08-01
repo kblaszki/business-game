@@ -5,13 +5,11 @@
 
 #include <managers/MouseManagerI.hpp>
 
-#include <iostream>
-
 class OnHoverHandler : virtual protected IsHoverHandlerI
 {
 public:
     OnHoverHandler(MouseManagerI& mouseManager);
-    virtual ~OnHoverHandler();
+    virtual ~OnHoverHandler() = default;
 
     virtual void onHover() = 0;
     virtual void onHoverOut() = 0;

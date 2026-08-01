@@ -13,7 +13,7 @@ Source of truth: [docs/how-to/add-screen.md](../../../docs/how-to/add-screen.md)
 
 ```
 - [ ] Create src/screens/NameScreen.hpp and NameScreen.cpp
-- [ ] Implement ScreenI (update + display)
+- [ ] Implement ScreenI (update(float dt) + display)
 - [ ] Add NameScreen.cpp to gameLib in src/CMakeLists.txt
 - [ ] Switch with screenUpdater.setScreen(...)
 - [ ] Pass EventManagers, ScreenRendererI, ScreenUpdaterI like existing screens
@@ -21,7 +21,7 @@ Source of truth: [docs/how-to/add-screen.md](../../../docs/how-to/add-screen.md)
 
 ## Steps
 
-1. **Interface** — implement `ScreenI` (`update`, `display`). Match ctor shape of existing screens:
+1. **Interface** — implement `ScreenI` (`update(float dt)`, `display`). Match ctor shape of existing screens:
 
 ```cpp
 NameScreen(EventManagers& eventManagers,

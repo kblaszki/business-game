@@ -30,18 +30,18 @@ Source of truth: [docs/how-to/add-entity.md](../../../docs/how-to/add-entity.md)
 class Name : public EntityI
 {
 public:
-    void update() override;
+    void update(float dt) override;
     void draw(DrawerI& drawer) const override;
 };
 ```
 
-2. **Implementation** — draw through `DrawerI`, not raw window APIs from screens.
+2. **Implementation** — draw through `DrawerI`, not raw window APIs from screens. Express movement in px/s using `dt`.
 
 3. **CMake** — append `entities/Name.cpp` to the `gameLib` list in `src/CMakeLists.txt`. Without this, the file never builds.
 
 4. **Screen** — `entities.emplace_back(std::make_unique<Name>(...));` in `GameScreen` or `MenuScreen` ctor (see `GameScreen.cpp`).
 
-5. **Input** — inject `KeyboardManagerI` / `MouseManagerI` (or `EventManagers&`) like `Paddle` / `Button`; register handlers in the ctor and unregister on destroy if the existing pattern does so.
+5. **Input** — inject `KeyboardManagerI` / `MouseManagerI` (or `EventManagers&`) like `Paddle` / `Button`; register handlers in the ctor and **store** the `[[nodiscard]]` RAII `UnRegisterer` as a member.
 
 ## References
 

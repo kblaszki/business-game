@@ -18,7 +18,7 @@ struct EventManager<ManagerOf::GameExit>
     using ExitHandler = std::function<void()>;
     using ExitUnRegisterer = ManagedList<ExitHandler>::UnRegisterer;
 
-    virtual ExitUnRegisterer registerExitHandler(ExitHandler&& handler) = 0;
+    [[nodiscard]] virtual ExitUnRegisterer registerExitHandler(ExitHandler&& handler) = 0;
 };
 
 using GameExitManagerI = EventManager<ManagerOf::GameExit>;

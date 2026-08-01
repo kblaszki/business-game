@@ -11,13 +11,17 @@
 class Paddle : public EntityI
 {
 public:
+    static constexpr float SPEED_PX_PER_SEC = 600.f;
+
     Paddle(KeyboardManagerI& keyboardManager);
 
-    void update() override;
+    void update(float dt) override;
     void draw(DrawerI& drawer) const override;
 
 private:
     sf::RectangleShape shape{};
+    KeyboardManagerI::KeyUnRegisterer leftKeyRegistration;
+    KeyboardManagerI::KeyUnRegisterer rightKeyRegistration;
     bool moveLeft = false;
     bool moveRight = false;
 };

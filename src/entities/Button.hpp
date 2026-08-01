@@ -22,7 +22,7 @@ public:
            sf::Vector2f size,
            std::function<void()> onClickAction);
 
-    void update() override;
+    void update(float dt) override;
     void draw(DrawerI& drawer) const override;
 
     void setOnClick(std::function<void()> onClickAction)

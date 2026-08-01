@@ -49,4 +49,4 @@ Only `GameExit`, `Keyboard`, and `Mouse` managers are installed in `main.cpp`; `
 
 ## Inside a manager
 
-Each manager keeps per-kind `ManagedList`s of `std::function` handlers. `handleEvent` decodes the concrete SFML subtype (e.g. `sf::Event::KeyPressed` + `KeyStatus`) and invokes matching handlers. Pressed/released pairs share one handler signature: the released subtype is converted to the pressed one, which acts as the canonical payload (`sf::Event::KeyPressed`, `sf::Event::MouseButtonPressed`). `registerXxxHandler` returns an `UnRegisterer`; dropping it unregisters.
+Each manager keeps per-kind `ManagedList`s of `std::function` handlers. `handleEvent` decodes the concrete SFML subtype (e.g. `sf::Event::KeyPressed` + `KeyStatus`) and invokes matching handlers. Pressed/released pairs share one handler signature: the released subtype is converted to the pressed one, which acts as the canonical payload (`sf::Event::KeyPressed`, `sf::Event::MouseButtonPressed`). `registerXxxHandler` is `[[nodiscard]]` and returns a move-only RAII `UnRegisterer`; destroying the handle (or moving from it) unregisters.

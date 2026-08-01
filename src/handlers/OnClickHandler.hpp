@@ -5,13 +5,11 @@
 
 #include <managers/MouseManagerI.hpp>
 
-#include <iostream>
-
 class OnClickHandler : virtual protected IsHoverHandlerI
 {
 public:
     OnClickHandler(MouseManagerI& mouseManager, sf::Mouse::Button button);
-    virtual ~OnClickHandler();
+    virtual ~OnClickHandler() = default;
 
     virtual void onClick() = 0;
     virtual void onUnClick(bool isHovered) = 0;

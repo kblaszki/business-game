@@ -19,7 +19,8 @@ protected:
 
 TEST_F(GameExitManagerShould, properlyRegisterClosedEventHandler)
 {
-    EXPECT_NO_THROW(gameExitManager.registerExitHandler([this]() { actionMock.doAction(); }));
+    GameExitManagerI::ExitUnRegisterer registration;
+    EXPECT_NO_THROW(registration = gameExitManager.registerExitHandler([this]() { actionMock.doAction(); }));
 }
 
 TEST_F(GameExitManagerShould, properlyHandleClosedEvent)
@@ -27,7 +28,7 @@ TEST_F(GameExitManagerShould, properlyHandleClosedEvent)
     EXPECT_CALL(windowMock, close()).Times(1);
     EXPECT_CALL(actionMock, doAction()).Times(1);
 
-    EXPECT_NO_THROW(gameExitManager.registerExitHandler([this]() { actionMock.doAction(); }));
+    auto registration = gameExitManager.registerExitHandler([this]() { actionMock.doAction(); });
 
     gameExitManager.handleEvent(sf::Event{sf::Event::Closed{}});
 }

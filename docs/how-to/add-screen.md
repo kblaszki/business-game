@@ -38,7 +38,7 @@ NameScreen(EventManagers& eventManagers,
            ScreenUpdaterI& screenUpdater);
 ```
 
-Implement `ScreenI`: `update()` iterates entities; `display()` does clear -> draw entities -> display through `screenRenderer` (copy the pattern in `src/screens/GameScreen.cpp`).
+Implement `ScreenI`: `update(float dt)` iterates entities (pass `dt` through); `display()` does clear -> draw entities -> display through `screenRenderer` (copy the pattern in `src/screens/GameScreen.cpp`).
 
 ## 2. Register in the build
 
@@ -53,7 +53,7 @@ screenUpdater.setScreen(
     std::make_unique<NameScreen>(eventManagers, screenRenderer, screenUpdater));
 ```
 
-`ScreenController` applies the swap on the next `update()` (deferred, see [architecture.md](../reference/architecture.md)). The Start button in `src/screens/MenuScreen.cpp` is the reference example.
+`ScreenController` applies the swap on the next `update(dt)` (deferred, see [architecture.md](../reference/architecture.md)). The Start button in `src/screens/MenuScreen.cpp` is the reference example.
 
 ## 4. Boot screen
 

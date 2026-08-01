@@ -26,8 +26,3 @@ OnClickHandler::OnClickHandler(MouseManagerI& mouseManager, const sf::Mouse::But
     , button{button}
 {
 }
-
-OnClickHandler::~OnClickHandler()
-{
-    unregisterHandler();
-}

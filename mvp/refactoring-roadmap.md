@@ -52,14 +52,16 @@ Done 2026-08-01. Bonus: the per-event logging fix from phase 3 landed here, beca
 Bugs and traps from [architecture-review.md](architecture-review.md), issues 1, 2, 4.
 
 ```
-- [ ] RAII unregistration: ManagedList returns a move-only handle that erases on destruction; register methods [[nodiscard]]
-- [ ] Fix Paddle to store its registration handles (kills the dangling-this bug); simplify OnClickHandler/OnHoverHandler destructors
-- [ ] Unit test proving handlers die with their owner
-- [ ] Delta time: sf::Clock in GameController loop, update(float dt) through ScreenI/EntityI, Paddle speed in px/s, fixed-timestep accumulator
+- [x] RAII unregistration: ManagedList returns a move-only handle that erases on destruction; register methods [[nodiscard]]
+- [x] Fix Paddle to store its registration handles (kills the dangling-this bug); simplify OnClickHandler/OnHoverHandler destructors
+- [x] Unit test proving handlers die with their owner
+- [x] Delta time: sf::Clock in GameController loop, update(float dt) through ScreenI/EntityI, Paddle speed in px/s, fixed-timestep accumulator
 - [x] Remove per-event std::cerr logging from EventController (done in phase 2 — EventPrinter deleted)
 ```
 
 Exit: no dangling handlers, framerate-independent movement, silent event loop; tests green.
+
+Done 2026-08-01. `GameController` accepts an optional `FrameTimeProvider` so unit tests stay deterministic under the fixed timestep.
 
 ## Phase 4 — Architecture upgrades (size: L)
 

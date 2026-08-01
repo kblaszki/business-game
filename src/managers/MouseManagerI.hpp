@@ -36,10 +36,11 @@ struct EventManager<ManagerOf::Mouse> : public EventManagerI
     using StatusHandler = std::function<void(MouseStatus)>;
     using StatusUnRegisterer = ManagedList<StatusHandler>::UnRegisterer;
 
-    virtual MoveUnRegisterer registerMoveHandler(MoveHandler&& handler) = 0;
-    virtual ButtonUnRegisterer registerButtonHandler(sf::Mouse::Button button, ButtonHandler&& handler) = 0;
-    virtual ScrollUnRegisterer registerScrollHandler(ScrollHandler&& handler) = 0;
-    virtual StatusUnRegisterer registerStatusHandler(StatusHandler&& handler) = 0;
+    [[nodiscard]] virtual MoveUnRegisterer registerMoveHandler(MoveHandler&& handler) = 0;
+    [[nodiscard]] virtual ButtonUnRegisterer registerButtonHandler(sf::Mouse::Button button,
+                                                                   ButtonHandler&& handler) = 0;
+    [[nodiscard]] virtual ScrollUnRegisterer registerScrollHandler(ScrollHandler&& handler) = 0;
+    [[nodiscard]] virtual StatusUnRegisterer registerStatusHandler(StatusHandler&& handler) = 0;
 };
 
 using MouseManagerI = EventManager<ManagerOf::Mouse>;

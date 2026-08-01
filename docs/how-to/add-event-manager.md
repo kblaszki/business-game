@@ -47,7 +47,7 @@ struct EventManager<ManagerOf::Joystick> : public EventManagerI
 {
     static constexpr ManagerOf MANAGER_TYPE = ManagerOf::Joystick;
     // using XHandler = std::function<...>;
-    // virtual XUnRegisterer registerXHandler(XHandler&&) = 0;
+    // [[nodiscard]] virtual XUnRegisterer registerXHandler(XHandler&&) = 0;
 };
 using JoystickManagerI = EventManager<ManagerOf::Joystick>;
 ```
@@ -56,7 +56,7 @@ The static `MANAGER_TYPE` is required by the `IsBaseOfEventManager` concept used
 
 ## 3. Implement the manager
 
-Follow `KeyboardManager.hpp/.cpp`: store handlers in `ManagedList`s, decode the concrete sub-event in `handleEvent`, and return an `UnRegisterer` from each register method.
+Follow `KeyboardManager.hpp/.cpp`: store handlers in `ManagedList`s, decode the concrete sub-event in `handleEvent`, and return a move-only RAII `UnRegisterer` from each `[[nodiscard]]` register method.
 
 ## 4. Register in the build and wire it up
 

@@ -21,11 +21,11 @@ MenuScreen::MenuScreen(EventManagers& eventManagers, ScreenRendererI& screenRend
         }));
 }
 
-void MenuScreen::update()
+void MenuScreen::update(float dt)
 {
     for(auto& entity: entities)
     {
-        entity->update();
+        entity->update(dt);
     }
 }
 

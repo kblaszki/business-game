@@ -36,11 +36,15 @@ Nearly every collaborator is behind a small `*I` interface. This keeps SFML at t
 
 ## Deferred screen switching
 
-`ScreenController::setScreen` stores the next screen in `newScreen` and swaps it in at the start of the next `update()`. A screen can therefore request its own replacement from inside a button callback without deleting itself mid-execution.
+`ScreenController::setScreen` stores the next screen in `newScreen` and swaps it in at the start of the next `update(dt)`. A screen can therefore request its own replacement from inside a button callback without deleting itself mid-execution.
 
 ## Handler lifetime via `ManagedList`
 
-Registering a handler returns an `UnRegisterer`; when it is destroyed the handler is removed. Objects like `OnClickHandler` hold their unregisterer, so their callbacks disappear automatically when the object dies — no dangling `std::function` into freed state.
+Registering a handler returns a move-only RAII `UnRegisterer` that erases the handler in its destructor (`[[nodiscard]]` on register APIs). Entities and handlers (`Paddle`, `OnClickHandler`, `OnHoverHandler`) store these handles as members — discarding a registration is a compile-time warning and would otherwise leave a dangling `std::function` into freed state.
+
+## Fixed timestep
+
+`GameController` accumulates wall-clock frame time and calls `update(FIXED_DT)` in constant 1/60 s steps. Entity speeds are expressed in px/s (e.g. `Paddle::SPEED_PX_PER_SEC`), so gameplay does not depend on the window framerate limit.
 
 ## No namespaces
 

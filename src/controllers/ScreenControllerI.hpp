@@ -5,6 +5,6 @@
 
 struct ScreenControllerI : public ScreenUpdaterI
 {
-    virtual void update() = 0;
+    virtual void update(float dt) = 0;
     virtual void display() = 0;
 };

@@ -40,12 +40,12 @@ Goal: a new `EntityI` that a screen updates and draws.
 class Name : public EntityI
 {
 public:
-    void update() override;
+    void update(float dt) override;
     void draw(DrawerI& drawer) const override;
 };
 ```
 
-Follow `src/entities/Paddle.hpp` for an input-driven object or `Button.hpp` for a UI element.
+`dt` is seconds (fixed timestep from `GameController`). Follow `src/entities/Paddle.hpp` for an input-driven object or `Button.hpp` for a UI element.
 
 ## 2. Implementation
 
@@ -63,11 +63,11 @@ In `GameScreen` (or `MenuScreen`) constructor:
 entities.emplace_back(std::make_unique<Name>(/* deps */));
 ```
 
-See `src/screens/GameScreen.cpp` — the screen's `update()`/`display()` loop already calls each entity.
+See `src/screens/GameScreen.cpp` — the screen's `update(dt)`/`display()` loop already calls each entity.
 
 ## 5. Input (optional)
 
-Inject the manager interface you need (`KeyboardManagerI&`, `MouseManagerI&`, or the whole `EventManagers&`) like `Paddle` / `Button`. Register handlers in the constructor; keep the returned `UnRegisterer` if you must control lifetime. See [interfaces.md](../reference/interfaces.md).
+Inject the manager interface you need (`KeyboardManagerI&`, `MouseManagerI&`, or the whole `EventManagers&`) like `Paddle` / `Button`. Register handlers in the constructor and **store** the returned `UnRegisterer` as a member (RAII; `[[nodiscard]]`). See [interfaces.md](../reference/interfaces.md).
 
 ## Verify
 

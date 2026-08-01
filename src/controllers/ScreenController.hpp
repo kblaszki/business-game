@@ -14,7 +14,7 @@ class ScreenController : public ScreenControllerI
 public:
     ScreenController(EventManagers& eventManagers, ScreenRendererI& screenRenderer);
     void setScreen(std::unique_ptr<ScreenI>&& screen);
-    void update() override;
+    void update(float dt) override;
     void display() override;
 
 private:

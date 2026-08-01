@@ -16,7 +16,7 @@ class GameScreen : public ScreenI
 public:
     GameScreen(EventManagers& eventManagers, ScreenRendererI& screenRenderer, ScreenUpdaterI& screenUpdater);
 
-    void update() override;
+    void update(float dt) override;
     void display() override;
 
 private:
