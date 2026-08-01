@@ -1,0 +1,42 @@
+# Build outputs (CMake presets use build/<preset>/)
+build/
+out/
+cmake-build-*/
+
+# CMake / compile database (generated under build/; ignore stray copies)
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+_deps/
+
+# IDE / editor
+.idea/
+*.user
+*.suo
+*.ncb
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Compiler / linker junk
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.exe
+*.pdb
+*.ilk
+*.exp

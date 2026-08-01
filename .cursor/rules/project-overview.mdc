@@ -1,0 +1,43 @@
+---
+description: Project overview, architecture, and build commands for business-game
+alwaysApply: true
+---
+
+# business-game
+
+C++20 SFML 2D game prototype (menu + paddle). Longer-term direction is a business/board-style game; do not assume board-game features exist yet.
+
+## Stack
+
+- C++20, CMake ≥ 3.20, Ninja presets (`debug` / `release`)
+- SFML 2.6 via FetchContent (`cmake/FetchSFML.cmake`) — no manual SFML install
+- GoogleTest only in Debug; clang-format / clang-tidy at repo root
+
+## Layout
+
+- `src/main.cpp` — wires window, event managers, screens, `GameController::run()`
+- `src/controllers/` — game loop, events, screen switching
+- `src/managers/` — keyboard, mouse, game-exit event managers
+- `src/screens/` — `MenuScreen`, `GameScreen` (`ScreenI`)
+- `src/entities/` — `EntityI` implementations (`Paddle`, `Button`, …)
+- `src/handlers/`, `src/window/`, `src/utils/`
+- `tests/unit_tests/`, `tests/mocks/`
+
+Shared library target: `gameLib`. Executable: `game`.
+
+## Build / test
+
+```sh
+cmake --preset debug
+cmake --build --preset debug --target game
+cmake --build --preset debug --target build_ut
+ctest --preset debug
+```
+
+Binary: `build/<preset>/bin/game` (`.exe` on Windows). Resources are copied next to the binary.
+
+## Agent pitfalls
+
+- Prefer interfaces (`DrawerI`, `ScreenRendererI`); avoid raw SFML in screens
+- New `.cpp` files must be listed in `src/CMakeLists.txt` (`gameLib`)
+- `src/entities/Ball.*` are WIP and not in the build — not production code

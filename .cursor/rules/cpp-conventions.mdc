@@ -1,0 +1,29 @@
+---
+description: C++ coding conventions for business-game sources
+globs: "**/*.{hpp,cpp}"
+alwaysApply: false
+---
+
+# C++ conventions
+
+- Standard: **C++20** (not C++23)
+- Headers: `#pragma once` (not include guards)
+- No namespaces
+- Classes: `CamelCase`; methods/vars: `camelCase`
+- Interfaces: `FooI` suffix (`EntityI`, `ScreenI`, `DrawerI`, …)
+- One primary type per `.hpp` / `.cpp` pair, side by side under `src/<area>/`
+
+## Includes
+
+- From `src/`: angle brackets — `#include <entities/Paddle.hpp>`
+- Same directory: quotes — `#include "EntityI.hpp"`
+- Prefer existing interface headers over reaching into concrete SFML types from screens
+
+## Style (match `.clang-format`)
+
+- LLVM-based, 4 spaces, column 120, `PointerAlignment: Left`
+- `SpaceBeforeParens: Never` → `if(`, `for(`, `while(`
+- Braces on new lines (`BreakBeforeBraces` / `BraceWrapping`)
+- Warnings as errors (`-Wall -Wextra -pedantic -Werror` / MSVC `/W4 /WX`)
+
+After larger edits: `cmake --build --preset debug --target format` (Debug configure required).
