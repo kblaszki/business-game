@@ -4,6 +4,8 @@ add_library(gameLib
         controllers/GameController.cpp
         controllers/ScreenController.cpp
 
+        entities/Ball.cpp
+        entities/Brick.cpp
         entities/Button.cpp
         entities/Paddle.cpp
 

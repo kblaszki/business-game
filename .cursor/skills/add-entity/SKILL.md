@@ -46,7 +46,7 @@ public:
 ## References
 
 - Interface: `src/entities/EntityI.hpp`
-- Examples: `src/entities/Paddle.*`, `src/entities/Button.*`
+- Examples: `src/entities/Paddle.*`, `src/entities/Ball.*`, `src/entities/Brick.*`, `src/entities/Button.*`
 - Prefer `ResourceManager` for fonts/assets instead of loading files inside entities.
 
 ## Update docs

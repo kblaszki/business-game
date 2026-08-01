@@ -5,7 +5,7 @@ alwaysApply: true
 
 # business-game
 
-C++20 SFML 2D game prototype (menu + paddle). Longer-term direction is a business/board-style game; do not assume board-game features exist yet.
+C++20 SFML 2D game prototype (menu + Arkanoid session). Longer-term direction is a business/board-style game; do not assume board-game features exist yet.
 
 ## Stack
 
@@ -20,7 +20,7 @@ C++20 SFML 2D game prototype (menu + paddle). Longer-term direction is a busines
 - `src/managers/` — keyboard, mouse, game-exit, game-window event managers
 - `src/resources/` — `ResourceManager` (font cache)
 - `src/screens/` — `MenuScreen`, `GameScreen` (`ScreenI`)
-- `src/entities/` — `EntityI` implementations (`Paddle`, `Button`, …)
+- `src/entities/` — `EntityI` implementations (`Paddle`, `Ball`, `Brick`, `Button`, …)
 - `src/handlers/`, `src/window/`, `src/utils/`
 - `tests/unit_tests/`, `tests/mocks/`
 

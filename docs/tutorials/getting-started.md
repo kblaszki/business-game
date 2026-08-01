@@ -63,7 +63,7 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280x720 window titled "Business game" opens on the menu screen. Click **Start** to enter the paddle screen; **Exit** or Escape closes it.
+A 1280x720 window titled "Business game" opens on the menu screen. Click **Start** for Arkanoid (paddle, ball, bricks; 3 lives); **Exit** or Escape closes it. Clearing all bricks or losing all lives returns to the menu.
 
 ## Next steps
 

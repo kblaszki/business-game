@@ -1,6 +1,6 @@
 # business-game
 
-A C++20 [SFML](https://www.sfml-dev.org/) 2D game prototype: menu screen and paddle gameplay.
+A C++20 [SFML](https://www.sfml-dev.org/) 2D game prototype: menu screen and an Arkanoid-style game session (paddle, ball, bricks).
 
 Longer-term direction is a business / board-style game (working name ideas such as *Empire Legends* are optional only; there is no `elcp` namespace in the code yet).
 
@@ -38,10 +38,10 @@ cd business-game
 | `src/managers/` | Keyboard, mouse, game-exit, and game-window event managers |
 | `src/resources/` | `ResourceManager` (font cache, exe-relative paths) |
 | `src/screens/` | `MenuScreen`, `GameScreen` |
-| `src/entities/` | Drawable/updatable game objects (`EntityI`) |
+| `src/entities/` | Drawable/updatable game objects (`Paddle`, `Ball`, `Brick`, `Button`) |
 | `src/handlers/` | Click / hover helpers |
 | `src/window/` | Window interfaces and SFML implementation |
-| `src/utils/` | Shared helpers (`ManagedList`) |
+| `src/utils/` | Shared helpers (`ManagedList`, `RectCollision`) |
 | `tests/unit_tests/` | GoogleTest unit tests (Debug only) |
 | `tests/mocks/` | gmock doubles |
 | `resources/` | Fonts and other assets (copied next to the binary) |

@@ -16,16 +16,12 @@ last_reviewed: 2026-08-01
 
 ## Where it is now
 
-A working SFML 3 prototype: a menu screen with Start/Exit buttons and a game screen with a keyboard-driven paddle. Engine plumbing includes window abstraction, typed event routing, a scene stack, resource caching, fixed-timestep updates, and letterboxed resize handling. Gameplay itself is still minimal.
+A working SFML 3 prototype: menu with Start/Exit, and an **Arkanoid v1** session in `GameScreen` (paddle, ball, brick grid, 3 lives, win/lose back to menu). Engine plumbing includes window abstraction, typed event routing, a scene stack, resource caching, fixed-timestep updates, and letterboxed resize handling.
 
 ## Where it is going
 
-The longer-term intent is a business / board-style game (working name ideas like *Empire Legends* have been floated). None of that domain exists yet: there is no board, tiles, turns, players-as-domain, or economy. Do not assume board-game features are present — build them explicitly when asked.
-
-## Removed stubs (phase 4)
-
-`Player`, `Ball`, and `EntitiesManagerI` were deleted as unused / unfinished stubs. Reintroduce domain entities when there is a concrete gameplay need (not speculative pong mechanics).
+The longer-term intent is a business / board-style game (working name ideas like *Empire Legends* have been floated). None of that domain exists yet: there is no board, tiles, turns, players-as-domain, or economy. Do not assume board-game features are present — build them explicitly when asked. The Arkanoid session is a gameplay exercise on the engine, not the final product.
 
 ## Refactoring plan
 
-A full architecture/stack audit with a phased refactoring checklist lives in [mvp/refactoring-roadmap.md](../../mvp/refactoring-roadmap.md). Phases 1–5 are complete; further work is feature development on this engine base.
+A full architecture/stack audit with a phased refactoring checklist lives in [mvp/refactoring-roadmap.md](../../mvp/refactoring-roadmap.md). Phases 1–5 are complete.

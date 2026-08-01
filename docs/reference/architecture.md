@@ -39,7 +39,9 @@ flowchart LR
   SC --> Game[GameScreen]
   Menu --> Ent[Entities]
   Game --> Ent
+  Game --> BallBrick[Ball Brick Paddle]
   RM --> Menu
+  RM --> Game
 ```
 
 ## Composition (in `src/main.cpp`)

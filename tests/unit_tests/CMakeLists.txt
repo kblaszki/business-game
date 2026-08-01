@@ -57,6 +57,8 @@ target_compile_definitions(resources_test PRIVATE
 
 add_unit_test(entities_test
     SOURCES
+        entities/BallTest.cpp
+        entities/BrickTest.cpp
         entities/PaddleTest.cpp
         entities/ButtonTest.cpp
     DEPENDENCIES
@@ -64,6 +66,13 @@ add_unit_test(entities_test
 )
 target_compile_definitions(entities_test PRIVATE
     RESOURCES_ROOT_FOR_TESTS="${CMAKE_SOURCE_DIR}/resources"
+)
+
+add_unit_test(utils_test
+    SOURCES
+        utils/RectCollisionTest.cpp
+    DEPENDENCIES
+        gameLib
 )
 
 add_unit_test(screens_test

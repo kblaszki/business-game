@@ -12,6 +12,9 @@ class Paddle : public EntityI
 {
 public:
     static constexpr float SPEED_PX_PER_SEC = 600.f;
+    static constexpr float WIDTH = 100.f;
+    static constexpr float HEIGHT = 20.f;
+    static constexpr float ARENA_WIDTH = 1280.f;
 
     Paddle(KeyboardManagerI& keyboardManager);
 
@@ -19,8 +22,12 @@ public:
     void draw(DrawerI& drawer) const override;
 
     [[nodiscard]] sf::Vector2f getPosition() const;
+    [[nodiscard]] sf::Vector2f getSize() const;
+    [[nodiscard]] sf::FloatRect getBounds() const;
 
 private:
+    void clampToArena();
+
     sf::RectangleShape shape{};
     KeyboardManagerI::KeyUnRegisterer leftKeyRegistration;
     KeyboardManagerI::KeyUnRegisterer rightKeyRegistration;

@@ -46,7 +46,7 @@ public:
 };
 ```
 
-`dt` is seconds (fixed timestep from `GameController`). Follow `src/entities/Paddle.hpp` for an input-driven object or `Button.hpp` for a UI element.
+`dt` is seconds (fixed timestep from `GameController`). Follow `src/entities/Paddle.hpp` / `Ball.hpp` for gameplay objects or `Button.hpp` for a UI element.
 
 ## 2. Implementation
 
