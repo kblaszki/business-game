@@ -7,6 +7,8 @@ description: >-
 
 # Run build and tests
 
+Source of truth: [docs/how-to/build-and-test.md](../../../docs/how-to/build-and-test.md) and [docs/tutorials/getting-started.md](../../../docs/tutorials/getting-started.md). Keep this skill consistent with those docs.
+
 ## Prerequisites
 
 - CMake ≥ 3.20, Ninja, C++20 compiler

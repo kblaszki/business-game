@@ -7,6 +7,8 @@ description: >-
 
 # Add screen
 
+Source of truth: [docs/how-to/add-screen.md](../../../docs/how-to/add-screen.md) (details) and [docs/reference/architecture.md](../../../docs/reference/architecture.md). This skill is the quick path; keep it and the doc consistent.
+
 ## Checklist
 
 ```
@@ -40,3 +42,7 @@ NameScreen(EventManagers& eventManagers,
 - `src/screens/ScreenI.hpp`, `ScreenUpdaterI.hpp`
 - `src/screens/MenuScreen.*`, `GameScreen.*`
 - Controllers: `src/controllers/ScreenController.*`
+
+## Update docs
+
+After the change, refresh docs whose `related_code` lists the files you touched (at least `docs/how-to/add-screen.md`), and `docs/reference/source-layout.md` for the new `.cpp`. Use the `update-docs` skill for a full sweep.

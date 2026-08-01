@@ -7,6 +7,8 @@ description: >-
 
 # Add entity
 
+Source of truth: [docs/how-to/add-entity.md](../../../docs/how-to/add-entity.md) (details) and [docs/reference/interfaces.md](../../../docs/reference/interfaces.md). This skill is the quick path; keep it and the doc consistent.
+
 ## Checklist
 
 ```
@@ -46,3 +48,7 @@ public:
 - Interface: `src/entities/EntityI.hpp`
 - Examples: `src/entities/Paddle.*`, `src/entities/Button.*`
 - Do not treat `Ball.*` as a finished template until it is added to `gameLib` and matches project style (`#pragma once`).
+
+## Update docs
+
+After the change, refresh docs whose `related_code` lists the files you touched (at least `docs/how-to/add-entity.md`), and `docs/reference/source-layout.md` for the new `.cpp`. Use the `update-docs` skill for a full sweep.
