@@ -12,6 +12,8 @@ alwaysApply: false
 - Classes: `CamelCase`; methods/vars: `camelCase`
 - Interfaces: `FooI` suffix (`EntityI`, `ScreenI`, `DrawerI`, …)
 - One primary type per `.hpp` / `.cpp` pair, side by side under `src/<area>/`
+- Gameplay tick: `EntityI::update(float dt)` / `ScreenI::update(float dt)` — `dt` in seconds (fixed timestep)
+- Screen transitions: `ScreenUpdaterI::{push,pop,replace}Screen` (deferred scene stack)
 
 ## Includes
 

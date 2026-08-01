@@ -28,7 +28,7 @@ last_reviewed: 2026-08-01
 | `src/handlers/` | Reusable UI behavior: `OnClickHandler`, `OnHoverHandler` |
 | `src/window/` | Window interfaces (ISP) and `WindowSFML` implementation |
 | `src/utils/` | `ManagedList` |
-| `tests/unit_tests/` | GoogleTest suites, mirror `src/` layout (Debug only) |
+| `tests/unit_tests/` | GoogleTest suites (`controllers`, `handlers`, `managers`, `resources`, `entities`, `screens`) |
 | `tests/mocks/` | gmock doubles |
 | `resources/fonts/` | Fonts copied next to the binary at build |
 

@@ -7,10 +7,12 @@ related_code:
   - src/managers/EventManagers.hpp
   - src/controllers/ScreenController.cpp
   - src/screens/ScreenUpdaterI.hpp
+  - src/resources/ResourceManager.hpp
+  - src/controllers/GameController.cpp
 related_docs:
   - ../reference/interfaces.md
   - ../reference/architecture.md
-keywords: [design, rationale, interface segregation, dependency injection, ISP, deferred swap]
+keywords: [design, rationale, interface segregation, dependency injection, ISP, scene stack, fixed timestep, ResourceManager]
 last_reviewed: 2026-08-01
 ---
 

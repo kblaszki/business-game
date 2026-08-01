@@ -54,3 +54,25 @@ add_unit_test(resources_test
 target_compile_definitions(resources_test PRIVATE
     RESOURCES_ROOT_FOR_TESTS="${CMAKE_SOURCE_DIR}/resources"
 )
+
+add_unit_test(entities_test
+    SOURCES
+        entities/PaddleTest.cpp
+        entities/ButtonTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+target_compile_definitions(entities_test PRIVATE
+    RESOURCES_ROOT_FOR_TESTS="${CMAKE_SOURCE_DIR}/resources"
+)
+
+add_unit_test(screens_test
+    SOURCES
+        screens/MenuScreenTest.cpp
+        screens/GameScreenTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+target_compile_definitions(screens_test PRIVATE
+    RESOURCES_ROOT_FOR_TESTS="${CMAKE_SOURCE_DIR}/resources"
+)

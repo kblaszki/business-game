@@ -33,19 +33,21 @@ cd business-game
 
 | Path | Role |
 |------|------|
-| `src/main.cpp` | Entry point; wires window, managers, screens, game loop |
-| `src/controllers/` | `GameController`, `EventController`, `ScreenController` |
-| `src/managers/` | Keyboard, mouse, and game-exit event managers |
+| `src/main.cpp` | Entry point; wires window, resources, managers, screens, game loop |
+| `src/controllers/` | `GameController`, `EventController`, `ScreenController` (scene stack) |
+| `src/managers/` | Keyboard, mouse, game-exit, and game-window event managers |
+| `src/resources/` | `ResourceManager` (font cache, exe-relative paths) |
 | `src/screens/` | `MenuScreen`, `GameScreen` |
 | `src/entities/` | Drawable/updatable game objects (`EntityI`) |
 | `src/handlers/` | Click / hover helpers |
 | `src/window/` | Window interfaces and SFML implementation |
-| `src/utils/` | Shared helpers |
+| `src/utils/` | Shared helpers (`ManagedList`) |
 | `tests/unit_tests/` | GoogleTest unit tests (Debug only) |
 | `tests/mocks/` | gmock doubles |
 | `resources/` | Fonts and other assets (copied next to the binary) |
+| `docs/` | Diátaxis documentation (tutorials, how-tos, reference, explanation) |
 
-Library target: `gameLib`. Executable target: `game`.
+Static library target: `gameLib`. Executable target: `game`.
 
 ## Building the Project
 
@@ -113,9 +115,10 @@ Contributions are welcome. Please:
 1. Fork the repository and create a feature branch.
 2. Match existing C++ style (see `.clang-format`). With a debug configure: `cmake --build --preset debug --target format`.
 3. Treat warnings as errors — keep the build clean under the project flags.
-4. For changes to controllers or managers, update or add unit tests under `tests/unit_tests/` and mocks under `tests/mocks/`.
+4. For changes to controllers, managers, screens, or entities, update or add unit tests under `tests/unit_tests/` and mocks under `tests/mocks/`.
 5. Add every new `src/**/*.cpp` to `gameLib` in `src/CMakeLists.txt`.
-6. Open a pull request with a short description of the change.
+6. Keep `docs/` current for files listed in a doc's `related_code` (see `docs/index.md`).
+7. Open a pull request with a short description of the change.
 
 ## License
 

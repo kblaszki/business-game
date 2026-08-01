@@ -7,12 +7,13 @@ related_code:
   - src/entities/Paddle.hpp
   - src/entities/Paddle.cpp
   - src/entities/Button.hpp
+  - src/resources/ResourceManager.hpp
   - src/CMakeLists.txt
   - src/screens/GameScreen.cpp
 related_docs:
   - ../reference/interfaces.md
   - ../reference/source-layout.md
-keywords: [entity, EntityI, paddle, draw, update, spawn]
+keywords: [entity, EntityI, paddle, draw, update, spawn, ResourceManager]
 last_reviewed: 2026-08-01
 ---
 
@@ -69,6 +70,10 @@ See `src/screens/GameScreen.cpp` — the screen's `update(dt)`/`display()` loop 
 
 Inject the manager interface you need (`KeyboardManagerI&`, `MouseManagerI&`, or the whole `EventManagers&`) like `Paddle` / `Button`. Register handlers in the constructor and **store** the returned `UnRegisterer` as a member (RAII; `[[nodiscard]]`). See [interfaces.md](../reference/interfaces.md).
 
+## 6. Fonts / assets (optional)
+
+Borrow from `ResourceManager` (`resources.getFont("fonts/prototype.ttf")`) — do not load files from the CWD inside the entity. The manager is owned in `main.cpp` and passed into screens.
+
 ## Verify
 
-`cmake --build --preset debug --target game`, then run and confirm the entity appears. If you touched managers or controllers, add/adjust tests and run `ctest --preset debug`.
+`cmake --build --preset debug --target game`, then run and confirm the entity appears. Prefer a unit test under `tests/unit_tests/entities/` (see `PaddleTest.cpp` / `ButtonTest.cpp`), then `ctest --preset debug`.

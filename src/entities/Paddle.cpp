@@ -31,3 +31,8 @@ void Paddle::draw(DrawerI& drawer) const
 {
     drawer.draw(shape);
 }
+
+sf::Vector2f Paddle::getPosition() const
+{
+    return shape.getPosition();
+}

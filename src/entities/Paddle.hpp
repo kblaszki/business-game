@@ -18,6 +18,8 @@ public:
     void update(float dt) override;
     void draw(DrawerI& drawer) const override;
 
+    [[nodiscard]] sf::Vector2f getPosition() const;
+
 private:
     sf::RectangleShape shape{};
     KeyboardManagerI::KeyUnRegisterer leftKeyRegistration;

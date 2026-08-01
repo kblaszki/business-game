@@ -28,4 +28,4 @@ The longer-term intent is a business / board-style game (working name ideas like
 
 ## Refactoring plan
 
-A full architecture/stack audit with a phased refactoring checklist lives in [mvp/refactoring-roadmap.md](../../mvp/refactoring-roadmap.md). Phases 1–4 are done; phase 5 covers broader tests and a docs sweep.
+A full architecture/stack audit with a phased refactoring checklist lives in [mvp/refactoring-roadmap.md](../../mvp/refactoring-roadmap.md). Phases 1–5 are complete; further work is feature development on this engine base.

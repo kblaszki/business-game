@@ -7,11 +7,13 @@ related_code:
   - src/controllers/GameController.cpp
   - src/controllers/EventController.cpp
   - src/controllers/ScreenController.cpp
+  - src/resources/ResourceManager.cpp
+  - src/managers/GameWindowManager.cpp
 related_docs:
   - ./source-layout.md
   - ./event-flow.md
   - ./interfaces.md
-keywords: [architecture, game loop, controllers, GameController, EventController, ScreenController]
+keywords: [architecture, game loop, controllers, GameController, EventController, ScreenController, ResourceManager]
 last_reviewed: 2026-08-01
 ---
 
@@ -23,7 +25,8 @@ business-game is a C++20 SFML 3 prototype built as one static library (`gameLib`
 
 ```mermaid
 flowchart LR
-  Main[main.cpp] --> GC[GameController]
+  Main[main.cpp] --> RM[ResourceManager]
+  Main --> GC[GameController]
   GC --> EC[EventController]
   GC --> SC[ScreenController]
   GC --> Win[WindowSFML : WindowI]
@@ -31,10 +34,12 @@ flowchart LR
   EM --> KB[KeyboardManager]
   EM --> MO[MouseManager]
   EM --> GE[GameExitManager]
+  EM --> GW[GameWindowManager]
   SC --> Menu[MenuScreen]
   SC --> Game[GameScreen]
   Menu --> Ent[Entities]
   Game --> Ent
+  RM --> Menu
 ```
 
 ## Composition (in `src/main.cpp`)

@@ -41,6 +41,8 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
+Suites: `controllers_test`, `handlers_test`, `managers_test`, `resources_test`, `entities_test`, `screens_test`.
+
 `build_ut` builds every suite registered with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`.
 
 ## Format the code

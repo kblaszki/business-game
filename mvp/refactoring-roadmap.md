@@ -14,8 +14,8 @@ flowchart LR
 ## Phase 0 — Baseline (size: XS)
 
 ```
-- [ ] Fresh cmake --preset debug; build game and build_ut; ctest green
-- [ ] Decide fate of untracked Ball.cpp/Ball.hpp (commit as WIP or delete) so the tree is clean
+- [x] Fresh cmake --preset debug; build game and build_ut; ctest green
+- [x] Decide fate of untracked Ball.cpp/Ball.hpp (deleted in phase 4)
 - [ ] Tag/note the commit as the pre-refactor baseline
 ```
 
@@ -81,13 +81,15 @@ Done 2026-08-01. Decisions: deleted `Player`, `Ball`, and `EntitiesManagerI` (un
 ## Phase 5 — Tests and documentation sync (size: M)
 
 ```
-- [ ] Unit tests for MenuScreen/GameScreen, Paddle (dt movement, unregistration), Button (hover/click)
-- [ ] Update docs/ (reference/architecture.md, interfaces.md, event-flow.md, how-to pages) to the post-refactor reality — run the update-docs skill
-- [ ] Update .cursor rules/skills where they reference changed APIs (SFML 2 snippets, update() signature)
-- [ ] Refresh README.md facts if commands or prerequisites changed
+- [x] Unit tests for MenuScreen/GameScreen, Paddle (dt movement, unregistration), Button (hover/click)
+- [x] Update docs/ (reference/architecture.md, interfaces.md, event-flow.md, how-to pages) to the post-refactor reality — run the update-docs skill
+- [x] Update .cursor rules/skills where they reference changed APIs (SFML 2 snippets, update() signature)
+- [x] Refresh README.md facts if commands or prerequisites changed
 ```
 
 Exit: coverage extended to screens/entities, `docs/` front-matter `last_reviewed` current, CI green.
+
+Done 2026-08-01. Suites: `controllers_test`, `handlers_test`, `managers_test`, `resources_test`, `entities_test`, `screens_test`.
 
 ## Suggested sequencing notes
 

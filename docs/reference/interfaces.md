@@ -34,8 +34,8 @@ Interfaces use the `*I` suffix and are usually `struct`s with a virtual destruct
 
 | Interface | Methods | Notes |
 |-----------|---------|-------|
-| `EntityI` | `update(float dt)`, `draw(DrawerI&) const` | Base for all game objects; `dt` in seconds |
-| `ScreenI` | `update(float dt)`, `display()` | Base for screens |
+| `EntityI` | `update(float dt)`, `draw(DrawerI&) const` | Base for all game objects; `dt` in seconds (fixed timestep) |
+| `ScreenI` | `update(float dt)`, `display()` | Base for screens; `display` draws content only (controller clears/presents) |
 | `ScreenUpdaterI` | `pushScreen` / `popScreen` / `replaceScreen` | Implemented by `ScreenController` (deferred scene stack) |
 
 ## Window (interface segregation)

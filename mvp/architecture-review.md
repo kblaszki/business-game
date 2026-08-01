@@ -98,9 +98,9 @@ The API invites this bug: unregistration is opt-in instead of automatic.
 Controllers, managers, and handlers have suites; screens and entities have none — precisely the code the refactor will touch most.
 
 ```
-- [ ] Add ScreenRendererI-based tests for MenuScreen/GameScreen (update/display call through to entities)
-- [ ] Add Paddle tests (movement with dt, handler unregistration)
-- [ ] Add Button tests via mouse manager mock (hover/click transitions)
+- [x] Add ScreenRendererI-based tests for MenuScreen/GameScreen (update/display call through to entities)
+- [x] Add Paddle tests (movement with dt, handler unregistration)
+- [x] Add Button tests via mouse manager mock (hover/click transitions)
 ```
 
 ## Is this approach right for an SFML game?

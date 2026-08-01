@@ -40,7 +40,7 @@ flowchart TD
 | [tutorials/getting-started.md](tutorials/getting-started.md) | tutorial | setup, toolchain, build, run, msys2 |
 | [how-to/build-and-test.md](how-to/build-and-test.md) | how-to | build, test, ctest, format, presets |
 | [how-to/add-entity.md](how-to/add-entity.md) | how-to | entity, EntityI, paddle, draw, update |
-| [how-to/add-screen.md](how-to/add-screen.md) | how-to | screen, ScreenI, ScreenUpdaterI, transition |
+| [how-to/add-screen.md](how-to/add-screen.md) | how-to | screen, ScreenI, push/pop/replace, transition |
 | [how-to/add-event-manager.md](how-to/add-event-manager.md) | how-to | manager, EventManager, ManagerOf, events |
 | [reference/architecture.md](reference/architecture.md) | reference | architecture, game loop, controllers |
 | [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, gameLib, targets |
