@@ -4,7 +4,7 @@ One-off audit of business-game, written 2026-08-01. Standalone artifact — the 
 
 ## Verdict
 
-The architecture is fundamentally sound for an SFML game — interface segregation, dependency injection, and testability are already in place and should be kept. Phases 1–3 are done (build modernization, SFML 3.1, RAII handlers + fixed timestep). Remaining gaps are game-engine fundamentals (resource cache, scene stack) and dead/WIP code decisions in phase 4. A full rewrite is not warranted; the phased refactor below is.
+The architecture is fundamentally sound for an SFML game — interface segregation, dependency injection, and testability are already in place and should be kept. Phases 1–4 are done (build, SFML 3.1, correctness, resources/scene stack/window manager). Remaining work is broader test coverage and a docs/rules sync in phase 5. A full rewrite is not warranted; the phased refactor below is.
 
 ## Documents
 
@@ -29,5 +29,5 @@ The architecture is fundamentally sound for an SFML game — interface segregati
 | SFML version | 3.1.0 (phase 2 done 2026-08-01) |
 | Build system | Done (phase 1) |
 | Correctness (RAII handlers, fixed dt, no event spam) | Done (phase 3, 2026-08-01) |
-| Game-engine fundamentals (resources, scene stack) | Missing (phase 4) |
-| Dead/WIP code (Player, Ball, EntitiesManagerI) | Decision required (phase 4) |
+| Game-engine fundamentals (resources, scene stack, resize) | Done (phase 4, 2026-08-01) |
+| Dead/WIP code (Player, Ball, EntitiesManagerI) | Deleted in phase 4 |

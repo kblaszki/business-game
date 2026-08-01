@@ -8,5 +8,7 @@
 struct ScreenUpdaterI
 {
     virtual ~ScreenUpdaterI() = default;
-    virtual void setScreen(std::unique_ptr<ScreenI>&& screen) = 0;
+    virtual void pushScreen(std::unique_ptr<ScreenI>&& screen) = 0;
+    virtual void popScreen() = 0;
+    virtual void replaceScreen(std::unique_ptr<ScreenI>&& screen) = 0;
 };

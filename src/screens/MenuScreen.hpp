@@ -9,12 +9,16 @@
 #include <window/ScreenRendererI.hpp>
 
 #include <memory>
+#include <resources/ResourceManager.hpp>
 #include <vector>
 
 class MenuScreen : public ScreenI
 {
 public:
-    MenuScreen(EventManagers& eventManagers, ScreenRendererI& screenRenderer, ScreenUpdaterI& screenUpdater);
+    MenuScreen(EventManagers& eventManagers,
+               ScreenRendererI& screenRenderer,
+               ScreenUpdaterI& screenUpdater,
+               ResourceManager& resources);
 
     void update(float dt) override;
     void display() override;

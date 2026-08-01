@@ -17,7 +17,11 @@ public:
     void draw(const sf::Drawable& drawable, const sf::RenderStates& states = sf::RenderStates::Default) override;
     void display() override;
     std::optional<sf::Event> pollEvent() override;
+    void setView(const sf::View& view) override;
+    sf::Vector2u getSize() const override;
 
 private:
+    void mapMouseEventToWorld(sf::Event& event);
+
     sf::RenderWindow window;
 };

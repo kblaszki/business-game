@@ -68,13 +68,15 @@ Done 2026-08-01. `GameController` accepts an optional `FrameTimeProvider` so uni
 Issues 3, 5, 6, 7 of the architecture review; makes the codebase ready for actual game content.
 
 ```
-- [ ] ResourceManager (font cache), injected from main.cpp; exe-relative resource paths; hard failure on missing assets
-- [ ] Scene stack in ScreenController (push/pop/replace via extended ScreenUpdaterI); initial screen injected, not hardcoded
-- [ ] GameWindowManager for Resized/focus (correct view handling on resize)
-- [ ] Decide and execute: Player (delete or repurpose), Ball (implement with dt + collision vs Paddle, or delete), EntitiesManagerI (implement only if collisions arrive now)
+- [x] ResourceManager (font cache), injected from main.cpp; exe-relative resource paths; hard failure on missing assets
+- [x] Scene stack in ScreenController (push/pop/replace via extended ScreenUpdaterI); initial screen injected, not hardcoded
+- [x] GameWindowManager for Resized/focus (correct view handling on resize)
+- [x] Decide and execute: Player (delete or repurpose), Ball (implement with dt + collision vs Paddle, or delete), EntitiesManagerI (implement only if collisions arrive now)
 ```
 
 Exit: pause/overlay technically possible, resources cached, window resize handled, no dead code left undecided.
+
+Done 2026-08-01. Decisions: deleted `Player`, `Ball`, and `EntitiesManagerI` (unused / speculative). `GameWindowManager` letterboxes 1280×720; focus events are acknowledged for a future auto-pause. GNU ld tests that touch fonts use `--whole-archive` on HarfBuzz.
 
 ## Phase 5 — Tests and documentation sync (size: M)
 

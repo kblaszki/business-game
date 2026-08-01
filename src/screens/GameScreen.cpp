@@ -5,7 +5,10 @@
 #include <entities/Paddle.hpp>
 #include <managers/KeyboardManagerI.hpp>
 
-GameScreen::GameScreen(EventManagers& eventManagers, ScreenRendererI& screenRenderer, ScreenUpdaterI& /*screenUpdater*/)
+GameScreen::GameScreen(EventManagers& eventManagers,
+                       ScreenRendererI& screenRenderer,
+                       ScreenUpdaterI& /*screenUpdater*/,
+                       ResourceManager& /*resources*/)
     : screenRenderer{screenRenderer}
 {
     entities.emplace_back(std::make_unique<Paddle>(eventManagers.get<ManagerOf::Keyboard>()));
@@ -21,10 +24,8 @@ void GameScreen::update(float dt)
 
 void GameScreen::display()
 {
-    screenRenderer.clear();
     for(auto& entity: entities)
     {
         entity->draw(screenRenderer);
     }
-    screenRenderer.display();
 }

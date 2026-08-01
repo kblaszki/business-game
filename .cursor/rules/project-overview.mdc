@@ -15,15 +15,16 @@ C++20 SFML 2D game prototype (menu + paddle). Longer-term direction is a busines
 
 ## Layout
 
-- `src/main.cpp` — wires window, event managers, screens, `GameController::run()`
-- `src/controllers/` — game loop, events, screen switching
-- `src/managers/` — keyboard, mouse, game-exit event managers
+- `src/main.cpp` — wires window, resources, event managers, screens, `GameController::run()`
+- `src/controllers/` — game loop, events, scene stack
+- `src/managers/` — keyboard, mouse, game-exit, game-window event managers
+- `src/resources/` — `ResourceManager` (font cache)
 - `src/screens/` — `MenuScreen`, `GameScreen` (`ScreenI`)
 - `src/entities/` — `EntityI` implementations (`Paddle`, `Button`, …)
 - `src/handlers/`, `src/window/`, `src/utils/`
 - `tests/unit_tests/`, `tests/mocks/`
 
-Shared library target: `gameLib`. Executable: `game`.
+Static library target: `gameLib`. Executable: `game`.
 
 ## Build / test
 
@@ -40,4 +41,5 @@ Binary: `build/<preset>/bin/game` (`.exe` on Windows). Resources are copied next
 
 - Prefer interfaces (`DrawerI`, `ScreenRendererI`); avoid raw SFML in screens
 - New `.cpp` files must be listed in `src/CMakeLists.txt` (`gameLib`)
-- `src/entities/Ball.*` are WIP and not in the build — not production code
+- Load fonts/assets through `ResourceManager` (exe-relative paths); do not load from CWD in entities
+- Screen transitions use `pushScreen` / `popScreen` / `replaceScreen` (not `setScreen`)

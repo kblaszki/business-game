@@ -45,7 +45,7 @@ flowchart LR
 | `SensorChanged` | `Sensor` |
 | anything else | `None` |
 
-Only `GameExit`, `Keyboard`, and `Mouse` managers are installed in `main.cpp`; `GameWindow`, `Joystick`, `Touch`, `Sensor` have enum entries but no manager yet, so those events are dropped.
+`GameExit`, `GameWindow`, `Keyboard`, and `Mouse` managers are installed in `main.cpp`. `Joystick`, `Touch`, and `Sensor` remain reserved enum values with no manager — those events are dropped.
 
 ## Inside a manager
 

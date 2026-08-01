@@ -12,7 +12,7 @@ related_code:
 related_docs:
   - ../reference/interfaces.md
   - ../reference/architecture.md
-keywords: [screen, ScreenI, ScreenUpdaterI, setScreen, transition, menu]
+keywords: [screen, ScreenI, ScreenUpdaterI, pushScreen, popScreen, replaceScreen, transition, menu]
 last_reviewed: 2026-08-01
 ---
 
@@ -22,23 +22,24 @@ Goal: a new `ScreenI` reachable via a transition.
 
 ```
 - [ ] Create src/screens/NameScreen.hpp and NameScreen.cpp
-- [ ] Implement ScreenI (update + display)
+- [ ] Implement ScreenI (update(float dt) + display)
 - [ ] Add screens/NameScreen.cpp to gameLib in src/CMakeLists.txt
-- [ ] Trigger it with screenUpdater.setScreen(...)
+- [ ] Trigger it with screenUpdater.replaceScreen / pushScreen
 - [ ] Build and run
 ```
 
 ## 1. Match the existing screen shape
 
-Constructors of `MenuScreen` / `GameScreen` take the same three dependencies:
+Constructors of `MenuScreen` / `GameScreen` take:
 
 ```cpp
 NameScreen(EventManagers& eventManagers,
            ScreenRendererI& screenRenderer,
-           ScreenUpdaterI& screenUpdater);
+           ScreenUpdaterI& screenUpdater,
+           ResourceManager& resources);
 ```
 
-Implement `ScreenI`: `update(float dt)` iterates entities (pass `dt` through); `display()` does clear -> draw entities -> display through `screenRenderer` (copy the pattern in `src/screens/GameScreen.cpp`).
+Implement `ScreenI`: `update(float dt)` iterates entities (pass `dt` through); `display()` only draws content through `screenRenderer` — do **not** call `clear()` / `display()` on the renderer (the controller owns that for the scene stack). Copy `src/screens/GameScreen.cpp`.
 
 ## 2. Register in the build
 
@@ -46,18 +47,22 @@ Append `screens/NameScreen.cpp` to the `gameLib` source list in `src/CMakeLists.
 
 ## 3. Navigate to it
 
-From a button callback or entity, request the swap:
+From a button callback or entity:
 
 ```cpp
-screenUpdater.setScreen(
-    std::make_unique<NameScreen>(eventManagers, screenRenderer, screenUpdater));
+// Replace the whole stack (e.g. Menu → Game)
+screenUpdater.replaceScreen(
+    std::make_unique<NameScreen>(eventManagers, screenRenderer, screenUpdater, resources));
+
+// Or push an overlay (pause / dialog) and later popScreen()
+screenUpdater.pushScreen(std::make_unique<PauseScreen>(...));
 ```
 
-`ScreenController` applies the swap on the next `update(dt)` (deferred, see [architecture.md](../reference/architecture.md)). The Start button in `src/screens/MenuScreen.cpp` is the reference example.
+`ScreenController` applies the transition on the next `update(dt)` (deferred, see [architecture.md](../reference/architecture.md)). The Start button in `src/screens/MenuScreen.cpp` is the reference example for `replaceScreen`.
 
 ## 4. Boot screen
 
-`ScreenController` starts on `MenuScreen` (`src/controllers/ScreenController.cpp`). Only change that constructor if you intend to replace the initial screen.
+`main.cpp` passes a factory into `ScreenController` that builds `MenuScreen`. Change that factory to replace the initial screen.
 
 ## Verify
 

@@ -13,4 +13,6 @@ struct WindowMock : public WindowI
     MOCK_METHOD(void, draw, (const sf::Drawable&, const sf::RenderStates&), (override));
     MOCK_METHOD(void, display, (), (override));
     MOCK_METHOD(std::optional<sf::Event>, pollEvent, (), (override));
+    MOCK_METHOD(void, setView, (const sf::View&), (override));
+    MOCK_METHOD(sf::Vector2u, getSize, (), (const, override));
 };

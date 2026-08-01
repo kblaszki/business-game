@@ -6,15 +6,17 @@ add_library(gameLib
 
         entities/Button.cpp
         entities/Paddle.cpp
-        entities/Player.cpp
 
         handlers/OnClickHandler.cpp
         handlers/OnHoverHandler.cpp
 
         managers/ManagerOf.cpp
         managers/GameExitManager.cpp
+        managers/GameWindowManager.cpp
         managers/KeyboardManager.cpp
         managers/MouseManager.cpp
+
+        resources/ResourceManager.cpp
 
         screens/GameScreen.cpp
         screens/MenuScreen.cpp

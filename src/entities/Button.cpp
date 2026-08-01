@@ -3,6 +3,7 @@
 #include "Button.hpp"
 
 Button::Button(MouseManagerI& mouseManager,
+               const sf::Font& font,
                const std::string& text,
                sf::Vector2f position,
                sf::Vector2f size,
@@ -17,11 +18,6 @@ Button::Button(MouseManagerI& mouseManager,
     shape.setPosition(position);
     shape.setSize(size);
     shape.setFillColor(idleColor);
-
-    if(not font.openFromFile("resources/fonts/prototype.ttf"))
-    {
-        std::cerr << "Error loading font\n";
-    }
 
     buttonText.setString(text);
     buttonText.setCharacterSize(24);

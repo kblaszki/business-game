@@ -8,7 +8,7 @@ alwaysApply: false
 
 ## gameLib sources
 
-Every new implementation `.cpp` under `src/` must be added to the `gameLib` source list in `src/CMakeLists.txt`. Omitting it means the file never compiles (see untracked `Ball` stubs).
+Every new implementation `.cpp` under `src/` must be added to the `gameLib` source list in `src/CMakeLists.txt`. Omitting it means the file never compiles.
 
 Executable is `game` (`src/main.cpp`); link only against `gameLib` + SFML as already set up.
 

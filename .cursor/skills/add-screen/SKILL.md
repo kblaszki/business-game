@@ -15,8 +15,8 @@ Source of truth: [docs/how-to/add-screen.md](../../../docs/how-to/add-screen.md)
 - [ ] Create src/screens/NameScreen.hpp and NameScreen.cpp
 - [ ] Implement ScreenI (update(float dt) + display)
 - [ ] Add NameScreen.cpp to gameLib in src/CMakeLists.txt
-- [ ] Switch with screenUpdater.setScreen(...)
-- [ ] Pass EventManagers, ScreenRendererI, ScreenUpdaterI like existing screens
+- [ ] Switch with screenUpdater.replaceScreen / pushScreen
+- [ ] Pass EventManagers, ScreenRendererI, ScreenUpdaterI, ResourceManager like existing screens
 ```
 
 ## Steps
@@ -26,16 +26,17 @@ Source of truth: [docs/how-to/add-screen.md](../../../docs/how-to/add-screen.md)
 ```cpp
 NameScreen(EventManagers& eventManagers,
            ScreenRendererI& screenRenderer,
-           ScreenUpdaterI& screenUpdater);
+           ScreenUpdaterI& screenUpdater,
+           ResourceManager& resources);
 ```
 
-2. **Lifecycle** — in `display()`, clear → draw entities via `screenRenderer` → `display()`, same as `MenuScreen` / `GameScreen`.
+2. **Lifecycle** — in `display()`, only draw entities via `screenRenderer` (no clear/present; the controller owns that for the scene stack).
 
 3. **CMake** — add `screens/NameScreen.cpp` to `gameLib` in `src/CMakeLists.txt`.
 
-4. **Navigate** — call `ScreenUpdaterI::setScreen(std::make_unique<NameScreen>(...))` from a button callback or entity (see Start button in `MenuScreen.cpp`).
+4. **Navigate** — `replaceScreen` for full transitions, `pushScreen`/`popScreen` for overlays (see Start button in `MenuScreen.cpp`).
 
-5. **Default entry** — `ScreenController` starts on `MenuScreen`; change that only if intentionally replacing the boot screen.
+5. **Default entry** — `main.cpp` injects the initial screen factory into `ScreenController`.
 
 ## References
 

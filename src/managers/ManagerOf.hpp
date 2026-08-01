@@ -10,9 +10,9 @@ enum class ManagerOf
     GameWindow,
     Keyboard,
     Mouse,
-    Joystick,
-    Touch,
-    Sensor
+    Joystick, // reserved — no manager yet
+    Touch,    // reserved — no manager yet
+    Sensor    // reserved — no manager yet
 };
 
 ManagerOf getManagerOf(const sf::Event& event);

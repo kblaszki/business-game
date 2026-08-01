@@ -17,6 +17,7 @@ class Button
 {
 public:
     Button(MouseManagerI& mouseManager,
+           const sf::Font& font,
            const std::string& text,
            sf::Vector2f position,
            sf::Vector2f size,
@@ -28,15 +29,6 @@ public:
     void setOnClick(std::function<void()> onClickAction)
     {
         this->onClickAction = onClickAction;
-    }
-
-    void setFont(const std::string& fontPath)
-    {
-        if(not font.openFromFile(fontPath))
-        {
-            std::cerr << "Error loading font\n";
-        }
-        buttonText.setFont(font);
     }
 
     void setHoverColor(sf::Color color)
@@ -61,6 +53,5 @@ private:
     sf::RectangleShape shape;
     sf::Color idleColor;
     sf::Color hoverColor;
-    sf::Font font;
     sf::Text buttonText;
 };

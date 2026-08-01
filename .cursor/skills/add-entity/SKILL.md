@@ -47,7 +47,7 @@ public:
 
 - Interface: `src/entities/EntityI.hpp`
 - Examples: `src/entities/Paddle.*`, `src/entities/Button.*`
-- Do not treat `Ball.*` as a finished template until it is added to `gameLib` and matches project style (`#pragma once`).
+- Prefer `ResourceManager` for fonts/assets instead of loading files inside entities.
 
 ## Update docs
 

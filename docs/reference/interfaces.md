@@ -7,6 +7,7 @@ related_code:
   - src/screens/ScreenI.hpp
   - src/screens/ScreenUpdaterI.hpp
   - src/window/WindowI.hpp
+  - src/window/WindowViewI.hpp
   - src/window/ScreenRendererI.hpp
   - src/window/DrawerI.hpp
   - src/window/EventCollectorI.hpp
@@ -15,11 +16,13 @@ related_code:
   - src/managers/KeyboardManagerI.hpp
   - src/managers/MouseManagerI.hpp
   - src/managers/GameExitManagerI.hpp
+  - src/managers/GameWindowManagerI.hpp
+  - src/resources/ResourceManager.hpp
 related_docs:
   - ./architecture.md
   - ./event-flow.md
   - ../explanation/design-decisions.md
-keywords: [interfaces, EntityI, ScreenI, DrawerI, ScreenRendererI, WindowI, EventManager, ISP]
+keywords: [interfaces, EntityI, ScreenI, DrawerI, ScreenRendererI, WindowI, EventManager, ISP, ResourceManager]
 last_reviewed: 2026-08-01
 ---
 
@@ -33,7 +36,7 @@ Interfaces use the `*I` suffix and are usually `struct`s with a virtual destruct
 |-----------|---------|-------|
 | `EntityI` | `update(float dt)`, `draw(DrawerI&) const` | Base for all game objects; `dt` in seconds |
 | `ScreenI` | `update(float dt)`, `display()` | Base for screens |
-| `ScreenUpdaterI` | `setScreen(unique_ptr<ScreenI>&&)` | Implemented by `ScreenController`; screens request transitions through it |
+| `ScreenUpdaterI` | `pushScreen` / `popScreen` / `replaceScreen` | Implemented by `ScreenController` (deferred scene stack) |
 
 ## Window (interface segregation)
 
@@ -44,13 +47,14 @@ flowchart TD
   WindowI --> WindowOpenerI[WindowOpenerI: isOpen]
   WindowI --> WindowCloserI[WindowCloserI: close]
   WindowI --> EventCollectorI[EventCollectorI: pollEvent]
+  WindowI --> WindowViewI[WindowViewI: setView / getSize]
   WindowI --> ScreenRendererI
   ScreenRendererI --> CleanerI[CleanerI: clear]
   ScreenRendererI --> DrawerI[DrawerI: draw]
   ScreenRendererI --> DisplayerI[DisplayerI: display]
 ```
 
-Screens receive a `ScreenRendererI&` (clear + draw + display); entities receive only a `DrawerI&`.
+Screens receive a `ScreenRendererI&` for drawing content (the controller owns clear/display); entities receive only a `DrawerI&`. `WindowSFML::pollEvent` maps mouse positions through the current view so letterboxing stays consistent with hit-testing.
 
 ## Event managers
 
@@ -61,6 +65,7 @@ Screens receive a `ScreenRendererI&` (clear + draw + display); entities receive 
 | `KeyboardManagerI` | `Keyboard` | `registerKeyHandler(key, handler)`, `registerTextHandler(handler)` |
 | `MouseManagerI` | `Mouse` | `registerMoveHandler`, `registerButtonHandler(button, handler)`, `registerScrollHandler`, `registerStatusHandler` |
 | `GameExitManagerI` | `GameExit` | `registerExitHandler(handler)`; also a `WindowCloserI` |
+| `GameWindowManagerI` | `GameWindow` | No registrations; handles `Resized` (letterbox view) and reserves focus for later |
 
 Handler registration is `[[nodiscard]]` and returns a move-only `UnRegisterer` (from `ManagedList`) that removes the handler in its destructor — store it as a member (see `Paddle`, `OnClickHandler`).
 

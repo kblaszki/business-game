@@ -47,10 +47,10 @@ The API invites this bug: unregistration is opt-in instead of automatic.
 `Button`'s constructor calls `font.loadFromFile("resources/fonts/prototype.ttf")` — one disk load and one `sf::Font` per button instance, hardcoded path, resolved relative to the process CWD (running the exe from another directory breaks rendering silently; errors go to `std::cerr` and are otherwise swallowed).
 
 ```
-- [ ] Add a small ResourceManager (font cache keyed by path; sf::Font owned once, handed out by reference)
-- [ ] Inject it from main.cpp into screens the same way EventManagers is injected
-- [ ] Resolve the resources root robustly (relative to the executable path, not CWD)
-- [ ] Fail loudly on missing resources (throw during construction) instead of logging and continuing
+- [x] Add a small ResourceManager (font cache keyed by path; sf::Font owned once, handed out by reference)
+- [x] Inject it from main.cpp into screens the same way EventManagers is injected
+- [x] Resolve the resources root robustly (relative to the executable path, not CWD)
+- [x] Fail loudly on missing resources (throw during construction) instead of logging and continuing
 ```
 
 ### 4. Per-event logging to `std::cerr` (noise/perf, MEDIUM)
@@ -67,9 +67,9 @@ The API invites this bug: unregistration is opt-in instead of automatic.
 `ScreenController` holds exactly one screen and hardcodes `MenuScreen` as the boot screen in its constructor. A pause menu, settings overlay, or dialog cannot be layered on top of a running game screen; the game screen would be destroyed and rebuilt.
 
 ```
-- [ ] Evolve ScreenController into a scene stack: push/pop/replace operations (extend ScreenUpdaterI accordingly)
-- [ ] update() the top scene only; display() all scenes bottom-up so overlays render above the game
-- [ ] Take the initial screen as a constructor argument (factory or unique_ptr) instead of hardcoding MenuScreen — also makes the controller testable without MenuScreen
+- [x] Evolve ScreenController into a scene stack: push/pop/replace operations (extend ScreenUpdaterI accordingly)
+- [x] update() the top scene only; display() all scenes bottom-up so overlays render above the game
+- [x] Take the initial screen as a constructor argument (factory or unique_ptr) instead of hardcoding MenuScreen — also makes the controller testable without MenuScreen
 ```
 
 ### 6. Silently dropped event categories (completeness, LOW)
@@ -77,8 +77,8 @@ The API invites this bug: unregistration is opt-in instead of automatic.
 `getManagerOf` maps `Resized`/focus events to `ManagerOf::GameWindow` and joystick/touch/sensor to their enums, but no manager exists for any of them — the events vanish. Resizing the window today distorts rendering (no view adjustment).
 
 ```
-- [ ] Implement a GameWindowManager handling Resized (adjust sf::View / letterbox) and focus changes (auto-pause later)
-- [ ] Leave Joystick/Touch/Sensor unimplemented until needed; delete the enum values or document them as reserved
+- [x] Implement a GameWindowManager handling Resized (adjust sf::View / letterbox) and focus changes (auto-pause later)
+- [x] Leave Joystick/Touch/Sensor unimplemented until needed; delete the enum values or document them as reserved
 ```
 
 ### 7. Dead and stub code (hygiene, LOW)
@@ -88,9 +88,9 @@ The API invites this bug: unregistration is opt-in instead of automatic.
 - `src/managers/EntitiesManagerI.hpp` sketches a collision/entity-management API with no implementation and no consumer.
 
 ```
-- [ ] Decide Player: delete it (Paddle covers the use case) or repurpose it as the first business-game domain entity
-- [ ] Decide Ball: either implement it properly (EntityI, gameLib entry, spawned by GameScreen, moves with dt, collides with Paddle) or delete both files
-- [ ] Keep EntitiesManagerI only if collisions are the next milestone; otherwise remove and reintroduce when needed
+- [x] Decide Player: delete it (Paddle covers the use case) or repurpose it as the first business-game domain entity
+- [x] Decide Ball: either implement it properly (EntityI, gameLib entry, spawned by GameScreen, moves with dt, collides with Paddle) or delete both files
+- [x] Keep EntitiesManagerI only if collisions are the next milestone; otherwise remove and reintroduce when needed
 ```
 
 ### 8. Test gaps (quality, LOW)

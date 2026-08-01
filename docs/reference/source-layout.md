@@ -19,11 +19,12 @@ last_reviewed: 2026-08-01
 
 | Path | Responsibility |
 |------|----------------|
-| `src/main.cpp` | Entry point; composes window, managers, screens, game loop |
-| `src/controllers/` | `GameController` (loop), `EventController` (poll + route), `ScreenController` (screen swap) |
-| `src/managers/` | Event managers keyed by `ManagerOf`: keyboard, mouse, game-exit, plus `EventManagers` container |
+| `src/main.cpp` | Entry point; composes window, resources, managers, screens, game loop |
+| `src/controllers/` | `GameController` (loop), `EventController` (poll + route), `ScreenController` (scene stack) |
+| `src/managers/` | Event managers keyed by `ManagerOf`: keyboard, mouse, game-exit, game-window, plus `EventManagers` container |
+| `src/resources/` | `ResourceManager` (font cache, exe-relative paths) |
 | `src/screens/` | `MenuScreen`, `GameScreen` (both `ScreenI`) |
-| `src/entities/` | `EntityI` implementations: `Paddle`, `Button`, `Player` |
+| `src/entities/` | `EntityI` implementations: `Paddle`, `Button` |
 | `src/handlers/` | Reusable UI behavior: `OnClickHandler`, `OnHoverHandler` |
 | `src/window/` | Window interfaces (ISP) and `WindowSFML` implementation |
 | `src/utils/` | `ManagedList` |
@@ -39,9 +40,3 @@ last_reviewed: 2026-08-01
 ## Adding a source file
 
 Any new `.cpp` under `src/` must be added to the `gameLib` source list in `src/CMakeLists.txt`, otherwise it is never compiled. Header-only files (`*.hpp`, interfaces) do not need listing.
-
-## Not in the build
-
-- `src/entities/Ball.cpp` / `Ball.hpp` are WIP stubs, not listed in `gameLib`.
-- `src/entities/Player.*` compiles into `gameLib` but is not used by any screen yet.
-- `src/managers/EntitiesManagerI.hpp` is an interface sketch with no implementation.

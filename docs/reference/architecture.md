@@ -39,12 +39,13 @@ flowchart LR
 
 ## Composition (in `src/main.cpp`)
 
-1. Create `WindowSFML` (implements `WindowI`).
-2. Create `EventController` over the window's `EventCollectorI`; it is also a `LordOfEventManagers`.
-3. `emplace<GameExitManager>`, `emplace<KeyboardManager>`, `emplace<MouseManager>` onto the controller.
-4. Register an Escape key handler that closes the window.
-5. Create `ScreenController` (starts on `MenuScreen`).
-6. Move all three into `GameController` and call `run()`.
+1. Create `ResourceManager` rooted at `<exe-dir>/resources`.
+2. Create `WindowSFML` (implements `WindowI`).
+3. Create `EventController` over the window's `EventCollectorI`; it is also a `LordOfEventManagers`.
+4. `emplace` exit / game-window / keyboard / mouse managers onto the controller.
+5. Register an Escape key handler that closes the window (keep the RAII `UnRegisterer`).
+6. Create `ScreenController` with a factory that builds the initial `MenuScreen`.
+7. Move window, events, and screens into `GameController` and call `run()`.
 
 ## Game loop (in `src/controllers/GameController.cpp`)
 
@@ -64,10 +65,10 @@ while(window->isOpen())
 ```
 
 - `handleEvents()` polls SFML events and routes each to the matching manager (see [event-flow.md](./event-flow.md)).
-- `ScreenController::update(float dt)` first applies a pending screen swap, then updates the current screen with `dt` (seconds).
-- `ScreenController::display()` clears, draws entities, and displays via the `ScreenRendererI`.
+- `ScreenController::update(float dt)` applies any pending stack transition, then updates only the top screen with `dt` (seconds).
+- `ScreenController::display()` clears once, draws every screen bottom-up, then presents via `ScreenRendererI`.
 - Framerate limit on the window is only a render cap; gameplay speed comes from the fixed timestep.
 
-## Screen switching
+## Scene stack
 
-`ScreenController` implements `ScreenUpdaterI`. A screen requests a transition with `setScreen(...)`; the controller stores it in `newScreen` and swaps it in on the next `update(dt)` (deferred swap, so a screen never deletes itself mid-callback). Rationale in [design-decisions.md](../explanation/design-decisions.md).
+`ScreenController` implements `ScreenUpdaterI` with `pushScreen` / `popScreen` / `replaceScreen`. Transitions are deferred until the next `update(dt)` so a screen never deletes itself mid-callback. `update` runs only the top screen; `display` clears once, draws every screen bottom-up (for overlays), then presents. The initial screen is injected via a factory — `MenuScreen` is not hardcoded inside the controller. Rationale in [design-decisions.md](../explanation/design-decisions.md).

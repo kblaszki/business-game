@@ -3,13 +3,12 @@ title: Project direction and status
 diataxis: explanation
 audience: [ai, human]
 related_code:
-  - src/entities/Ball.hpp
-  - src/entities/Player.hpp
-  - src/managers/EntitiesManagerI.hpp
+  - src/main.cpp
+  - src/resources/ResourceManager.hpp
 related_docs:
   - ../reference/source-layout.md
   - ./design-decisions.md
-keywords: [roadmap, direction, prototype, board game, business, WIP, status, refactoring]
+keywords: [roadmap, direction, prototype, board game, business, status, refactoring]
 last_reviewed: 2026-08-01
 ---
 
@@ -17,20 +16,16 @@ last_reviewed: 2026-08-01
 
 ## Where it is now
 
-A working SFML prototype: a menu screen with Start/Exit buttons and a game screen with a keyboard-driven paddle. The engine plumbing (window abstraction, event routing, screen switching, entity loop) is the real substance; the gameplay is minimal.
+A working SFML 3 prototype: a menu screen with Start/Exit buttons and a game screen with a keyboard-driven paddle. Engine plumbing includes window abstraction, typed event routing, a scene stack, resource caching, fixed-timestep updates, and letterboxed resize handling. Gameplay itself is still minimal.
 
 ## Where it is going
 
 The longer-term intent is a business / board-style game (working name ideas like *Empire Legends* have been floated). None of that domain exists yet: there is no board, tiles, turns, players-as-domain, or economy. Do not assume board-game features are present — build them explicitly when asked.
 
-## Work in progress and unused code
+## Removed stubs (phase 4)
 
-- `src/entities/Ball.*` — stub files, not in `gameLib`, not production code.
-- `src/entities/Player.*` — compiles but no screen uses it.
-- `src/managers/EntitiesManagerI.hpp` — a collision/entities-management interface sketch with no implementation.
-
-Treat these as direction hints, not finished building blocks. When you start using or completing one, wire it into the build and update the relevant reference docs plus `docs/index.md`.
+`Player`, `Ball`, and `EntitiesManagerI` were deleted as unused / unfinished stubs. Reintroduce domain entities when there is a concrete gameplay need (not speculative pong mechanics).
 
 ## Refactoring plan
 
-A full architecture/stack audit with a phased refactoring checklist (SFML 3.1 migration, correctness fixes, engine fundamentals) lives in [mvp/refactoring-roadmap.md](../../mvp/refactoring-roadmap.md).
+A full architecture/stack audit with a phased refactoring checklist lives in [mvp/refactoring-roadmap.md](../../mvp/refactoring-roadmap.md). Phases 1–4 are done; phase 5 covers broader tests and a docs sweep.

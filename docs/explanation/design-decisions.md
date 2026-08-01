@@ -36,7 +36,7 @@ Nearly every collaborator is behind a small `*I` interface. This keeps SFML at t
 
 ## Deferred screen switching
 
-`ScreenController::setScreen` stores the next screen in `newScreen` and swaps it in at the start of the next `update(dt)`. A screen can therefore request its own replacement from inside a button callback without deleting itself mid-execution.
+`ScreenController` keeps a scene stack. `pushScreen` / `popScreen` / `replaceScreen` stash a pending transition applied at the start of the next `update(dt)`, so a screen can replace or overlay itself from inside a button callback without deleting itself mid-execution. Only the top screen updates; all screens draw bottom-up for overlays.
 
 ## Handler lifetime via `ManagedList`
 
@@ -45,6 +45,14 @@ Registering a handler returns a move-only RAII `UnRegisterer` that erases the ha
 ## Fixed timestep
 
 `GameController` accumulates wall-clock frame time and calls `update(FIXED_DT)` in constant 1/60 s steps. Entity speeds are expressed in px/s (e.g. `Paddle::SPEED_PX_PER_SEC`), so gameplay does not depend on the window framerate limit.
+
+## Resource ownership
+
+`ResourceManager` owns fonts (and later other assets), keyed by path relative to `<exe-dir>/resources`. Screens/entities borrow `const sf::Font&`; missing assets throw during load instead of logging and continuing.
+
+## Letterboxed design resolution
+
+`GameWindowManager` keeps a 1280×720 view and letterboxes it inside the real window on `Resized`. `WindowSFML` maps mouse pixels to world coordinates so UI hit-tests stay aligned with the letterboxed view.
 
 ## No namespaces
 
