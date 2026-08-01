@@ -32,7 +32,7 @@ public:
 
     void setFont(const std::string& fontPath)
     {
-        if(not font.loadFromFile(fontPath))
+        if(not font.openFromFile(fontPath))
         {
             std::cerr << "Error loading font\n";
         }
@@ -61,6 +61,6 @@ private:
     sf::RectangleShape shape;
     sf::Color idleColor;
     sf::Color hoverColor;
-    sf::Text buttonText;
     sf::Font font;
+    sf::Text buttonText;
 };

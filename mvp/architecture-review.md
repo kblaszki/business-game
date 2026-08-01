@@ -58,8 +58,8 @@ The API invites this bug: unregistration is opt-in instead of automatic.
 `EventController::handleEvents()` prints every SFML event (including every mouse move) via `EventPrinter`. That is debug scaffolding running in release builds.
 
 ```
-- [ ] Remove the std::cerr line from EventController::handleEvents
-- [ ] If event tracing is still wanted, gate it behind a compile-time flag or a debug-only logger; keep EventPrinter as the formatter
+- [x] Remove the std::cerr line from EventController::handleEvents (done in phase 2)
+- [x] EventPrinter deleted with it — it was pure SFML-2 API; re-add a debug-only logger later if tracing is ever wanted
 ```
 
 ### 5. Single current screen, no scene stack (architecture, MEDIUM)

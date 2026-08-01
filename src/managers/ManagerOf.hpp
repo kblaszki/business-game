@@ -15,4 +15,4 @@ enum class ManagerOf
     Sensor
 };
 
-ManagerOf getManagerOf(sf::Event::EventType event);
+ManagerOf getManagerOf(const sf::Event& event);

@@ -3,7 +3,7 @@
 #include "WindowSFML.hpp"
 
 WindowSFML::WindowSFML()
-    : window{sf::VideoMode(1280, 720), "Business game", sf::Style::Default}
+    : window{sf::VideoMode({1280, 720}), "Business game", sf::Style::Default}
 {
     window.setFramerateLimit(60);
     window.setKeyRepeatEnabled(false);
@@ -34,7 +34,7 @@ void WindowSFML::display()
     window.display();
 }
 
-bool WindowSFML::pollEvent(sf::Event& event)
+std::optional<sf::Event> WindowSFML::pollEvent()
 {
-    return window.pollEvent(event);
+    return window.pollEvent();
 }

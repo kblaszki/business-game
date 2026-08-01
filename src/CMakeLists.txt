@@ -18,14 +18,12 @@ add_library(gameLib
 
         screens/GameScreen.cpp
         screens/MenuScreen.cpp
-        
-        utils/EventPrinter.cpp
-        
+
         window/WindowSFML.cpp
 )
 target_compile_features(gameLib PRIVATE cxx_std_20)
 target_compile_options(gameLib PRIVATE ${BASE_COMPILE_FLAGS})
-target_link_libraries(gameLib PUBLIC sfml-graphics sfml-system sfml-window)
+target_link_libraries(gameLib PUBLIC SFML::Graphics SFML::System SFML::Window)
 
 add_executable(game main.cpp)
 target_compile_features(game PRIVATE cxx_std_20)

@@ -3,8 +3,10 @@
 
 #include <SFML/Window/Event.hpp>
 
+#include <optional>
+
 struct EventCollectorI
 {
     virtual ~EventCollectorI() = default;
-    virtual bool pollEvent(sf::Event& event) = 0;
+    virtual std::optional<sf::Event> pollEvent() = 0;
 };

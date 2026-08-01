@@ -26,7 +26,7 @@ The architecture is fundamentally sound for an SFML game — interface segregati
 | Area | State |
 |------|-------|
 | Architecture foundations (ISP, DI, tests) | Good — keep |
-| SFML version | 2.6.1 → migrate to 3.1.0 (phase 2) |
+| SFML version | 3.1.0 (phase 2 done 2026-08-01) |
 | Build system | 3 fixes needed (phase 1) |
 | Correctness | 1 real bug + 2 traps (phase 3) |
 | Game-engine fundamentals (dt, resources, scene stack) | Missing (phases 3–4) |

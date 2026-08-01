@@ -7,18 +7,20 @@ Work through the steps in order; the build stays broken between steps 2 and 8, s
 ## Master checklist
 
 ```
-- [ ] 1. CMake: SFML 3.1.0 + new target names (+ FetchContent_MakeAvailable)
-- [ ] 2. EventCollectorI + WindowSFML: optional-returning pollEvent, VideoMode
-- [ ] 3. EventController + getManagerOf: variant-based dispatch
-- [ ] 4. KeyboardManager(I): event subtypes + scoped enums
-- [ ] 5. MouseManager(I): event subtypes
-- [ ] 6. GameExitManager: is<Closed>
-- [ ] 7. Entities: Paddle (vectors, scoped keys), Button (font/text/rect API)
-- [ ] 8. main.cpp + EventPrinter
-- [ ] 9. Tests and mocks
-- [ ] 10. CI flags cleanup
-- [ ] 11. Verify: build, ctest, manual smoke run
+- [x] 1. CMake: SFML 3.1.0 + new target names (+ FetchContent_MakeAvailable)
+- [x] 2. EventCollectorI + WindowSFML: optional-returning pollEvent, VideoMode
+- [x] 3. EventController + getManagerOf: variant-based dispatch
+- [x] 4. KeyboardManager(I): event subtypes + scoped enums
+- [x] 5. MouseManager(I): event subtypes
+- [x] 6. GameExitManager: is<Closed>
+- [x] 7. Entities: Paddle (vectors, scoped keys), Button (font/text/rect API)
+- [x] 8. main.cpp + EventPrinter
+- [x] 9. Tests and mocks
+- [x] 10. CI flags cleanup
+- [x] 11. Verify: build, ctest, manual smoke run
 ```
+
+Completed 2026-08-01. Deviations from the plan below: `EventPrinter` was deleted (not rewritten) together with the per-event `std::cerr` logging, as recommended; `IsHoverHandlerI::isHover(int, int)` was kept as-is (handlers read `event.position.x/y`) to avoid churn in mocks and tests; `Player.cpp` (dead code, but compiled into `gameLib`) was migrated too.
 
 ## 1. CMake
 

@@ -35,7 +35,7 @@ Goal: handle a category of SFML events (e.g. joystick) that currently maps to a 
 
 ## 1. Confirm the routing
 
-`getManagerOf` in `src/managers/ManagerOf.cpp` maps `sf::Event::EventType` to `ManagerOf`. If your event type already returns the target enum value, no change is needed; otherwise add/adjust the `case`. Add a new enum value in `ManagerOf.hpp` only if introducing a genuinely new category.
+`getManagerOf` in `src/managers/ManagerOf.cpp` classifies the event variant with `event.is<sf::Event::Xxx>()` checks and returns a `ManagerOf`. If your event subtypes already map to the target enum value, no change is needed; otherwise extend the matching `if`. Add a new enum value in `ManagerOf.hpp` only if introducing a genuinely new category.
 
 ## 2. Declare the interface
 

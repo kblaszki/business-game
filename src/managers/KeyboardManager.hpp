@@ -13,8 +13,8 @@ public:
     TextUnRegisterer registerTextHandler(TextHandler&& handler) override;
 
 private:
-    void handleKeyEvent(KeyStatus status, const sf::Event::KeyEvent& event);
-    void handleTextEvent(const sf::Event::TextEvent& event);
+    void handleKeyEvent(KeyStatus status, const sf::Event::KeyPressed& event);
+    void handleTextEvent(const sf::Event::TextEntered& event);
 
     std::unordered_map<sf::Keyboard::Key, ManagedList<KeyHandler>> keyHandlers;
     ManagedList<TextHandler> textHandlers;

@@ -13,6 +13,13 @@ using namespace ::testing;
 class OnHoverHandlerShould : public Test
 {
 protected:
+    sf::Event makeMouseMovedEvent(int x, int y) const
+    {
+        sf::Event::MouseMoved event{};
+        event.position = {x, y};
+        return sf::Event{event};
+    }
+
     MouseManager mouseManager{};
 };
 
@@ -34,11 +41,7 @@ TEST_F(OnHoverHandlerShould, invokeOnHoverWhenMouseEnters)
     EXPECT_CALL(handler, isHover(100, 200)).Times(1).WillOnce(Return(true));
     EXPECT_CALL(handler, onHover()).Times(1);
 
-    sf::Event event;
-    event.type = sf::Event::MouseMoved;
-    event.mouseMove.x = 100;
-    event.mouseMove.y = 200;
-    mouseManager.handleEvent(event);
+    mouseManager.handleEvent(makeMouseMovedEvent(100, 200));
 }
 
 TEST_F(OnHoverHandlerShould, invokeOnHoverOutWhenMouseLeaves)
@@ -48,12 +51,8 @@ TEST_F(OnHoverHandlerShould, invokeOnHoverOutWhenMouseLeaves)
     EXPECT_CALL(handler, onHover()).Times(1);
     EXPECT_CALL(handler, onHoverOut()).Times(1);
 
-    sf::Event event;
-    event.type = sf::Event::MouseMoved;
-    event.mouseMove.x = 100;
-    event.mouseMove.y = 200;
-    mouseManager.handleEvent(event);
-    mouseManager.handleEvent(event);
+    mouseManager.handleEvent(makeMouseMovedEvent(100, 200));
+    mouseManager.handleEvent(makeMouseMovedEvent(100, 200));
 }
 
 TEST_F(OnHoverHandlerShould, notInvokeOnHoverWhenAlreadyHovered)
@@ -62,12 +61,8 @@ TEST_F(OnHoverHandlerShould, notInvokeOnHoverWhenAlreadyHovered)
     EXPECT_CALL(handler, isHover(100, 200)).Times(2).WillOnce(Return(true)).WillOnce(Return(true));
     EXPECT_CALL(handler, onHover()).Times(1);
 
-    sf::Event event;
-    event.type = sf::Event::MouseMoved;
-    event.mouseMove.x = 100;
-    event.mouseMove.y = 200;
-    mouseManager.handleEvent(event);
-    mouseManager.handleEvent(event);
+    mouseManager.handleEvent(makeMouseMovedEvent(100, 200));
+    mouseManager.handleEvent(makeMouseMovedEvent(100, 200));
 }
 
 TEST_F(OnHoverHandlerShould, notInvokeOnHoverOutWhenNotHovered)
@@ -81,11 +76,7 @@ TEST_F(OnHoverHandlerShould, notInvokeOnHoverOutWhenNotHovered)
     EXPECT_CALL(handler, onHover()).Times(1);
     EXPECT_CALL(handler, onHoverOut()).Times(1);
 
-    sf::Event event;
-    event.type = sf::Event::MouseMoved;
-    event.mouseMove.x = 100;
-    event.mouseMove.y = 200;
-    mouseManager.handleEvent(event);
-    mouseManager.handleEvent(event);
-    mouseManager.handleEvent(event);
+    mouseManager.handleEvent(makeMouseMovedEvent(100, 200));
+    mouseManager.handleEvent(makeMouseMovedEvent(100, 200));
+    mouseManager.handleEvent(makeMouseMovedEvent(100, 200));
 }

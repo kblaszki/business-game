@@ -24,13 +24,13 @@ struct EventManager<ManagerOf::Mouse> : public EventManagerI
 {
     static constexpr ManagerOf MANAGER_TYPE = ManagerOf::Mouse;
 
-    using MoveHandler = std::function<void(const sf::Event::MouseMoveEvent&)>;
+    using MoveHandler = std::function<void(const sf::Event::MouseMoved&)>;
     using MoveUnRegisterer = ManagedList<MoveHandler>::UnRegisterer;
 
-    using ButtonHandler = std::function<void(MouseButtonStatus, const sf::Event::MouseButtonEvent&)>;
+    using ButtonHandler = std::function<void(MouseButtonStatus, const sf::Event::MouseButtonPressed&)>;
     using ButtonUnRegisterer = ManagedList<ButtonHandler>::UnRegisterer;
 
-    using ScrollHandler = std::function<void(const sf::Event::MouseWheelScrollEvent&)>;
+    using ScrollHandler = std::function<void(const sf::Event::MouseWheelScrolled&)>;
     using ScrollUnRegisterer = ManagedList<ScrollHandler>::UnRegisterer;
 
     using StatusHandler = std::function<void(MouseStatus)>;

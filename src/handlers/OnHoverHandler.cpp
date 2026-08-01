@@ -3,8 +3,8 @@
 #include "OnHoverHandler.hpp"
 
 OnHoverHandler::OnHoverHandler(MouseManagerI& mouseManager)
-    : unregisterHandler{mouseManager.registerMoveHandler([this](const sf::Event::MouseMoveEvent& event) {
-        if(isHover(event.x, event.y))
+    : unregisterHandler{mouseManager.registerMoveHandler([this](const sf::Event::MouseMoved& event) {
+        if(isHover(event.position.x, event.position.y))
         {
             if(not isHovered)
             {

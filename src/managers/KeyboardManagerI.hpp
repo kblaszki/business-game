@@ -18,10 +18,10 @@ struct EventManager<ManagerOf::Keyboard> : public EventManagerI
 {
     static constexpr ManagerOf MANAGER_TYPE = ManagerOf::Keyboard;
 
-    using KeyHandler = std::function<void(KeyStatus, const sf::Event::KeyEvent&)>;
+    using KeyHandler = std::function<void(KeyStatus, const sf::Event::KeyPressed&)>;
     using KeyUnRegisterer = ManagedList<KeyHandler>::UnRegisterer;
 
-    using TextHandler = std::function<void(const sf::Event::TextEvent&)>;
+    using TextHandler = std::function<void(const sf::Event::TextEntered&)>;
     using TextUnRegisterer = ManagedList<TextHandler>::UnRegisterer;
 
     virtual KeyUnRegisterer registerKeyHandler(sf::Keyboard::Key key, KeyHandler&& handler) = 0;

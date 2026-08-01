@@ -17,7 +17,7 @@ int main()
     eventController->emplace<MouseManager>();
 
     eventController->get<ManagerOf::Keyboard>().registerKeyHandler(
-        sf::Keyboard::Escape, [&w = *window](const KeyStatus status, const sf::Event::KeyEvent&) {
+        sf::Keyboard::Key::Escape, [&w = *window](const KeyStatus status, const sf::Event::KeyPressed&) {
             if(KeyStatus::Released == status)
             {
                 w.close();

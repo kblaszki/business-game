@@ -19,8 +19,8 @@ protected:
 
 TEST_F(KeyboardManagerShould, properlyRegisterKeyHandler)
 {
-    EXPECT_NO_THROW(keyboardManager.registerKeyHandler(sf::Keyboard::Enter,
-                                                       [this](const KeyStatus status, const sf::Event::KeyEvent&) {
+    EXPECT_NO_THROW(keyboardManager.registerKeyHandler(sf::Keyboard::Key::Enter,
+                                                       [this](const KeyStatus status, const sf::Event::KeyPressed&) {
                                                            if(KeyStatus::Pressed == status)
                                                                keyPressedActionMock.doAction();
                                                            else
@@ -32,44 +32,42 @@ TEST_F(KeyboardManagerShould, properlyHandleKeyPressedEvent)
 {
     EXPECT_CALL(keyPressedActionMock, doAction()).Times(1);
 
-    EXPECT_NO_THROW(keyboardManager.registerKeyHandler(sf::Keyboard::Enter,
-                                                       [this](const KeyStatus status, const sf::Event::KeyEvent&) {
+    EXPECT_NO_THROW(keyboardManager.registerKeyHandler(sf::Keyboard::Key::Enter,
+                                                       [this](const KeyStatus status, const sf::Event::KeyPressed&) {
                                                            if(KeyStatus::Pressed == status)
                                                                keyPressedActionMock.doAction();
                                                            else
                                                                keyReleasedActionMock.doAction();
                                                        }));
 
-    sf::Event keyPressedEvent{};
-    keyPressedEvent.type = sf::Event::KeyPressed;
-    keyPressedEvent.key.code = sf::Keyboard::Enter;
-    keyPressedEvent.key.scancode = sf::Keyboard::Scancode::Enter;
-    keyboardManager.handleEvent(keyPressedEvent);
+    sf::Event::KeyPressed keyPressed{};
+    keyPressed.code = sf::Keyboard::Key::Enter;
+    keyPressed.scancode = sf::Keyboard::Scancode::Enter;
+    keyboardManager.handleEvent(sf::Event{keyPressed});
 }
 
 TEST_F(KeyboardManagerShould, properlyHandleKeyReleasedEvent)
 {
     EXPECT_CALL(keyReleasedActionMock, doAction()).Times(1);
 
-    EXPECT_NO_THROW(keyboardManager.registerKeyHandler(sf::Keyboard::Enter,
-                                                       [this](const KeyStatus status, const sf::Event::KeyEvent&) {
+    EXPECT_NO_THROW(keyboardManager.registerKeyHandler(sf::Keyboard::Key::Enter,
+                                                       [this](const KeyStatus status, const sf::Event::KeyPressed&) {
                                                            if(KeyStatus::Pressed == status)
                                                                keyPressedActionMock.doAction();
                                                            else
                                                                keyReleasedActionMock.doAction();
                                                        }));
 
-    sf::Event keyPressedEvent{};
-    keyPressedEvent.type = sf::Event::KeyReleased;
-    keyPressedEvent.key.code = sf::Keyboard::Enter;
-    keyPressedEvent.key.scancode = sf::Keyboard::Scancode::Enter;
-    keyboardManager.handleEvent(keyPressedEvent);
+    sf::Event::KeyReleased keyReleased{};
+    keyReleased.code = sf::Keyboard::Key::Enter;
+    keyReleased.scancode = sf::Keyboard::Scancode::Enter;
+    keyboardManager.handleEvent(sf::Event{keyReleased});
 }
 
 TEST_F(KeyboardManagerShould, properlyRegisterTextHandler)
 {
     EXPECT_NO_THROW(
-        keyboardManager.registerTextHandler([this](const sf::Event::TextEvent&) { textActionMock.doAction(); }));
+        keyboardManager.registerTextHandler([this](const sf::Event::TextEntered&) { textActionMock.doAction(); }));
 }
 
 TEST_F(KeyboardManagerShould, properlyHandleTextEnteredEvent)
@@ -77,9 +75,7 @@ TEST_F(KeyboardManagerShould, properlyHandleTextEnteredEvent)
     EXPECT_CALL(textActionMock, doAction()).Times(1);
 
     EXPECT_NO_THROW(
-        keyboardManager.registerTextHandler([this](const sf::Event::TextEvent&) { textActionMock.doAction(); }));
+        keyboardManager.registerTextHandler([this](const sf::Event::TextEntered&) { textActionMock.doAction(); }));
 
-    sf::Event textEvent{};
-    textEvent.type = sf::Event::TextEntered;
-    keyboardManager.handleEvent(textEvent);
+    keyboardManager.handleEvent(sf::Event{sf::Event::TextEntered{}});
 }

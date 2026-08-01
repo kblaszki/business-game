@@ -2,5 +2,5 @@ include(FetchContent)
 
 FetchContent_Declare(sfml
         GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 2.6.1)
+        GIT_TAG 3.1.0)
 FetchContent_MakeAvailable(sfml)

@@ -22,7 +22,7 @@ Longer-term direction is a business / board-style game (working name ideas such 
 - [Ninja](https://ninja-build.org/) (used by CMake presets)
 - A C++20 compiler (GCC, Clang, or MSVC)
 
-SFML 2.6 is downloaded automatically via CMake FetchContent (`cmake/FetchSFML.cmake`). A separate SFML install is not required.
+SFML 3.1 is downloaded automatically via CMake FetchContent (`cmake/FetchSFML.cmake`). A separate SFML install is not required.
 
 ```sh
 git clone git@github.com:DevKrystian/business-game.git

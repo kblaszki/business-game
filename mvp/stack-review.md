@@ -9,7 +9,7 @@ Assessment date: 2026-08-01. Verdict: the language/tooling core is current; the 
 | C++ standard | C++20 | C++23 available | OK | Keep C++20; nothing in the codebase needs C++23 |
 | CMake minimum | 3.20 | 4.x installed locally | OK | Keep 3.20 as minimum; fix deprecations below |
 | Ninja presets | debug / release | — | OK | Keep |
-| SFML | 2.6.1 | **3.1.0** (2026-04-16) | **Outdated** | Migrate — see [sfml3-migration.md](sfml3-migration.md) |
+| SFML | 3.1.0 (migrated 2026-08-01) | 3.1.0 (2026-04-16) | OK | Done — see [sfml3-migration.md](sfml3-migration.md) |
 | GoogleTest | v1.14.0 | **v1.17.0** (2025-04-30) | Outdated | Bump tag; requires C++17 (we have C++20) |
 | clang-format / clang-tidy | configs at root | — | OK | Keep |
 | CI | Windows MinGW GCC 12.2 + Linux GCC | — | OK | GCC 12.2 covers C++17 required by SFML 3 |

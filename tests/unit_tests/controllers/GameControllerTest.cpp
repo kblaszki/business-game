@@ -36,7 +36,7 @@ protected:
 TEST_F(GameControllerShould, doOneIterationCorrectly)
 {
     EXPECT_CALL(*windowMock, isOpen()).Times(2).WillOnce(Return(true)).WillOnce(Return(false));
-    EXPECT_CALL(*windowMock, pollEvent(_)).Times(1).WillOnce(Return(false));
+    EXPECT_CALL(*windowMock, pollEvent()).Times(1).WillOnce(Return(std::nullopt));
     EXPECT_CALL(*screenControllerMock, update()).Times(1);
     EXPECT_CALL(*screenControllerMock, display()).Times(1);
 
@@ -47,13 +47,10 @@ TEST_F(GameControllerShould, doOneIterationCorrectly)
 TEST_F(GameControllerShould, closeWindowAfterClickingTheExitButton)
 {
     EXPECT_CALL(*windowMock, isOpen()).Times(2).WillOnce(Return(true)).WillOnce(Return(false));
-    EXPECT_CALL(*windowMock, pollEvent(_))
+    EXPECT_CALL(*windowMock, pollEvent())
         .Times(2)
-        .WillOnce(Invoke([](sf::Event& event) {
-            event.type = sf::Event::Closed;
-            return true;
-        }))
-        .WillOnce(Return(false));
+        .WillOnce(Return(sf::Event{sf::Event::Closed{}}))
+        .WillOnce(Return(std::nullopt));
     EXPECT_CALL(*windowMock, close()).Times(1);
     EXPECT_CALL(*screenControllerMock, update()).Times(1);
     EXPECT_CALL(*screenControllerMock, display()).Times(1);
@@ -70,15 +67,13 @@ TEST_F(GameControllerShould, closeWindowAfterClickingTheExitButton)
 TEST_F(GameControllerShould, closeWindowAfterEscapeKeyPressed)
 {
     EXPECT_CALL(*windowMock, isOpen()).Times(2).WillOnce(Return(true)).WillOnce(Return(false));
-    EXPECT_CALL(*windowMock, pollEvent(_))
+    sf::Event::KeyPressed escapePressed{};
+    escapePressed.code = sf::Keyboard::Key::Escape;
+    escapePressed.scancode = sf::Keyboard::Scancode::Escape;
+    EXPECT_CALL(*windowMock, pollEvent())
         .Times(2)
-        .WillOnce(Invoke([](sf::Event& event) {
-            event.type = sf::Event::KeyPressed;
-            event.key.code = sf::Keyboard::Escape;
-            event.key.scancode = sf::Keyboard::Scancode::Escape;
-            return true;
-        }))
-        .WillOnce(Return(false));
+        .WillOnce(Return(sf::Event{escapePressed}))
+        .WillOnce(Return(std::nullopt));
     EXPECT_CALL(*windowMock, close()).Times(1);
     EXPECT_CALL(*screenControllerMock, update()).Times(1);
     EXPECT_CALL(*screenControllerMock, display()).Times(1);
@@ -86,7 +81,8 @@ TEST_F(GameControllerShould, closeWindowAfterEscapeKeyPressed)
     EXPECT_CALL(*keyboardManagerMock, handleEvent(_))
         .Times(1)
         .WillOnce(Invoke([window = windowMock.get()](const sf::Event& event) {
-            if(sf::Keyboard::Escape == event.key.code)
+            const auto* keyPressed = event.getIf<sf::Event::KeyPressed>();
+            if(keyPressed and sf::Keyboard::Key::Escape == keyPressed->code)
             {
                 window->close();
             }

@@ -27,13 +27,10 @@ TEST_F(EventControllerShould, throwRuntimeErrorWhenTrySecondTimeRegisterHandlerF
 TEST_F(EventControllerShould, handleCorrectlyEvent)
 {
 
-    EXPECT_CALL(eventCollectorMock, pollEvent(_))
+    EXPECT_CALL(eventCollectorMock, pollEvent())
         .Times(2)
-        .WillOnce(Invoke([](sf::Event& event) {
-            event.type = sf::Event::Closed;
-            return true;
-        }))
-        .WillOnce(Return(false));
+        .WillOnce(Return(sf::Event{sf::Event::Closed{}}))
+        .WillOnce(Return(std::nullopt));
 
     auto gameExitManagerMock = std::make_unique<StrictMock<GameExitManagerMock>>();
     auto keyboardManagerMock = std::make_unique<StrictMock<KeyboardManagerMock>>();

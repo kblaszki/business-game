@@ -26,14 +26,14 @@ last_reviewed: 2026-08-01
 | `src/entities/` | `EntityI` implementations: `Paddle`, `Button`, `Player` |
 | `src/handlers/` | Reusable UI behavior: `OnClickHandler`, `OnHoverHandler` |
 | `src/window/` | Window interfaces (ISP) and `WindowSFML` implementation |
-| `src/utils/` | `ManagedList`, `EventPrinter` |
+| `src/utils/` | `ManagedList` |
 | `tests/unit_tests/` | GoogleTest suites, mirror `src/` layout (Debug only) |
 | `tests/mocks/` | gmock doubles |
 | `resources/fonts/` | Fonts copied next to the binary at build |
 
 ## Build targets
 
-- **`gameLib`** (STATIC) — all implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. Links SFML (`sfml-graphics`, `sfml-system`, `sfml-window`).
+- **`gameLib`** (STATIC) — all implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. Links SFML 3 (`SFML::Graphics`, `SFML::System`, `SFML::Window`).
 - **`game`** (executable) — only `src/main.cpp`, links `gameLib`.
 
 ## Adding a source file

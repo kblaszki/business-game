@@ -39,11 +39,13 @@ Exit: same behavior, zero configure warnings, static lib.
 Follow [sfml3-migration.md](sfml3-migration.md) step by step (CMake targets → window layer → event dispatch → managers → entities → main → tests → CI).
 
 ```
-- [ ] All 11 steps of the migration checklist done
-- [ ] Verification gate of the migration doc passes (build, tests, manual smoke, CI)
+- [x] All 11 steps of the migration checklist done
+- [x] Verification gate of the migration doc passes (build, tests, manual smoke, CI)
 ```
 
 Exit: game runs on SFML 3.1.0, CI green on both platforms.
+
+Done 2026-08-01. Bonus: the per-event logging fix from phase 3 landed here, because `EventPrinter` was pure SFML-2 API and deleting it beat rewriting it.
 
 ## Phase 3 — Correctness fixes (size: M)
 
@@ -54,7 +56,7 @@ Bugs and traps from [architecture-review.md](architecture-review.md), issues 1, 
 - [ ] Fix Paddle to store its registration handles (kills the dangling-this bug); simplify OnClickHandler/OnHoverHandler destructors
 - [ ] Unit test proving handlers die with their owner
 - [ ] Delta time: sf::Clock in GameController loop, update(float dt) through ScreenI/EntityI, Paddle speed in px/s, fixed-timestep accumulator
-- [ ] Remove per-event std::cerr logging from EventController (delete or debug-gate EventPrinter)
+- [x] Remove per-event std::cerr logging from EventController (done in phase 2 — EventPrinter deleted)
 ```
 
 Exit: no dangling handlers, framerate-independent movement, silent event loop; tests green.

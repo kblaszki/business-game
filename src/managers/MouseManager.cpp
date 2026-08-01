@@ -2,28 +2,43 @@
 
 #include "MouseManager.hpp"
 
+static sf::Event::MouseButtonPressed toCanonicalButton(const sf::Event::MouseButtonReleased& event)
+{
+    sf::Event::MouseButtonPressed button{};
+    button.button = event.button;
+    button.position = event.position;
+    return button;
+}
+
 void MouseManager::handleEvent(const sf::Event& event)
 {
-    switch(event.type)
+    if(const auto* mouseMoved = event.getIf<sf::Event::MouseMoved>())
     {
-        case sf::Event::MouseMoved:
-            return handleMouseMoveEvent(event.mouseMove);
-        case sf::Event::MouseButtonPressed:
-            return handleMouseButtonEvent(MouseButtonStatus::Pressed, event.mouseButton);
-        case sf::Event::MouseButtonReleased:
-            return handleMouseButtonEvent(MouseButtonStatus::Released, event.mouseButton);
-        case sf::Event::MouseWheelScrolled:
-            return handleMouseScrollEvent(event.mouseWheelScroll);
-        case sf::Event::MouseEntered:
-            return handleStatusEvent(MouseStatus::Entered);
-        case sf::Event::MouseLeft:
-            return handleStatusEvent(MouseStatus::Left);
-        default:
-            break;
+        handleMouseMoveEvent(*mouseMoved);
+    }
+    else if(const auto* buttonPressed = event.getIf<sf::Event::MouseButtonPressed>())
+    {
+        handleMouseButtonEvent(MouseButtonStatus::Pressed, *buttonPressed);
+    }
+    else if(const auto* buttonReleased = event.getIf<sf::Event::MouseButtonReleased>())
+    {
+        handleMouseButtonEvent(MouseButtonStatus::Released, toCanonicalButton(*buttonReleased));
+    }
+    else if(const auto* wheelScrolled = event.getIf<sf::Event::MouseWheelScrolled>())
+    {
+        handleMouseScrollEvent(*wheelScrolled);
+    }
+    else if(event.is<sf::Event::MouseEntered>())
+    {
+        handleStatusEvent(MouseStatus::Entered);
+    }
+    else if(event.is<sf::Event::MouseLeft>())
+    {
+        handleStatusEvent(MouseStatus::Left);
     }
 }
 
-void MouseManager::handleMouseMoveEvent(const sf::Event::MouseMoveEvent& event)
+void MouseManager::handleMouseMoveEvent(const sf::Event::MouseMoved& event)
 {
     for(auto& handle: mouseMoveHandlers)
     {
@@ -31,7 +46,7 @@ void MouseManager::handleMouseMoveEvent(const sf::Event::MouseMoveEvent& event)
     }
 }
 
-void MouseManager::handleMouseButtonEvent(const MouseButtonStatus status, const sf::Event::MouseButtonEvent& event)
+void MouseManager::handleMouseButtonEvent(const MouseButtonStatus status, const sf::Event::MouseButtonPressed& event)
 {
     auto specificMouseButtonHandlers = mouseButtonHandlers.find(event.button);
     if(mouseButtonHandlers.end() not_eq specificMouseButtonHandlers)
@@ -43,7 +58,7 @@ void MouseManager::handleMouseButtonEvent(const MouseButtonStatus status, const 
     }
 }
 
-void MouseManager::handleMouseScrollEvent(const sf::Event::MouseWheelScrollEvent& event)
+void MouseManager::handleMouseScrollEvent(const sf::Event::MouseWheelScrolled& event)
 {
     for(auto& handle: mouseScrollHandlers)
     {

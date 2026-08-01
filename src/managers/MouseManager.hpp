@@ -13,9 +13,9 @@ public:
     StatusUnRegisterer registerStatusHandler(StatusHandler&& handler) override;
 
 private:
-    void handleMouseMoveEvent(const sf::Event::MouseMoveEvent& event);
-    void handleMouseButtonEvent(MouseButtonStatus status, const sf::Event::MouseButtonEvent& event);
-    void handleMouseScrollEvent(const sf::Event::MouseWheelScrollEvent& event);
+    void handleMouseMoveEvent(const sf::Event::MouseMoved& event);
+    void handleMouseButtonEvent(MouseButtonStatus status, const sf::Event::MouseButtonPressed& event);
+    void handleMouseScrollEvent(const sf::Event::MouseWheelScrolled& event);
     void handleStatusEvent(MouseStatus status);
 
     std::unordered_map<sf::Mouse::Button, ManagedList<ButtonHandler>> mouseButtonHandlers;

@@ -37,12 +37,10 @@ TEST_F(OnClickHandlerShould, invokeOnClickWhenButtonIsPressedAndHovered)
     EXPECT_CALL(handler, isHover(100, 200)).Times(1).WillOnce(Return(true));
     EXPECT_CALL(handler, onClick()).Times(1);
 
-    sf::Event event;
-    event.type = sf::Event::MouseButtonPressed;
-    event.mouseButton.button = sf::Mouse::Button::Left;
-    event.mouseButton.x = 100;
-    event.mouseButton.y = 200;
-    mouseManager.handleEvent(event);
+    sf::Event::MouseButtonPressed event{};
+    event.button = sf::Mouse::Button::Left;
+    event.position = {100, 200};
+    mouseManager.handleEvent(sf::Event{event});
 }
 
 TEST_F(OnClickHandlerShould, notInvokeOnClickWhenButtonIsPressedButNotHovered)
@@ -51,12 +49,10 @@ TEST_F(OnClickHandlerShould, notInvokeOnClickWhenButtonIsPressedButNotHovered)
     EXPECT_CALL(handler, isHover(100, 200)).Times(1).WillOnce(Return(false));
     EXPECT_CALL(handler, onClick()).Times(0);
 
-    sf::Event event;
-    event.type = sf::Event::MouseButtonPressed;
-    event.mouseButton.button = sf::Mouse::Button::Left;
-    event.mouseButton.x = 100;
-    event.mouseButton.y = 200;
-    mouseManager.handleEvent(event);
+    sf::Event::MouseButtonPressed event{};
+    event.button = sf::Mouse::Button::Left;
+    event.position = {100, 200};
+    mouseManager.handleEvent(sf::Event{event});
 }
 
 TEST_F(OnClickHandlerShould, invokeOnUnClickWhenButtonIsReleasedAfterClick)
@@ -66,14 +62,15 @@ TEST_F(OnClickHandlerShould, invokeOnUnClickWhenButtonIsReleasedAfterClick)
     EXPECT_CALL(handler, onClick()).Times(1);
     EXPECT_CALL(handler, onUnClick(true)).Times(1);
 
-    sf::Event event;
-    event.type = sf::Event::MouseButtonPressed;
-    event.mouseButton.button = sf::Mouse::Button::Left;
-    event.mouseButton.x = 100;
-    event.mouseButton.y = 200;
-    mouseManager.handleEvent(event);
-    event.type = sf::Event::MouseButtonReleased;
-    mouseManager.handleEvent(event);
+    sf::Event::MouseButtonPressed pressedEvent{};
+    pressedEvent.button = sf::Mouse::Button::Left;
+    pressedEvent.position = {100, 200};
+    mouseManager.handleEvent(sf::Event{pressedEvent});
+
+    sf::Event::MouseButtonReleased releasedEvent{};
+    releasedEvent.button = sf::Mouse::Button::Left;
+    releasedEvent.position = {100, 200};
+    mouseManager.handleEvent(sf::Event{releasedEvent});
 }
 
 TEST_F(OnClickHandlerShould, notInvokeOnUnClickWhenButtonIsReleasedWithoutClick)
@@ -81,10 +78,8 @@ TEST_F(OnClickHandlerShould, notInvokeOnUnClickWhenButtonIsReleasedWithoutClick)
     OnClickHandlerMock handler{mouseManager, sf::Mouse::Button::Left};
     EXPECT_CALL(handler, onUnClick(true)).Times(0);
 
-    sf::Event event;
-    event.type = sf::Event::MouseButtonReleased;
-    event.mouseButton.button = sf::Mouse::Button::Left;
-    event.mouseButton.x = 100;
-    event.mouseButton.y = 200;
-    mouseManager.handleEvent(event);
+    sf::Event::MouseButtonReleased event{};
+    event.button = sf::Mouse::Button::Left;
+    event.position = {100, 200};
+    mouseManager.handleEvent(sf::Event{event});
 }

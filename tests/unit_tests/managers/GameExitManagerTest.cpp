@@ -29,7 +29,5 @@ TEST_F(GameExitManagerShould, properlyHandleClosedEvent)
 
     EXPECT_NO_THROW(gameExitManager.registerExitHandler([this]() { actionMock.doAction(); }));
 
-    sf::Event closedEvent{};
-    closedEvent.type = sf::Event::Closed;
-    gameExitManager.handleEvent(closedEvent);
+    gameExitManager.handleEvent(sf::Event{sf::Event::Closed{}});
 }

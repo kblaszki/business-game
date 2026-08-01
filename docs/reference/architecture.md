@@ -17,7 +17,7 @@ last_reviewed: 2026-08-01
 
 # Architecture reference
 
-business-game is a C++20 SFML prototype built as one shared library (`gameLib`) plus a thin executable (`game`). The entry point wires dependencies by hand and hands them to the game loop.
+business-game is a C++20 SFML 3 prototype built as one static library (`gameLib`) plus a thin executable (`game`). The entry point wires dependencies by hand and hands them to the game loop.
 
 ## Component map
 

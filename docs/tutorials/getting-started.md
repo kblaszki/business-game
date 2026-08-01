@@ -38,7 +38,7 @@ ninja --version
 cmake --version
 ```
 
-SFML 2.6 and GoogleTest are fetched automatically by CMake (`cmake/FetchSFML.cmake`). No separate install.
+SFML 3.1 and GoogleTest are fetched automatically by CMake (`cmake/FetchSFML.cmake`). No separate install.
 
 ## 2. Configure
 

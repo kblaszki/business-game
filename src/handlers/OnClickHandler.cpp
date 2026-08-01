@@ -5,10 +5,10 @@
 OnClickHandler::OnClickHandler(MouseManagerI& mouseManager, const sf::Mouse::Button button)
     : unregisterHandler{mouseManager.registerButtonHandler(
           button,
-          [this](const MouseButtonStatus status, const sf::Event::MouseButtonEvent& event) {
+          [this](const MouseButtonStatus status, const sf::Event::MouseButtonPressed& event) {
               if(MouseButtonStatus::Pressed == status)
               {
-                  if(isHover(event.x, event.y))
+                  if(isHover(event.position.x, event.position.y))
                   {
                       isClicked = true;
                       onClick();
@@ -19,7 +19,7 @@ OnClickHandler::OnClickHandler(MouseManagerI& mouseManager, const sf::Mouse::But
                   if(isClicked)
                   {
                       isClicked = false;
-                      onUnClick(isHover(event.x, event.y));
+                      onUnClick(isHover(event.position.x, event.position.y));
                   }
               }
           })}

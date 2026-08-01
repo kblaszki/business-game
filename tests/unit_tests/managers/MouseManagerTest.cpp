@@ -26,9 +26,7 @@ TEST_F(MouseManagerShould, properlyHandleMouseMovedEvent)
 
     EXPECT_NO_THROW(mouseManager.registerMoveHandler([this](const auto&) { actionMock.doAction(); }));
 
-    sf::Event mouseMovedEvent{};
-    mouseMovedEvent.type = sf::Event::MouseMoved;
-    mouseManager.handleEvent(mouseMovedEvent);
+    mouseManager.handleEvent(sf::Event{sf::Event::MouseMoved{}});
 }
 
 TEST_F(MouseManagerShould, properlyRegisterMouseButtonEventHandler)
@@ -37,7 +35,7 @@ TEST_F(MouseManagerShould, properlyRegisterMouseButtonEventHandler)
     StrictMock<ActionMock> mouseButtonReleasedActionMock{};
 
     EXPECT_NO_THROW(mouseManager.registerButtonHandler(
-        sf::Mouse::Button::Left, [&](const MouseButtonStatus status, const sf::Event::MouseButtonEvent&) {
+        sf::Mouse::Button::Left, [&](const MouseButtonStatus status, const sf::Event::MouseButtonPressed&) {
             if(MouseButtonStatus::Pressed == status)
                 mouseButtonPressedActionMock.doAction();
             else
@@ -53,17 +51,16 @@ TEST_F(MouseManagerShould, properlyHandleMouseButtonPressedEvent)
     EXPECT_CALL(mouseButtonPressedActionMock, doAction()).Times(1);
 
     EXPECT_NO_THROW(mouseManager.registerButtonHandler(
-        sf::Mouse::Button::Left, [&](const MouseButtonStatus status, const sf::Event::MouseButtonEvent&) {
+        sf::Mouse::Button::Left, [&](const MouseButtonStatus status, const sf::Event::MouseButtonPressed&) {
             if(MouseButtonStatus::Pressed == status)
                 mouseButtonPressedActionMock.doAction();
             else
                 mouseButtonReleasedActionMock.doAction();
         }));
 
-    sf::Event mouseButtonPressedEvent{};
-    mouseButtonPressedEvent.type = sf::Event::MouseButtonPressed;
-    mouseButtonPressedEvent.mouseButton.button = sf::Mouse::Button::Left;
-    mouseManager.handleEvent(mouseButtonPressedEvent);
+    sf::Event::MouseButtonPressed mouseButtonPressed{};
+    mouseButtonPressed.button = sf::Mouse::Button::Left;
+    mouseManager.handleEvent(sf::Event{mouseButtonPressed});
 }
 
 TEST_F(MouseManagerShould, properlyHandleMouseButtonReleasedEvent)
@@ -74,17 +71,16 @@ TEST_F(MouseManagerShould, properlyHandleMouseButtonReleasedEvent)
     EXPECT_CALL(mouseButtonReleasedActionMock, doAction()).Times(1);
 
     EXPECT_NO_THROW(mouseManager.registerButtonHandler(
-        sf::Mouse::Button::Left, [&](const MouseButtonStatus status, const sf::Event::MouseButtonEvent&) {
+        sf::Mouse::Button::Left, [&](const MouseButtonStatus status, const sf::Event::MouseButtonPressed&) {
             if(MouseButtonStatus::Pressed == status)
                 mouseButtonPressedActionMock.doAction();
             else
                 mouseButtonReleasedActionMock.doAction();
         }));
 
-    sf::Event mouseButtonReleasedEvent{};
-    mouseButtonReleasedEvent.type = sf::Event::MouseButtonReleased;
-    mouseButtonReleasedEvent.mouseButton.button = sf::Mouse::Button::Left;
-    mouseManager.handleEvent(mouseButtonReleasedEvent);
+    sf::Event::MouseButtonReleased mouseButtonReleased{};
+    mouseButtonReleased.button = sf::Mouse::Button::Left;
+    mouseManager.handleEvent(sf::Event{mouseButtonReleased});
 }
 
 TEST_F(MouseManagerShould, properlyRegisterMouseWheelScrolledEventHandler)
@@ -98,9 +94,7 @@ TEST_F(MouseManagerShould, properlyHandleMouseWheelScrolledEvent)
 
     EXPECT_NO_THROW(mouseManager.registerScrollHandler([this](const auto&) { actionMock.doAction(); }));
 
-    sf::Event mouseWheelScrolledEvent{};
-    mouseWheelScrolledEvent.type = sf::Event::MouseWheelScrolled;
-    mouseManager.handleEvent(mouseWheelScrolledEvent);
+    mouseManager.handleEvent(sf::Event{sf::Event::MouseWheelScrolled{}});
 }
 
 TEST_F(MouseManagerShould, properlyRegisterMouseStatusEventHandler)
@@ -130,9 +124,7 @@ TEST_F(MouseManagerShould, properlyHandleMouseEnteredEvent)
             mouseLeftActionMock.doAction();
     }));
 
-    sf::Event mouseEnteredEvent{};
-    mouseEnteredEvent.type = sf::Event::MouseEntered;
-    mouseManager.handleEvent(mouseEnteredEvent);
+    mouseManager.handleEvent(sf::Event{sf::Event::MouseEntered{}});
 }
 
 TEST_F(MouseManagerShould, properlyHandleMouseLeftEvent)
@@ -149,7 +141,5 @@ TEST_F(MouseManagerShould, properlyHandleMouseLeftEvent)
             mouseLeftActionMock.doAction();
     }));
 
-    sf::Event mouseLeftEvent{};
-    mouseLeftEvent.type = sf::Event::MouseLeft;
-    mouseManager.handleEvent(mouseLeftEvent);
+    mouseManager.handleEvent(sf::Event{sf::Event::MouseLeft{}});
 }

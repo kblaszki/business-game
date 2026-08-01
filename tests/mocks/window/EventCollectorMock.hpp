@@ -7,5 +7,5 @@
 
 struct EventCollectorMock : public EventCollectorI
 {
-    MOCK_METHOD(bool, pollEvent, (sf::Event&), (override));
+    MOCK_METHOD(std::optional<sf::Event>, pollEvent, (), (override));
 };

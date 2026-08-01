@@ -33,7 +33,7 @@ jobs:
       matrix:
         platform:
         - { name: Windows MinGW, os: windows-2022, flags: -DSFML_USE_MESA3D=TRUE -DCMAKE_CXX_COMPILER=g++ -GNinja }
-        - { name: Linux GCC, os: ubuntu-22.04, flags: -DOPENAL_LIBRARY=/usr/lib/x86_64-linux-gnu/libopenal.so -DOPENAL_INCLUDE_DIR=/usr/include/AL -GNinja }
+        - { name: Linux GCC, os: ubuntu-22.04, flags: -GNinja }
         type:
         - { name: Debug }
 
@@ -55,7 +55,6 @@ jobs:
         libgl1-mesa-dev \
         libegl1-mesa-dev \
         libudev-dev \
-        libopenal-dev \
         libdrm-dev \
         libgbm-dev \
         libvorbis-dev \
@@ -73,15 +72,6 @@ jobs:
         fluxbox \
         ccache \
         gcovr
-
-    - name: Verify OpenAL installation
-      if: runner.os == 'Linux'
-      run: |
-        dpkg -L libopenal-dev
-    
-    - name: Remove ALSA Library
-      if: runner.os == 'Linux'
-      run: sudo apt-get remove -y libasound2
 
     - name: Setup CCache
       uses: hendrikmuhs/ccache-action@v1.2.12
