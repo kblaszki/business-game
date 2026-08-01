@@ -53,10 +53,18 @@ flowchart TD
 | [explanation/sfml/events.md](explanation/sfml/events.md) | explanation | SFML events, pollEvent, input models |
 | [explanation/sfml/game-architecture.md](explanation/sfml/game-architecture.md) | explanation | game loop, timestep, layering on SFML |
 | [explanation/sfml/screens-pause-levels.md](explanation/sfml/screens-pause-levels.md) | explanation | scene stack, pause, levels |
+| [explanation/game-dev/index.md](explanation/game-dev/index.md) | explanation | external C++/SFML practices map |
+| [explanation/game-dev/from-scratch.md](explanation/game-dev/from-scratch.md) | explanation | build a game from scratch with SFML |
+| [explanation/game-dev/multithreading.md](explanation/game-dev/multithreading.md) | explanation | SFML threading analysis |
+| [explanation/game-dev/bibliography.md](explanation/game-dev/bibliography.md) | explanation | game-dev sources and references |
 
 ## SFML knowledge
 
 Conceptual guides for SFML 3.1 and typical 2D game structure live under [explanation/sfml/](explanation/sfml/index.md). They explain the library and common patterns; project-specific facts stay in `reference/` and `how-to/`.
+
+## Game development practices (external)
+
+Repository-agnostic C++/SFML from-scratch practices, bibliography, and multithreading analysis: [explanation/game-dev/](explanation/game-dev/index.md). Use as an external baseline when comparing this project later.
 
 ## Maintenance
 

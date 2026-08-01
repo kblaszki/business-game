@@ -9,6 +9,7 @@ related_docs:
   - ./events.md
   - ./game-architecture.md
   - ./screens-pause-levels.md
+  - ../game-dev/index.md
   - ../../index.md
   - ../design-decisions.md
 keywords: [SFML, SFML 3.1, knowledge, multimedia, game architecture, index]
@@ -20,6 +21,8 @@ last_reviewed: 2026-08-01
 Conceptual guide to [SFML](https://www.sfml-dev.org/) 3.1 and common patterns for structuring a 2D game on top of it. This is **explanation** material: why APIs look the way they do, and how teams typically compose windows, events, screens, and levels.
 
 It does **not** replace the [official SFML tutorials](https://www.sfml-dev.org/tutorials/3.1/) or [API documentation](https://www.sfml-dev.org/documentation/3.1.0/). For facts about *this* repository’s code, prefer [docs/reference/](../../reference/architecture.md) and the how-to guides.
+
+For **repository-agnostic** from-scratch practices, external bibliography, and a multithreading analysis, see [explanation/game-dev/](../game-dev/index.md).
 
 business-game pins SFML via FetchContent at tag `3.1.0` ([cmake/FetchSFML.cmake](../../../cmake/FetchSFML.cmake)).
 
