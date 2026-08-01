@@ -28,10 +28,10 @@ Assessment date: 2026-08-01. Verdict: the language/tooling core is current; the 
 `cmake/FetchSFML.cmake` and `cmake/FetchGTest.cmake` use the `FetchContent_Populate` + manual `add_subdirectory` pattern, deprecated by CMake policy CMP0169 (warns on every configure today, will hard-fail in a future CMake).
 
 ```
-- [ ] Rewrite cmake/FetchSFML.cmake to FetchContent_Declare(... EXCLUDE_FROM_ALL) + FetchContent_MakeAvailable(sfml)
-- [ ] Rewrite cmake/FetchGTest.cmake the same way
-- [ ] If EXCLUDE_FROM_ALL inside Declare is kept, raise cmake_minimum_required to 3.28; otherwise stay at 3.20
-- [ ] Reconfigure and confirm the CMP0169 warnings are gone
+- [x] Rewrite cmake/FetchSFML.cmake to FetchContent_MakeAvailable(sfml)
+- [x] Rewrite cmake/FetchGTest.cmake the same way (plus INSTALL_GTEST OFF)
+- [x] Stayed at cmake_minimum_required 3.20 (no EXCLUDE_FROM_ALL in Declare; CI runs CMake 3.22/3.25)
+- [x] Reconfigure and confirm the CMP0169 warnings are gone
 ```
 
 ### 2. `gameLib` is SHARED without export annotations
@@ -39,15 +39,15 @@ Assessment date: 2026-08-01. Verdict: the language/tooling core is current; the 
 `src/CMakeLists.txt` builds `gameLib` as `SHARED` with no `__declspec(dllexport)` / visibility macros and no `WINDOWS_EXPORT_ALL_SYMBOLS`. It links today only because MinGW GCC exports everything by default — MSVC would fail to produce usable imports. A shared library buys nothing here (single executable consumer).
 
 ```
-- [ ] Change add_library(gameLib SHARED ...) to STATIC in src/CMakeLists.txt
-- [ ] Rebuild game and tests; confirm no runtime DLL copying is needed anymore
+- [x] Change add_library(gameLib SHARED ...) to STATIC in src/CMakeLists.txt
+- [x] Rebuild game and tests; confirm no runtime DLL copying is needed anymore
 ```
 
 ### 3. GoogleTest bump
 
 ```
-- [ ] Change GIT_TAG in cmake/FetchGTest.cmake from v1.14.0 to v1.17.0
-- [ ] Rebuild build_ut, run ctest --preset debug, fix any deprecation fallout (none expected)
+- [x] Change GIT_TAG in cmake/FetchGTest.cmake from v1.14.0 to v1.17.0
+- [x] Rebuild build_ut, run ctest --preset debug, fix any deprecation fallout (none occurred)
 ```
 
 ## Explicitly fine as-is

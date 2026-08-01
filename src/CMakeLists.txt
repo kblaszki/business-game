@@ -1,5 +1,5 @@
 add_library(gameLib
-    SHARED
+    STATIC
         controllers/EventController.cpp
         controllers/GameController.cpp
         controllers/ScreenController.cpp

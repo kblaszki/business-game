@@ -33,7 +33,7 @@ last_reviewed: 2026-08-01
 
 ## Build targets
 
-- **`gameLib`** (SHARED) — all implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. Links SFML (`sfml-graphics`, `sfml-system`, `sfml-window`).
+- **`gameLib`** (STATIC) — all implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. Links SFML (`sfml-graphics`, `sfml-system`, `sfml-window`).
 - **`game`** (executable) — only `src/main.cpp`, links `gameLib`.
 
 ## Adding a source file

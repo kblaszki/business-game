@@ -26,10 +26,10 @@ Exit: reproducible green build recorded.
 Still on SFML 2.6.1; isolates build churn from API churn.
 
 ```
-- [ ] FetchContent_MakeAvailable in cmake/FetchSFML.cmake and cmake/FetchGTest.cmake (kills CMP0169 warnings)
-- [ ] gameLib SHARED → STATIC in src/CMakeLists.txt
-- [ ] GoogleTest v1.14.0 → v1.17.0
-- [ ] Full rebuild + ctest green on debug and release
+- [x] FetchContent_MakeAvailable in cmake/FetchSFML.cmake and cmake/FetchGTest.cmake (kills CMP0169 warnings)
+- [x] gameLib SHARED → STATIC in src/CMakeLists.txt
+- [x] GoogleTest v1.14.0 → v1.17.0
+- [x] Full rebuild + ctest green on debug and release
 ```
 
 Exit: same behavior, zero configure warnings, static lib.
