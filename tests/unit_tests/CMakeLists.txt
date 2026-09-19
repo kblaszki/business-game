@@ -26,3 +26,52 @@ add_unit_test(smoke_test
     DEPENDENCIES
         gameLib
 )
+
+add_unit_test(fixed_timestep_test
+    SOURCES
+        FixedTimestepTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+
+add_unit_test(iscreen_dummy_test
+    SOURCES
+        IScreenDummyTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+
+add_unit_test(screen_stack_test
+    SOURCES
+        ScreenStackTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+
+add_unit_test(screen_transition_test
+    SOURCES
+        ScreenTransitionTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+
+add_unit_test(input_mapper_test
+    SOURCES
+        InputMapperTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+
+add_unit_test(pause_blocks_ticks_test
+    SOURCES
+        PauseBlocksTicksTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+
+add_unit_test(world_test
+    SOURCES
+        WorldTest.cpp
+    DEPENDENCIES
+        gameLib
+)

@@ -1,6 +1,14 @@
 add_library(gameLib
     STATIC
         Game.cpp
+        GameObject.cpp
+        GameplayScreen.cpp
+        InputMapper.cpp
+        MainMenuScreen.cpp
+        PauseScreen.cpp
+        ScreenStack.cpp
+        World.cpp
+        makeWorld.cpp
 )
 target_compile_features(gameLib PRIVATE cxx_std_23)
 target_compile_options(gameLib PRIVATE ${BASE_COMPILE_FLAGS})
