@@ -1,99 +1,50 @@
 /* Created by kblaszki */
 
-#include <FixedTimestep.hpp>
+#include <Ball.hpp>
 #include <GameplayScreen.hpp>
 #include <LevelDescriptor.hpp>
 #include <LevelId.hpp>
+#include <Paddle.hpp>
 #include <ScreenStack.hpp>
 #include <World.hpp>
 #include <gtest/gtest.h>
 #include <makeWorld.hpp>
 
-TEST(WorldShould, exposeOneSandboxSpawn)
+TEST(WorldShould, exposeArkanoidDescriptor)
 {
-    const auto& descriptor = levelDescriptor(LevelId::Sandbox);
+    const auto& descriptor = levelDescriptor(LevelId::Arkanoid);
 
-    EXPECT_EQ(descriptor.id, LevelId::Sandbox);
-    ASSERT_EQ(descriptor.spawns.size(), 1u);
-    EXPECT_EQ(descriptor.spawns[0].position, (sf::Vector2f{0.f, 340.f}));
-    EXPECT_EQ(descriptor.spawns[0].velocity, (sf::Vector2f{240.f, 0.f}));
+    EXPECT_EQ(descriptor.id, LevelId::Arkanoid);
 }
 
-TEST(WorldShould, makeSandboxWorldAtSpawnPose)
+TEST(WorldShould, spawnPaddleBallAndFiftyBricks)
 {
-    const auto world = makeWorld(levelDescriptor(LevelId::Sandbox));
+    const auto world = makeWorld(levelDescriptor(LevelId::Arkanoid));
 
-    EXPECT_EQ(world.objectCount(), 1u);
-    EXPECT_EQ(world.dummyPosition(), (sf::Vector2f{0.f, 340.f}));
+    EXPECT_EQ(world.objectCount(), 52u);
+    ASSERT_NE(dynamic_cast<const Paddle*>(world.objectAt(0)), nullptr);
+    ASSERT_NE(dynamic_cast<const Ball*>(world.objectAt(1)), nullptr);
+    EXPECT_EQ(world.objectAt(0)->position(), (sf::Vector2f{590.f, 680.f}));
 }
 
-TEST(WorldShould, advanceDummyFourPixelsPerTick)
+TEST(WorldShould, placeBallAbovePaddleAtSpawn)
 {
-    auto world = makeWorld(levelDescriptor(LevelId::Sandbox));
+    const auto world = makeWorld(levelDescriptor(LevelId::Arkanoid));
+    const auto* const paddle = dynamic_cast<const Paddle*>(world.objectAt(0));
+    const auto* const ball = dynamic_cast<const Ball*>(world.objectAt(1));
+    ASSERT_NE(paddle, nullptr);
+    ASSERT_NE(ball, nullptr);
 
-    for(int i = 0; i < 10; ++i)
-    {
-        world.fixedUpdate(FixedTimestep::tick);
-    }
-
-    EXPECT_FLOAT_EQ(world.dummyPosition().x, 40.f);
-    EXPECT_FLOAT_EQ(world.dummyPosition().y, 340.f);
+    EXPECT_FLOAT_EQ(ball->position().x, paddle->position().x + paddle->size().x / 2.f);
+    EXPECT_FLOAT_EQ(ball->position().y, paddle->position().y - Ball::RADIUS - 2.f);
 }
 
-TEST(WorldShould, wrapDummyXAfterThreeHundredTwentyTicks)
-{
-    auto world = makeWorld(levelDescriptor(LevelId::Sandbox));
-
-    for(int i = 0; i < 320; ++i)
-    {
-        world.fixedUpdate(FixedTimestep::tick);
-    }
-
-    EXPECT_FLOAT_EQ(world.dummyPosition().x, 0.f);
-    EXPECT_FLOAT_EQ(world.dummyPosition().y, 340.f);
-}
-
-TEST(WorldShould, keepSpawnPoseUntilFixedUpdateRuns)
-{
-    const auto world = makeWorld(levelDescriptor(LevelId::Sandbox));
-
-    EXPECT_EQ(world.objectCount(), 1u);
-    EXPECT_EQ(world.dummyPosition(), (sf::Vector2f{0.f, 340.f}));
-}
-
-TEST(WorldShould, spawnEverySpecAndStayEmptyWhenNone)
-{
-    const SpawnSpec twoSpawns[]{
-        SpawnSpec{{10.f, 20.f}, {0.f, 0.f}},
-        SpawnSpec{{30.f, 40.f}, {0.f, 0.f}},
-    };
-    const LevelDescriptor twoSpecDescriptor{
-        .id = LevelId::Sandbox,
-        .spawns = twoSpawns,
-    };
-    const auto twoObjectWorld = makeWorld(twoSpecDescriptor);
-    EXPECT_EQ(twoObjectWorld.objectCount(), 2u);
-    EXPECT_EQ(twoObjectWorld.dummyPosition(), (sf::Vector2f{10.f, 20.f}));
-
-    const LevelDescriptor emptyDescriptor{
-        .id = LevelId::Sandbox,
-        .spawns = {},
-    };
-    const auto emptyWorld = makeWorld(emptyDescriptor);
-    EXPECT_EQ(emptyWorld.objectCount(), 0u);
-}
-
-TEST(WorldShould, moveGameplayDummyTwentyPixelsAfterFiveUpdates)
+TEST(WorldShould, exposePaddlePoseOnGameplayScreen)
 {
     ScreenStack stack;
-    GameplayScreen screen{stack, LevelId::Sandbox};
+    GameplayScreen screen{stack, LevelId::Arkanoid};
 
-    for(int i = 0; i < 5; ++i)
-    {
-        screen.update(FixedTimestep::tick);
-    }
-
-    EXPECT_EQ(screen.tickCount(), 5u);
-    EXPECT_FLOAT_EQ(screen.dummyPosition().x, 20.f);
-    EXPECT_FLOAT_EQ(screen.dummyPosition().y, 340.f);
+    EXPECT_EQ(screen.paddlePosition(), (sf::Vector2f{590.f, 680.f}));
+    EXPECT_EQ(screen.remainingBricks(), 50u);
+    EXPECT_EQ(screen.lives(), 3);
 }

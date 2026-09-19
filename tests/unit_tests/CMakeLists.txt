@@ -75,3 +75,17 @@ add_unit_test(world_test
     DEPENDENCIES
         gameLib
 )
+
+add_unit_test(rect_collision_test
+    SOURCES
+        RectCollisionTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+
+add_unit_test(arkanoid_session_test
+    SOURCES
+        ArkanoidSessionTest.cpp
+    DEPENDENCIES
+        gameLib
+)

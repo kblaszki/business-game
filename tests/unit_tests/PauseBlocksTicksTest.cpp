@@ -45,7 +45,7 @@ void simulateGameUpdate(ScreenStack& stack, FixedTimestep& timestep, sf::Clock& 
 TEST(PauseBlocksTicksShould, pushOnlyOnePauseOverlayEvenWhenRequestedTwice)
 {
     ScreenStack stack;
-    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Sandbox);
+    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Arkanoid);
     GameplayScreen* const gameplayPtr = gameplay.get();
     stack.requestPush(std::move(gameplay));
     stack.applyCommands();
@@ -77,7 +77,7 @@ TEST(PauseBlocksTicksShould, pushOnlyOnePauseOverlayEvenWhenRequestedTwice)
 TEST(PauseBlocksTicksShould, leaveGameplayTickCountUnchangedWhilePaused)
 {
     ScreenStack stack;
-    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Sandbox);
+    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Arkanoid);
     GameplayScreen* const gameplayPtr = gameplay.get();
     stack.requestPush(std::move(gameplay));
     stack.applyCommands();
@@ -110,7 +110,7 @@ TEST(PauseBlocksTicksShould, leaveGameplayTickCountUnchangedWhilePaused)
 TEST(PauseBlocksTicksShould, resumeWithPauseAndKeepSameGameplayInstance)
 {
     ScreenStack stack;
-    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Sandbox);
+    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Arkanoid);
     GameplayScreen* const gameplayPtr = gameplay.get();
     stack.requestPush(std::move(gameplay));
     stack.applyCommands();
@@ -143,7 +143,7 @@ TEST(PauseBlocksTicksShould, resumeWithPauseAndKeepSameGameplayInstance)
 TEST(PauseBlocksTicksShould, resumeWithCancelAndKeepTickCountFrozenAcrossPausedUpdates)
 {
     ScreenStack stack;
-    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Sandbox);
+    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Arkanoid);
     GameplayScreen* const gameplayPtr = gameplay.get();
     stack.requestPush(std::move(gameplay));
     stack.applyCommands();
@@ -171,7 +171,7 @@ TEST(PauseBlocksTicksShould, resumeWithCancelAndKeepTickCountFrozenAcrossPausedU
 TEST(PauseBlocksTicksShould, quitToMenuOnConfirmAndDestroyGameplay)
 {
     ScreenStack stack;
-    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Sandbox);
+    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Arkanoid);
     stack.requestPush(std::move(gameplay));
     stack.applyCommands();
 
@@ -192,7 +192,7 @@ TEST(PauseBlocksTicksShould, quitToMenuOnConfirmAndDestroyGameplay)
 TEST(PauseBlocksTicksShould, letGameplayConsumeFirstPauseThenOverlayConsumesLater)
 {
     ScreenStack stack;
-    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Sandbox);
+    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Arkanoid);
     GameplayScreen* const gameplayPtr = gameplay.get();
     stack.requestPush(std::move(gameplay));
     stack.applyCommands();
@@ -231,7 +231,7 @@ TEST(PauseBlocksTicksShould, keepDrawingGameplayUnderPauseOverlay)
 {
     ScreenStack stack;
     NullRenderTarget target;
-    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Sandbox);
+    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Arkanoid);
     GameplayScreen* const gameplayPtr = gameplay.get();
     stack.requestPush(std::move(gameplay));
     stack.applyCommands();
