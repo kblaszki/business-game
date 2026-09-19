@@ -1,6 +1,6 @@
 # business-game
 
-A C++23 [SFML](https://www.sfml-dev.org/) 2D playable slice: main menu, a sandbox dummy, pause overlay, CMake presets, and windowless unit tests. Product-domain gameplay is not implemented yet.
+A C++23 [SFML](https://www.sfml-dev.org/) 2D playable slice: main menu, a simple Arkanoid session, pause overlay, CMake presets, and windowless unit tests.
 
 ## Table of Contents
 
@@ -89,7 +89,7 @@ After building, run the executable from the preset output directory:
 
 ## Running the Tests
 
-Tests are available only for the **debug** preset. Suites: `smoke_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
+Tests are available only for the **debug** preset. Suites: `smoke_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
 
 ```sh
 cmake --preset debug

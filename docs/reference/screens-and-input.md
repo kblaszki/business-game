@@ -27,7 +27,7 @@ last_reviewed: 2026-09-19
 
 `handleEvent` and `handleAction` return `bool` (`true` = consume, stop the walk). `update` and `draw` take `sf::Time` / `sf::RenderTarget&` (`draw` is non-const). `blocksUpdate` / `blocksDraw` affect update and draw only — not input.
 
-All three playable screens return `false` from `handleEvent` (keyboard slice; no pointer hit-tests).
+Menu and pause return `false` from `handleEvent`. `GameplayScreen` consumes Left/Right `KeyPressed` / `KeyReleased` to hold the paddle (not `Action`).
 
 ## ScreenStack commands
 
@@ -64,9 +64,11 @@ Requests queue; `applyCommands()` applies them FIFO **after** draw. Null push/re
 
 | Screen | blocksUpdate / blocksDraw | Confirm | Pause | Cancel |
 |--------|---------------------------|---------|-------|--------|
-| `MainMenuScreen` | true / true | `replace(GameplayScreen{LevelId::Sandbox})` | ignored | ignored |
+| `MainMenuScreen` | true / true | `replace(GameplayScreen{LevelId::Arkanoid})` | ignored | ignored |
 | `GameplayScreen` | true / true | ignored | `requestPauseOverlay()` | ignored |
 | `PauseScreen` | true / false | `pop` then `replace(MainMenuScreen)` | `pop` (resume) | `pop` (resume) |
+
+Clearing all bricks or losing the last life also `requestReplace(MainMenuScreen)`. Left/Right while play is top move the paddle; they are not `Action`s.
 
 Menu Confirm **replaces** (menu must not stay under play). Pause Confirm must `pop` then `replace`; a single `replace` would swap only the overlay.
 

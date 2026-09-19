@@ -24,6 +24,13 @@ related_code:
   - src/World.cpp
   - src/GameObject.hpp
   - src/GameObject.cpp
+  - src/Paddle.hpp
+  - src/Paddle.cpp
+  - src/Ball.hpp
+  - src/Ball.cpp
+  - src/Brick.hpp
+  - src/Brick.cpp
+  - src/RectCollision.hpp
   - src/makeWorld.hpp
   - src/makeWorld.cpp
   - src/LevelId.hpp
@@ -52,14 +59,14 @@ last_reviewed: 2026-09-19
 | `src/Game.hpp` / `Game.cpp` | Window, event pump, `FixedTimestep` — see [application-loop.md](application-loop.md) |
 | `src/IScreen.hpp` / `src/ScreenStack.*` / `src/*Screen.*` / `src/Action.hpp` / `src/InputMapper.*` | Screens and consume — see [screens-and-input.md](screens-and-input.md) |
 | `src/FixedTimestep.hpp` | Tick 1/60 s, clamp 0.25 s — see [application-loop.md](application-loop.md) |
-| `src/World.*` / `src/GameObject.*` / `src/makeWorld.*` / `src/LevelId.hpp` / `src/LevelDescriptor.hpp` | Sandbox dummy — see [world-and-levels.md](world-and-levels.md) |
+| `src/World.*` / `src/GameObject.*` / `src/Paddle.*` / `src/Ball.*` / `src/Brick.*` / `src/RectCollision.hpp` / `src/makeWorld.*` / `src/LevelId.hpp` / `src/LevelDescriptor.hpp` | Arkanoid session — see [world-and-levels.md](world-and-levels.md) |
 | `tests/unit_tests/` | GoogleTest suites (Debug; no window) |
 
 ## Build targets
 
 - **`gameLib`** (STATIC) — implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. C++23. Links SFML 3 (`SFML::Graphics`, `SFML::System`, `SFML::Window`; Audio and Network modules are not built).
 - **`game`** (executable) — only `src/main.cpp`, links `gameLib`.
-- **Debug unit tests** — `smoke_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`.
+- **Debug unit tests** — `smoke_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`.
 
 ## Adding a source file
 

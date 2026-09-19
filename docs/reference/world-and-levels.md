@@ -7,6 +7,13 @@ related_code:
   - src/World.cpp
   - src/GameObject.hpp
   - src/GameObject.cpp
+  - src/Paddle.hpp
+  - src/Paddle.cpp
+  - src/Ball.hpp
+  - src/Ball.cpp
+  - src/Brick.hpp
+  - src/Brick.cpp
+  - src/RectCollision.hpp
   - src/LevelId.hpp
   - src/LevelDescriptor.hpp
   - src/makeWorld.hpp
@@ -17,7 +24,7 @@ related_docs:
   - application-loop.md
   - screens-and-input.md
   - source-layout.md
-keywords: [World, GameObject, LevelId, LevelDescriptor, makeWorld, sandbox, wrap]
+keywords: [World, GameObject, Paddle, Ball, Brick, LevelId, Arkanoid]
 last_reviewed: 2026-09-19
 ---
 
@@ -25,29 +32,30 @@ last_reviewed: 2026-09-19
 
 `GameplayScreen` owns the `World`. It builds one with `makeWorld(levelDescriptor(id))`. `Game` does not load levels or call `World::fixedUpdate`.
 
-`World` has no pause flag. Ticks stop because `Game::run` skips `drain` / `stack.update` while `pauseIsTop()` (see [application-loop.md](application-loop.md)).
+`World` has no pause flag. Ticks stop because `Game::run` skips `drain` / `stack.update` while `pauseIsTop()` (see [application-loop.md](application-loop.md)). Collision and lives live on `GameplayScreen`, not on `World`.
 
 ## Types
 
 | Type | Role |
 |------|------|
-| `LevelId` | `Sandbox` only |
-| `SpawnSpec` | `position`, `velocity` |
-| `LevelDescriptor` | `id` plus a `span` of `SpawnSpec` |
-| `levelDescriptor(id)` | Returns the static sandbox table; other ids are unreachable |
-| `makeWorld` | Immediate `World::spawn` of one `GameObject` per spec |
-| `World` | Owns `unique_ptr<GameObject>`s; `fixedUpdate` / const `draw`; `dummyPosition` for tests |
-| `GameObject` | Yellow 40×40 `sf::RectangleShape`; wrap motion in `DESIGN_SIZE` |
+| `LevelId` | `Arkanoid` only |
+| `LevelDescriptor` | `{ id }` — grid constants live in `makeWorld` |
+| `makeWorld` | Spawns paddle, ball, then 50 bricks |
+| `World` | Owns `unique_ptr<GameObject>`s; `objectAt`; draw skips `!alive()` |
+| `GameObject` | Virtual base: `fixedUpdate`, `draw`, `position`, `bounds`, `alive()` |
+| `Paddle` | Green `100×20`, start `{590, 680}`, `600` px/s, clamp X `[0, 1180]` |
+| `Ball` | White circle, radius `8`, launch `{252, -420}`; walls L/R/T; floor sets `lost()` |
+| `Brick` | `80×30`, one-hit (`destroy()` / `alive()`) |
+| `RectCollision` | AABB overlap; shallow-axis brick bounce; paddle ±60° |
 
-There is no deferred spawn/despawn, `restart()`, player steering, or `Action::MoveDummy`.
+There is no score, font HUD, brick HP, deferred spawn, or `Action::MoveDummy`. Paddle hold is `GameplayScreen::handleEvent` Left/Right.
 
-## Sandbox dummy
+## Session
 
-| Field | Value |
-|-------|-------|
-| Size | 40×40 |
-| Start | `{0, 340}` |
-| Velocity | `{240, 0}` px/s |
-| Motion | wrap each axis in `Game::DESIGN_SIZE` (1280×720), not bounce |
+- Lives start at `3`. Floor hit: `--lives`, then `resetAbove(paddle)` or `requestReplace(MainMenuScreen)` at 0.
+- Win: `remainingBricks() == 0` → replace menu.
+- Lives HUD: white 16×16 pips at `{16, 12}`, one per remaining life.
 
-Each `fixedUpdate` steps `velocity * (1/60) * (tick / 1s/60)` so the step stays exact when `tick` is the 1/60 s constant.
+## Brick grid
+
+`10×5`, gap `4`, top `60`, start X `222` (`(1280 - 836) / 2`). Row colors: `{220,80,80}`, `{220,160,60}`, `{220,220,80}`, `{80,180,80}`, `{80,140,220}`.

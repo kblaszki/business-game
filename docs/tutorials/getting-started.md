@@ -20,7 +20,7 @@ last_reviewed: 2026-09-19
 
 # Getting started
 
-Goal: from a fresh clone to the playable slice. By the end you will have configured, built, and launched `game`: menu → sandbox dummy → pause overlay.
+Goal: from a fresh clone to the playable slice. By the end you will have configured, built, and launched `game`: menu → Arkanoid → pause overlay.
 
 ## 1. Install the toolchain
 
@@ -68,8 +68,8 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280×720 window titled "Business game" opens on the main menu. Enter starts the sandbox (one moving dummy). Escape pauses (dummy freezes; overlay dims the view). Escape again resumes; Enter on the overlay returns to the menu. The window chrome close control always exits.
+A 1280×720 window titled "Business game" opens on the main menu. Enter starts Arkanoid (paddle, ball, 50 bricks, 3 lives). Left/Right move the paddle. Escape pauses (world freezes; overlay dims the view). Escape again resumes; Enter on the overlay returns to the menu. Clearing the bricks or losing the last life also returns to the menu. The window chrome close control always exits.
 
 ## Next steps
 
-Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Loop, screens, and sandbox: [../reference/application-loop.md](../reference/application-loop.md), [../reference/screens-and-input.md](../reference/screens-and-input.md), [../reference/world-and-levels.md](../reference/world-and-levels.md).
+Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Loop, screens, and Arkanoid: [../reference/application-loop.md](../reference/application-loop.md), [../reference/screens-and-input.md](../reference/screens-and-input.md), [../reference/world-and-levels.md](../reference/world-and-levels.md).

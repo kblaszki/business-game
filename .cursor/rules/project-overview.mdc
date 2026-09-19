@@ -5,7 +5,7 @@ alwaysApply: true
 
 # business-game
 
-C++23 SFML 2D playable slice: menu → sandbox dummy → pause overlay. Do not assume Arkanoid or board-game features exist.
+C++23 SFML 2D playable slice: menu → Arkanoid (`LevelId::Arkanoid`) → pause overlay. Do not assume a board-game or business sim exists. Do not port `v0.1-arkanoid` managers.
 
 ## Stack
 

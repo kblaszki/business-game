@@ -50,7 +50,7 @@ flowchart TD
 | [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, gameLib, targets |
 | [reference/application-loop.md](reference/application-loop.md) | reference | Game, FixedTimestep, frame, FocusLost |
 | [reference/screens-and-input.md](reference/screens-and-input.md) | reference | IScreen, ScreenStack, Action, Pause |
-| [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, GameObject, LevelId, sandbox |
+| [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, Paddle, Ball, Brick, Arkanoid |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, playable slice, screen stack |
 | [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | historical engine plan |
 

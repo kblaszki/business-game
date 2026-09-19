@@ -24,12 +24,10 @@ last_reviewed: 2026-09-19
 
 ## Where it is now
 
-A C++23 SFML 3.1 playable slice: CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, and a 1280×720 window that boots `MainMenuScreen`. Enter starts a sandbox `World` with one wrapping dummy; Escape opens `PauseScreen` (world ticks stop); Enter on the overlay returns to the menu. Product domain (board game, business sim, and so on) is not present.
+A C++23 SFML 3.1 playable slice: CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, and a 1280×720 window that boots `MainMenuScreen`. Enter starts `LevelId::Arkanoid` (paddle, ball, 50 bricks, 3 lives); Escape opens `PauseScreen` (world ticks stop); Enter on the overlay returns to the menu. Clearing the board or losing the last life also returns to the menu.
 
 Facts: [application-loop.md](../reference/application-loop.md), [screens-and-input.md](../reference/screens-and-input.md), [world-and-levels.md](../reference/world-and-levels.md). Historical design notes: [`mvp/`](../../mvp/README.md).
 
 ## Where it is going
 
-Product direction is still open. Do not assume board-game, Arkanoid, or other features exist — add them explicitly when asked.
-
-The previous playable prototype lives on the git branch `v0.1-arkanoid` and is not part of this tree.
+Product direction is still open. Do not assume a board-game or business sim exists — add those explicitly when asked. The current demo is a simple Arkanoid session on this engine, not a port of the old `v0.1-arkanoid` stack.
