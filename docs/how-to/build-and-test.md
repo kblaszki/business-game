@@ -42,7 +42,7 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Suite: `smoke_test` (design-size constant; does not open a window).
+Suites (none open a window): `smoke_test` (`DESIGN_SIZE`), `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`.
 
 `build_ut` builds every suite registered with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`.
 

@@ -5,7 +5,8 @@ audience: [ai, human]
 related_code:
   - src/main.cpp
   - CMakeLists.txt
-related_docs: []
+related_docs:
+  - ../mvp/README.md
 keywords: [documentation, diataxis, index, map, navigation, docs]
 last_reviewed: 2026-09-19
 ---
@@ -40,7 +41,10 @@ flowchart TD
 | [tutorials/getting-started.md](tutorials/getting-started.md) | tutorial | setup, toolchain, build, run, msys2 |
 | [how-to/build-and-test.md](how-to/build-and-test.md) | how-to | build, test, ctest, format, presets |
 | [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, gameLib, targets |
-| [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, empty base, direction |
+| [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, playable slice, screen stack |
+| [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | engine plan, screen stack, pause, playable slice |
+
+`mvp/` is the design that is now implemented on `main`. Current facts stay in the four Diátaxis pages above.
 
 ## Maintenance
 

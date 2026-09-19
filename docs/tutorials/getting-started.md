@@ -17,7 +17,7 @@ last_reviewed: 2026-09-19
 
 # Getting started
 
-Goal: from a fresh clone to a running empty SFML window. By the end you will have configured, built, and launched `game`.
+Goal: from a fresh clone to the playable slice. By the end you will have configured, built, and launched `game`: menu → sandbox dummy → pause overlay.
 
 ## 1. Install the toolchain
 
@@ -65,8 +65,8 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280x720 window titled "Business game" opens. Close it with the window chrome close control.
+A 1280×720 window titled "Business game" opens on the main menu. Enter starts the sandbox (one moving dummy). Escape pauses (dummy freezes; overlay dims the view). Escape again resumes; Enter on the overlay returns to the menu. The window chrome close control always exits.
 
 ## Next steps
 
-Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout of the scaffold: [../reference/source-layout.md](../reference/source-layout.md).
+Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Source layout of the playable slice: [../reference/source-layout.md](../reference/source-layout.md).

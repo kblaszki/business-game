@@ -5,9 +5,15 @@ audience: [ai, human]
 related_code:
   - src/main.cpp
   - src/Game.cpp
+  - src/ScreenStack.cpp
+  - src/MainMenuScreen.cpp
+  - src/GameplayScreen.cpp
+  - src/PauseScreen.cpp
+  - src/World.cpp
 related_docs:
   - ../reference/source-layout.md
-keywords: [roadmap, direction, empty base, SFML, scaffold]
+  - ../../mvp/README.md
+keywords: [roadmap, direction, playable slice, SFML, screen stack]
 last_reviewed: 2026-09-19
 ---
 
@@ -15,7 +21,7 @@ last_reviewed: 2026-09-19
 
 ## Where it is now
 
-An empty C++23 SFML 3.1 scaffold: CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, a 1280×720 window that closes on the window chrome, and one smoke unit test. There is no menu, gameplay, or product domain yet.
+A C++23 SFML 3.1 playable slice: CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, and a 1280×720 window that boots `MainMenuScreen`. Enter starts a sandbox `World` with one wrapping dummy; Escape opens `PauseScreen` (world ticks stop); Enter on the overlay returns to the menu. Product domain (board game, business sim, and so on) is not present. The design notes that led here live in [`mvp/`](../../mvp/README.md).
 
 ## Where it is going
 

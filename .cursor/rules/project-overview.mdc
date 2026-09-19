@@ -5,7 +5,7 @@ alwaysApply: true
 
 # business-game
 
-C++23 SFML 2D scaffold: empty window loop, no gameplay yet. Do not assume menu, Arkanoid, or board-game features exist.
+C++23 SFML 2D playable slice: menu → sandbox dummy → pause overlay. Do not assume Arkanoid or board-game features exist.
 
 ## Stack
 
@@ -16,8 +16,8 @@ C++23 SFML 2D scaffold: empty window loop, no gameplay yet. Do not assume menu, 
 ## Layout
 
 - `src/main.cpp` — constructs `Game` and calls `run()`
-- `src/Game.hpp` / `Game.cpp` — 1280×720 window, poll `Closed`, clear/display
-- `tests/unit_tests/` — `smoke_test` (Debug)
+- `src/Game.hpp` / `Game.cpp` — 1280×720 window, event pump, `ScreenStack`
+- `tests/unit_tests/` — Debug suites (`smoke_test`, stack/input/pause/world, …)
 
 Static library target: `gameLib`. Executable: `game`.
 
@@ -36,4 +36,4 @@ Binary: `build/<preset>/bin/game` (`.exe` on Windows).
 
 - New `.cpp` files must be listed in `src/CMakeLists.txt` (`gameLib`)
 - Prototype snapshot: git branch `v0.1-arkanoid` (not this tree)
-- Screen transitions / entities / ResourceManager are not present
+- Design notes for this slice: `mvp/`

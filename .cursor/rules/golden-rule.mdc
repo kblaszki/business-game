@@ -25,7 +25,7 @@ Before implementing:
 Project-specific examples of assumptions to surface:
 - New `.cpp` must be listed in `src/CMakeLists.txt` (`gameLib`) or it never builds.
 - Tests exist only in Debug (`build_ut` + `ctest --preset debug`).
-- This tree is an empty SFML scaffold; do not assume screens, entities, or ResourceManager exist.
+- This tree has a menu / sandbox dummy / pause slice; do not assume Arkanoid, board-game, or ResourceManager features exist.
 
 ## 2. Simplicity First
 

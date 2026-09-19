@@ -1,6 +1,6 @@
 # business-game
 
-A C++23 [SFML](https://www.sfml-dev.org/) 2D scaffold: empty window, CMake presets, and a smoke unit test. Gameplay is not implemented yet.
+A C++23 [SFML](https://www.sfml-dev.org/) 2D playable slice: main menu, a sandbox dummy, pause overlay, CMake presets, and windowless unit tests. Product-domain gameplay is not implemented yet.
 
 ## Table of Contents
 
@@ -32,8 +32,8 @@ cd business-game
 | Path | Role |
 |------|------|
 | `src/main.cpp` | Entry point; runs `Game` |
-| `src/Game.hpp` / `Game.cpp` | SFML window loop |
-| `tests/unit_tests/` | GoogleTest (`smoke_test`, Debug only) |
+| `src/Game.hpp` / `Game.cpp` | Window, event pump, `ScreenStack`, `InputMapper` |
+| `tests/unit_tests/` | Debug GoogleTest suites (windowless) |
 | `docs/` | Diátaxis documentation |
 
 Static library target: `gameLib`. Executable target: `game`.
@@ -89,7 +89,7 @@ After building, run the executable from the preset output directory:
 
 ## Running the Tests
 
-Tests are available only for the **debug** preset.
+Tests are available only for the **debug** preset. Suites: `smoke_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
 
 ```sh
 cmake --preset debug
