@@ -12,6 +12,9 @@ related_code:
   - src/World.cpp
 related_docs:
   - ../reference/source-layout.md
+  - ../reference/application-loop.md
+  - ../reference/screens-and-input.md
+  - ../reference/world-and-levels.md
   - ../../mvp/README.md
 keywords: [roadmap, direction, playable slice, SFML, screen stack]
 last_reviewed: 2026-09-19
@@ -21,7 +24,9 @@ last_reviewed: 2026-09-19
 
 ## Where it is now
 
-A C++23 SFML 3.1 playable slice: CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, and a 1280×720 window that boots `MainMenuScreen`. Enter starts a sandbox `World` with one wrapping dummy; Escape opens `PauseScreen` (world ticks stop); Enter on the overlay returns to the menu. Product domain (board game, business sim, and so on) is not present. The design notes that led here live in [`mvp/`](../../mvp/README.md).
+A C++23 SFML 3.1 playable slice: CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, and a 1280×720 window that boots `MainMenuScreen`. Enter starts a sandbox `World` with one wrapping dummy; Escape opens `PauseScreen` (world ticks stop); Enter on the overlay returns to the menu. Product domain (board game, business sim, and so on) is not present.
+
+Facts: [application-loop.md](../reference/application-loop.md), [screens-and-input.md](../reference/screens-and-input.md), [world-and-levels.md](../reference/world-and-levels.md). Historical design notes: [`mvp/`](../../mvp/README.md).
 
 ## Where it is going
 

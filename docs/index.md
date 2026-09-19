@@ -6,6 +6,13 @@ related_code:
   - src/main.cpp
   - CMakeLists.txt
 related_docs:
+  - tutorials/getting-started.md
+  - how-to/build-and-test.md
+  - reference/source-layout.md
+  - reference/application-loop.md
+  - reference/screens-and-input.md
+  - reference/world-and-levels.md
+  - explanation/roadmap.md
   - ../mvp/README.md
 keywords: [documentation, diataxis, index, map, navigation, docs]
 last_reviewed: 2026-09-19
@@ -41,10 +48,13 @@ flowchart TD
 | [tutorials/getting-started.md](tutorials/getting-started.md) | tutorial | setup, toolchain, build, run, msys2 |
 | [how-to/build-and-test.md](how-to/build-and-test.md) | how-to | build, test, ctest, format, presets |
 | [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, gameLib, targets |
+| [reference/application-loop.md](reference/application-loop.md) | reference | Game, FixedTimestep, frame, FocusLost |
+| [reference/screens-and-input.md](reference/screens-and-input.md) | reference | IScreen, ScreenStack, Action, Pause |
+| [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, GameObject, LevelId, sandbox |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, playable slice, screen stack |
-| [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | engine plan, screen stack, pause, playable slice |
+| [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | historical engine plan |
 
-`mvp/` is the design that is now implemented on `main`. Current facts stay in the four Diátaxis pages above.
+`mvp/` is historical design notes. Current facts live in the Diátaxis pages above; prefer `src/` over chapter prose if they disagree.
 
 ## Maintenance
 

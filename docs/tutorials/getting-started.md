@@ -11,6 +11,9 @@ related_code:
 related_docs:
   - ../how-to/build-and-test.md
   - ../reference/source-layout.md
+  - ../reference/application-loop.md
+  - ../reference/screens-and-input.md
+  - ../reference/world-and-levels.md
 keywords: [setup, toolchain, build, run, msys2, ninja, cmake, first time]
 last_reviewed: 2026-09-19
 ---
@@ -69,4 +72,4 @@ A 1280×720 window titled "Business game" opens on the main menu. Enter starts t
 
 ## Next steps
 
-Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Source layout of the playable slice: [../reference/source-layout.md](../reference/source-layout.md).
+Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Loop, screens, and sandbox: [../reference/application-loop.md](../reference/application-loop.md), [../reference/screens-and-input.md](../reference/screens-and-input.md), [../reference/world-and-levels.md](../reference/world-and-levels.md).
