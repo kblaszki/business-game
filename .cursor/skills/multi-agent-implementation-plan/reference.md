@@ -8,7 +8,7 @@ The orchestrator fills one card per agent:
 
 ```
 Goal: (one sentence)
-Owned write paths: (src/..., tests/..., matching docs/ whose related_code lists those files)
+Owned write paths: (src/..., tests/..., and the matching docs/ pages — always include docs/ when src/ is owned)
 Forbidden paths: (everything else, especially siblings in this wave)
 Locked signatures: (paste from contract)
 Read first: (existing headers, contract, listed mvp/ or docs)
@@ -16,7 +16,7 @@ Verify: cmake --build --preset debug --target build_ut && ctest --preset debug
           (or “no code — skip build”)
 ```
 
-Owned writes may include the matching `docs/` paths. Parallelize two cards only when owned write paths do not overlap.
+Owned writes **must** include the matching `docs/` paths whenever the card owns `src/`. Parallelize two cards only when owned write paths do not overlap.
 
 ## Implement prompt
 
@@ -38,8 +38,10 @@ DO:
 - Implement the goal in C++23, #pragma once, no namespaces, CamelCase types
 - List every new src/*.cpp in src/CMakeLists.txt (gameLib)
 - Add windowless GoogleTest via add_unit_test in tests/unit_tests/CMakeLists.txt
+- You must produce a docs/ edit if you change src/ (hard gate)
 - Update docs whose related_code lists a file you changed; last_reviewed today
 - New/removed src file or target → docs/reference/source-layout.md
+- New type or new player-visible / loop behavior → update or add a docs/reference/ (or how-to) page; source-layout inventory alone is not enough
 - New/removed/retitled doc → docs/index.md
 - Do not git commit (the orchestrator commits after stitch)
 
@@ -75,7 +77,9 @@ no style, colors, or click.
 - Two agents wrote the same path
 - New `.cpp` missing from `gameLib`
 - Docs `related_code` current; `last_reviewed` today; `source-layout.md` / `index.md` if structure changed
+- Hard gate: `src/` in the wave diff without any `docs/` path → incomplete, no commit
+- New behavior has a reference/how-to page, not only a source-layout row
 - Contract / todos updated with locked decisions
-- Verify failed → no commit
+- Docs hard gate or verify failed → no commit
 - Verify passed → orchestrator committed owned paths + matching docs (record the hash)
 - Dirty tree is only the next wave (or clean). Never staged `build/`
