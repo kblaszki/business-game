@@ -10,7 +10,7 @@ related_docs:
   - ../tutorials/getting-started.md
   - ../reference/source-layout.md
 keywords: [build, test, ctest, format, presets, build_ut, debug, release]
-last_reviewed: 2026-08-01
+last_reviewed: 2026-09-19
 ---
 
 # Build, test, and format
@@ -29,7 +29,7 @@ cmake --preset debug     # or: release
 cmake --build --preset debug --target game
 ```
 
-Binary: `build/<preset>/bin/game` (`.exe` on Windows). Resources are copied next to it.
+Binary: `build/<preset>/bin/game` (`.exe` on Windows).
 
 ## Run tests (Debug only)
 
@@ -41,7 +41,7 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Suites: `controllers_test`, `handlers_test`, `managers_test`, `resources_test`, `entities_test`, `utils_test`, `screens_test`.
+Suite: `smoke_test` (design-size constant; does not open a window).
 
 `build_ut` builds every suite registered with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`.
 

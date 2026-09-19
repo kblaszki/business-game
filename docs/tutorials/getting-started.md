@@ -6,20 +6,21 @@ related_code:
   - CMakePresets.json
   - CMakeLists.txt
   - cmake/FetchSFML.cmake
+  - src/Game.cpp
 related_docs:
   - ../how-to/build-and-test.md
-  - ../reference/architecture.md
+  - ../reference/source-layout.md
 keywords: [setup, toolchain, build, run, msys2, ninja, cmake, first time]
-last_reviewed: 2026-08-01
+last_reviewed: 2026-09-19
 ---
 
 # Getting started
 
-Goal: from a fresh clone to a running game window. By the end you will have configured, built, and launched `game`.
+Goal: from a fresh clone to a running empty SFML window. By the end you will have configured, built, and launched `game`.
 
 ## 1. Install the toolchain
 
-You need CMake, Ninja, and a C++20 compiler on your `PATH`. On Windows this repo is set up around MSYS2 MinGW (CMake already probes `C:\msys64\mingw64\...`).
+You need CMake, Ninja, and a C++20 compiler on your `PATH`. On Windows this repo is set up around MSYS2 MinGW.
 
 MSYS2 MinGW 64-bit shell:
 
@@ -38,7 +39,7 @@ ninja --version
 cmake --version
 ```
 
-SFML 3.1 and GoogleTest are fetched automatically by CMake (`cmake/FetchSFML.cmake`). No separate install.
+SFML 3.1 and GoogleTest are fetched automatically by CMake (`cmake/FetchSFML.cmake`, `cmake/FetchGTest.cmake`). No separate install.
 
 ## 2. Configure
 
@@ -63,10 +64,8 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280x720 window titled "Business game" opens on the menu screen. Click **Start** for Arkanoid (paddle, ball, bricks; 3 lives); **Exit** or Escape closes it. Clearing all bricks or losing all lives returns to the menu.
+A 1280x720 window titled "Business game" opens. Close it with the window chrome close control.
 
 ## Next steps
 
-- Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md)
-- How the pieces fit: [../reference/architecture.md](../reference/architecture.md)
-- Add your first game object: [../how-to/add-entity.md](../how-to/add-entity.md)
+Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout of the scaffold: [../reference/source-layout.md](../reference/source-layout.md).

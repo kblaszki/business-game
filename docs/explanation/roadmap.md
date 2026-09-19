@@ -4,25 +4,21 @@ diataxis: explanation
 audience: [ai, human]
 related_code:
   - src/main.cpp
-  - src/resources/ResourceManager.hpp
+  - src/Game.cpp
 related_docs:
   - ../reference/source-layout.md
-  - ./design-decisions.md
-  - ./sfml/index.md
-keywords: [roadmap, direction, prototype, board game, business, status, refactoring]
-last_reviewed: 2026-08-01
+keywords: [roadmap, direction, empty base, SFML, scaffold]
+last_reviewed: 2026-09-19
 ---
 
 # Project direction and status
 
 ## Where it is now
 
-A working SFML 3 prototype: menu with Start/Exit, and an **Arkanoid v1** session in `GameScreen` (paddle, ball, brick grid, 3 lives, win/lose back to menu). Engine plumbing includes window abstraction, typed event routing, a scene stack, resource caching, fixed-timestep updates, and letterboxed resize handling. SFML-oriented concepts and recommended patterns: [explanation/sfml/](./sfml/index.md).
+An empty SFML 3.1 scaffold: CMake presets, FetchContent for SFML and GoogleTest, a 1280×720 window that closes on the window chrome, and one smoke unit test. There is no menu, gameplay, or product domain yet.
 
 ## Where it is going
 
-The longer-term intent is a business / board-style game (working name ideas like *Empire Legends* have been floated). None of that domain exists yet: there is no board, tiles, turns, players-as-domain, or economy. Do not assume board-game features are present — build them explicitly when asked. The Arkanoid session is a gameplay exercise on the engine, not the final product.
+Product direction is still open. Do not assume board-game, Arkanoid, or other features exist — add them explicitly when asked.
 
-## Refactoring plan
-
-A full architecture/stack audit with a phased refactoring checklist lives in [mvp/refactoring-roadmap.md](../../mvp/refactoring-roadmap.md). Phases 1–5 are complete.
+The previous playable prototype lives on the git branch `v0.1-arkanoid` and is not part of this tree.

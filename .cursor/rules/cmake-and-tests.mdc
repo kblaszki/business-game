@@ -20,9 +20,9 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-- Unit tests: `tests/unit_tests/<area>/` (e.g. `GameControllerTest.cpp`)
-- Mocks: `tests/mocks/<area>/`
+- Unit tests: `tests/unit_tests/` (currently `smoke_test` / `GameSmokeTest.cpp`)
 - Register with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`
-- Prefer `StrictMock`, fixture names like `*Should`, mirror `src/` layout
+- Prefer tests that do not open a window unless a display is required
+- Fixture names like `*Should` when adding behavioral suites
 
-When changing controllers or managers, update or add unit tests and mocks in the matching folders.
+When changing `gameLib`, update or add unit tests in `tests/unit_tests/`.

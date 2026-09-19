@@ -32,7 +32,7 @@ cmake --build --preset debug --target game
 cmake --build --preset release --target game
 ```
 
-Run from the binary directory (resources are copied beside the exe):
+Run from the binary directory:
 
 - Windows: `build/debug/bin/game.exe` or `build/release/bin/game.exe`
 - Linux/macOS: `build/debug/bin/game` or `build/release/bin/game`

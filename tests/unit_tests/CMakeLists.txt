@@ -20,68 +20,9 @@ function(add_unit_test UNIT_TEST_NAME)
     add_dependencies(build_ut ${UNIT_TEST_NAME})
 endfunction()
 
-add_unit_test(controllers_test
+add_unit_test(smoke_test
     SOURCES
-        controllers/EventControllerTest.cpp
-        controllers/GameControllerTest.cpp
-    DEPENDENCIES 
-        gameLib
-)
-
-add_unit_test(handlers_test
-    SOURCES
-        handlers/OnClickHandlerTest.cpp
-        handlers/OnHoverHandlerTest.cpp
-    DEPENDENCIES 
-        gameLib
-)
-
-add_unit_test(managers_test
-    SOURCES
-        managers/GameExitManagerTest.cpp
-        managers/KeyboardManagerTest.cpp
-        managers/MouseManagerTest.cpp
-    DEPENDENCIES 
-        gameLib
-)
-
-add_unit_test(resources_test
-    SOURCES
-        resources/ResourceManagerTest.cpp
+        GameSmokeTest.cpp
     DEPENDENCIES
         gameLib
-)
-target_compile_definitions(resources_test PRIVATE
-    RESOURCES_ROOT_FOR_TESTS="${CMAKE_SOURCE_DIR}/resources"
-)
-
-add_unit_test(entities_test
-    SOURCES
-        entities/BallTest.cpp
-        entities/BrickTest.cpp
-        entities/PaddleTest.cpp
-        entities/ButtonTest.cpp
-    DEPENDENCIES
-        gameLib
-)
-target_compile_definitions(entities_test PRIVATE
-    RESOURCES_ROOT_FOR_TESTS="${CMAKE_SOURCE_DIR}/resources"
-)
-
-add_unit_test(utils_test
-    SOURCES
-        utils/RectCollisionTest.cpp
-    DEPENDENCIES
-        gameLib
-)
-
-add_unit_test(screens_test
-    SOURCES
-        screens/MenuScreenTest.cpp
-        screens/GameScreenTest.cpp
-    DEPENDENCIES
-        gameLib
-)
-target_compile_definitions(screens_test PRIVATE
-    RESOURCES_ROOT_FOR_TESTS="${CMAKE_SOURCE_DIR}/resources"
 )

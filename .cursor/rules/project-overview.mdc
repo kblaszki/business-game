@@ -5,7 +5,7 @@ alwaysApply: true
 
 # business-game
 
-C++20 SFML 2D game prototype (menu + Arkanoid session). Longer-term direction is a business/board-style game; do not assume board-game features exist yet.
+C++20 SFML 2D scaffold: empty window loop, no gameplay yet. Do not assume menu, Arkanoid, or board-game features exist.
 
 ## Stack
 
@@ -15,14 +15,9 @@ C++20 SFML 2D game prototype (menu + Arkanoid session). Longer-term direction is
 
 ## Layout
 
-- `src/main.cpp` — wires window, resources, event managers, screens, `GameController::run()`
-- `src/controllers/` — game loop, events, scene stack
-- `src/managers/` — keyboard, mouse, game-exit, game-window event managers
-- `src/resources/` — `ResourceManager` (font cache)
-- `src/screens/` — `MenuScreen`, `GameScreen` (`ScreenI`)
-- `src/entities/` — `EntityI` implementations (`Paddle`, `Ball`, `Brick`, `Button`, …)
-- `src/handlers/`, `src/window/`, `src/utils/`
-- `tests/unit_tests/`, `tests/mocks/`
+- `src/main.cpp` — constructs `Game` and calls `run()`
+- `src/Game.hpp` / `Game.cpp` — 1280×720 window, poll `Closed`, clear/display
+- `tests/unit_tests/` — `smoke_test` (Debug)
 
 Static library target: `gameLib`. Executable: `game`.
 
@@ -35,11 +30,10 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Binary: `build/<preset>/bin/game` (`.exe` on Windows). Resources are copied next to the binary.
+Binary: `build/<preset>/bin/game` (`.exe` on Windows).
 
 ## Agent pitfalls
 
-- Prefer interfaces (`DrawerI`, `ScreenRendererI`); avoid raw SFML in screens
 - New `.cpp` files must be listed in `src/CMakeLists.txt` (`gameLib`)
-- Load fonts/assets through `ResourceManager` (exe-relative paths); do not load from CWD in entities
-- Screen transitions use `pushScreen` / `popScreen` / `replaceScreen` (not `setScreen`)
+- Prototype snapshot: git branch `v0.1-arkanoid` (not this tree)
+- Screen transitions / entities / ResourceManager are not present

@@ -4,13 +4,15 @@ diataxis: reference
 audience: [ai, human]
 related_code:
   - src/CMakeLists.txt
+  - src/Game.hpp
+  - src/Game.cpp
+  - src/main.cpp
   - CMakeLists.txt
   - tests/unit_tests/CMakeLists.txt
 related_docs:
-  - ./architecture.md
   - ../how-to/build-and-test.md
 keywords: [layout, directories, gameLib, game, targets, cmake sources]
-last_reviewed: 2026-08-01
+last_reviewed: 2026-09-19
 ---
 
 # Source layout reference
@@ -19,24 +21,16 @@ last_reviewed: 2026-08-01
 
 | Path | Responsibility |
 |------|----------------|
-| `src/main.cpp` | Entry point; composes window, resources, managers, screens, game loop |
-| `src/controllers/` | `GameController` (loop), `EventController` (poll + route), `ScreenController` (scene stack) |
-| `src/managers/` | Event managers keyed by `ManagerOf`: keyboard, mouse, game-exit, game-window, plus `EventManagers` container |
-| `src/resources/` | `ResourceManager` (font cache, exe-relative paths) |
-| `src/screens/` | `MenuScreen`, `GameScreen` (both `ScreenI`) |
-| `src/entities/` | `EntityI` implementations: `Paddle`, `Ball`, `Brick`, `Button` |
-| `src/handlers/` | Reusable UI behavior: `OnClickHandler`, `OnHoverHandler` |
-| `src/window/` | Window interfaces (ISP) and `WindowSFML` implementation |
-| `src/utils/` | `ManagedList`, `RectCollision` (AABB helpers) |
-| `tests/unit_tests/` | GoogleTest suites (`controllers`, `handlers`, `managers`, `resources`, `entities`, `utils`, `screens`) |
-| `tests/mocks/` | gmock doubles |
-| `resources/fonts/` | Fonts copied next to the binary at build |
+| `src/main.cpp` | Entry point; constructs `Game` and calls `run()` |
+| `src/Game.hpp` / `Game.cpp` | Window loop: 1280×720 SFML window, poll `Closed`, clear/display |
+| `tests/unit_tests/` | GoogleTest suites (`smoke_test`) |
 
 ## Build targets
 
-- **`gameLib`** (STATIC) — all implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. Links SFML 3 (`SFML::Graphics`, `SFML::System`, `SFML::Window`).
+- **`gameLib`** (STATIC) — implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. Links SFML 3 (`SFML::Graphics`, `SFML::System`, `SFML::Window`).
 - **`game`** (executable) — only `src/main.cpp`, links `gameLib`.
+- **`smoke_test`** (Debug) — `GameSmokeTest.cpp`; asserts `Game::DESIGN_SIZE`.
 
 ## Adding a source file
 
-Any new `.cpp` under `src/` must be added to the `gameLib` source list in `src/CMakeLists.txt`, otherwise it is never compiled. Header-only files (`*.hpp`, interfaces) do not need listing.
+Any new `.cpp` under `src/` must be added to the `gameLib` source list in `src/CMakeLists.txt`, otherwise it is never compiled. Header-only files (`*.hpp`) do not need listing.
