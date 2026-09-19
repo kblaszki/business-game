@@ -43,7 +43,7 @@ ninja --version
 cmake --version
 ```
 
-SFML 3.1 (Graphics/Window/System only) and GoogleTest 1.18 are fetched automatically by CMake (`cmake/FetchSFML.cmake`, `cmake/FetchGTest.cmake`). No separate install.
+SFML 3.1 (Graphics/Window/System only) and GoogleTest 1.18 are fetched automatically by CMake (`cmake/FetchSFML.cmake`, `cmake/FetchGTest.cmake`). No separate SFML install. On Ubuntu, install `libfreetype6-dev` and `libharfbuzz-dev` (and the usual X11/OpenGL packages from `.github/workflows/ci.yml`) before `cmake --preset debug`.
 
 ## 2. Configure
 

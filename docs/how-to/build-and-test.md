@@ -48,7 +48,7 @@ Suites (none open a window): `smoke_test` (`DESIGN_SIZE`), `fixed_timestep_test`
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`) runs the same Debug tests and a Release `game` build on Ubuntu 24.04 and Windows 2022.
+GitHub Actions (`.github/workflows/ci.yml`) runs the same Debug tests and a Release `game` build on Ubuntu 24.04 and Windows 2022. Linux CI installs SFML Graphics deps including `libfreetype6-dev` and `libharfbuzz-dev` (SFML 3.1 `find_package(HarfBuzz)` after system FreeType).
 
 ## Format the code
 

@@ -53,6 +53,7 @@ jobs:
             libxi-dev \
             libx11-dev \
             libfreetype6-dev \
+            libharfbuzz-dev \
             ninja-build \
             ccache
 
