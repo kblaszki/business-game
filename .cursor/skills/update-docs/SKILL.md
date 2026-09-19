@@ -33,7 +33,7 @@ Keep `docs/` in sync with the code. Docs are the source of truth; each file has 
    - New workflow → update or add a `docs/how-to/` page.
    - Any added/removed/retitled doc → update the table in `docs/index.md`.
 
-4. **Verify**: relative links resolve; every `related_code` path exists; facts (C++20, presets, targets, binary path) match `CMakeLists.txt`, `src/CMakeLists.txt`, `CMakePresets.json`.
+4. **Verify**: relative links resolve; every `related_code` path exists; facts (C++23, presets, targets, binary path) match `CMakeLists.txt`, `src/CMakeLists.txt`, `CMakePresets.json`.
 
 ## Front-matter shape
 

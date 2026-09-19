@@ -11,7 +11,7 @@ Source of truth: [docs/how-to/build-and-test.md](../../../docs/how-to/build-and-
 
 ## Prerequisites
 
-- CMake ≥ 3.20, Ninja, C++20 compiler
+- CMake ≥ 3.20, Ninja, C++23 compiler
 - SFML is fetched by CMake (no manual install)
 
 ## Configure

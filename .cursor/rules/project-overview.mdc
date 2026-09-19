@@ -5,13 +5,13 @@ alwaysApply: true
 
 # business-game
 
-C++20 SFML 2D scaffold: empty window loop, no gameplay yet. Do not assume menu, Arkanoid, or board-game features exist.
+C++23 SFML 2D scaffold: empty window loop, no gameplay yet. Do not assume menu, Arkanoid, or board-game features exist.
 
 ## Stack
 
-- C++20, CMake ≥ 3.20, Ninja presets (`debug` / `release`)
-- SFML 3.1 via FetchContent (`cmake/FetchSFML.cmake`) — no manual SFML install
-- GoogleTest only in Debug; clang-format / clang-tidy at repo root
+- C++23, CMake ≥ 3.20, Ninja presets (`debug` / `release`)
+- SFML 3.1 via FetchContent (`cmake/FetchSFML.cmake`) — Graphics/Window/System only; no manual SFML install
+- GoogleTest 1.18 only in Debug; clang-format / clang-tidy at repo root
 
 ## Layout
 

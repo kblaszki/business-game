@@ -15,7 +15,7 @@ last_reviewed: 2026-09-19
 
 ## Where it is now
 
-An empty SFML 3.1 scaffold: CMake presets, FetchContent for SFML and GoogleTest, a 1280×720 window that closes on the window chrome, and one smoke unit test. There is no menu, gameplay, or product domain yet.
+An empty C++23 SFML 3.1 scaffold: CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, a 1280×720 window that closes on the window chrome, and one smoke unit test. There is no menu, gameplay, or product domain yet.
 
 ## Where it is going
 

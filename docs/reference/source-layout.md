@@ -8,6 +8,8 @@ related_code:
   - src/Game.cpp
   - src/main.cpp
   - CMakeLists.txt
+  - cmake/FetchSFML.cmake
+  - cmake/FetchGTest.cmake
   - tests/unit_tests/CMakeLists.txt
 related_docs:
   - ../how-to/build-and-test.md
@@ -27,9 +29,9 @@ last_reviewed: 2026-09-19
 
 ## Build targets
 
-- **`gameLib`** (STATIC) — implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. Links SFML 3 (`SFML::Graphics`, `SFML::System`, `SFML::Window`).
+- **`gameLib`** (STATIC) — implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. C++23. Links SFML 3 (`SFML::Graphics`, `SFML::System`, `SFML::Window`; Audio and Network modules are not built).
 - **`game`** (executable) — only `src/main.cpp`, links `gameLib`.
-- **`smoke_test`** (Debug) — `GameSmokeTest.cpp`; asserts `Game::DESIGN_SIZE`.
+- **`smoke_test`** (Debug) — `GameSmokeTest.cpp`; GoogleTest 1.18; asserts `Game::DESIGN_SIZE`.
 
 ## Adding a source file
 

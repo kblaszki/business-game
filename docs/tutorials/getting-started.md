@@ -6,6 +6,7 @@ related_code:
   - CMakePresets.json
   - CMakeLists.txt
   - cmake/FetchSFML.cmake
+  - cmake/FetchGTest.cmake
   - src/Game.cpp
 related_docs:
   - ../how-to/build-and-test.md
@@ -20,7 +21,7 @@ Goal: from a fresh clone to a running empty SFML window. By the end you will hav
 
 ## 1. Install the toolchain
 
-You need CMake, Ninja, and a C++20 compiler on your `PATH`. On Windows this repo is set up around MSYS2 MinGW.
+You need CMake, Ninja, and a C++23 compiler on your `PATH`. On Windows this repo is set up around MSYS2 MinGW.
 
 MSYS2 MinGW 64-bit shell:
 
@@ -39,7 +40,7 @@ ninja --version
 cmake --version
 ```
 
-SFML 3.1 and GoogleTest are fetched automatically by CMake (`cmake/FetchSFML.cmake`, `cmake/FetchGTest.cmake`). No separate install.
+SFML 3.1 (Graphics/Window/System only) and GoogleTest 1.18 are fetched automatically by CMake (`cmake/FetchSFML.cmake`, `cmake/FetchGTest.cmake`). No separate install.
 
 ## 2. Configure
 

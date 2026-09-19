@@ -6,6 +6,7 @@ related_code:
   - CMakePresets.json
   - CMakeLists.txt
   - tests/unit_tests/CMakeLists.txt
+  - .github/workflows/ci.yml
 related_docs:
   - ../tutorials/getting-started.md
   - ../reference/source-layout.md
@@ -44,6 +45,10 @@ ctest --preset debug
 Suite: `smoke_test` (design-size constant; does not open a window).
 
 `build_ut` builds every suite registered with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`.
+
+## CI
+
+GitHub Actions (`.github/workflows/ci.yml`) runs the same Debug tests and a Release `game` build on Ubuntu 24.04 and Windows 2022.
 
 ## Format the code
 

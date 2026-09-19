@@ -1,6 +1,6 @@
 # business-game
 
-A C++20 [SFML](https://www.sfml-dev.org/) 2D scaffold: empty window, CMake presets, and a smoke unit test. Gameplay is not implemented yet.
+A C++23 [SFML](https://www.sfml-dev.org/) 2D scaffold: empty window, CMake presets, and a smoke unit test. Gameplay is not implemented yet.
 
 ## Table of Contents
 
@@ -18,9 +18,9 @@ A C++20 [SFML](https://www.sfml-dev.org/) 2D scaffold: empty window, CMake prese
 
 - [CMake](https://cmake.org/) 3.20 or higher
 - [Ninja](https://ninja-build.org/) (used by CMake presets)
-- A C++20 compiler (GCC, Clang, or MSVC)
+- A C++23 compiler (GCC, Clang, or MSVC)
 
-SFML 3.1 is downloaded automatically via CMake FetchContent (`cmake/FetchSFML.cmake`). A separate SFML install is not required.
+SFML 3.1 is downloaded automatically via CMake FetchContent (`cmake/FetchSFML.cmake`; Audio and Network modules are off). A separate SFML install is not required.
 
 ```sh
 git clone git@github.com:DevKrystian/business-game.git
