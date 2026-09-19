@@ -1,10 +1,13 @@
 add_library(gameLib
     STATIC
+        Ball.cpp
+        Brick.cpp
         Game.cpp
         GameObject.cpp
         GameplayScreen.cpp
         InputMapper.cpp
         MainMenuScreen.cpp
+        Paddle.cpp
         PauseScreen.cpp
         ScreenStack.cpp
         World.cpp

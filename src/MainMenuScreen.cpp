@@ -24,7 +24,7 @@ bool MainMenuScreen::handleAction(Action action)
 {
     if(action == Action::Confirm)
     {
-        m_stack.requestReplace(std::make_unique<GameplayScreen>(m_stack, LevelId::Sandbox));
+        m_stack.requestReplace(std::make_unique<GameplayScreen>(m_stack, LevelId::Arkanoid));
         return true;
     }
 

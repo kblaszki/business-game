@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System/Time.hpp>
-#include <SFML/System/Vector2.hpp>
 
 #include <GameObject.hpp>
 #include <cstddef>
@@ -18,7 +17,8 @@ public:
     void draw(sf::RenderTarget& target) const;
 
     std::size_t objectCount() const;
-    sf::Vector2f dummyPosition() const;
+    GameObject* objectAt(std::size_t index);
+    const GameObject* objectAt(std::size_t index) const;
 
 private:
     std::vector<std::unique_ptr<GameObject>> m_objects;

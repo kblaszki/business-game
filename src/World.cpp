@@ -21,7 +21,10 @@ void World::draw(sf::RenderTarget& target) const
 {
     for(const auto& object: m_objects)
     {
-        object->draw(target);
+        if(object->alive())
+        {
+            object->draw(target);
+        }
     }
 }
 
@@ -30,8 +33,14 @@ std::size_t World::objectCount() const
     return m_objects.size();
 }
 
-sf::Vector2f World::dummyPosition() const
+GameObject* World::objectAt(std::size_t index)
 {
-    assert(!m_objects.empty());
-    return m_objects.front()->position();
+    assert(index < m_objects.size());
+    return m_objects[index].get();
+}
+
+const GameObject* World::objectAt(std::size_t index) const
+{
+    assert(index < m_objects.size());
+    return m_objects[index].get();
 }

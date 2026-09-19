@@ -3,5 +3,5 @@
 
 enum class LevelId
 {
-    Sandbox
+    Arkanoid
 };
