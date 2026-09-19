@@ -68,7 +68,7 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280×720 window titled "Business game" opens on the main menu. Enter starts Arkanoid (paddle, ball, 50 bricks, 3 lives). Left/Right move the paddle. Escape pauses (world freezes; overlay dims the view). Escape again resumes; Enter on the overlay returns to the menu. Clearing the bricks or losing the last life also returns to the menu. The window chrome close control always exits.
+A 1280×720 window titled "Business game" opens on the main menu: a dark panel, a green start button, and a red exit button (no labels yet). Hover brightens the button under the cursor. Click start or press Enter to begin Arkanoid (paddle, ball, 50 bricks, 3 lives). Click exit to leave. Left/Right move the paddle. Escape pauses (world freezes; overlay dims the view). Escape again resumes; Enter on the overlay returns to the menu. Clearing the bricks or losing the last life also returns to the menu. The window chrome close control always exits.
 
 ## Next steps
 

@@ -27,7 +27,7 @@ last_reviewed: 2026-09-19
 
 `handleEvent` and `handleAction` return `bool` (`true` = consume, stop the walk). `update` and `draw` take `sf::Time` / `sf::RenderTarget&` (`draw` is non-const). `blocksUpdate` / `blocksDraw` affect update and draw only — not input.
 
-Menu and pause return `false` from `handleEvent`. `GameplayScreen` consumes Left/Right `KeyPressed` / `KeyReleased` to hold the paddle (not `Action`).
+Pause returns `false` from `handleEvent`. `MainMenuScreen` consumes `MouseMoved` and left `MouseButtonPressed` for two unlabeled buttons (green start, red exit; hover brightens). `GameplayScreen` consumes Left/Right `KeyPressed` / `KeyReleased` to hold the paddle (not `Action`).
 
 ## ScreenStack commands
 
@@ -72,4 +72,4 @@ Clearing all bricks or losing the last life also `requestReplace(MainMenuScreen)
 
 Menu Confirm **replaces** (menu must not stay under play). Pause Confirm must `pop` then `replace`; a single `replace` would swap only the overlay.
 
-The menu does not call `requestClose`. There is no on-screen text or highlighted dual-purpose Confirm row.
+Clicking start (or Enter) **replaces** with play. Clicking exit calls `requestClose`. There is no on-screen text.
