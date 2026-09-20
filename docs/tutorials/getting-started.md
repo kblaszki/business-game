@@ -8,6 +8,7 @@ related_code:
   - cmake/FetchSFML.cmake
   - cmake/FetchGTest.cmake
   - src/Game.cpp
+  - .github/workflows/ci.yml
 related_docs:
   - ../how-to/build-and-test.md
   - ../reference/source-layout.md
@@ -15,7 +16,7 @@ related_docs:
   - ../reference/screens-and-input.md
   - ../reference/world-and-levels.md
 keywords: [setup, toolchain, build, run, msys2, ninja, cmake, first time]
-last_reviewed: 2026-09-19
+last_reviewed: 2026-09-20
 ---
 
 # Getting started
@@ -43,7 +44,7 @@ ninja --version
 cmake --version
 ```
 
-SFML 3.1 (Graphics/Window/System only) and GoogleTest 1.18 are fetched automatically by CMake (`cmake/FetchSFML.cmake`, `cmake/FetchGTest.cmake`). No separate SFML install. On Ubuntu, install `libfreetype6-dev` and `libharfbuzz-dev` (and the usual X11/OpenGL packages from `.github/workflows/ci.yml`) before `cmake --preset debug`.
+SFML 3.1 (Graphics/Window/System only) and GoogleTest 1.18 are fetched automatically by CMake (`cmake/FetchSFML.cmake`, `cmake/FetchGTest.cmake`). No separate SFML install. On Ubuntu, install `libfreetype6-dev` and `libharfbuzz-dev` (and the usual X11/OpenGL packages from `.github/workflows/ci.yml`) before `cmake --preset debug`. On Windows MSYS2 MinGW, install `mingw-w64-x86_64-freetype` and `mingw-w64-x86_64-harfbuzz` so CMake does not fetch static copies of those libraries.
 
 ## 2. Configure
 

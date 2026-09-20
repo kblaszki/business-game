@@ -1,27 +1,14 @@
 /* Created by kblaszki */
 
+#include "fakes/NullRenderTarget.hpp"
 #include "fakes/SpyScreen.hpp"
 
-#include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System/Time.hpp>
-#include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 
 #include <ScreenStack.hpp>
 #include <gtest/gtest.h>
 #include <memory>
-
-namespace
-{
-class NullRenderTarget : public sf::RenderTarget
-{
-public:
-    sf::Vector2u getSize() const override
-    {
-        return {1u, 1u};
-    }
-};
-} // namespace
 
 TEST(ScreenStackShould, keepSizeUnchangedUntilApplyCommandsAfterTwoPushes)
 {
@@ -48,8 +35,7 @@ TEST(ScreenStackShould, destroyPoppedScreenOnlyAfterApplyCommands)
     auto upper = std::make_unique<SpyScreen>();
     SpyScreen* const upperPtr = upper.get();
     upperPtr->destructorCount = &destroyed;
-    upperPtr->popOnUpdate = true;
-    upperPtr->stack = &stack;
+    upperPtr->onUpdate = [&stack] { stack.requestPop(); };
 
     stack.requestPush(std::move(lower));
     stack.requestPush(std::move(upper));

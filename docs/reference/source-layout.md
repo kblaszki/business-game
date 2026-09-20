@@ -39,6 +39,9 @@ related_code:
   - cmake/FetchSFML.cmake
   - cmake/FetchGTest.cmake
   - tests/unit_tests/CMakeLists.txt
+  - tests/unit_tests/fakes/NullRenderTarget.hpp
+  - tests/unit_tests/fakes/SpyScreen.hpp
+  - .github/workflows/ci.yml
 related_docs:
   - application-loop.md
   - screens-and-input.md
@@ -46,7 +49,7 @@ related_docs:
   - ../how-to/build-and-test.md
   - ../../mvp/README.md
 keywords: [layout, directories, gameLib, game, targets, cmake sources, ScreenStack]
-last_reviewed: 2026-09-19
+last_reviewed: 2026-09-20
 ---
 
 # Source layout reference
@@ -60,7 +63,8 @@ last_reviewed: 2026-09-19
 | `src/IScreen.hpp` / `src/ScreenStack.*` / `src/*Screen.*` / `src/Action.hpp` / `src/InputMapper.*` | Screens and consume — see [screens-and-input.md](screens-and-input.md) |
 | `src/FixedTimestep.hpp` | Tick 1/60 s, clamp 0.25 s — see [application-loop.md](application-loop.md) |
 | `src/World.*` / `src/GameObject.*` / `src/Paddle.*` / `src/Ball.*` / `src/Brick.*` / `src/RectCollision.hpp` / `src/makeWorld.*` / `src/LevelId.hpp` / `src/LevelDescriptor.hpp` | Arkanoid session — see [world-and-levels.md](world-and-levels.md) |
-| `tests/unit_tests/` | GoogleTest suites (Debug; no window) |
+| `tests/unit_tests/` | GoogleTest suites (Debug; no window, no OpenGL) |
+| `tests/unit_tests/fakes/` | `SpyScreen` (no `ScreenStack` include) and `NullRenderTarget` (`setActive` returns false) |
 
 ## Build targets
 

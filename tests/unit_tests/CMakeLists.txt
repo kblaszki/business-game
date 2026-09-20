@@ -9,8 +9,9 @@ function(add_unit_test UNIT_TEST_NAME)
     add_executable(${UNIT_TEST_NAME} ${UNIT_TEST_SOURCES})
     target_compile_options(${UNIT_TEST_NAME} PRIVATE ${BASE_COMPILE_FLAGS})
     target_link_libraries(${UNIT_TEST_NAME} PRIVATE ${UNIT_TEST_DEPENDENCIES} gtest gmock gtest_main)
-    # GNU ld may pull only part of static HarfBuzz before FreeType adds more undefs.
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND TARGET harfbuzz)
+    # GNU ld on Linux may pull only part of static HarfBuzz before FreeType adds more undefs.
+    # Do not whole-archive on Windows: it can deadlock with static FreeType at process start.
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND UNIX AND NOT APPLE AND TARGET harfbuzz)
         target_link_libraries(${UNIT_TEST_NAME} PRIVATE
             -Wl,--whole-archive $<TARGET_FILE:harfbuzz> -Wl,--no-whole-archive
         )

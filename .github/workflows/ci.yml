@@ -66,8 +66,16 @@ jobs:
         if: runner.os == 'Windows'
         run: echo "C:\\msys64\\mingw64\\bin" >> "$GITHUB_PATH"
 
+      - name: Install Windows dependencies
+        if: runner.os == 'Windows'
+        run: |
+          C:/msys64/usr/bin/pacman.exe -Sy --noconfirm --needed \
+            mingw-w64-x86_64-pkg-config \
+            mingw-w64-x86_64-freetype \
+            mingw-w64-x86_64-harfbuzz
+
       - name: Configure Debug
-        run: cmake --preset debug ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++' || '' }}
+        run: cmake --preset debug ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++ -DCMAKE_PREFIX_PATH=C:/msys64/mingw64' || '' }}
 
       - name: Build tests
         run: cmake --build --preset debug --target build_ut
@@ -76,7 +84,7 @@ jobs:
         run: ctest --preset debug
 
       - name: Configure Release
-        run: cmake --preset release ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++' || '' }}
+        run: cmake --preset release ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++ -DCMAKE_PREFIX_PATH=C:/msys64/mingw64' || '' }}
 
       - name: Build game
         run: cmake --build --preset release --target game

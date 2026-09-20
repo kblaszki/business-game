@@ -2,8 +2,8 @@
 #pragma once
 
 #include <IScreen.hpp>
-#include <ScreenStack.hpp>
 #include <cstdint>
+#include <functional>
 
 class SpyScreen : public IScreen
 {
@@ -42,9 +42,9 @@ public:
     void update(sf::Time) override
     {
         ++updateCount;
-        if(popOnUpdate && stack != nullptr)
+        if(onUpdate)
         {
-            stack->requestPop();
+            onUpdate();
         }
         finishedUpdate = true;
     }
@@ -68,9 +68,8 @@ public:
     bool consumeAction{false};
     bool blockUpdate{false};
     bool blockDraw{false};
-    bool popOnUpdate{false};
     bool finishedUpdate{false};
-    ScreenStack* stack{nullptr};
+    std::function<void()> onUpdate{};
     std::uint32_t* destructorCount{nullptr};
 
     std::uint32_t handleEventCount{0};

@@ -1,9 +1,9 @@
 /* Created by kblaszki */
 
-#include <SFML/Graphics/RenderTarget.hpp>
+#include "fakes/NullRenderTarget.hpp"
+
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
-#include <SFML/System/Vector2.hpp>
 
 #include <Action.hpp>
 #include <FixedTimestep.hpp>
@@ -17,15 +17,6 @@
 
 namespace
 {
-class NullRenderTarget : public sf::RenderTarget
-{
-public:
-    sf::Vector2u getSize() const override
-    {
-        return {1u, 1u};
-    }
-};
-
 void simulateGameUpdate(ScreenStack& stack, FixedTimestep& timestep, sf::Clock& clock)
 {
     if(stack.pauseIsTop())
