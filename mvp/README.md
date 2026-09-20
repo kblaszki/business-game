@@ -1,7 +1,7 @@
 ---
 title: Prospective SFML engine plan
 status: prospective
-last_reviewed: 2026-09-19
+last_reviewed: 2026-09-20
 related_docs:
   - 01-architecture.md
   - 02-application-loop.md
@@ -12,6 +12,7 @@ related_docs:
   - 07-levels.md
   - 08-playable-slice.md
   - 09-rollout.md
+  - 10-v0.1-interface-base.md
 ---
 
 # Prospective SFML 3.1 engine plan
@@ -34,6 +35,7 @@ Facts about the running tree belong in [`docs/`](../docs/index.md). This folder 
 8. [07-levels.md](07-levels.md) — `LevelDescriptor` as data
 9. [08-playable-slice.md](08-playable-slice.md) — player-visible acceptance
 10. [09-rollout.md](09-rollout.md) — phased files, tests, `gameLib`
+11. [10-v0.1-interface-base.md](10-v0.1-interface-base.md) — FooI / WindowI / EntityI **target** (supersedes naming in 01–09 for work after 2026-09-20)
 
 ```mermaid
 flowchart TD
@@ -47,6 +49,7 @@ flowchart TD
   Levels[07-levels]
   Slice[08-playable-slice]
   Rollout[09-rollout]
+  Base10[10-interface-base]
   Readme --> Arch
   Arch --> Loop
   Loop --> Input
@@ -56,11 +59,12 @@ flowchart TD
   World --> Levels
   Levels --> Slice
   Slice --> Rollout
+  Rollout --> Base10
 ```
 
 ## Locked type names
 
-Use these identifiers in every chapter. Do not invent synonyms (`Scene`, `StateMachine`, `Entity`, `IManager`).
+Chapters 01–09 use the identifiers below. **[10-v0.1-interface-base.md](10-v0.1-interface-base.md) supersedes naming for the next engine base** (`ScreenI`, `DrawerI`, `WindowI`, `EntityI`, `CollidableI`). Do not invent synonyms in 01–09 (`Scene`, `StateMachine`, `IManager`).
 
 | Type | Role |
 |------|------|

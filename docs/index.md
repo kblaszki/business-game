@@ -14,6 +14,7 @@ related_docs:
   - reference/world-and-levels.md
   - explanation/roadmap.md
   - ../mvp/README.md
+  - ../mvp/10-v0.1-interface-base.md
 keywords: [documentation, diataxis, index, map, navigation, docs]
 last_reviewed: 2026-09-20
 ---
@@ -53,8 +54,9 @@ flowchart TD
 | [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, Paddle, Ball, Brick, Arkanoid |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, playable slice, screen stack |
 | [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | historical engine plan |
+| [../mvp/10-v0.1-interface-base.md](../mvp/10-v0.1-interface-base.md) | design notes (not Diátaxis) | FooI, WindowI, EntityI, ScreenStack |
 
-`mvp/` is historical design notes. Current facts live in the Diátaxis pages above; prefer `src/` over chapter prose if they disagree.
+`mvp/` is design notes. Current facts live in the Diátaxis pages above; prefer `src/` over chapter prose if they disagree. [mvp/10](../mvp/10-v0.1-interface-base.md) is the **target** FooI base (v0.1 ports + `ScreenStack`); chapters 01–09 stay historical.
 
 ## Maintenance
 
