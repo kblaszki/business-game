@@ -13,6 +13,7 @@ add_library(gameLib
         SfmlDrawer.cpp
         World.cpp
         makeWorld.cpp
+        window/WindowSFML.cpp
 )
 target_compile_features(gameLib PRIVATE cxx_std_23)
 target_compile_options(gameLib PRIVATE ${BASE_COMPILE_FLAGS})

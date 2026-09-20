@@ -17,7 +17,7 @@ void World::fixedUpdate(sf::Time tick)
     }
 }
 
-void World::draw(IDrawer& drawer) const
+void World::draw(DrawerI& drawer) const
 {
     for(const auto& object: m_objects)
     {

@@ -26,7 +26,7 @@ public:
     bool handleEvent(const sf::Event& event) override;
     bool handleAction(Action action) override;
     void update(sf::Time dt) override;
-    void draw(IDrawer& drawer) override;
+    void draw(DrawerI& drawer) override;
     bool blocksUpdate() const override;
     bool blocksDraw() const override;
 

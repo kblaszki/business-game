@@ -12,7 +12,7 @@
 
 Ball::Ball() = default;
 
-void Ball::draw(IDrawer& drawer) const
+void Ball::draw(DrawerI& drawer) const
 {
     sf::CircleShape shape{RADIUS};
     shape.setOrigin({RADIUS, RADIUS});

@@ -1,6 +1,8 @@
 /* Created by kblaszki */
 #pragma once
 
+#include <window/DrawerI.hpp>
+
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 
@@ -27,7 +29,7 @@ public:
     bool handleEvent(const sf::Event& event);
     bool handleAction(Action action);
     void update(sf::Time dt);
-    void draw(IDrawer& drawer);
+    void draw(DrawerI& drawer);
 
     [[nodiscard]] bool empty() const;
     [[nodiscard]] std::size_t size() const;

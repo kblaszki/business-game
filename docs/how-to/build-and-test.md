@@ -8,8 +8,8 @@ related_code:
   - tests/unit_tests/CMakeLists.txt
   - tests/unit_tests/fakes/SpyScreen.hpp
   - tests/unit_tests/fakes/DrawerMock.hpp
-  - tests/unit_tests/fakes/NullDrawer.hpp
-  - src/IDrawer.hpp
+  - tests/unit_tests/fakes/WindowMock.hpp
+  - src/window/DrawerI.hpp
   - src/SfmlDrawer.cpp
   - .github/workflows/ci.yml
 related_docs:
@@ -47,9 +47,9 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Suites (none open a window): `smoke_test` (`DESIGN_SIZE`), `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`.
+Suites (none open a window): `smoke_test` (`DESIGN_SIZE`), `game_loop_test` (`WindowMock`), `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`.
 
-Screens and objects draw through `IDrawer`. Production `Game::run` uses `SfmlDrawer` around the window. Unit tests pass `NullDrawer` or `DrawerMock` and never call `sf::RenderTarget::draw`. Test binaries still link SFML Graphics, so headless CI uses Mesa on Windows (`-DSFML_USE_MESA3D=TRUE`) and `xvfb-run` on Linux.
+Screens and objects draw through `DrawerI`. Production `Game::run(WindowI&)` draws on the window. Unit tests pass `NullDrawer`, `DrawerMock`, or `WindowMock` and never construct `WindowSFML`. Test binaries still link SFML Graphics, so headless CI uses Mesa on Windows (`-DSFML_USE_MESA3D=TRUE`) and `xvfb-run` on Linux.
 
 `build_ut` builds every suite registered with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`.
 

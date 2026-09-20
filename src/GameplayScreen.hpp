@@ -22,7 +22,7 @@ public:
     bool handleEvent(const sf::Event& event) override;
     bool handleAction(Action action) override;
     void update(sf::Time dt) override;
-    void draw(IDrawer& drawer) override;
+    void draw(DrawerI& drawer) override;
     bool blocksUpdate() const override;
     bool blocksDraw() const override;
     bool isGameplay() const override
@@ -47,7 +47,7 @@ private:
     void handleBrickCollisions();
     void loseLife();
     void returnToMenu();
-    void drawLives(IDrawer& drawer) const;
+    void drawLives(DrawerI& drawer) const;
 
     ScreenStack& m_stack;
     World m_world;

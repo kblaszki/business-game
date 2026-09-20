@@ -9,7 +9,9 @@ related_code:
   - src/FixedTimestep.hpp
   - src/InputMapper.cpp
   - src/ScreenStack.cpp
-  - src/IDrawer.hpp
+  - src/window/DrawerI.hpp
+  - src/window/WindowI.hpp
+  - src/window/WindowSFML.cpp
   - src/SfmlDrawer.cpp
 related_docs:
   - screens-and-input.md
@@ -21,9 +23,9 @@ last_reviewed: 2026-09-20
 
 # Application loop
 
-`src/main.cpp` constructs `Game` and calls `run()`. Window, clock, mapper, and stack are locals inside `run()`, not `Game` members.
+`src/main.cpp` constructs `Game` and calls `run()`, which builds a `WindowSFML` and delegates to `run(WindowI&)`. Clock, mapper, and stack are locals inside `run(WindowI&)`, not `Game` members.
 
-The window is `Game::DESIGN_SIZE` (1280×720), title `"Business game"`, framerate limit 60, key repeat off. Boot queues `requestPush(MainMenuScreen)` and calls `applyCommands()` before the first poll.
+The window is `Game::DESIGN_SIZE` (1280×720), title `"Business game"`, framerate limit 60, key repeat off. Boot queues `requestPush(MainMenuScreen)` and calls `applyCommands()` before the first poll. Unit tests call `Game::run(WindowI&)` with `WindowMock` and must not construct `WindowSFML`.
 
 ## Frame order
 
@@ -37,7 +39,7 @@ flowchart TD
   Skip[restart clock, no drain]
   Drain[FixedTimestep drain]
   Tick[stack.update tick]
-  Draw[clear, SfmlDrawer, stack.draw]
+  Draw[clear, stack.draw WindowI]
   Apply[applyCommands]
   Close{closeRequested}
   Display[display]
@@ -61,7 +63,7 @@ flowchart TD
 3. Otherwise `InputMapper::mapEvent`: a mapped `Action` goes to `stack.handleAction` only; an unmapped event goes to `stack.handleEvent` only (never both).
 4. If `stack.pauseIsTop()`, `clock.restart()` and **do not** call `drain` or `stack.update`. The frame’s `dt` is discarded so resume does not catch up.
 5. Else `FixedTimestep::drain(clock.restart())` and `stack.update(FixedTimestep::tick)` once per returned tick.
-6. `window.clear()`, `SfmlDrawer drawer{window}`, `stack.draw(drawer)`, `stack.applyCommands()`.
+6. `window.clear()`, `stack.draw(window)` (`WindowI` is a `DrawerI`), `stack.applyCommands()`.
 7. If `stack.closeRequested()`, `window.close()`.
 8. `window.display()`.
 
@@ -69,7 +71,7 @@ flowchart TD
 
 | Event | Effect |
 |-------|--------|
-| `Closed` | `window.close()` |
+| `Closed` | `WindowCloserI::close()` |
 | `Resized` | Consumed; no view / letterbox change |
 | `FocusLost` | `stack.requestPauseOverlay()` — not mapped to `Action::Pause` |
 | `FocusGained` | Consumed; does not resume |

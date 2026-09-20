@@ -41,7 +41,7 @@ bool PauseScreen::handleAction(Action action)
 
 void PauseScreen::update(sf::Time) {}
 
-void PauseScreen::draw(IDrawer& drawer)
+void PauseScreen::draw(DrawerI& drawer)
 {
     sf::RectangleShape overlay{{static_cast<float>(Game::DESIGN_SIZE.x), static_cast<float>(Game::DESIGN_SIZE.y)}};
     overlay.setFillColor(sf::Color{0, 0, 0, 140});

@@ -9,7 +9,7 @@ related_code:
   - src/MainMenuScreen.cpp
   - src/GameplayScreen.cpp
   - src/PauseScreen.cpp
-  - src/IDrawer.hpp
+  - src/window/DrawerI.hpp
   - src/SfmlDrawer.cpp
   - src/Action.hpp
   - src/InputMapper.hpp
@@ -19,7 +19,7 @@ related_docs:
   - application-loop.md
   - world-and-levels.md
   - source-layout.md
-keywords: [IScreen, ScreenStack, Action, InputMapper, PauseScreen, consume, overlay, IDrawer]
+keywords: [IScreen, ScreenStack, Action, InputMapper, PauseScreen, consume, overlay, DrawerI]
 last_reviewed: 2026-09-20
 ---
 
@@ -27,7 +27,7 @@ last_reviewed: 2026-09-20
 
 ## IScreen
 
-`handleEvent` and `handleAction` return `bool` (`true` = consume, stop the walk). `update` takes `sf::Time`. `draw` takes `IDrawer&` (`draw` is non-const). Production `Game::run` wraps the window in `SfmlDrawer`. Unit tests pass `NullDrawer` or `DrawerMock`. `blocksUpdate` / `blocksDraw` affect update and draw only — not input. `isGameplay` / `isPauseOverlay` default `false`; `GameplayScreen` / `PauseScreen` override them. `gameplayIsTop` / `pauseIsTop` use those flags, not `dynamic_cast`.
+`handleEvent` and `handleAction` return `bool` (`true` = consume, stop the walk). `update` takes `sf::Time`. `draw` takes `DrawerI&` (`draw` is non-const). Production `Game::run(WindowI&)` draws through the window (`WindowI` is a `DrawerI`). Unit tests pass `NullDrawer`, `DrawerMock`, or `WindowMock`. `blocksUpdate` / `blocksDraw` affect update and draw only — not input. `isGameplay` / `isPauseOverlay` default `false`; `GameplayScreen` / `PauseScreen` override them. `gameplayIsTop` / `pauseIsTop` use those flags, not `dynamic_cast`.
 
 Pause returns `false` from `handleEvent`. `MainMenuScreen` consumes `MouseMoved` and left `MouseButtonPressed` for two unlabeled buttons (green start, red exit; hover brightens). `GameplayScreen` consumes Left/Right `KeyPressed` / `KeyReleased` to hold the paddle (not `Action`).
 

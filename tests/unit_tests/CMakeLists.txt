@@ -28,6 +28,13 @@ add_unit_test(smoke_test
         gameLib
 )
 
+add_unit_test(game_loop_test
+    SOURCES
+        GameLoopTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+
 add_unit_test(fixed_timestep_test
     SOURCES
         FixedTimestepTest.cpp

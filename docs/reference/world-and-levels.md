@@ -19,7 +19,7 @@ related_code:
   - src/makeWorld.hpp
   - src/makeWorld.cpp
   - src/GameplayScreen.cpp
-  - src/IDrawer.hpp
+  - src/window/DrawerI.hpp
   - src/Game.hpp
 related_docs:
   - application-loop.md
@@ -31,7 +31,7 @@ last_reviewed: 2026-09-20
 
 # World and levels
 
-`GameplayScreen` owns the `World`. It builds one with `makeWorld(levelDescriptor(id))`. `Game` does not load levels or call `World::fixedUpdate`. `Paddle` / `Ball` / `Brick` keep pose in `sf::Vector2f` (and brick fill color). `draw` builds a local `RectangleShape` / `CircleShape` and calls `IDrawer::draw`. Production uses `SfmlDrawer`; unit tests use `NullDrawer` / `DrawerMock` so they never call `sf::RenderTarget::draw`.
+`GameplayScreen` owns the `World`. It builds one with `makeWorld(levelDescriptor(id))`. `Game` does not load levels or call `World::fixedUpdate`. `Paddle` / `Ball` / `Brick` keep pose in `sf::Vector2f` (and brick fill color). `draw` builds a local `RectangleShape` / `CircleShape` and calls `DrawerI::draw`. Production draws through `WindowI`; unit tests use `NullDrawer` / `DrawerMock` so they never call `sf::RenderTarget::draw`.
 
 `World` has no pause flag. Ticks stop because `Game::run` skips `drain` / `stack.update` while `pauseIsTop()` (see [application-loop.md](application-loop.md)). Collision and lives live on `GameplayScreen`, not on `World`.
 

@@ -8,7 +8,7 @@ related_code:
   - cmake/FetchSFML.cmake
   - cmake/FetchGTest.cmake
   - src/Game.cpp
-  - src/IDrawer.hpp
+  - src/window/DrawerI.hpp
   - .github/workflows/ci.yml
 related_docs:
   - ../how-to/build-and-test.md

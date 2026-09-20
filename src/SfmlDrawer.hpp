@@ -1,11 +1,11 @@
 /* Created by kblaszki */
 #pragma once
 
+#include <window/DrawerI.hpp>
+
 #include <SFML/Graphics/RenderTarget.hpp>
 
-#include <IDrawer.hpp>
-
-class SfmlDrawer : public IDrawer
+class SfmlDrawer : public DrawerI
 {
 public:
     explicit SfmlDrawer(sf::RenderTarget& target);

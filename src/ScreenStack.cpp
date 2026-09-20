@@ -137,7 +137,7 @@ void ScreenStack::update(sf::Time dt)
     }
 }
 
-void ScreenStack::draw(IDrawer& drawer)
+void ScreenStack::draw(DrawerI& drawer)
 {
     if(m_screens.empty())
     {

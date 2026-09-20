@@ -14,7 +14,7 @@ public:
     Brick(sf::Vector2f position, sf::Color color);
 
     void fixedUpdate(sf::Time tick) override;
-    void draw(IDrawer& drawer) const override;
+    void draw(DrawerI& drawer) const override;
     sf::Vector2f position() const override;
     sf::FloatRect bounds() const override;
     bool alive() const override;

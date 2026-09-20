@@ -93,7 +93,7 @@ bool MainMenuScreen::handleAction(Action action)
 
 void MainMenuScreen::update(sf::Time) {}
 
-void MainMenuScreen::draw(IDrawer& drawer)
+void MainMenuScreen::draw(DrawerI& drawer)
 {
     sf::RectangleShape panel{{640.f, 360.f}};
     panel.setPosition({320.f, 180.f});

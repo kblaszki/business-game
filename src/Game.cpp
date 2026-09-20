@@ -2,17 +2,19 @@
 
 #include "Game.hpp"
 
-#include <SFML/Graphics.hpp>
+#include <window/WindowI.hpp>
+#include <window/WindowSFML.hpp>
+
+#include <SFML/System/Clock.hpp>
 
 #include <FixedTimestep.hpp>
 #include <InputMapper.hpp>
 #include <MainMenuScreen.hpp>
 #include <ScreenStack.hpp>
-#include <SfmlDrawer.hpp>
 #include <memory>
 #include <optional>
 
-bool Game::handleWindowEvent(sf::RenderWindow& window, ScreenStack& stack, const sf::Event& event)
+bool Game::handleWindowEvent(WindowI& window, ScreenStack& stack, const sf::Event& event)
 {
     if(event.is<sf::Event::Closed>())
     {
@@ -41,10 +43,12 @@ bool Game::handleWindowEvent(sf::RenderWindow& window, ScreenStack& stack, const
 
 void Game::run()
 {
-    sf::RenderWindow window{sf::VideoMode{DESIGN_SIZE}, "Business game"};
-    window.setFramerateLimit(60);
-    window.setKeyRepeatEnabled(false);
+    WindowSFML window;
+    run(window);
+}
 
+void Game::run(WindowI& window)
+{
     sf::Clock clock;
     FixedTimestep timestep;
     InputMapper mapper;
@@ -85,10 +89,7 @@ void Game::run()
         }
 
         window.clear();
-        {
-            SfmlDrawer drawer{window};
-            stack.draw(drawer);
-        }
+        stack.draw(window);
         stack.applyCommands();
         if(stack.closeRequested())
         {

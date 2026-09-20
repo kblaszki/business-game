@@ -12,7 +12,7 @@ Brick::Brick(sf::Vector2f position, sf::Color color)
 
 void Brick::fixedUpdate(sf::Time) {}
 
-void Brick::draw(IDrawer& drawer) const
+void Brick::draw(DrawerI& drawer) const
 {
     if(m_destroyed)
     {

@@ -53,7 +53,7 @@ sf::Vector2f Paddle::size() const
     return {WIDTH, HEIGHT};
 }
 
-void Paddle::draw(IDrawer& drawer) const
+void Paddle::draw(DrawerI& drawer) const
 {
     sf::RectangleShape shape{{WIDTH, HEIGHT}};
     shape.setPosition(m_position);

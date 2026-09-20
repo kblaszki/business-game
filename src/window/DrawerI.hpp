@@ -4,9 +4,8 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/RenderStates.hpp>
 
-class IDrawer
+struct DrawerI
 {
-public:
-    virtual ~IDrawer() = default;
+    virtual ~DrawerI() = default;
     virtual void draw(const sf::Drawable& drawable, const sf::RenderStates& states = sf::RenderStates::Default) = 0;
 };

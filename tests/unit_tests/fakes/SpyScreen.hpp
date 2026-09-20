@@ -49,7 +49,7 @@ public:
         finishedUpdate = true;
     }
 
-    void draw(IDrawer&) override
+    void draw(DrawerI&) override
     {
         ++drawCount;
     }

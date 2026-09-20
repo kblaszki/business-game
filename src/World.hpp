@@ -1,10 +1,11 @@
 /* Created by kblaszki */
 #pragma once
 
+#include <window/DrawerI.hpp>
+
 #include <SFML/System/Time.hpp>
 
 #include <GameObject.hpp>
-#include <IDrawer.hpp>
 #include <cstddef>
 #include <memory>
 #include <vector>
@@ -14,7 +15,7 @@ class World
 public:
     void spawn(std::unique_ptr<GameObject> object);
     void fixedUpdate(sf::Time tick);
-    void draw(IDrawer& drawer) const;
+    void draw(DrawerI& drawer) const;
 
     std::size_t objectCount() const;
     GameObject* objectAt(std::size_t index);

@@ -120,7 +120,7 @@ bool GameplayScreen::blocksUpdate() const
     return true;
 }
 
-void GameplayScreen::drawLives(IDrawer& drawer) const
+void GameplayScreen::drawLives(DrawerI& drawer) const
 {
     for(int i = 0; i < m_lives; ++i)
     {
@@ -131,7 +131,7 @@ void GameplayScreen::drawLives(IDrawer& drawer) const
     }
 }
 
-void GameplayScreen::draw(IDrawer& drawer)
+void GameplayScreen::draw(DrawerI& drawer)
 {
     ++m_drawCount;
     m_world.draw(drawer);

@@ -16,7 +16,7 @@ public:
     void setMoveRight(bool moveRight);
 
     void fixedUpdate(sf::Time tick) override;
-    void draw(IDrawer& drawer) const override;
+    void draw(DrawerI& drawer) const override;
     sf::Vector2f position() const override;
     sf::FloatRect bounds() const override;
     sf::Vector2f size() const;
