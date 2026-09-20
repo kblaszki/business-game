@@ -30,6 +30,9 @@ related_code:
   - src/World.cpp
   - src/EntityI.hpp
   - src/CollidableI.hpp
+  - src/HitTestI.hpp
+  - src/entities/Button.hpp
+  - src/entities/Button.cpp
   - src/Paddle.hpp
   - src/Paddle.cpp
   - src/Ball.hpp
@@ -70,6 +73,7 @@ last_reviewed: 2026-09-20
 | `src/Game.hpp` / `Game.cpp` | Window, event pump, `FixedTimestep` — see [application-loop.md](application-loop.md) |
 | `src/window/` | `WindowI` facets, `WindowSFML`, `DrawerI` — see [application-loop.md](application-loop.md) |
 | `src/ScreenI.hpp` / `src/ScreenUpdaterI.hpp` / `src/ScreenStack.*` / `src/*Screen.*` / `src/Action.hpp` / `src/InputMapper.*` | Screens and consume — see [screens-and-input.md](screens-and-input.md) |
+| `src/HitTestI.hpp` / `src/entities/` | Menu `Button` (`EntityI` + `HitTestI`) — see [screens-and-input.md](screens-and-input.md) |
 | `src/FixedTimestep.hpp` | Tick 1/60 s, clamp 0.25 s — see [application-loop.md](application-loop.md) |
 | `src/World.*` / `src/EntityI.hpp` / `src/CollidableI.hpp` / `src/Paddle.*` / `src/Ball.*` / `src/Brick.*` / `src/RectCollision.hpp` / `src/makeWorld.*` / `src/LevelId.hpp` / `src/LevelDescriptor.hpp` | Arkanoid session — see [world-and-levels.md](world-and-levels.md) |
 | `src/window/DrawerI.hpp` / `src/SfmlDrawer.*` | Draw port (`draw(sf::Drawable&)`) and optional `RenderTarget` adapter |
@@ -80,7 +84,7 @@ last_reviewed: 2026-09-20
 
 - **`gameLib`** (STATIC) — implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. C++23. Links SFML 3 (`SFML::Graphics`, `SFML::System`, `SFML::Window`; Audio and Network modules are not built).
 - **`game`** (executable) — `src/main.cpp`, links `gameLib`.
-- **Debug unit tests** — `smoke_test`, `game_loop_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`.
+- **Debug unit tests** — `smoke_test`, `game_loop_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `button_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`.
 
 ## Adding a source file
 

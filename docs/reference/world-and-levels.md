@@ -43,14 +43,14 @@ last_reviewed: 2026-09-20
 | `LevelDescriptor` | `{ id }` — grid constants live in `makeWorld` |
 | `makeWorld` | Spawns paddle, ball, then 50 bricks |
 | `World` | Owns `unique_ptr<EntityI>`s; `objectAt`; draw skips `!alive()`; collisions via `dynamic_cast<CollidableI*>` |
-| `EntityI` | `fixedUpdate`, `draw`, `alive()` (default true). No pose — menu `Button` can share this later. |
+| `EntityI` | `fixedUpdate`, `draw`, `alive()` (default true). No pose. Menu `Button` implements this plus `HitTestI`. |
 | `CollidableI` | `EntityI` plus `position` / `bounds`. `Paddle` / `Ball` / `Brick`. |
 | `Paddle` | Green `100×20`, start `{590, 680}`, `600` px/s, clamp X `[0, 1180]`; pose is `Vector2f`, not `RectangleShape` |
 | `Ball` | White circle, radius `8`, launch `{252, -420}`; walls L/R/T; floor sets `lost()`; pose is center `Vector2f` |
 | `Brick` | `80×30`, one-hit (`destroy()` / `alive()`); pose is `Vector2f` + `Color` |
 | `RectCollision` | AABB overlap; shallow-axis brick bounce; paddle ±60° |
 
-There is no score, font HUD, brick HP, deferred spawn, or `Action::MoveDummy`. Paddle hold is `GameplayScreen::handleEvent` Left/Right.
+There is no score, font HUD, brick HP, deferred spawn, or `Action::MoveDummy`. Paddle hold is `GameplayScreen::handleEvent` Left/Right. Menu `Button`s live on `MainMenuScreen`, not in `World`.
 
 ## Session
 

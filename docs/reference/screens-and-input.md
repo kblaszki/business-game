@@ -8,6 +8,9 @@ related_code:
   - src/ScreenStack.hpp
   - src/ScreenStack.cpp
   - src/MainMenuScreen.cpp
+  - src/HitTestI.hpp
+  - src/entities/Button.hpp
+  - src/entities/Button.cpp
   - src/GameplayScreen.cpp
   - src/PauseScreen.cpp
   - src/window/DrawerI.hpp
@@ -20,7 +23,7 @@ related_docs:
   - application-loop.md
   - world-and-levels.md
   - source-layout.md
-keywords: [ScreenI, ScreenStack, ScreenUpdaterI, Action, InputMapper, PauseScreen, consume, overlay, DrawerI]
+keywords: [ScreenI, ScreenStack, ScreenUpdaterI, Action, InputMapper, PauseScreen, consume, overlay, DrawerI, Button, HitTestI]
 last_reviewed: 2026-09-20
 ---
 
@@ -32,7 +35,7 @@ last_reviewed: 2026-09-20
 
 Screens hold `ScreenUpdaterI&` (`requestPush` / `Pop` / `Replace` / `Close` / `PauseOverlay`). `ScreenStack` implements `ScreenUpdaterI`.
 
-Pause returns `false` from `handleEvent`. `MainMenuScreen` consumes `MouseMoved` and left `MouseButtonPressed` for two unlabeled buttons (green start, red exit; hover brightens). `GameplayScreen` consumes Left/Right `KeyPressed` / `KeyReleased` to hold the paddle (not `Action`).
+Pause returns `false` from `handleEvent`. `MainMenuScreen` owns a panel `EntityI` plus start/exit `Button`s (`EntityI` + `HitTestI`, not in `World`). It consumes `MouseMoved` and left `MouseButtonPressed`; hover calls `HitTestI::contains` and brightens the matching button. `GameplayScreen` consumes Left/Right `KeyPressed` / `KeyReleased` to hold the paddle (not `Action`).
 
 ## ScreenStack commands
 

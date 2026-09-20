@@ -49,6 +49,13 @@ add_unit_test(iscreen_dummy_test
         gameLib
 )
 
+add_unit_test(button_test
+    SOURCES
+        ButtonTest.cpp
+    DEPENDENCIES
+        gameLib
+)
+
 add_unit_test(screen_stack_test
     SOURCES
         ScreenStackTest.cpp

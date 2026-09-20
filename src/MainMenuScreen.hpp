@@ -1,10 +1,14 @@
 /* Created by kblaszki */
 #pragma once
 
+#include <entities/Button.hpp>
+
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 
+#include <EntityI.hpp>
 #include <ScreenI.hpp>
+#include <memory>
 
 class ScreenUpdaterI;
 
@@ -35,8 +39,9 @@ public:
 private:
     void startGame();
     void setHoverFrom(sf::Vector2i pixel);
-    [[nodiscard]] static Hover hitTest(sf::Vector2i pixel);
 
     ScreenUpdaterI& m_stack;
-    Hover m_hover{Hover::None};
+    std::unique_ptr<EntityI> m_panel;
+    Button m_start;
+    Button m_exit;
 };

@@ -47,7 +47,7 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Suites (none open a window): `smoke_test` (`DESIGN_SIZE`), `game_loop_test` (`WindowMock`), `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`.
+Suites (none open a window): `smoke_test` (`DESIGN_SIZE`), `game_loop_test` (`WindowMock`), `fixed_timestep_test`, `iscreen_dummy_test`, `button_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`.
 
 Screens and objects draw through `DrawerI`. Production `Game::run(WindowI&)` draws on the window. Unit tests pass `NullDrawer`, `DrawerMock`, or `WindowMock` and never construct `WindowSFML`. Test binaries still link SFML Graphics, so headless CI uses Mesa on Windows (`-DSFML_USE_MESA3D=TRUE`) and `xvfb-run` on Linux.
 

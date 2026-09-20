@@ -14,33 +14,38 @@
 
 namespace
 {
-bool contains(const sf::FloatRect& rect, sf::Vector2i pixel)
+class MenuPanel : public EntityI
 {
-    return rect.contains(sf::Vector2f{static_cast<float>(pixel.x), static_cast<float>(pixel.y)});
-}
+public:
+    void fixedUpdate(sf::Time) override {}
+
+    void draw(DrawerI& drawer) const override
+    {
+        sf::RectangleShape panel{{640.f, 360.f}};
+        panel.setPosition({320.f, 180.f});
+        panel.setFillColor(sf::Color{24, 32, 56});
+        drawer.draw(panel);
+    }
+};
+
+constexpr sf::Color startFill{36, 130, 70};
+constexpr sf::Color startHoverFill{80, 200, 110};
+constexpr sf::Color exitFill{130, 40, 40};
+constexpr sf::Color exitHoverFill{210, 80, 80};
 } // namespace
 
 MainMenuScreen::MainMenuScreen(ScreenUpdaterI& stack)
     : m_stack(stack)
+    , m_panel(std::make_unique<MenuPanel>())
+    , m_start(startButton, startFill, startHoverFill)
+    , m_exit(exitButton, exitFill, exitHoverFill)
 {
-}
-
-MainMenuScreen::Hover MainMenuScreen::hitTest(sf::Vector2i pixel)
-{
-    if(contains(startButton, pixel))
-    {
-        return Hover::Start;
-    }
-    if(contains(exitButton, pixel))
-    {
-        return Hover::Exit;
-    }
-    return Hover::None;
 }
 
 void MainMenuScreen::setHoverFrom(sf::Vector2i pixel)
 {
-    m_hover = hitTest(pixel);
+    m_start.setHovered(m_start.contains(pixel));
+    m_exit.setHovered(m_exit.contains(pixel));
 }
 
 void MainMenuScreen::startGame()
@@ -64,12 +69,12 @@ bool MainMenuScreen::handleEvent(const sf::Event& event)
         }
 
         setHoverFrom(pressed->position);
-        if(m_hover == Hover::Start)
+        if(m_start.hovered())
         {
             startGame();
             return true;
         }
-        if(m_hover == Hover::Exit)
+        if(m_exit.hovered())
         {
             m_stack.requestClose();
             return true;
@@ -95,23 +100,9 @@ void MainMenuScreen::update(sf::Time) {}
 
 void MainMenuScreen::draw(DrawerI& drawer)
 {
-    sf::RectangleShape panel{{640.f, 360.f}};
-    panel.setPosition({320.f, 180.f});
-    panel.setFillColor(sf::Color{24, 32, 56});
-    drawer.draw(panel);
-
-    const sf::Color startFill = m_hover == Hover::Start ? sf::Color{80, 200, 110} : sf::Color{36, 130, 70};
-    const sf::Color exitFill = m_hover == Hover::Exit ? sf::Color{210, 80, 80} : sf::Color{130, 40, 40};
-
-    sf::RectangleShape startShape{startButton.size};
-    startShape.setPosition(startButton.position);
-    startShape.setFillColor(startFill);
-    drawer.draw(startShape);
-
-    sf::RectangleShape exitShape{exitButton.size};
-    exitShape.setPosition(exitButton.position);
-    exitShape.setFillColor(exitFill);
-    drawer.draw(exitShape);
+    m_panel->draw(drawer);
+    m_start.draw(drawer);
+    m_exit.draw(drawer);
 }
 
 bool MainMenuScreen::blocksUpdate() const
@@ -126,5 +117,13 @@ bool MainMenuScreen::blocksDraw() const
 
 MainMenuScreen::Hover MainMenuScreen::hover() const
 {
-    return m_hover;
+    if(m_start.hovered())
+    {
+        return Hover::Start;
+    }
+    if(m_exit.hovered())
+    {
+        return Hover::Exit;
+    }
+    return Hover::None;
 }
