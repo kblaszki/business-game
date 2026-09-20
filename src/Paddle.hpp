@@ -1,9 +1,9 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <GameObject.hpp>
+#include <CollidableI.hpp>
 
-class Paddle : public GameObject
+class Paddle : public CollidableI
 {
 public:
     static constexpr float SPEED_PX_PER_SEC = 600.f;

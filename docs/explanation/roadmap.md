@@ -32,4 +32,4 @@ Facts: [application-loop.md](../reference/application-loop.md), [screens-and-inp
 
 ## Where it is going
 
-Product direction is still open. Do not assume a board-game or business sim exists — add those explicitly when asked. Engine ports from [mvp/10-v0.1-interface-base.md](../../mvp/10-v0.1-interface-base.md) that have landed: `WindowI` / `DrawerI`, `ScreenI` / `ScreenUpdaterI`, and `blocksUpdate` stopping the input walk so pause cuts paddle keys. Still target: thinner `EntityI` / `CollidableI` / `HitTestI` (no global event managers). The playable demo stays Arkanoid.
+Product direction is still open. Do not assume a board-game or business sim exists — add those explicitly when asked. Engine ports from [mvp/10-v0.1-interface-base.md](../../mvp/10-v0.1-interface-base.md) that have landed: `WindowI` / `DrawerI`, `ScreenI` / `ScreenUpdaterI` (pause cuts paddle keys), and `EntityI` / `CollidableI` (`World` holds `unique_ptr<EntityI>`). Still target: `HitTestI` + menu `Button` (no global event managers). The playable demo stays Arkanoid.

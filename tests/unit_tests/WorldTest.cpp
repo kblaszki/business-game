@@ -1,6 +1,10 @@
 /* Created by kblaszki */
 
+#include "fakes/NullDrawer.hpp"
+
 #include <Ball.hpp>
+#include <CollidableI.hpp>
+#include <EntityI.hpp>
 #include <GameplayScreen.hpp>
 #include <LevelDescriptor.hpp>
 #include <LevelId.hpp>
@@ -9,6 +13,18 @@
 #include <World.hpp>
 #include <gtest/gtest.h>
 #include <makeWorld.hpp>
+#include <memory>
+
+namespace
+{
+class DummyEntity : public EntityI
+{
+public:
+    void fixedUpdate(sf::Time) override {}
+
+    void draw(DrawerI&) const override {}
+};
+} // namespace
 
 TEST(WorldShould, exposeArkanoidDescriptor)
 {
@@ -24,7 +40,22 @@ TEST(WorldShould, spawnPaddleBallAndFiftyBricks)
     EXPECT_EQ(world.objectCount(), 52u);
     ASSERT_NE(dynamic_cast<const Paddle*>(world.objectAt(0)), nullptr);
     ASSERT_NE(dynamic_cast<const Ball*>(world.objectAt(1)), nullptr);
-    EXPECT_EQ(world.objectAt(0)->position(), (sf::Vector2f{590.f, 680.f}));
+    const auto* const paddle = dynamic_cast<const CollidableI*>(world.objectAt(0));
+    ASSERT_NE(paddle, nullptr);
+    EXPECT_EQ(paddle->position(), (sf::Vector2f{590.f, 680.f}));
+}
+
+TEST(WorldShould, spawnNonCollidableEntityWithoutBounds)
+{
+    World world;
+    world.spawn(std::make_unique<DummyEntity>());
+
+    EXPECT_EQ(world.objectCount(), 1u);
+    EXPECT_EQ(dynamic_cast<CollidableI*>(world.objectAt(0)), nullptr);
+    EXPECT_TRUE(world.objectAt(0)->alive());
+
+    NullDrawer drawer;
+    world.draw(drawer);
 }
 
 TEST(WorldShould, placeBallAbovePaddleAtSpawn)

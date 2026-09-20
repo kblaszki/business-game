@@ -3,9 +3,9 @@
 
 #include <SFML/Graphics/Color.hpp>
 
-#include <GameObject.hpp>
+#include <CollidableI.hpp>
 
-class Brick : public GameObject
+class Brick : public CollidableI
 {
 public:
     static constexpr float WIDTH = 80.f;

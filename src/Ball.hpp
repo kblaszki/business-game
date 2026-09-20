@@ -1,11 +1,11 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <GameObject.hpp>
+#include <CollidableI.hpp>
 
 class Paddle;
 
-class Ball : public GameObject
+class Ball : public CollidableI
 {
 public:
     static constexpr float RADIUS = 8.f;

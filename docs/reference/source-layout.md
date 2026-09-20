@@ -28,8 +28,8 @@ related_code:
   - src/FixedTimestep.hpp
   - src/World.hpp
   - src/World.cpp
-  - src/GameObject.hpp
-  - src/GameObject.cpp
+  - src/EntityI.hpp
+  - src/CollidableI.hpp
   - src/Paddle.hpp
   - src/Paddle.cpp
   - src/Ball.hpp
@@ -71,7 +71,7 @@ last_reviewed: 2026-09-20
 | `src/window/` | `WindowI` facets, `WindowSFML`, `DrawerI` — see [application-loop.md](application-loop.md) |
 | `src/ScreenI.hpp` / `src/ScreenUpdaterI.hpp` / `src/ScreenStack.*` / `src/*Screen.*` / `src/Action.hpp` / `src/InputMapper.*` | Screens and consume — see [screens-and-input.md](screens-and-input.md) |
 | `src/FixedTimestep.hpp` | Tick 1/60 s, clamp 0.25 s — see [application-loop.md](application-loop.md) |
-| `src/World.*` / `src/GameObject.*` / `src/Paddle.*` / `src/Ball.*` / `src/Brick.*` / `src/RectCollision.hpp` / `src/makeWorld.*` / `src/LevelId.hpp` / `src/LevelDescriptor.hpp` | Arkanoid session — see [world-and-levels.md](world-and-levels.md) |
+| `src/World.*` / `src/EntityI.hpp` / `src/CollidableI.hpp` / `src/Paddle.*` / `src/Ball.*` / `src/Brick.*` / `src/RectCollision.hpp` / `src/makeWorld.*` / `src/LevelId.hpp` / `src/LevelDescriptor.hpp` | Arkanoid session — see [world-and-levels.md](world-and-levels.md) |
 | `src/window/DrawerI.hpp` / `src/SfmlDrawer.*` | Draw port (`draw(sf::Drawable&)`) and optional `RenderTarget` adapter |
 | `tests/unit_tests/` | GoogleTest suites (Debug; loop tests use `WindowMock`, not `WindowSFML`) |
 | `tests/unit_tests/fakes/` | `SpyScreen`, `DrawerMock`, `NullDrawer`, `WindowMock` |

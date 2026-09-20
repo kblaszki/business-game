@@ -3,7 +3,6 @@ add_library(gameLib
         Ball.cpp
         Brick.cpp
         Game.cpp
-        GameObject.cpp
         GameplayScreen.cpp
         InputMapper.cpp
         MainMenuScreen.cpp

@@ -4,7 +4,7 @@
 
 #include <cassert>
 
-void World::spawn(std::unique_ptr<GameObject> object)
+void World::spawn(std::unique_ptr<EntityI> object)
 {
     m_objects.push_back(std::move(object));
 }
@@ -33,13 +33,13 @@ std::size_t World::objectCount() const
     return m_objects.size();
 }
 
-GameObject* World::objectAt(std::size_t index)
+EntityI* World::objectAt(std::size_t index)
 {
     assert(index < m_objects.size());
     return m_objects[index].get();
 }
 
-const GameObject* World::objectAt(std::size_t index) const
+const EntityI* World::objectAt(std::size_t index) const
 {
     assert(index < m_objects.size());
     return m_objects[index].get();
