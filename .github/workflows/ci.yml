@@ -54,6 +54,7 @@ jobs:
             libx11-dev \
             libfreetype6-dev \
             libharfbuzz-dev \
+            xvfb \
             ninja-build \
             ccache
 
@@ -75,16 +76,21 @@ jobs:
             mingw-w64-x86_64-harfbuzz
 
       - name: Configure Debug
-        run: cmake --preset debug ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++ -DCMAKE_PREFIX_PATH=C:/msys64/mingw64' || '' }}
+        run: cmake --preset debug ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++ -DCMAKE_PREFIX_PATH=C:/msys64/mingw64 -DSFML_USE_MESA3D=TRUE' || '' }}
 
       - name: Build tests
         run: cmake --build --preset debug --target build_ut
 
       - name: Run tests
+        if: runner.os == 'Linux'
+        run: xvfb-run --auto-servernum ctest --preset debug --output-on-failure
+
+      - name: Run tests
+        if: runner.os == 'Windows'
         run: ctest --preset debug --output-on-failure
 
       - name: Configure Release
-        run: cmake --preset release ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++ -DCMAKE_PREFIX_PATH=C:/msys64/mingw64' || '' }}
+        run: cmake --preset release ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++ -DCMAKE_PREFIX_PATH=C:/msys64/mingw64 -DSFML_USE_MESA3D=TRUE' || '' }}
 
       - name: Build game
         run: cmake --build --preset release --target game

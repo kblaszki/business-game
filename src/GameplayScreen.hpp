@@ -1,10 +1,11 @@
 /* Created by kblaszki */
 #pragma once
 
+#include <SFML/System/Vector2.hpp>
+
 #include <IScreen.hpp>
 #include <LevelId.hpp>
 #include <World.hpp>
-#include <SFML/System/Vector2.hpp>
 #include <cstdint>
 
 class Ball;
@@ -21,7 +22,7 @@ public:
     bool handleEvent(const sf::Event& event) override;
     bool handleAction(Action action) override;
     void update(sf::Time dt) override;
-    void draw(sf::RenderTarget& target) override;
+    void draw(IDrawer& drawer) override;
     bool blocksUpdate() const override;
     bool blocksDraw() const override;
     bool isGameplay() const override
@@ -46,7 +47,7 @@ private:
     void handleBrickCollisions();
     void loseLife();
     void returnToMenu();
-    void drawLives(sf::RenderTarget& target) const;
+    void drawLives(IDrawer& drawer) const;
 
     ScreenStack& m_stack;
     World m_world;

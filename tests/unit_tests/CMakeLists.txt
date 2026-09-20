@@ -6,7 +6,7 @@ function(add_unit_test UNIT_TEST_NAME)
     set(multiValueArgs SOURCES DEPENDENCIES)
     cmake_parse_arguments(UNIT_TEST "" "" "${multiValueArgs}" ${ARGN})
 
-    add_executable(${UNIT_TEST_NAME} ${UNIT_TEST_SOURCES} fakes/StubDraw.cpp)
+    add_executable(${UNIT_TEST_NAME} ${UNIT_TEST_SOURCES})
     target_compile_options(${UNIT_TEST_NAME} PRIVATE ${BASE_COMPILE_FLAGS})
     target_link_libraries(${UNIT_TEST_NAME} PRIVATE ${UNIT_TEST_DEPENDENCIES} gtest gmock gtest_main)
     # GNU ld on Linux may pull only part of static HarfBuzz before FreeType adds more undefs.

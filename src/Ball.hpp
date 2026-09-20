@@ -14,7 +14,7 @@ public:
     Ball();
 
     void fixedUpdate(sf::Time tick) override;
-    void draw(sf::RenderTarget& target) const override;
+    void draw(IDrawer& drawer) const override;
     sf::Vector2f position() const override;
     sf::FloatRect bounds() const override;
 

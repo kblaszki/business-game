@@ -2,8 +2,10 @@
 
 #include "Paddle.hpp"
 
-#include <Game.hpp>
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
+#include <Game.hpp>
 #include <algorithm>
 
 Paddle::Paddle()
@@ -49,6 +51,14 @@ sf::FloatRect Paddle::bounds() const
 sf::Vector2f Paddle::size() const
 {
     return {WIDTH, HEIGHT};
+}
+
+void Paddle::draw(IDrawer& drawer) const
+{
+    sf::RectangleShape shape{{WIDTH, HEIGHT}};
+    shape.setPosition(m_position);
+    shape.setFillColor(sf::Color::Green);
+    drawer.draw(shape);
 }
 
 void Paddle::clampToArena()

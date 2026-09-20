@@ -7,8 +7,10 @@ related_code:
   - CMakeLists.txt
   - tests/unit_tests/CMakeLists.txt
   - tests/unit_tests/fakes/SpyScreen.hpp
-  - tests/unit_tests/fakes/StubDraw.cpp
-  - src/draw.cpp
+  - tests/unit_tests/fakes/DrawerMock.hpp
+  - tests/unit_tests/fakes/NullDrawer.hpp
+  - src/IDrawer.hpp
+  - src/SfmlDrawer.cpp
   - .github/workflows/ci.yml
 related_docs:
   - ../tutorials/getting-started.md
@@ -45,15 +47,15 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Suites (none open a window, none import `opengl32.dll`): `smoke_test` (`DESIGN_SIZE`), `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`.
+Suites (none open a window): `smoke_test` (`DESIGN_SIZE`), `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`.
 
-Draw walk tests use `ScreenStack::drawStartIndex()` instead of constructing `sf::RenderTarget`. Real `target.draw` lives in `src/draw.cpp` (the `game` binary) and empty stand-ins in `tests/unit_tests/fakes/StubDraw.cpp`. Headless Windows CI hangs if a test executable imports `opengl32.dll`.
+Screens and objects draw through `IDrawer`. Production `Game::run` uses `SfmlDrawer` around the window. Unit tests pass `NullDrawer` or `DrawerMock` and never call `sf::RenderTarget::draw`. Test binaries still link SFML Graphics, so headless CI uses Mesa on Windows (`-DSFML_USE_MESA3D=TRUE`) and `xvfb-run` on Linux.
 
 `build_ut` builds every suite registered with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`.
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`) runs the same Debug tests and a Release `game` build on Ubuntu 24.04 and Windows 2022. Linux CI installs SFML Graphics deps including `libfreetype6-dev` and `libharfbuzz-dev`. Windows CI installs MSYS2 `mingw-w64-x86_64-freetype` and `mingw-w64-x86_64-harfbuzz` (SFML 3.1 `find_package(HarfBuzz)` after system FreeType). Static FetchContent copies of those two on MinGW can deadlock at process start when a test links Graphics.
+GitHub Actions (`.github/workflows/ci.yml`) runs the same Debug tests and a Release `game` build on Ubuntu 24.04 and Windows 2022. Linux CI installs SFML Graphics deps including `libfreetype6-dev`, `libharfbuzz-dev`, and `xvfb`, then runs `xvfb-run --auto-servernum ctest`. Windows CI installs MSYS2 `mingw-w64-x86_64-freetype` and `mingw-w64-x86_64-harfbuzz` (SFML 3.1 `find_package(HarfBuzz)` after system FreeType) and configures with `-DSFML_USE_MESA3D=TRUE`. Static FetchContent copies of FreeType/HarfBuzz on MinGW can deadlock at process start when a test links Graphics.
 
 ## Format the code
 

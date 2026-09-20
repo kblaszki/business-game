@@ -9,12 +9,14 @@ related_code:
   - src/FixedTimestep.hpp
   - src/InputMapper.cpp
   - src/ScreenStack.cpp
+  - src/IDrawer.hpp
+  - src/SfmlDrawer.cpp
 related_docs:
   - screens-and-input.md
   - world-and-levels.md
   - source-layout.md
 keywords: [Game, run, FixedTimestep, frame, FocusLost, pause, applyCommands]
-last_reviewed: 2026-09-19
+last_reviewed: 2026-09-20
 ---
 
 # Application loop
@@ -35,7 +37,7 @@ flowchart TD
   Skip[restart clock, no drain]
   Drain[FixedTimestep drain]
   Tick[stack.update tick]
-  Draw[clear, stack.draw]
+  Draw[clear, SfmlDrawer, stack.draw]
   Apply[applyCommands]
   Close{closeRequested}
   Display[display]
@@ -59,7 +61,7 @@ flowchart TD
 3. Otherwise `InputMapper::mapEvent`: a mapped `Action` goes to `stack.handleAction` only; an unmapped event goes to `stack.handleEvent` only (never both).
 4. If `stack.pauseIsTop()`, `clock.restart()` and **do not** call `drain` or `stack.update`. The frame’s `dt` is discarded so resume does not catch up.
 5. Else `FixedTimestep::drain(clock.restart())` and `stack.update(FixedTimestep::tick)` once per returned tick.
-6. `window.clear()`, `stack.draw(window)`, `stack.applyCommands()`.
+6. `window.clear()`, `SfmlDrawer drawer{window}`, `stack.draw(drawer)`, `stack.applyCommands()`.
 7. If `stack.closeRequested()`, `window.close()`.
 8. `window.display()`.
 

@@ -137,7 +137,7 @@ void ScreenStack::update(sf::Time dt)
     }
 }
 
-void ScreenStack::draw(sf::RenderTarget& target)
+void ScreenStack::draw(IDrawer& drawer)
 {
     if(m_screens.empty())
     {
@@ -146,7 +146,7 @@ void ScreenStack::draw(sf::RenderTarget& target)
 
     for(auto i = drawStartIndex(); i < m_screens.size(); ++i)
     {
-        m_screens[i]->draw(target);
+        m_screens[i]->draw(drawer);
     }
 }
 

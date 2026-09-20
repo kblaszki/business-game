@@ -2,8 +2,12 @@
 
 #include "PauseScreen.hpp"
 
+#include "Game.hpp"
 #include "MainMenuScreen.hpp"
 #include "ScreenStack.hpp"
+
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 #include <memory>
 
@@ -36,6 +40,13 @@ bool PauseScreen::handleAction(Action action)
 }
 
 void PauseScreen::update(sf::Time) {}
+
+void PauseScreen::draw(IDrawer& drawer)
+{
+    sf::RectangleShape overlay{{static_cast<float>(Game::DESIGN_SIZE.x), static_cast<float>(Game::DESIGN_SIZE.y)}};
+    overlay.setFillColor(sf::Color{0, 0, 0, 140});
+    drawer.draw(overlay);
+}
 
 bool PauseScreen::blocksUpdate() const
 {

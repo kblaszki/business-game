@@ -5,6 +5,8 @@
 #include "GameplayScreen.hpp"
 #include "ScreenStack.hpp"
 
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 
@@ -90,6 +92,27 @@ bool MainMenuScreen::handleAction(Action action)
 }
 
 void MainMenuScreen::update(sf::Time) {}
+
+void MainMenuScreen::draw(IDrawer& drawer)
+{
+    sf::RectangleShape panel{{640.f, 360.f}};
+    panel.setPosition({320.f, 180.f});
+    panel.setFillColor(sf::Color{24, 32, 56});
+    drawer.draw(panel);
+
+    const sf::Color startFill = m_hover == Hover::Start ? sf::Color{80, 200, 110} : sf::Color{36, 130, 70};
+    const sf::Color exitFill = m_hover == Hover::Exit ? sf::Color{210, 80, 80} : sf::Color{130, 40, 40};
+
+    sf::RectangleShape startShape{startButton.size};
+    startShape.setPosition(startButton.position);
+    startShape.setFillColor(startFill);
+    drawer.draw(startShape);
+
+    sf::RectangleShape exitShape{exitButton.size};
+    exitShape.setPosition(exitButton.position);
+    exitShape.setFillColor(exitFill);
+    drawer.draw(exitShape);
+}
 
 bool MainMenuScreen::blocksUpdate() const
 {

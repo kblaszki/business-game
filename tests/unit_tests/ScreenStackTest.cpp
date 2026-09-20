@@ -1,5 +1,6 @@
 /* Created by kblaszki */
 
+#include "fakes/NullDrawer.hpp"
 #include "fakes/SpyScreen.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -77,12 +78,19 @@ TEST(ScreenStackShould, drawLowerWhenTopDoesNotBlockDraw)
     ScreenStack stack;
     auto lower = std::make_unique<SpyScreen>();
     auto upper = std::make_unique<SpyScreen>(false, false);
+    SpyScreen* const lowerPtr = lower.get();
+    SpyScreen* const upperPtr = upper.get();
 
     stack.requestPush(std::move(lower));
     stack.requestPush(std::move(upper));
     stack.applyCommands();
 
     EXPECT_EQ(stack.drawStartIndex(), 0u);
+
+    NullDrawer drawer;
+    stack.draw(drawer);
+    EXPECT_EQ(lowerPtr->drawCount, 1u);
+    EXPECT_EQ(upperPtr->drawCount, 1u);
 }
 
 TEST(ScreenStackShould, skipLowerDrawWhenTopBlocksDraw)
@@ -90,12 +98,19 @@ TEST(ScreenStackShould, skipLowerDrawWhenTopBlocksDraw)
     ScreenStack stack;
     auto lower = std::make_unique<SpyScreen>();
     auto upper = std::make_unique<SpyScreen>(false, true);
+    SpyScreen* const lowerPtr = lower.get();
+    SpyScreen* const upperPtr = upper.get();
 
     stack.requestPush(std::move(lower));
     stack.requestPush(std::move(upper));
     stack.applyCommands();
 
     EXPECT_EQ(stack.drawStartIndex(), 1u);
+
+    NullDrawer drawer;
+    stack.draw(drawer);
+    EXPECT_EQ(lowerPtr->drawCount, 0u);
+    EXPECT_EQ(upperPtr->drawCount, 1u);
 }
 
 TEST(ScreenStackShould, stopHandleEventWhenTopConsumes)

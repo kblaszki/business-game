@@ -15,7 +15,7 @@ related_docs:
   - explanation/roadmap.md
   - ../mvp/README.md
 keywords: [documentation, diataxis, index, map, navigation, docs]
-last_reviewed: 2026-09-19
+last_reviewed: 2026-09-20
 ---
 
 # Documentation map

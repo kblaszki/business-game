@@ -49,7 +49,7 @@ public:
         finishedUpdate = true;
     }
 
-    void draw(sf::RenderTarget&) override
+    void draw(IDrawer&) override
     {
         ++drawCount;
     }

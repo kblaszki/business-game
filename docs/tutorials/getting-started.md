@@ -8,6 +8,7 @@ related_code:
   - cmake/FetchSFML.cmake
   - cmake/FetchGTest.cmake
   - src/Game.cpp
+  - src/IDrawer.hpp
   - .github/workflows/ci.yml
 related_docs:
   - ../how-to/build-and-test.md
@@ -44,7 +45,7 @@ ninja --version
 cmake --version
 ```
 
-SFML 3.1 (Graphics/Window/System only) and GoogleTest 1.18 are fetched automatically by CMake (`cmake/FetchSFML.cmake`, `cmake/FetchGTest.cmake`). No separate SFML install. On Ubuntu, install `libfreetype6-dev` and `libharfbuzz-dev` (and the usual X11/OpenGL packages from `.github/workflows/ci.yml`) before `cmake --preset debug`. On Windows MSYS2 MinGW, install `mingw-w64-x86_64-freetype` and `mingw-w64-x86_64-harfbuzz` so CMake does not fetch static copies of those libraries.
+SFML 3.1 (Graphics/Window/System only) and GoogleTest 1.18 are fetched automatically by CMake (`cmake/FetchSFML.cmake`, `cmake/FetchGTest.cmake`). No separate SFML install. On Ubuntu, install `libfreetype6-dev` and `libharfbuzz-dev` (and the usual X11/OpenGL packages from `.github/workflows/ci.yml`) before `cmake --preset debug`. Headless `ctest` on Linux needs `xvfb`. On Windows MSYS2 MinGW, install `mingw-w64-x86_64-freetype` and `mingw-w64-x86_64-harfbuzz` so CMake does not fetch static copies of those libraries. Headless Windows tests need SFML built with `-DSFML_USE_MESA3D=TRUE` (CI does this).
 
 ## 2. Configure
 

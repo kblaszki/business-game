@@ -8,6 +8,7 @@
 #include <InputMapper.hpp>
 #include <MainMenuScreen.hpp>
 #include <ScreenStack.hpp>
+#include <SfmlDrawer.hpp>
 #include <memory>
 #include <optional>
 
@@ -84,7 +85,10 @@ void Game::run()
         }
 
         window.clear();
-        stack.draw(window);
+        {
+            SfmlDrawer drawer{window};
+            stack.draw(drawer);
+        }
         stack.applyCommands();
         if(stack.closeRequested())
         {

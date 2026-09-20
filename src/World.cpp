@@ -17,6 +17,17 @@ void World::fixedUpdate(sf::Time tick)
     }
 }
 
+void World::draw(IDrawer& drawer) const
+{
+    for(const auto& object: m_objects)
+    {
+        if(object->alive())
+        {
+            object->draw(drawer);
+        }
+    }
+}
+
 std::size_t World::objectCount() const
 {
     return m_objects.size();

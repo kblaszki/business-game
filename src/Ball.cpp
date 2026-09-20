@@ -4,10 +4,22 @@
 
 #include "Paddle.hpp"
 
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Color.hpp>
+
 #include <Game.hpp>
 #include <RectCollision.hpp>
 
 Ball::Ball() = default;
+
+void Ball::draw(IDrawer& drawer) const
+{
+    sf::CircleShape shape{RADIUS};
+    shape.setOrigin({RADIUS, RADIUS});
+    shape.setPosition(m_position);
+    shape.setFillColor(sf::Color::White);
+    drawer.draw(shape);
+}
 
 void Ball::fixedUpdate(sf::Time tick)
 {

@@ -1,5 +1,7 @@
 /* Created by kblaszki */
 
+#include "fakes/DrawerMock.hpp"
+
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
 
@@ -232,4 +234,9 @@ TEST(PauseBlocksTicksShould, keepDrawingGameplayUnderPauseOverlay)
     ASSERT_TRUE(stack.pauseIsTop());
     EXPECT_FALSE(stack.top()->blocksDraw());
     EXPECT_EQ(stack.drawStartIndex(), 0u);
+
+    testing::StrictMock<DrawerMock> drawer;
+    EXPECT_CALL(drawer, draw(testing::_, testing::_)).Times(testing::AtLeast(2));
+    stack.draw(drawer);
+    EXPECT_GE(gameplayPtr->drawCount(), 1u);
 }

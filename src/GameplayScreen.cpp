@@ -5,16 +5,17 @@
 #include "MainMenuScreen.hpp"
 #include "ScreenStack.hpp"
 
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
+
 #include <Ball.hpp>
 #include <Brick.hpp>
 #include <LevelDescriptor.hpp>
 #include <Paddle.hpp>
 #include <RectCollision.hpp>
 #include <makeWorld.hpp>
-
-#include <SFML/Window/Event.hpp>
-#include <SFML/Window/Keyboard.hpp>
-
 #include <memory>
 
 GameplayScreen::GameplayScreen(ScreenStack& stack, LevelId levelId)
@@ -119,6 +120,24 @@ bool GameplayScreen::blocksUpdate() const
     return true;
 }
 
+void GameplayScreen::drawLives(IDrawer& drawer) const
+{
+    for(int i = 0; i < m_lives; ++i)
+    {
+        sf::RectangleShape pip{{16.f, 16.f}};
+        pip.setPosition({16.f + static_cast<float>(i) * 20.f, 12.f});
+        pip.setFillColor(sf::Color::White);
+        drawer.draw(pip);
+    }
+}
+
+void GameplayScreen::draw(IDrawer& drawer)
+{
+    ++m_drawCount;
+    m_world.draw(drawer);
+    drawLives(drawer);
+}
+
 bool GameplayScreen::blocksDraw() const
 {
     return true;
@@ -149,7 +168,8 @@ std::size_t GameplayScreen::remainingBricks() const
     std::size_t count = 0;
     for(std::size_t i = 0; i < m_world.objectCount(); ++i)
     {
-        if(const auto* const brick = dynamic_cast<const Brick*>(m_world.objectAt(i)); brick != nullptr && brick->alive())
+        if(const auto* const brick = dynamic_cast<const Brick*>(m_world.objectAt(i));
+           brick != nullptr && brick->alive())
         {
             ++count;
         }

@@ -1,8 +1,9 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <GameObject.hpp>
 #include <SFML/Graphics/Color.hpp>
+
+#include <GameObject.hpp>
 
 class Brick : public GameObject
 {
@@ -13,7 +14,7 @@ public:
     Brick(sf::Vector2f position, sf::Color color);
 
     void fixedUpdate(sf::Time tick) override;
-    void draw(sf::RenderTarget& target) const override;
+    void draw(IDrawer& drawer) const override;
     sf::Vector2f position() const override;
     sf::FloatRect bounds() const override;
     bool alive() const override;
