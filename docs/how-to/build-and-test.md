@@ -11,7 +11,7 @@ related_code:
 related_docs:
   - ../tutorials/getting-started.md
   - ../reference/source-layout.md
-keywords: [build, test, ctest, format, presets, build_ut, debug, release]
+keywords: [build, test, ctest, format, presets, build_ut, debug, release, mesa]
 last_reviewed: 2026-09-20
 ---
 
@@ -52,6 +52,8 @@ Suites (none open a window, none issue OpenGL): `smoke_test` (`DESIGN_SIZE`), `f
 ## CI
 
 GitHub Actions (`.github/workflows/ci.yml`) runs the same Debug tests and a Release `game` build on Ubuntu 24.04 and Windows 2022. Linux CI installs SFML Graphics deps including `libfreetype6-dev` and `libharfbuzz-dev`. Windows CI installs MSYS2 `mingw-w64-x86_64-freetype` and `mingw-w64-x86_64-harfbuzz` (SFML 3.1 `find_package(HarfBuzz)` after system FreeType). Static FetchContent copies of those two on MinGW can deadlock at process start when a test links Graphics.
+
+Windows CI also copies Mesa 3D software OpenGL DLLs next to `build/debug/bin/` test executables (`GALLIUM_DRIVER=llvmpipe`). Suites that link SFML Graphics import `opengl32.dll` at process start; the runner's display driver hangs there. Mesa must sit beside the `.exe` (Windows loads `System32\opengl32.dll` before `PATH`). This is the same approach SFML uses (`SFML_USE_MESA3D`). Do not install Mesa for a local GPU machine.
 
 ## Format the code
 
