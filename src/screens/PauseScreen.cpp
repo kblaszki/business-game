@@ -2,13 +2,13 @@
 
 #include "PauseScreen.hpp"
 
-#include "Game.hpp"
 #include "MainMenuScreen.hpp"
 #include "ScreenUpdaterI.hpp"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#include <Game.hpp>
 #include <memory>
 
 PauseScreen::PauseScreen(ScreenUpdaterI& stack)

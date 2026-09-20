@@ -1,7 +1,7 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <CollidableI.hpp>
+#include "CollidableI.hpp"
 
 class Paddle : public CollidableI
 {

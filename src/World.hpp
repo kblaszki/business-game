@@ -1,11 +1,11 @@
 /* Created by kblaszki */
 #pragma once
 
+#include <entities/EntityI.hpp>
 #include <window/DrawerI.hpp>
 
 #include <SFML/System/Time.hpp>
 
-#include <EntityI.hpp>
 #include <cstddef>
 #include <memory>
 #include <vector>

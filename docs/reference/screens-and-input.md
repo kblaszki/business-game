@@ -3,18 +3,18 @@ title: Screens and input
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - src/ScreenI.hpp
-  - src/ScreenUpdaterI.hpp
-  - src/ScreenStack.hpp
-  - src/ScreenStack.cpp
-  - src/MainMenuScreen.cpp
-  - src/HitTestI.hpp
+  - src/screens/ScreenI.hpp
+  - src/screens/ScreenUpdaterI.hpp
+  - src/screens/ScreenStack.hpp
+  - src/screens/ScreenStack.cpp
+  - src/screens/MainMenuScreen.cpp
+  - src/entities/HitTestI.hpp
   - src/entities/Button.hpp
   - src/entities/Button.cpp
-  - src/GameplayScreen.cpp
-  - src/PauseScreen.cpp
+  - src/screens/GameplayScreen.cpp
+  - src/screens/PauseScreen.cpp
   - src/window/DrawerI.hpp
-  - src/SfmlDrawer.cpp
+  - src/window/SfmlDrawer.cpp
   - src/Action.hpp
   - src/InputMapper.hpp
   - src/InputMapper.cpp

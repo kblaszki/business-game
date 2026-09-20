@@ -1,14 +1,15 @@
 /* Created by kblaszki */
 #pragma once
 
+#include "ScreenI.hpp"
+#include "ScreenUpdaterI.hpp"
+
 #include <window/DrawerI.hpp>
 
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 
 #include <Action.hpp>
-#include <ScreenI.hpp>
-#include <ScreenUpdaterI.hpp>
 #include <cstddef>
 #include <memory>
 #include <vector>

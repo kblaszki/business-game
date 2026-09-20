@@ -3,10 +3,11 @@
 #include "fakes/NullDrawer.hpp"
 #include "fakes/SpyScreen.hpp"
 
+#include <screens/ScreenStack.hpp>
+
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include <ScreenStack.hpp>
 #include <gtest/gtest.h>
 #include <memory>
 

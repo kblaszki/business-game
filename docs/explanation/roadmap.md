@@ -5,10 +5,10 @@ audience: [ai, human]
 related_code:
   - src/main.cpp
   - src/Game.cpp
-  - src/ScreenStack.cpp
-  - src/MainMenuScreen.cpp
-  - src/GameplayScreen.cpp
-  - src/PauseScreen.cpp
+  - src/screens/ScreenStack.cpp
+  - src/screens/MainMenuScreen.cpp
+  - src/screens/GameplayScreen.cpp
+  - src/screens/PauseScreen.cpp
   - src/World.cpp
   - src/window/DrawerI.hpp
 related_docs:

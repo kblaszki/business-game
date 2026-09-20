@@ -4,11 +4,12 @@
 
 #include "Paddle.hpp"
 
+#include <utils/RectCollision.hpp>
+
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
 
 #include <Game.hpp>
-#include <RectCollision.hpp>
 
 Ball::Ball() = default;
 

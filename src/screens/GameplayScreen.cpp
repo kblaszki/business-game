@@ -5,16 +5,17 @@
 #include "MainMenuScreen.hpp"
 #include "ScreenUpdaterI.hpp"
 
+#include <entities/Ball.hpp>
+#include <entities/Brick.hpp>
+#include <entities/Paddle.hpp>
+#include <utils/RectCollision.hpp>
+
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
-#include <Ball.hpp>
-#include <Brick.hpp>
 #include <LevelDescriptor.hpp>
-#include <Paddle.hpp>
-#include <RectCollision.hpp>
 #include <makeWorld.hpp>
 #include <memory>
 

@@ -10,7 +10,7 @@ related_code:
   - tests/unit_tests/fakes/DrawerMock.hpp
   - tests/unit_tests/fakes/WindowMock.hpp
   - src/window/DrawerI.hpp
-  - src/SfmlDrawer.cpp
+  - src/window/SfmlDrawer.cpp
   - .github/workflows/ci.yml
 related_docs:
   - ../tutorials/getting-started.md

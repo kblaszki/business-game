@@ -2,18 +2,19 @@
 
 #include "fakes/DrawerMock.hpp"
 
+#include <screens/GameplayScreen.hpp>
+#include <screens/MainMenuScreen.hpp>
+#include <screens/PauseScreen.hpp>
+#include <screens/ScreenStack.hpp>
+#include <utils/FixedTimestep.hpp>
+
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
 #include <Action.hpp>
-#include <FixedTimestep.hpp>
-#include <GameplayScreen.hpp>
 #include <LevelId.hpp>
-#include <MainMenuScreen.hpp>
-#include <PauseScreen.hpp>
-#include <ScreenStack.hpp>
 #include <gtest/gtest.h>
 #include <memory>
 

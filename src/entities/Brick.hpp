@@ -1,9 +1,9 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <SFML/Graphics/Color.hpp>
+#include "CollidableI.hpp"
 
-#include <CollidableI.hpp>
+#include <SFML/Graphics/Color.hpp>
 
 class Brick : public CollidableI
 {

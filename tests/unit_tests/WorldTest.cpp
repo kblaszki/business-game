@@ -2,14 +2,15 @@
 
 #include "fakes/NullDrawer.hpp"
 
-#include <Ball.hpp>
-#include <CollidableI.hpp>
-#include <EntityI.hpp>
-#include <GameplayScreen.hpp>
+#include <entities/Ball.hpp>
+#include <entities/CollidableI.hpp>
+#include <entities/EntityI.hpp>
+#include <entities/Paddle.hpp>
+#include <screens/GameplayScreen.hpp>
+#include <screens/ScreenStack.hpp>
+
 #include <LevelDescriptor.hpp>
 #include <LevelId.hpp>
-#include <Paddle.hpp>
-#include <ScreenStack.hpp>
 #include <World.hpp>
 #include <gtest/gtest.h>
 #include <makeWorld.hpp>

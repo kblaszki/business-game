@@ -1,7 +1,8 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <ScreenI.hpp>
+#include <screens/ScreenI.hpp>
+
 #include <cstdint>
 #include <functional>
 

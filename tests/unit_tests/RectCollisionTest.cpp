@@ -1,6 +1,7 @@
 /* Created by kblaszki */
 
-#include <RectCollision.hpp>
+#include <utils/RectCollision.hpp>
+
 #include <gtest/gtest.h>
 
 TEST(RectCollisionShould, reportIntersectionWhenRectsOverlap)

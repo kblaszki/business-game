@@ -1,10 +1,10 @@
 /* Created by kblaszki */
 #pragma once
 
+#include "EntityI.hpp"
+
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
-
-#include <EntityI.hpp>
 
 class CollidableI : public EntityI
 {

@@ -2,9 +2,10 @@
 
 #include "fakes/SpyScreen.hpp"
 
+#include <utils/FixedTimestep.hpp>
+
 #include <SFML/Window/Event.hpp>
 
-#include <FixedTimestep.hpp>
 #include <gtest/gtest.h>
 
 TEST(IScreenDummyShould, exposeNonBlockingFlagsAndIgnoreEvents)

@@ -6,13 +6,13 @@ related_code:
   - src/main.cpp
   - src/Game.hpp
   - src/Game.cpp
-  - src/FixedTimestep.hpp
+  - src/utils/FixedTimestep.hpp
   - src/InputMapper.cpp
-  - src/ScreenStack.cpp
+  - src/screens/ScreenStack.cpp
   - src/window/DrawerI.hpp
   - src/window/WindowI.hpp
   - src/window/WindowSFML.cpp
-  - src/SfmlDrawer.cpp
+  - src/window/SfmlDrawer.cpp
 related_docs:
   - screens-and-input.md
   - world-and-levels.md

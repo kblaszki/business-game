@@ -2,7 +2,8 @@
 
 #include "fakes/SpyScreen.hpp"
 
-#include <FixedTimestep.hpp>
+#include <utils/FixedTimestep.hpp>
+
 #include <gtest/gtest.h>
 
 TEST(FixedTimestepShould, drainOneTickFromExactlyOneSixtieth)

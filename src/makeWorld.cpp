@@ -2,11 +2,13 @@
 
 #include "makeWorld.hpp"
 
-#include <Ball.hpp>
-#include <Brick.hpp>
-#include <Game.hpp>
-#include <Paddle.hpp>
+#include <entities/Ball.hpp>
+#include <entities/Brick.hpp>
+#include <entities/Paddle.hpp>
+
 #include <SFML/Graphics/Color.hpp>
+
+#include <Game.hpp>
 #include <memory>
 
 namespace

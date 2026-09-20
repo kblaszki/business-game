@@ -3,6 +3,11 @@
 #include "fakes/NullDrawer.hpp"
 
 #include <entities/Button.hpp>
+#include <entities/CollidableI.hpp>
+#include <entities/EntityI.hpp>
+#include <entities/HitTestI.hpp>
+#include <screens/MainMenuScreen.hpp>
+#include <screens/ScreenStack.hpp>
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Rect.hpp>
@@ -10,11 +15,6 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 
-#include <CollidableI.hpp>
-#include <EntityI.hpp>
-#include <HitTestI.hpp>
-#include <MainMenuScreen.hpp>
-#include <ScreenStack.hpp>
 #include <gtest/gtest.h>
 #include <memory>
 

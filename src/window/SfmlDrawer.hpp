@@ -1,7 +1,7 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <window/DrawerI.hpp>
+#include "DrawerI.hpp"
 
 #include <SFML/Graphics/RenderTarget.hpp>
 

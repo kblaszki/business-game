@@ -10,36 +10,36 @@ related_code:
   - src/window/DrawerI.hpp
   - src/window/WindowI.hpp
   - src/window/WindowSFML.cpp
-  - src/SfmlDrawer.hpp
-  - src/SfmlDrawer.cpp
-  - src/ScreenI.hpp
-  - src/ScreenUpdaterI.hpp
-  - src/ScreenStack.hpp
-  - src/ScreenStack.cpp
-  - src/MainMenuScreen.hpp
-  - src/MainMenuScreen.cpp
-  - src/GameplayScreen.hpp
-  - src/GameplayScreen.cpp
-  - src/PauseScreen.hpp
-  - src/PauseScreen.cpp
+  - src/window/SfmlDrawer.hpp
+  - src/window/SfmlDrawer.cpp
+  - src/screens/ScreenI.hpp
+  - src/screens/ScreenUpdaterI.hpp
+  - src/screens/ScreenStack.hpp
+  - src/screens/ScreenStack.cpp
+  - src/screens/MainMenuScreen.hpp
+  - src/screens/MainMenuScreen.cpp
+  - src/screens/GameplayScreen.hpp
+  - src/screens/GameplayScreen.cpp
+  - src/screens/PauseScreen.hpp
+  - src/screens/PauseScreen.cpp
   - src/Action.hpp
   - src/InputMapper.hpp
   - src/InputMapper.cpp
-  - src/FixedTimestep.hpp
+  - src/utils/FixedTimestep.hpp
   - src/World.hpp
   - src/World.cpp
-  - src/EntityI.hpp
-  - src/CollidableI.hpp
-  - src/HitTestI.hpp
+  - src/entities/EntityI.hpp
+  - src/entities/CollidableI.hpp
+  - src/entities/HitTestI.hpp
   - src/entities/Button.hpp
   - src/entities/Button.cpp
-  - src/Paddle.hpp
-  - src/Paddle.cpp
-  - src/Ball.hpp
-  - src/Ball.cpp
-  - src/Brick.hpp
-  - src/Brick.cpp
-  - src/RectCollision.hpp
+  - src/entities/Paddle.hpp
+  - src/entities/Paddle.cpp
+  - src/entities/Ball.hpp
+  - src/entities/Ball.cpp
+  - src/entities/Brick.hpp
+  - src/entities/Brick.cpp
+  - src/utils/RectCollision.hpp
   - src/makeWorld.hpp
   - src/makeWorld.cpp
   - src/LevelId.hpp
@@ -59,7 +59,7 @@ related_docs:
   - world-and-levels.md
   - ../how-to/build-and-test.md
   - ../../mvp/README.md
-keywords: [layout, directories, gameLib, game, targets, cmake sources, ScreenStack, DrawerI, WindowI]
+keywords: [layout, directories, gameLib, game, targets, cmake sources, ScreenStack, DrawerI, WindowI, entities, screens, utils]
 last_reviewed: 2026-09-20
 ---
 
@@ -71,12 +71,12 @@ last_reviewed: 2026-09-20
 |------|----------------|
 | `src/main.cpp` | Entry point; constructs `Game` and calls `run()` |
 | `src/Game.hpp` / `Game.cpp` | Window, event pump, `FixedTimestep` — see [application-loop.md](application-loop.md) |
-| `src/window/` | `WindowI` facets, `WindowSFML`, `DrawerI` — see [application-loop.md](application-loop.md) |
-| `src/ScreenI.hpp` / `src/ScreenUpdaterI.hpp` / `src/ScreenStack.*` / `src/*Screen.*` / `src/Action.hpp` / `src/InputMapper.*` | Screens and consume — see [screens-and-input.md](screens-and-input.md) |
-| `src/HitTestI.hpp` / `src/entities/` | Menu `Button` (`EntityI` + `HitTestI`) — see [screens-and-input.md](screens-and-input.md) |
-| `src/FixedTimestep.hpp` | Tick 1/60 s, clamp 0.25 s — see [application-loop.md](application-loop.md) |
-| `src/World.*` / `src/EntityI.hpp` / `src/CollidableI.hpp` / `src/Paddle.*` / `src/Ball.*` / `src/Brick.*` / `src/RectCollision.hpp` / `src/makeWorld.*` / `src/LevelId.hpp` / `src/LevelDescriptor.hpp` | Arkanoid session — see [world-and-levels.md](world-and-levels.md) |
-| `src/window/DrawerI.hpp` / `src/SfmlDrawer.*` | Draw port (`draw(sf::Drawable&)`) and optional `RenderTarget` adapter |
+| `src/window/` | `WindowI` facets, `WindowSFML`, `DrawerI`, `SfmlDrawer` — see [application-loop.md](application-loop.md) |
+| `src/screens/` | `ScreenI`, `ScreenUpdaterI`, `ScreenStack`, menu / play / pause — see [screens-and-input.md](screens-and-input.md) |
+| `src/Action.hpp` / `src/InputMapper.*` | Mapped actions — see [screens-and-input.md](screens-and-input.md) |
+| `src/entities/` | `EntityI`, `CollidableI`, `HitTestI`, `Button`, `Paddle`, `Ball`, `Brick` |
+| `src/utils/` | `FixedTimestep` (1/60 s, clamp 0.25 s), `RectCollision` |
+| `src/World.*` / `src/makeWorld.*` / `src/LevelId.hpp` / `src/LevelDescriptor.hpp` | Arkanoid session — see [world-and-levels.md](world-and-levels.md) |
 | `tests/unit_tests/` | GoogleTest suites (Debug; loop tests use `WindowMock`, not `WindowSFML`) |
 | `tests/unit_tests/fakes/` | `SpyScreen`, `DrawerMock`, `NullDrawer`, `WindowMock` |
 

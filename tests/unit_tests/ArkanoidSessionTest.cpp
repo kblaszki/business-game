@@ -1,14 +1,15 @@
 /* Created by kblaszki */
 
+#include <entities/Paddle.hpp>
+#include <screens/GameplayScreen.hpp>
+#include <screens/MainMenuScreen.hpp>
+#include <screens/ScreenStack.hpp>
+#include <utils/FixedTimestep.hpp>
+
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
-#include <FixedTimestep.hpp>
-#include <GameplayScreen.hpp>
 #include <LevelId.hpp>
-#include <MainMenuScreen.hpp>
-#include <Paddle.hpp>
-#include <ScreenStack.hpp>
 #include <gtest/gtest.h>
 #include <memory>
 

@@ -1,13 +1,14 @@
 /* Created by kblaszki */
 #pragma once
 
+#include "ScreenI.hpp"
+
 #include <entities/Button.hpp>
+#include <entities/EntityI.hpp>
 
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 
-#include <EntityI.hpp>
-#include <ScreenI.hpp>
 #include <memory>
 
 class ScreenUpdaterI;

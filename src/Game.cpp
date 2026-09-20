@@ -2,15 +2,15 @@
 
 #include "Game.hpp"
 
+#include <screens/MainMenuScreen.hpp>
+#include <screens/ScreenStack.hpp>
+#include <utils/FixedTimestep.hpp>
 #include <window/WindowI.hpp>
 #include <window/WindowSFML.hpp>
 
 #include <SFML/System/Clock.hpp>
 
-#include <FixedTimestep.hpp>
 #include <InputMapper.hpp>
-#include <MainMenuScreen.hpp>
-#include <ScreenStack.hpp>
 #include <memory>
 #include <optional>
 

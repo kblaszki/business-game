@@ -1,19 +1,19 @@
 add_library(gameLib
     STATIC
-        Ball.cpp
-        Brick.cpp
         Game.cpp
-        GameplayScreen.cpp
         InputMapper.cpp
-        MainMenuScreen.cpp
-        Paddle.cpp
-        PauseScreen.cpp
-        ScreenStack.cpp
-        SfmlDrawer.cpp
         World.cpp
         makeWorld.cpp
-        window/WindowSFML.cpp
+        entities/Ball.cpp
+        entities/Brick.cpp
         entities/Button.cpp
+        entities/Paddle.cpp
+        screens/GameplayScreen.cpp
+        screens/MainMenuScreen.cpp
+        screens/PauseScreen.cpp
+        screens/ScreenStack.cpp
+        window/SfmlDrawer.cpp
+        window/WindowSFML.cpp
 )
 target_compile_features(gameLib PRIVATE cxx_std_23)
 target_compile_options(gameLib PRIVATE ${BASE_COMPILE_FLAGS})

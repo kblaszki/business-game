@@ -5,20 +5,20 @@ audience: [ai, human]
 related_code:
   - src/World.hpp
   - src/World.cpp
-  - src/EntityI.hpp
-  - src/CollidableI.hpp
-  - src/Paddle.hpp
-  - src/Paddle.cpp
-  - src/Ball.hpp
-  - src/Ball.cpp
-  - src/Brick.hpp
-  - src/Brick.cpp
-  - src/RectCollision.hpp
+  - src/entities/EntityI.hpp
+  - src/entities/CollidableI.hpp
+  - src/entities/Paddle.hpp
+  - src/entities/Paddle.cpp
+  - src/entities/Ball.hpp
+  - src/entities/Ball.cpp
+  - src/entities/Brick.hpp
+  - src/entities/Brick.cpp
+  - src/utils/RectCollision.hpp
   - src/LevelId.hpp
   - src/LevelDescriptor.hpp
   - src/makeWorld.hpp
   - src/makeWorld.cpp
-  - src/GameplayScreen.cpp
+  - src/screens/GameplayScreen.cpp
   - src/window/DrawerI.hpp
   - src/Game.hpp
 related_docs:

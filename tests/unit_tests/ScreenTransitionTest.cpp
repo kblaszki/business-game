@@ -1,12 +1,13 @@
 /* Created by kblaszki */
 
+#include <screens/GameplayScreen.hpp>
+#include <screens/MainMenuScreen.hpp>
+#include <screens/ScreenStack.hpp>
+
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 
 #include <Action.hpp>
-#include <GameplayScreen.hpp>
-#include <MainMenuScreen.hpp>
-#include <ScreenStack.hpp>
 #include <gtest/gtest.h>
 #include <memory>
 
