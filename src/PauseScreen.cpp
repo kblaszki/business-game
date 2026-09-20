@@ -4,14 +4,14 @@
 
 #include "Game.hpp"
 #include "MainMenuScreen.hpp"
-#include "ScreenStack.hpp"
+#include "ScreenUpdaterI.hpp"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
 #include <memory>
 
-PauseScreen::PauseScreen(ScreenStack& stack)
+PauseScreen::PauseScreen(ScreenUpdaterI& stack)
     : m_stack(stack)
 {
 }

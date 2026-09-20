@@ -8,10 +8,10 @@
 
 #include <Action.hpp>
 
-class IScreen
+class ScreenI
 {
 public:
-    virtual ~IScreen() = default;
+    virtual ~ScreenI() = default;
 
     virtual bool handleEvent(const sf::Event& event) = 0;
     virtual bool handleAction(Action action) = 0;

@@ -12,7 +12,8 @@ related_code:
   - src/window/WindowSFML.cpp
   - src/SfmlDrawer.hpp
   - src/SfmlDrawer.cpp
-  - src/IScreen.hpp
+  - src/ScreenI.hpp
+  - src/ScreenUpdaterI.hpp
   - src/ScreenStack.hpp
   - src/ScreenStack.cpp
   - src/MainMenuScreen.hpp
@@ -68,7 +69,7 @@ last_reviewed: 2026-09-20
 | `src/main.cpp` | Entry point; constructs `Game` and calls `run()` |
 | `src/Game.hpp` / `Game.cpp` | Window, event pump, `FixedTimestep` — see [application-loop.md](application-loop.md) |
 | `src/window/` | `WindowI` facets, `WindowSFML`, `DrawerI` — see [application-loop.md](application-loop.md) |
-| `src/IScreen.hpp` / `src/ScreenStack.*` / `src/*Screen.*` / `src/Action.hpp` / `src/InputMapper.*` | Screens and consume — see [screens-and-input.md](screens-and-input.md) |
+| `src/ScreenI.hpp` / `src/ScreenUpdaterI.hpp` / `src/ScreenStack.*` / `src/*Screen.*` / `src/Action.hpp` / `src/InputMapper.*` | Screens and consume — see [screens-and-input.md](screens-and-input.md) |
 | `src/FixedTimestep.hpp` | Tick 1/60 s, clamp 0.25 s — see [application-loop.md](application-loop.md) |
 | `src/World.*` / `src/GameObject.*` / `src/Paddle.*` / `src/Ball.*` / `src/Brick.*` / `src/RectCollision.hpp` / `src/makeWorld.*` / `src/LevelId.hpp` / `src/LevelDescriptor.hpp` | Arkanoid session — see [world-and-levels.md](world-and-levels.md) |
 | `src/window/DrawerI.hpp` / `src/SfmlDrawer.*` | Draw port (`draw(sf::Drawable&)`) and optional `RenderTarget` adapter |

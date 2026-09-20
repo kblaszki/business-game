@@ -60,7 +60,7 @@ flowchart TD
 
 1. Poll every `sf::Event`.
 2. `handleWindowEvent` consumes lifecycle events (see below). If it returns true, skip mapping.
-3. Otherwise `InputMapper::mapEvent`: a mapped `Action` goes to `stack.handleAction` only; an unmapped event goes to `stack.handleEvent` only (never both).
+3. Otherwise `InputMapper::mapEvent`: a mapped `Action` goes to `stack.handleAction` only; an unmapped event goes to `stack.handleEvent` only (never both). Both walks stop after the first screen that consumes **or** has `blocksUpdate() == true` (see [screens-and-input.md](screens-and-input.md)).
 4. If `stack.pauseIsTop()`, `clock.restart()` and **do not** call `drain` or `stack.update`. The frame’s `dt` is discarded so resume does not catch up.
 5. Else `FixedTimestep::drain(clock.restart())` and `stack.update(FixedTimestep::tick)` once per returned tick.
 6. `window.clear()`, `stack.draw(window)` (`WindowI` is a `DrawerI`), `stack.applyCommands()`.

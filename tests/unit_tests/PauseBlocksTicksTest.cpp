@@ -4,6 +4,8 @@
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 #include <Action.hpp>
 #include <FixedTimestep.hpp>
@@ -239,4 +241,28 @@ TEST(PauseBlocksTicksShould, keepDrawingGameplayUnderPauseOverlay)
     EXPECT_CALL(drawer, draw(testing::_, testing::_)).Times(testing::AtLeast(2));
     stack.draw(drawer);
     EXPECT_GE(gameplayPtr->drawCount(), 1u);
+}
+
+TEST(PauseBlocksTicksShould, ignoreGameplayKeyHoldWhileOverlayBlocksUpdate)
+{
+    ScreenStack stack;
+    auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Arkanoid);
+    GameplayScreen* const gameplayPtr = gameplay.get();
+    stack.requestPush(std::move(gameplay));
+    stack.applyCommands();
+
+    const float xBefore = gameplayPtr->paddlePosition().x;
+
+    stack.requestPauseOverlay();
+    stack.applyCommands();
+    ASSERT_TRUE(stack.pauseIsTop());
+
+    EXPECT_FALSE(stack.handleEvent(sf::Event{sf::Event::KeyPressed{.code = sf::Keyboard::Key::Left}}));
+
+    EXPECT_TRUE(stack.handleAction(Action::Pause));
+    stack.applyCommands();
+    ASSERT_TRUE(stack.gameplayIsTop());
+
+    stack.update(FixedTimestep::tick);
+    EXPECT_FLOAT_EQ(gameplayPtr->paddlePosition().x, xBefore);
 }

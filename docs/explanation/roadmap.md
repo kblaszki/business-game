@@ -32,4 +32,4 @@ Facts: [application-loop.md](../reference/application-loop.md), [screens-and-inp
 
 ## Where it is going
 
-Product direction is still open. Do not assume a board-game or business sim exists — add those explicitly when asked. The next engine base is [mvp/10-v0.1-interface-base.md](../../mvp/10-v0.1-interface-base.md): `FooI` ports (`WindowI`, `DrawerI`, `ScreenI`, `EntityI`) on the current `ScreenStack`, without global event managers. The playable demo stays Arkanoid; that document is the target, not a claim that the rename already shipped.
+Product direction is still open. Do not assume a board-game or business sim exists — add those explicitly when asked. Engine ports from [mvp/10-v0.1-interface-base.md](../../mvp/10-v0.1-interface-base.md) that have landed: `WindowI` / `DrawerI`, `ScreenI` / `ScreenUpdaterI`, and `blocksUpdate` stopping the input walk so pause cuts paddle keys. Still target: thinner `EntityI` / `CollidableI` / `HitTestI` (no global event managers). The playable demo stays Arkanoid.

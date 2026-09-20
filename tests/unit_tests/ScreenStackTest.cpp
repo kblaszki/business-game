@@ -113,6 +113,24 @@ TEST(ScreenStackShould, skipLowerDrawWhenTopBlocksDraw)
     EXPECT_EQ(upperPtr->drawCount, 1u);
 }
 
+TEST(ScreenStackShould, stopHandleEventWhenTopBlocksUpdateEvenIfNotConsumed)
+{
+    ScreenStack stack;
+    auto lower = std::make_unique<SpyScreen>();
+    auto upper = std::make_unique<SpyScreen>(true, false);
+    SpyScreen* const lowerPtr = lower.get();
+    SpyScreen* const upperPtr = upper.get();
+
+    stack.requestPush(std::move(lower));
+    stack.requestPush(std::move(upper));
+    stack.applyCommands();
+
+    const sf::Event event{sf::Event::Closed{}};
+    EXPECT_FALSE(stack.handleEvent(event));
+    EXPECT_EQ(upperPtr->handleEventCount, 1u);
+    EXPECT_EQ(lowerPtr->handleEventCount, 0u);
+}
+
 TEST(ScreenStackShould, stopHandleEventWhenTopConsumes)
 {
     ScreenStack stack;

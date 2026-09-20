@@ -6,7 +6,7 @@
 
 #include <cassert>
 
-void ScreenStack::requestPush(std::unique_ptr<IScreen> screen)
+void ScreenStack::requestPush(std::unique_ptr<ScreenI> screen)
 {
     assert(screen);
     if(!screen)
@@ -22,7 +22,7 @@ void ScreenStack::requestPop()
     m_commands.push_back(Command{CommandType::Pop, nullptr});
 }
 
-void ScreenStack::requestReplace(std::unique_ptr<IScreen> screen)
+void ScreenStack::requestReplace(std::unique_ptr<ScreenI> screen)
 {
     assert(screen);
     if(!screen)
@@ -102,9 +102,11 @@ bool ScreenStack::handleEvent(const sf::Event& event)
 {
     for(auto i = m_screens.size(); i > 0; --i)
     {
-        if(m_screens[i - 1]->handleEvent(event))
+        ScreenI* const screen = m_screens[i - 1].get();
+        const bool consumed = screen->handleEvent(event);
+        if(consumed || screen->blocksUpdate())
         {
-            return true;
+            return consumed;
         }
     }
 
@@ -115,9 +117,11 @@ bool ScreenStack::handleAction(Action action)
 {
     for(auto i = m_screens.size(); i > 0; --i)
     {
-        if(m_screens[i - 1]->handleAction(action))
+        ScreenI* const screen = m_screens[i - 1].get();
+        const bool consumed = screen->handleAction(action);
+        if(consumed || screen->blocksUpdate())
         {
-            return true;
+            return consumed;
         }
     }
 
@@ -128,7 +132,7 @@ void ScreenStack::update(sf::Time dt)
 {
     for(auto i = m_screens.size(); i > 0; --i)
     {
-        IScreen* const screen = m_screens[i - 1].get();
+        ScreenI* const screen = m_screens[i - 1].get();
         screen->update(dt);
         if(screen->blocksUpdate())
         {
@@ -165,7 +169,7 @@ bool ScreenStack::closeRequested() const
     return m_closeRequested;
 }
 
-IScreen* ScreenStack::top() const
+ScreenI* ScreenStack::top() const
 {
     if(m_screens.empty())
     {

@@ -1,14 +1,14 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <IScreen.hpp>
+#include <ScreenI.hpp>
 
-class ScreenStack;
+class ScreenUpdaterI;
 
-class PauseScreen : public IScreen
+class PauseScreen : public ScreenI
 {
 public:
-    explicit PauseScreen(ScreenStack& stack);
+    explicit PauseScreen(ScreenUpdaterI& stack);
 
     bool handleEvent(const sf::Event& event) override;
     bool handleAction(Action action) override;
@@ -22,5 +22,5 @@ public:
     }
 
 private:
-    ScreenStack& m_stack;
+    ScreenUpdaterI& m_stack;
 };

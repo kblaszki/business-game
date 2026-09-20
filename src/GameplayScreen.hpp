@@ -3,21 +3,21 @@
 
 #include <SFML/System/Vector2.hpp>
 
-#include <IScreen.hpp>
 #include <LevelId.hpp>
+#include <ScreenI.hpp>
 #include <World.hpp>
 #include <cstdint>
 
 class Ball;
 class Paddle;
-class ScreenStack;
+class ScreenUpdaterI;
 
-class GameplayScreen : public IScreen
+class GameplayScreen : public ScreenI
 {
 public:
     static constexpr int INITIAL_LIVES = 3;
 
-    explicit GameplayScreen(ScreenStack& stack, LevelId levelId);
+    explicit GameplayScreen(ScreenUpdaterI& stack, LevelId levelId);
 
     bool handleEvent(const sf::Event& event) override;
     bool handleAction(Action action) override;
@@ -49,7 +49,7 @@ private:
     void returnToMenu();
     void drawLives(DrawerI& drawer) const;
 
-    ScreenStack& m_stack;
+    ScreenUpdaterI& m_stack;
     World m_world;
     Paddle* m_paddle{nullptr};
     Ball* m_ball{nullptr};

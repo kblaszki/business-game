@@ -3,7 +3,7 @@
 #include "GameplayScreen.hpp"
 
 #include "MainMenuScreen.hpp"
-#include "ScreenStack.hpp"
+#include "ScreenUpdaterI.hpp"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -18,7 +18,7 @@
 #include <makeWorld.hpp>
 #include <memory>
 
-GameplayScreen::GameplayScreen(ScreenStack& stack, LevelId levelId)
+GameplayScreen::GameplayScreen(ScreenUpdaterI& stack, LevelId levelId)
     : m_stack(stack)
     , m_world(makeWorld(levelDescriptor(levelId)))
 {

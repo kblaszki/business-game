@@ -1,11 +1,11 @@
 /* Created by kblaszki */
 #pragma once
 
-#include <IScreen.hpp>
+#include <ScreenI.hpp>
 #include <cstdint>
 #include <functional>
 
-class SpyScreen : public IScreen
+class SpyScreen : public ScreenI
 {
 public:
     SpyScreen() = default;

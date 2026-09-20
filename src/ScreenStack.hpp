@@ -7,23 +7,24 @@
 #include <SFML/Window/Event.hpp>
 
 #include <Action.hpp>
-#include <IScreen.hpp>
+#include <ScreenI.hpp>
+#include <ScreenUpdaterI.hpp>
 #include <cstddef>
 #include <memory>
 #include <vector>
 
-class ScreenStack
+class ScreenStack : public ScreenUpdaterI
 {
 public:
     ScreenStack() = default;
     ScreenStack(const ScreenStack&) = delete;
     ScreenStack& operator=(const ScreenStack&) = delete;
 
-    void requestPush(std::unique_ptr<IScreen> screen);
-    void requestPop();
-    void requestReplace(std::unique_ptr<IScreen> screen);
-    void requestClose();
-    void requestPauseOverlay();
+    void requestPush(std::unique_ptr<ScreenI> screen) override;
+    void requestPop() override;
+    void requestReplace(std::unique_ptr<ScreenI> screen) override;
+    void requestClose() override;
+    void requestPauseOverlay() override;
     void applyCommands();
 
     bool handleEvent(const sf::Event& event);
@@ -34,7 +35,7 @@ public:
     [[nodiscard]] bool empty() const;
     [[nodiscard]] std::size_t size() const;
     [[nodiscard]] bool closeRequested() const;
-    [[nodiscard]] IScreen* top() const;
+    [[nodiscard]] ScreenI* top() const;
     [[nodiscard]] bool gameplayIsTop() const;
     [[nodiscard]] bool pauseIsTop() const;
     [[nodiscard]] std::size_t drawStartIndex() const;
@@ -50,10 +51,10 @@ private:
     struct Command
     {
         CommandType type{CommandType::Pop};
-        std::unique_ptr<IScreen> screen{};
+        std::unique_ptr<ScreenI> screen{};
     };
 
-    std::vector<std::unique_ptr<IScreen>> m_screens;
+    std::vector<std::unique_ptr<ScreenI>> m_screens;
     std::vector<Command> m_commands;
     bool m_closeRequested{false};
 };

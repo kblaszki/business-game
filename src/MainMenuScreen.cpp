@@ -3,7 +3,7 @@
 #include "MainMenuScreen.hpp"
 
 #include "GameplayScreen.hpp"
-#include "ScreenStack.hpp"
+#include "ScreenUpdaterI.hpp"
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -20,7 +20,7 @@ bool contains(const sf::FloatRect& rect, sf::Vector2i pixel)
 }
 } // namespace
 
-MainMenuScreen::MainMenuScreen(ScreenStack& stack)
+MainMenuScreen::MainMenuScreen(ScreenUpdaterI& stack)
     : m_stack(stack)
 {
 }

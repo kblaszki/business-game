@@ -3,7 +3,8 @@ title: Screens and input
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - src/IScreen.hpp
+  - src/ScreenI.hpp
+  - src/ScreenUpdaterI.hpp
   - src/ScreenStack.hpp
   - src/ScreenStack.cpp
   - src/MainMenuScreen.cpp
@@ -19,15 +20,17 @@ related_docs:
   - application-loop.md
   - world-and-levels.md
   - source-layout.md
-keywords: [IScreen, ScreenStack, Action, InputMapper, PauseScreen, consume, overlay, DrawerI]
+keywords: [ScreenI, ScreenStack, ScreenUpdaterI, Action, InputMapper, PauseScreen, consume, overlay, DrawerI]
 last_reviewed: 2026-09-20
 ---
 
 # Screens and input
 
-## IScreen
+## ScreenI
 
-`handleEvent` and `handleAction` return `bool` (`true` = consume, stop the walk). `update` takes `sf::Time`. `draw` takes `DrawerI&` (`draw` is non-const). Production `Game::run(WindowI&)` draws through the window (`WindowI` is a `DrawerI`). Unit tests pass `NullDrawer`, `DrawerMock`, or `WindowMock`. `blocksUpdate` / `blocksDraw` affect update and draw only — not input. `isGameplay` / `isPauseOverlay` default `false`; `GameplayScreen` / `PauseScreen` override them. `gameplayIsTop` / `pauseIsTop` use those flags, not `dynamic_cast`.
+`handleEvent` and `handleAction` return `bool` (`true` = consume, stop the walk). `update` takes `sf::Time`. `draw` takes `DrawerI&` (`draw` is non-const). Production `Game::run(WindowI&)` draws through the window (`WindowI` is a `DrawerI`). Unit tests pass `NullDrawer`, `DrawerMock`, or `WindowMock`. `blocksUpdate` / `blocksDraw` affect update and draw only — not input **except** the event/action walk stops after a screen with `blocksUpdate() == true` (that screen still received the call). Pause overlay therefore cuts paddle keys. `isGameplay` / `isPauseOverlay` default `false`; `GameplayScreen` / `PauseScreen` override them. `gameplayIsTop` / `pauseIsTop` use those flags, not `dynamic_cast`.
+
+Screens hold `ScreenUpdaterI&` (`requestPush` / `Pop` / `Replace` / `Close` / `PauseOverlay`). `ScreenStack` implements `ScreenUpdaterI`.
 
 Pause returns `false` from `handleEvent`. `MainMenuScreen` consumes `MouseMoved` and left `MouseButtonPressed` for two unlabeled buttons (green start, red exit; hover brightens). `GameplayScreen` consumes Left/Right `KeyPressed` / `KeyReleased` to hold the paddle (not `Action`).
 
@@ -47,7 +50,7 @@ Requests queue; `applyCommands()` applies them FIFO **after** draw. Null push/re
 
 ## Walks
 
-- **Events and actions:** top → bottom; stop only when a screen returns `true`. `blocksUpdate` is not a cutoff.
+- **Events and actions:** top → bottom; stop when a screen returns `true` **or** `blocksUpdate() == true` (that screen still ran).
 - **Update:** top → bottom; call `update`, then stop after the first `blocksUpdate == true` (that screen still updates).
 - **Draw:** find the highest `blocksDraw == true`, then draw that screen through the top (bottom → top of that range). Overlay with `blocksDraw == false` still shows gameplay.
 
