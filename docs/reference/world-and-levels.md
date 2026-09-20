@@ -19,18 +19,19 @@ related_code:
   - src/makeWorld.hpp
   - src/makeWorld.cpp
   - src/GameplayScreen.cpp
+  - src/draw.cpp
   - src/Game.hpp
 related_docs:
   - application-loop.md
   - screens-and-input.md
   - source-layout.md
 keywords: [World, GameObject, Paddle, Ball, Brick, LevelId, Arkanoid]
-last_reviewed: 2026-09-19
+last_reviewed: 2026-09-20
 ---
 
 # World and levels
 
-`GameplayScreen` owns the `World`. It builds one with `makeWorld(levelDescriptor(id))`. `Game` does not load levels or call `World::fixedUpdate`.
+`GameplayScreen` owns the `World`. It builds one with `makeWorld(levelDescriptor(id))`. `Game` does not load levels or call `World::fixedUpdate`. `Paddle` / `Ball` / `Brick` keep pose in `sf::Vector2f` (and brick fill color). `draw` implementations that call `sf::RenderTarget::draw` live in `src/draw.cpp`, which is linked only by `game`, so Debug unit tests do not import `opengl32.dll`.
 
 `World` has no pause flag. Ticks stop because `Game::run` skips `drain` / `stack.update` while `pauseIsTop()` (see [application-loop.md](application-loop.md)). Collision and lives live on `GameplayScreen`, not on `World`.
 
@@ -43,9 +44,9 @@ last_reviewed: 2026-09-19
 | `makeWorld` | Spawns paddle, ball, then 50 bricks |
 | `World` | Owns `unique_ptr<GameObject>`s; `objectAt`; draw skips `!alive()` |
 | `GameObject` | Virtual base: `fixedUpdate`, `draw`, `position`, `bounds`, `alive()` |
-| `Paddle` | Green `100×20`, start `{590, 680}`, `600` px/s, clamp X `[0, 1180]` |
-| `Ball` | White circle, radius `8`, launch `{252, -420}`; walls L/R/T; floor sets `lost()` |
-| `Brick` | `80×30`, one-hit (`destroy()` / `alive()`) |
+| `Paddle` | Green `100×20`, start `{590, 680}`, `600` px/s, clamp X `[0, 1180]`; pose is `Vector2f`, not `RectangleShape` |
+| `Ball` | White circle, radius `8`, launch `{252, -420}`; walls L/R/T; floor sets `lost()`; pose is center `Vector2f` |
+| `Brick` | `80×30`, one-hit (`destroy()` / `alive()`); pose is `Vector2f` + `Color` |
 | `RectCollision` | AABB overlap; shallow-axis brick bounce; paddle ±60° |
 
 There is no score, font HUD, brick HP, deferred spawn, or `Action::MoveDummy`. Paddle hold is `GameplayScreen::handleEvent` Left/Right.

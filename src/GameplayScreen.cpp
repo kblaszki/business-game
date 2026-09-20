@@ -12,8 +12,6 @@
 #include <RectCollision.hpp>
 #include <makeWorld.hpp>
 
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
@@ -113,24 +111,6 @@ void GameplayScreen::update(sf::Time dt)
     if(remainingBricks() == 0)
     {
         returnToMenu();
-    }
-}
-
-void GameplayScreen::draw(sf::RenderTarget& target)
-{
-    ++m_drawCount;
-    m_world.draw(target);
-    drawLives(target);
-}
-
-void GameplayScreen::drawLives(sf::RenderTarget& target) const
-{
-    for(int i = 0; i < m_lives; ++i)
-    {
-        sf::RectangleShape pip{{16.f, 16.f}};
-        pip.setPosition({16.f + static_cast<float>(i) * 20.f, 12.f});
-        pip.setFillColor(sf::Color::White);
-        target.draw(pip);
     }
 }
 

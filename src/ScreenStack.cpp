@@ -2,7 +2,6 @@
 
 #include "ScreenStack.hpp"
 
-#include "GameplayScreen.hpp"
 #include "PauseScreen.hpp"
 
 #include <cassert>
@@ -48,8 +47,7 @@ void ScreenStack::requestPauseOverlay()
 
     for(const auto& command: m_commands)
     {
-        if(command.type == CommandType::Push && command.screen != nullptr
-           && dynamic_cast<PauseScreen*>(command.screen.get()) != nullptr)
+        if(command.type == CommandType::Push && command.screen != nullptr && command.screen->isPauseOverlay())
         {
             return;
         }
@@ -146,17 +144,7 @@ void ScreenStack::draw(sf::RenderTarget& target)
         return;
     }
 
-    std::size_t start = 0;
-    for(auto i = m_screens.size(); i > 0; --i)
-    {
-        if(m_screens[i - 1]->blocksDraw())
-        {
-            start = i - 1;
-            break;
-        }
-    }
-
-    for(auto i = start; i < m_screens.size(); ++i)
+    for(auto i = drawStartIndex(); i < m_screens.size(); ++i)
     {
         m_screens[i]->draw(target);
     }
@@ -189,10 +177,24 @@ IScreen* ScreenStack::top() const
 
 bool ScreenStack::gameplayIsTop() const
 {
-    return dynamic_cast<GameplayScreen*>(top()) != nullptr;
+    return top() != nullptr && top()->isGameplay();
 }
 
 bool ScreenStack::pauseIsTop() const
 {
-    return dynamic_cast<PauseScreen*>(top()) != nullptr;
+    return top() != nullptr && top()->isPauseOverlay();
+}
+
+std::size_t ScreenStack::drawStartIndex() const
+{
+    std::size_t start = 0;
+    for(auto i = m_screens.size(); i > 0; --i)
+    {
+        if(m_screens[i - 1]->blocksDraw())
+        {
+            start = i - 1;
+            break;
+        }
+    }
+    return start;
 }

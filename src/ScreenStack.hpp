@@ -36,6 +36,7 @@ public:
     [[nodiscard]] IScreen* top() const;
     [[nodiscard]] bool gameplayIsTop() const;
     [[nodiscard]] bool pauseIsTop() const;
+    [[nodiscard]] std::size_t drawStartIndex() const;
 
 private:
     enum class CommandType

@@ -2,7 +2,6 @@
 #pragma once
 
 #include <GameObject.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
 
 class Paddle;
 
@@ -29,7 +28,7 @@ public:
 private:
     void resolveWalls();
 
-    sf::CircleShape m_shape;
+    sf::Vector2f m_position{640.f, 640.f};
     sf::Vector2f m_velocity{DEFAULT_SPEED * 0.6f, -DEFAULT_SPEED};
     bool m_lost{false};
 };

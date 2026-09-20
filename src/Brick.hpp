@@ -3,7 +3,6 @@
 
 #include <GameObject.hpp>
 #include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
 
 class Brick : public GameObject
 {
@@ -21,6 +20,7 @@ public:
     void destroy();
 
 private:
-    sf::RectangleShape m_shape;
+    sf::Vector2f m_position{};
+    sf::Color m_fill{};
     bool m_destroyed{false};
 };

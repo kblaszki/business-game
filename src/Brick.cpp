@@ -3,34 +3,21 @@
 #include "Brick.hpp"
 
 Brick::Brick(sf::Vector2f position, sf::Color color)
-    : m_shape({WIDTH, HEIGHT})
-{
-    m_shape.setPosition(position);
-    m_shape.setFillColor(color);
-}
-
-void Brick::fixedUpdate(sf::Time)
+    : m_position(position)
+    , m_fill(color)
 {
 }
 
-void Brick::draw(sf::RenderTarget& target) const
-{
-    if(m_destroyed)
-    {
-        return;
-    }
-
-    target.draw(m_shape);
-}
+void Brick::fixedUpdate(sf::Time) {}
 
 sf::Vector2f Brick::position() const
 {
-    return m_shape.getPosition();
+    return m_position;
 }
 
 sf::FloatRect Brick::bounds() const
 {
-    return m_shape.getGlobalBounds();
+    return {m_position, {WIDTH, HEIGHT}};
 }
 
 bool Brick::alive() const

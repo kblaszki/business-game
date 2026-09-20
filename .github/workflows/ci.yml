@@ -80,19 +80,8 @@ jobs:
       - name: Build tests
         run: cmake --build --preset debug --target build_ut
 
-      - name: Install Mesa software OpenGL
-        if: runner.os == 'Windows'
-        run: |
-          curl -L --fail -o mesa.7z \
-            https://github.com/pal1000/mesa-dist-win/releases/download/25.2.0/mesa3d-25.2.0-release-msvc.7z
-          "/c/Program Files/7-Zip/7z.exe" x -y mesa.7z "x64/*.dll" -omesa-dist
-          mkdir -p build/debug/bin
-          cp mesa-dist/x64/*.dll build/debug/bin/
-
       - name: Run tests
         run: ctest --preset debug --output-on-failure
-        env:
-          GALLIUM_DRIVER: ${{ runner.os == 'Windows' && 'llvmpipe' || '' }}
 
       - name: Configure Release
         run: cmake --preset release ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++ -DCMAKE_PREFIX_PATH=C:/msys64/mingw64' || '' }}

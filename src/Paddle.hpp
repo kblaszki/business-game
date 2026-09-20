@@ -2,7 +2,6 @@
 #pragma once
 
 #include <GameObject.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
 
 class Paddle : public GameObject
 {
@@ -25,7 +24,7 @@ public:
 private:
     void clampToArena();
 
-    sf::RectangleShape m_shape;
+    sf::Vector2f m_position{};
     bool m_moveLeft{false};
     bool m_moveRight{false};
 };

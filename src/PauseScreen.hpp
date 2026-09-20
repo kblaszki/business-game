@@ -16,6 +16,10 @@ public:
     void draw(sf::RenderTarget& target) override;
     bool blocksUpdate() const override;
     bool blocksDraw() const override;
+    bool isPauseOverlay() const override
+    {
+        return true;
+    }
 
 private:
     ScreenStack& m_stack;

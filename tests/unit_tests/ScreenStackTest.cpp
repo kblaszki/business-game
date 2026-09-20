@@ -1,6 +1,5 @@
 /* Created by kblaszki */
 
-#include "fakes/NullRenderTarget.hpp"
 #include "fakes/SpyScreen.hpp"
 
 #include <SFML/System/Time.hpp>
@@ -76,39 +75,27 @@ TEST(ScreenStackShould, skipLowerUpdateWhenTopBlocksUpdate)
 TEST(ScreenStackShould, drawLowerWhenTopDoesNotBlockDraw)
 {
     ScreenStack stack;
-    NullRenderTarget target;
     auto lower = std::make_unique<SpyScreen>();
     auto upper = std::make_unique<SpyScreen>(false, false);
-    SpyScreen* const lowerPtr = lower.get();
-    SpyScreen* const upperPtr = upper.get();
 
     stack.requestPush(std::move(lower));
     stack.requestPush(std::move(upper));
     stack.applyCommands();
 
-    stack.draw(target);
-
-    EXPECT_EQ(upperPtr->drawCount, 1u);
-    EXPECT_EQ(lowerPtr->drawCount, 1u);
+    EXPECT_EQ(stack.drawStartIndex(), 0u);
 }
 
 TEST(ScreenStackShould, skipLowerDrawWhenTopBlocksDraw)
 {
     ScreenStack stack;
-    NullRenderTarget target;
     auto lower = std::make_unique<SpyScreen>();
     auto upper = std::make_unique<SpyScreen>(false, true);
-    SpyScreen* const lowerPtr = lower.get();
-    SpyScreen* const upperPtr = upper.get();
 
     stack.requestPush(std::move(lower));
     stack.requestPush(std::move(upper));
     stack.applyCommands();
 
-    stack.draw(target);
-
-    EXPECT_EQ(upperPtr->drawCount, 1u);
-    EXPECT_EQ(lowerPtr->drawCount, 0u);
+    EXPECT_EQ(stack.drawStartIndex(), 1u);
 }
 
 TEST(ScreenStackShould, stopHandleEventWhenTopConsumes)
@@ -133,7 +120,6 @@ TEST(ScreenStackShould, stopHandleEventWhenTopConsumes)
 TEST(ScreenStackShould, treatEmptyStackOperationsAsNoOps)
 {
     ScreenStack stack;
-    NullRenderTarget target;
     const sf::Event event{sf::Event::Closed{}};
 
     EXPECT_TRUE(stack.empty());
@@ -143,7 +129,7 @@ TEST(ScreenStackShould, treatEmptyStackOperationsAsNoOps)
     EXPECT_FALSE(stack.handleEvent(event));
 
     stack.update(sf::Time{});
-    stack.draw(target);
+    EXPECT_EQ(stack.drawStartIndex(), 0u);
     stack.applyCommands();
     stack.requestPop();
     stack.applyCommands();

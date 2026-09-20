@@ -1,7 +1,5 @@
 /* Created by kblaszki */
 
-#include "fakes/NullRenderTarget.hpp"
-
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
 
@@ -221,20 +219,17 @@ TEST(PauseBlocksTicksShould, ignorePauseOverlayRequestWhenMenuIsTop)
 TEST(PauseBlocksTicksShould, keepDrawingGameplayUnderPauseOverlay)
 {
     ScreenStack stack;
-    NullRenderTarget target;
     auto gameplay = std::make_unique<GameplayScreen>(stack, LevelId::Arkanoid);
     GameplayScreen* const gameplayPtr = gameplay.get();
     stack.requestPush(std::move(gameplay));
     stack.applyCommands();
 
-    stack.draw(target);
-    EXPECT_EQ(gameplayPtr->drawCount(), 1u);
+    EXPECT_TRUE(gameplayPtr->blocksDraw());
+    EXPECT_EQ(stack.drawStartIndex(), 0u);
 
     stack.requestPauseOverlay();
     stack.applyCommands();
     ASSERT_TRUE(stack.pauseIsTop());
-
-    stack.draw(target);
-    stack.draw(target);
-    EXPECT_EQ(gameplayPtr->drawCount(), 3u);
+    EXPECT_FALSE(stack.top()->blocksDraw());
+    EXPECT_EQ(stack.drawStartIndex(), 0u);
 }

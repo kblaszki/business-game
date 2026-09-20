@@ -7,13 +7,7 @@
 #include <Game.hpp>
 #include <RectCollision.hpp>
 
-Ball::Ball()
-    : m_shape{RADIUS}
-{
-    m_shape.setFillColor(sf::Color::White);
-    m_shape.setOrigin({RADIUS, RADIUS});
-    setPosition({640.f, 640.f});
-}
+Ball::Ball() = default;
 
 void Ball::fixedUpdate(sf::Time tick)
 {
@@ -23,23 +17,18 @@ void Ball::fixedUpdate(sf::Time tick)
     }
 
     constexpr float secondsPerTick = 1.f / 60.f;
-    m_shape.move(m_velocity * secondsPerTick * (tick / sf::seconds(secondsPerTick)));
+    m_position += m_velocity * secondsPerTick * (tick / sf::seconds(secondsPerTick));
     resolveWalls();
-}
-
-void Ball::draw(sf::RenderTarget& target) const
-{
-    target.draw(m_shape);
 }
 
 sf::Vector2f Ball::position() const
 {
-    return m_shape.getPosition();
+    return m_position;
 }
 
 sf::FloatRect Ball::bounds() const
 {
-    return m_shape.getGlobalBounds();
+    return {{m_position.x - RADIUS, m_position.y - RADIUS}, {RADIUS * 2.f, RADIUS * 2.f}};
 }
 
 sf::Vector2f Ball::velocity() const
@@ -49,7 +38,7 @@ sf::Vector2f Ball::velocity() const
 
 void Ball::setPosition(sf::Vector2f position)
 {
-    m_shape.setPosition(position);
+    m_position = position;
 }
 
 void Ball::setVelocity(sf::Vector2f velocity)

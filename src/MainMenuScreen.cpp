@@ -5,8 +5,6 @@
 #include "GameplayScreen.hpp"
 #include "ScreenStack.hpp"
 
-#include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
 
@@ -14,14 +12,6 @@
 
 namespace
 {
-void drawButton(sf::RenderTarget& target, const sf::FloatRect& rect, sf::Color fill)
-{
-    sf::RectangleShape shape{rect.size};
-    shape.setPosition(rect.position);
-    shape.setFillColor(fill);
-    target.draw(shape);
-}
-
 bool contains(const sf::FloatRect& rect, sf::Vector2i pixel)
 {
     return rect.contains(sf::Vector2f{static_cast<float>(pixel.x), static_cast<float>(pixel.y)});
@@ -100,19 +90,6 @@ bool MainMenuScreen::handleAction(Action action)
 }
 
 void MainMenuScreen::update(sf::Time) {}
-
-void MainMenuScreen::draw(sf::RenderTarget& target)
-{
-    sf::RectangleShape panel{{640.f, 360.f}};
-    panel.setPosition({320.f, 180.f});
-    panel.setFillColor(sf::Color{24, 32, 56});
-    target.draw(panel);
-
-    const sf::Color startFill = m_hover == Hover::Start ? sf::Color{80, 200, 110} : sf::Color{36, 130, 70};
-    const sf::Color exitFill = m_hover == Hover::Exit ? sf::Color{210, 80, 80} : sf::Color{130, 40, 40};
-    drawButton(target, startButton, startFill);
-    drawButton(target, exitButton, exitFill);
-}
 
 bool MainMenuScreen::blocksUpdate() const
 {

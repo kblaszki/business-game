@@ -18,4 +18,12 @@ public:
     virtual void draw(sf::RenderTarget& target) = 0;
     virtual bool blocksUpdate() const = 0;
     virtual bool blocksDraw() const = 0;
+    virtual bool isGameplay() const
+    {
+        return false;
+    }
+    virtual bool isPauseOverlay() const
+    {
+        return false;
+    }
 };

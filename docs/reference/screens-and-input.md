@@ -9,6 +9,7 @@ related_code:
   - src/MainMenuScreen.cpp
   - src/GameplayScreen.cpp
   - src/PauseScreen.cpp
+  - src/draw.cpp
   - src/Action.hpp
   - src/InputMapper.hpp
   - src/InputMapper.cpp
@@ -18,14 +19,14 @@ related_docs:
   - world-and-levels.md
   - source-layout.md
 keywords: [IScreen, ScreenStack, Action, InputMapper, PauseScreen, consume, overlay]
-last_reviewed: 2026-09-19
+last_reviewed: 2026-09-20
 ---
 
 # Screens and input
 
 ## IScreen
 
-`handleEvent` and `handleAction` return `bool` (`true` = consume, stop the walk). `update` and `draw` take `sf::Time` / `sf::RenderTarget&` (`draw` is non-const). `blocksUpdate` / `blocksDraw` affect update and draw only — not input.
+`handleEvent` and `handleAction` return `bool` (`true` = consume, stop the walk). `update` and `draw` take `sf::Time` / `sf::RenderTarget&` (`draw` is non-const). `blocksUpdate` / `blocksDraw` affect update and draw only — not input. `isGameplay` / `isPauseOverlay` default `false`; `GameplayScreen` / `PauseScreen` override them. `gameplayIsTop` / `pauseIsTop` use those flags, not `dynamic_cast`.
 
 Pause returns `false` from `handleEvent`. `MainMenuScreen` consumes `MouseMoved` and left `MouseButtonPressed` for two unlabeled buttons (green start, red exit; hover brightens). `GameplayScreen` consumes Left/Right `KeyPressed` / `KeyReleased` to hold the paddle (not `Action`).
 
@@ -41,7 +42,7 @@ Requests queue; `applyCommands()` applies them FIFO **after** draw. Null push/re
 | `requestClose` | Sets `closeRequested`; `Game` closes after apply |
 | `requestPauseOverlay` | Pushes `PauseScreen` unless already paused, a pause push is already queued, or gameplay is not top |
 
-`gameplayIsTop` / `pauseIsTop` use `dynamic_cast` on `top()`.
+`gameplayIsTop` / `pauseIsTop` use `isGameplay()` / `isPauseOverlay()` on `top()`. `drawStartIndex()` is the first screen in the draw walk (highest `blocksDraw == true`, or `0`).
 
 ## Walks
 

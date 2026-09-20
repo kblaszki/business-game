@@ -24,6 +24,10 @@ public:
     void draw(sf::RenderTarget& target) override;
     bool blocksUpdate() const override;
     bool blocksDraw() const override;
+    bool isGameplay() const override
+    {
+        return true;
+    }
 
     [[nodiscard]] std::uint32_t tickCount() const;
     [[nodiscard]] std::uint32_t drawCount() const;
