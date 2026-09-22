@@ -38,6 +38,7 @@ TEST(InputMapperShould, ignoreUnmappedKeyReleasedAndClosed)
     EXPECT_EQ(mapper.mapKeyPressed(sf::Keyboard::Key::Space), std::nullopt);
     EXPECT_EQ(mapper.mapEvent(keyReleased(sf::Keyboard::Key::Enter)), std::nullopt);
     EXPECT_EQ(mapper.mapEvent(sf::Event{sf::Event::Closed{}}), std::nullopt);
+    EXPECT_EQ(mapper.mapEvent(sf::Event{sf::Event::FocusLost{}}), std::nullopt);
 }
 
 TEST(InputMapperShould, mapKeyPressedEventToConfirm)

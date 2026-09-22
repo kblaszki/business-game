@@ -20,6 +20,7 @@ public:
     void push(std::unique_ptr<ScreenI> screen);
     void pop();
     void replace(std::unique_ptr<ScreenI> screen);
+    void requestPauseOverlay();
 
     bool handleEvent(const sf::Event& event);
     bool handleAction(Action action);
@@ -51,4 +52,5 @@ private:
     std::vector<std::unique_ptr<ScreenI>> screens;
     std::vector<Command> commands;
     bool dispatching{false};
+    bool pauseQueued{false};
 };

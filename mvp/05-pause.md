@@ -16,7 +16,7 @@ related_docs:
 
 # Pause as overlay
 
-This chapter is the target design for pausing the first engine slice. It is **not** a description of code that exists today. The running tree ([`src/Game.cpp`](../src/Game.cpp)) polls `sf::Event::Closed`, clears, and displays. There is no `ScreenStack`, `PauseScreen`, or world tick.
+This chapter is **prospective**. What landed (`PauseScreen`, `requestPauseOverlay`, FocusLost) is in [10-engine-progress.md](10-engine-progress.md) and [`docs/reference/pause-overlay.md`](../docs/reference/pause-overlay.md). World freeze and selectable pause rows are **not** in the tree.
 
 Pause will be a **stack overlay**: `PauseScreen` sits on top of `GameplayScreen`, freezes simulation by blocking updates, and still lets gameplay draw underneath. It is not a boolean on `GameObject`, and it is not `World` `timeScale = 0`.
 

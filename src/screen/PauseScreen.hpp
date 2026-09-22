@@ -2,15 +2,14 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 
-#include <cstdint>
 #include <screen/ScreenI.hpp>
 
 class ScreenStack;
 
-class GameplayScreen : public ScreenI
+class PauseScreen : public ScreenI
 {
 public:
-    explicit GameplayScreen(ScreenStack& screens);
+    explicit PauseScreen(ScreenStack& screens);
 
     bool handleEvent(const sf::Event& event) override;
     bool handleAction(Action action) override;
@@ -18,11 +17,9 @@ public:
     void draw(DrawerI& drawer) override;
     [[nodiscard]] bool blocksUpdate() const override;
     [[nodiscard]] bool blocksDraw() const override;
-    [[nodiscard]] bool acceptsPauseOverlay() const override;
-    [[nodiscard]] std::uint32_t tickCount() const;
+    [[nodiscard]] bool isPauseOverlay() const override;
 
 private:
     ScreenStack& screens;
-    sf::RectangleShape dummy;
-    std::uint32_t ticks{0};
+    sf::RectangleShape dim;
 };

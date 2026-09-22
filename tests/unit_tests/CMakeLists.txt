@@ -26,6 +26,7 @@ add_unit_test(game_test
         GameTest.cpp
     DEPENDENCIES
         gameLib
+        SFML::Graphics
 )
 
 add_unit_test(fixed_timestep_test
@@ -40,6 +41,7 @@ add_unit_test(screen_stack_test
         ScreenStackTest.cpp
     DEPENDENCIES
         gameLib
+        SFML::Graphics
 )
 
 add_unit_test(menu_gameplay_test
@@ -55,4 +57,12 @@ add_unit_test(input_mapper_test
         InputMapperTest.cpp
     DEPENDENCIES
         gameLib
+)
+
+add_unit_test(pause_overlay_test
+    SOURCES
+        PauseOverlayTest.cpp
+    DEPENDENCIES
+        gameLib
+        SFML::Graphics
 )

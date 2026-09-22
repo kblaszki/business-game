@@ -23,6 +23,13 @@ void Game::run()
             {
                 window.close();
             }
+            else if(event->is<sf::Event::FocusLost>())
+            {
+                screens.requestPauseOverlay();
+            }
+            else if(event->is<sf::Event::FocusGained>())
+            {
+            }
             else if(const auto action = mapper.mapEvent(*event))
             {
                 screens.handleAction(*action);

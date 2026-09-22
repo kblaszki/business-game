@@ -1,5 +1,8 @@
 #include "ScreenStack.hpp"
 
+#include <memory>
+#include <screen/PauseScreen.hpp>
+
 void ScreenStack::push(std::unique_ptr<ScreenI> screen)
 {
     enqueue(Command{CommandType::Push, std::move(screen)});
@@ -13,6 +16,23 @@ void ScreenStack::pop()
 void ScreenStack::replace(std::unique_ptr<ScreenI> screen)
 {
     enqueue(Command{CommandType::Replace, std::move(screen)});
+}
+
+void ScreenStack::requestPauseOverlay()
+{
+    if(pauseQueued || screens.empty())
+    {
+        return;
+    }
+
+    ScreenI& topScreen = *screens.back();
+    if(topScreen.isPauseOverlay() || !topScreen.acceptsPauseOverlay())
+    {
+        return;
+    }
+
+    pauseQueued = true;
+    push(std::make_unique<PauseScreen>(*this));
 }
 
 bool ScreenStack::handleEvent(const sf::Event& event)
@@ -156,4 +176,5 @@ void ScreenStack::applyCommands()
     }
 
     commands.clear();
+    pauseQueued = false;
 }

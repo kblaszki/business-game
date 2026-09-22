@@ -21,6 +21,8 @@ related_code:
   - ../src/screen/MainMenuScreen.cpp
   - ../src/screen/GameplayScreen.hpp
   - ../src/screen/GameplayScreen.cpp
+  - ../src/screen/PauseScreen.hpp
+  - ../src/screen/PauseScreen.cpp
   - ../src/input/Action.hpp
   - ../src/input/InputMapper.hpp
   - ../src/input/InputMapper.cpp
@@ -35,6 +37,7 @@ related_code:
   - ../tests/unit_tests/ScreenStackTest.cpp
   - ../tests/unit_tests/MenuGameplayTest.cpp
   - ../tests/unit_tests/InputMapperTest.cpp
+  - ../tests/unit_tests/PauseOverlayTest.cpp
   - ../tests/unit_tests/fakes/ScreenSpy.hpp
 ---
 
@@ -73,10 +76,10 @@ Check a box only after that slice is on `main`. Paths are what landed, not a pro
 | 3 | `ScreenStack` | **done** | see below |
 | 4 | Main menu + gameplay screens | **done** | see below |
 | 5 | `InputMapper` + `Action` | **done** | see below |
-| 6 | Pause overlay | not-started | — |
+| 6 | Pause overlay | **done** | see below |
 | 7 | World, objects, levels | not-started | — |
 
-Next slice (pause overlay) starts only after names and signatures are agreed in chat. Do not invent them here.
+Next slice (World / objects / levels) starts only after names and signatures are agreed in chat. Do not invent them here.
 
 ### Slice 1 — window port (landed)
 
@@ -197,3 +200,25 @@ flowchart LR
 | [`src/input/InputMapper.hpp`](../src/input/InputMapper.hpp) / [`.cpp`](../src/input/InputMapper.cpp) | Table |
 | [`tests/unit_tests/InputMapperTest.cpp`](../tests/unit_tests/InputMapperTest.cpp) | `input_mapper_test` |
 | [`docs/reference/input-and-events.md`](../docs/reference/input-and-events.md) | Pump + SFML notes |
+
+### Slice 6 — pause overlay (landed)
+
+- [x] `PauseScreen` — `blocksUpdate` true, `blocksDraw` false; dim full-view rect
+- [x] `ScreenI::acceptsPauseOverlay` / `isPauseOverlay` (defaults false)
+- [x] `ScreenStack::requestPauseOverlay` (only push path; `pauseQueued`)
+- [x] Gameplay `Action::Pause` → request; overlay Pause/Cancel → pop; Confirm → pop+replace menu
+- [x] `Game`: `FocusLost` → request; `FocusGained` does not resume
+- [x] `pause_overlay_test`; freeze = `tickCount` unchanged
+
+```mermaid
+flowchart LR
+  Play[GameplayScreen] -->|"Pause or FocusLost"| Overlay[PauseScreen]
+  Overlay -->|"Pause or Cancel"| Play
+  Overlay -->|"Confirm"| Menu[MainMenuScreen]
+```
+
+| Path | Role |
+|------|------|
+| [`src/screen/PauseScreen.hpp`](../src/screen/PauseScreen.hpp) / [`.cpp`](../src/screen/PauseScreen.cpp) | Overlay |
+| [`tests/unit_tests/PauseOverlayTest.cpp`](../tests/unit_tests/PauseOverlayTest.cpp) | `pause_overlay_test` |
+| [`docs/reference/pause-overlay.md`](../docs/reference/pause-overlay.md) | Overlay facts |

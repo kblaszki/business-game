@@ -17,11 +17,13 @@ related_code:
   - src/screen/GameplayScreen.hpp
   - src/input/Action.hpp
   - src/input/InputMapper.hpp
+  - src/screen/PauseScreen.hpp
   - .github/workflows/ci.yml
 related_docs:
   - ../how-to/build-and-test.md
   - ../reference/source-layout.md
   - ../reference/input-and-events.md
+  - ../reference/pause-overlay.md
   - ../../mvp/10-engine-progress.md
 keywords: [setup, toolchain, build, run, msys2, ninja, cmake, first time]
 last_reviewed: 2026-09-22
@@ -77,8 +79,8 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280×720 window titled "Business game" opens on a menu bar. Enter is mapped to `Action::Confirm` and replaces the menu with an empty gameplay rectangle. Close the window with the chrome. `main` constructs `WindowSFML`, `ClockSFML`, a `ScreenStack` seeded with `MainMenuScreen`, and `Game`.
+A 1280×720 window titled "Business game" opens on a menu bar. Enter (`Action::Confirm`) starts empty gameplay. Escape (or losing window focus) opens a dim pause overlay; Escape resumes, Enter on the overlay returns to the menu. Close the window with the chrome.
 
 ## Next steps
 
-Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Input pump: [../reference/input-and-events.md](../reference/input-and-events.md).
+Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Input: [../reference/input-and-events.md](../reference/input-and-events.md). Pause: [../reference/pause-overlay.md](../reference/pause-overlay.md).

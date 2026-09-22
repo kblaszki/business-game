@@ -1,5 +1,7 @@
 #include "GameplayScreen.hpp"
 
+#include <screen/ScreenStack.hpp>
+
 GameplayScreen::GameplayScreen(ScreenStack& screens)
     : screens{screens}
     , dummy{{40.f, 40.f}}
@@ -13,8 +15,14 @@ bool GameplayScreen::handleEvent(const sf::Event&)
     return false;
 }
 
-bool GameplayScreen::handleAction(Action)
+bool GameplayScreen::handleAction(Action action)
 {
+    if(action == Action::Pause)
+    {
+        screens.requestPauseOverlay();
+        return true;
+    }
+
     return false;
 }
 
@@ -34,6 +42,11 @@ bool GameplayScreen::blocksUpdate() const
 }
 
 bool GameplayScreen::blocksDraw() const
+{
+    return true;
+}
+
+bool GameplayScreen::acceptsPauseOverlay() const
 {
     return true;
 }

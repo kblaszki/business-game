@@ -13,12 +13,14 @@ related_code:
   - src/screen/ScreenStack.cpp
   - src/screen/MainMenuScreen.cpp
   - src/screen/GameplayScreen.cpp
+  - src/screen/PauseScreen.cpp
   - src/window/WindowSFML.cpp
   - tests/unit_tests/InputMapperTest.cpp
   - tests/unit_tests/MenuGameplayTest.cpp
   - tests/unit_tests/GameTest.cpp
 related_docs:
   - source-layout.md
+  - pause-overlay.md
   - ../tutorials/getting-started.md
   - ../../mvp/03-events-and-input.md
   - ../../mvp/10-engine-progress.md
@@ -28,7 +30,7 @@ last_reviewed: 2026-09-22
 
 # Input and events
 
-Facts about the running tree. Prospective design (FocusLost pause, hold axes, player remap UI) stays in [`mvp/03-events-and-input.md`](../../mvp/03-events-and-input.md).
+Facts about the running tree. Prospective design (hold axes, player remap UI) stays in [`mvp/03-events-and-input.md`](../../mvp/03-events-and-input.md). Overlay pause: [pause-overlay.md](pause-overlay.md).
 
 ## SFML 3 event model
 
@@ -43,7 +45,9 @@ Facts about the running tree. Prospective design (FocusLost pause, hold axes, pl
 | `Closed` | `Game` calls `window.close()`. Not an `Action`. Not “quit to menu”. |
 | `KeyPressed` | `InputMapper::mapEvent` if the key is bound; else `handleEvent` |
 | `KeyReleased` | `handleEvent` (mapper returns `nullopt`) |
-| `Resized`, `FocusLost`, `FocusGained` | Fall through to `handleEvent` today. Later `Game` will consume them (letterbox / pause overlay). Not remappable. |
+| `FocusLost` | `Game` calls `requestPauseOverlay()`. Not an `Action`. Not remappable. |
+| `FocusGained` | `Game` consumes; does **not** resume. |
+| `Resized` | Falls through to `handleEvent`. Letterbox later. Not remappable. |
 | `TextEntered` | Ignored. For typing, not gameplay binds. |
 | `MouseMoved`, `MouseMovedRaw`, `MouseButtonPressed` / `Released`, `MouseWheelScrolled`, `MouseEntered` / `Left` | `handleEvent`. Not mapped to global `Confirm`. |
 | `Joystick*`, `Touch*`, `SensorChanged` | `handleEvent` / ignored. Later bind rows can use joystick buttons. |
@@ -71,14 +75,18 @@ Every `pollEvent` result goes into **exactly one** bucket.
 flowchart TD
   Poll[Game pollEvent]
   Closed{"Closed?"}
+  Focus{"FocusLost or FocusGained?"}
   CloseWin[window.close]
+  Overlay[requestPauseOverlay or ignore gain]
   Map[InputMapper mapEvent]
   HasAction{"optional Action?"}
   StackAction[ScreenStack handleAction]
   StackEvent[ScreenStack handleEvent]
   Poll --> Closed
   Closed -->|yes| CloseWin
-  Closed -->|no| Map
+  Closed -->|no| Focus
+  Focus -->|yes| Overlay
+  Focus -->|no| Map
   Map --> HasAction
   HasAction -->|yes| StackAction
   HasAction -->|no| StackEvent
@@ -98,7 +106,7 @@ enum class Action { Confirm, Cancel, Pause };
 | `Escape` | `Pause` |
 | anything else | `nullopt` → `handleEvent` |
 
-`Cancel` is in the enum and **unbound**. `GameplayScreen::handleAction` returns `false` (pause overlay is a later slice). `MainMenuScreen::handleAction(Confirm)` `replace`s with `GameplayScreen`.
+`Cancel` is in the enum and **unbound** on the mapper. `GameplayScreen::handleAction(Pause)` calls `requestPauseOverlay()`. Overlay `Pause` / `Cancel` resume; `Confirm` quits to menu. `MainMenuScreen::handleAction(Confirm)` `replace`s with `GameplayScreen`.
 
 `mapEvent` only unwraps `KeyPressed` and delegates to `mapKeyPressed`. Lifecycle events passed in by mistake yield `nullopt`.
 

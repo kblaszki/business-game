@@ -18,4 +18,12 @@ public:
     virtual void draw(DrawerI& drawer) = 0;
     [[nodiscard]] virtual bool blocksUpdate() const = 0;
     [[nodiscard]] virtual bool blocksDraw() const = 0;
+    [[nodiscard]] virtual bool acceptsPauseOverlay() const
+    {
+        return false;
+    }
+    [[nodiscard]] virtual bool isPauseOverlay() const
+    {
+        return false;
+    }
 };

@@ -90,6 +90,19 @@ TEST(ScreenStackShould, stopActionWalkWhenTopConsumes)
     EXPECT_EQ(below.handleActionCount, 0u);
 }
 
+TEST(ScreenStackShould, ignorePauseOverlayRequestOnSpyOrEmpty)
+{
+    ScreenStack empty;
+    empty.requestPauseOverlay();
+    EXPECT_TRUE(empty.empty());
+
+    ScreenStack screens;
+    pushSpy(screens);
+    screens.requestPauseOverlay();
+    EXPECT_EQ(screens.size(), 1u);
+    EXPECT_NE(dynamic_cast<ScreenSpy*>(screens.top()), nullptr);
+}
+
 TEST(ScreenStackShould, noOpWhenEmpty)
 {
     ScreenStack screens;
