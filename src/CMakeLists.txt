@@ -2,6 +2,7 @@ add_library(gameLib
     STATIC
         Example.cpp
         Game.cpp
+        input/InputMapper.cpp
         screen/ScreenStack.cpp
         screen/MainMenuScreen.cpp
         screen/GameplayScreen.cpp

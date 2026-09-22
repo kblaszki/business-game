@@ -49,3 +49,10 @@ add_unit_test(menu_gameplay_test
         gameLib
         SFML::Graphics
 )
+
+add_unit_test(input_mapper_test
+    SOURCES
+        InputMapperTest.cpp
+    DEPENDENCIES
+        gameLib
+)

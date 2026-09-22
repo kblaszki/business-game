@@ -4,6 +4,7 @@ WindowSFML::WindowSFML(sf::Vector2u size, const std::string& title)
     : window{sf::VideoMode{size}, title}
 {
     window.setFramerateLimit(60);
+    window.setKeyRepeatEnabled(false);
 }
 
 bool WindowSFML::isOpen() const

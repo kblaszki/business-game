@@ -1,6 +1,6 @@
 # business-game
 
-A C++23 [SFML](https://www.sfml-dev.org/) 2D skeleton: `Game` on `WindowI`, `ClockI`, and `ScreenStack`, with `MainMenuScreen` / empty `GameplayScreen`, CMake presets, and windowless unit tests.
+A C++23 [SFML](https://www.sfml-dev.org/) 2D skeleton: `Game` on `WindowI`, `ClockI`, `ScreenStack`, and `InputMapper` / `Action`, with `MainMenuScreen` / empty `GameplayScreen`, CMake presets, and windowless unit tests.
 
 Longer-term direction lives in [`mvp/`](mvp/README.md) (`01`–`09` prospect, [`10`](mvp/10-engine-progress.md) living); do not assume pause, Arkanoid, or board-game features exist in the code yet.
 
@@ -38,8 +38,9 @@ cd business-game
 | `src/window/` | `WindowI` (`DrawerI`), `WindowSFML` (adapter on `game`) |
 | `src/time/` | `ClockI`, `ClockSFML` (on `game`), `FixedTimestep` |
 | `src/screen/` | `ScreenI`, `ScreenStack`, `MainMenuScreen`, `GameplayScreen` |
+| `src/input/` | `Action`, `InputMapper` |
 | `src/Example.hpp` / `Example.cpp` | Windowless helper in `gameLib` |
-| `tests/unit_tests/` | Debug GoogleTest (`example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`) |
+| `tests/unit_tests/` | Debug GoogleTest (`example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`) |
 | `docs/` | Diátaxis documentation |
 | `mvp/` | Prospective design (`01`–`09`) and living progress (`10`) |
 
@@ -94,11 +95,11 @@ After building, run the executable from the preset output directory:
 ./build/release/bin/game
 ```
 
-A 1280×720 window titled "Business game" opens on a menu bar. Enter replaces it with empty gameplay. Close it with the window chrome.
+A 1280×720 window titled "Business game" opens on a menu bar. Enter (`Action::Confirm`) replaces it with empty gameplay. Close it with the window chrome.
 
 ## Running the Tests
 
-Tests are available only for the **debug** preset. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
+Tests are available only for the **debug** preset. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
 
 ```sh
 cmake --preset debug

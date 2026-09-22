@@ -11,6 +11,8 @@ related_code:
   - src/screen/ScreenStack.hpp
   - src/screen/MainMenuScreen.hpp
   - src/screen/GameplayScreen.hpp
+  - src/input/Action.hpp
+  - src/input/InputMapper.hpp
 related_docs:
   - ../reference/source-layout.md
   - ../../mvp/README.md
@@ -23,11 +25,11 @@ last_reviewed: 2026-09-22
 
 ## Where it is now
 
-A C++23 SFML 3.1 skeleton with window, clock, `ScreenStack`, `MainMenuScreen`, and empty `GameplayScreen` (Enter to start). CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, windowless tests.
+A C++23 SFML 3.1 skeleton with window, clock, `ScreenStack`, `InputMapper` / `Action`, `MainMenuScreen`, and empty `GameplayScreen` (`Confirm` to start). CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, windowless tests.
 
 Facts: [source-layout.md](../reference/source-layout.md). Prospective engine notes: [`mvp/01`–`09`](../../mvp/README.md). What already landed: [`mvp/10-engine-progress.md`](../../mvp/10-engine-progress.md).
 
-There is no pause overlay, `Action` mapper, World, or Arkanoid session in this tree.
+There is no pause overlay, World, or Arkanoid session in this tree.
 
 ## Where it is going
 

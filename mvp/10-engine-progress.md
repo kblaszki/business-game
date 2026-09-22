@@ -21,6 +21,9 @@ related_code:
   - ../src/screen/MainMenuScreen.cpp
   - ../src/screen/GameplayScreen.hpp
   - ../src/screen/GameplayScreen.cpp
+  - ../src/input/Action.hpp
+  - ../src/input/InputMapper.hpp
+  - ../src/input/InputMapper.cpp
   - ../src/Game.hpp
   - ../src/Game.cpp
   - ../src/main.cpp
@@ -31,6 +34,7 @@ related_code:
   - ../tests/unit_tests/FixedTimestepTest.cpp
   - ../tests/unit_tests/ScreenStackTest.cpp
   - ../tests/unit_tests/MenuGameplayTest.cpp
+  - ../tests/unit_tests/InputMapperTest.cpp
   - ../tests/unit_tests/fakes/ScreenSpy.hpp
 ---
 
@@ -46,7 +50,7 @@ This file is the **living register** of names and files that exist in the tree. 
 | `mvp/` names with prefix `I` | Remap when that type lands — do not edit 01–09 |
 | Directories | No `engine/` vs `game/` split ([README.md](README.md) non-goal). Window: `src/window/`. Time: `src/time/`. Screen port: `src/screen/`. Process loop: `Game` in `src/` |
 | SOLID | One `WindowI` (inherits `DrawerI` because `ScreenI` must not see `close()`) |
-| `gameLib` vs SFML | `gameLib` compiles `Game.cpp`, `ScreenStack.cpp`, and the menu/gameplay screens with **SFML headers only** (no SFML / OpenGL link). `WindowSFML.cpp` and `ClockSFML.cpp` live on executable `game`. `menu_gameplay_test` links Graphics because those screens construct `sf::RectangleShape` |
+| `gameLib` vs SFML | `gameLib` compiles `Game.cpp`, `InputMapper.cpp`, `ScreenStack.cpp`, and the menu/gameplay screens with **SFML headers only** (no SFML / OpenGL link). `WindowSFML.cpp` and `ClockSFML.cpp` live on executable `game`. `menu_gameplay_test` links Graphics because those screens construct `sf::RectangleShape` |
 
 ### Name remap (when those types are added)
 
@@ -68,11 +72,11 @@ Check a box only after that slice is on `main`. Paths are what landed, not a pro
 | 2 | Clock + `DrawerI` + `ScreenI` | **done** | see below |
 | 3 | `ScreenStack` | **done** | see below |
 | 4 | Main menu + gameplay screens | **done** | see below |
-| 5 | `InputMapper` + `Action` | not-started | — |
+| 5 | `InputMapper` + `Action` | **done** | see below |
 | 6 | Pause overlay | not-started | — |
 | 7 | World, objects, levels | not-started | — |
 
-Next slice (`InputMapper` / `Action`) starts only after names and signatures are agreed in chat. Do not invent them here.
+Next slice (pause overlay) starts only after names and signatures are agreed in chat. Do not invent them here.
 
 ### Slice 1 — window port (landed)
 
@@ -167,3 +171,29 @@ flowchart LR
 | [`src/screen/MainMenuScreen.hpp`](../src/screen/MainMenuScreen.hpp) / [`.cpp`](../src/screen/MainMenuScreen.cpp) | Menu |
 | [`src/screen/GameplayScreen.hpp`](../src/screen/GameplayScreen.hpp) / [`.cpp`](../src/screen/GameplayScreen.cpp) | Empty play |
 | [`tests/unit_tests/MenuGameplayTest.cpp`](../tests/unit_tests/MenuGameplayTest.cpp) | `menu_gameplay_test` |
+
+### Slice 5 — `InputMapper` and `Action` (landed)
+
+- [x] `Action` — `Confirm`, `Cancel` (unbound), `Pause`
+- [x] `InputMapper` — `mapEvent` / `mapKeyPressed`; Enter → Confirm; Escape → Pause
+- [x] `ScreenI::handleAction` / `ScreenStack::handleAction` (stop on consume only)
+- [x] `Game` pump: Closed \| map → handleAction \| handleEvent
+- [x] Menu Start = `Confirm`; gameplay ignores `Pause`
+- [x] `setKeyRepeatEnabled(false)` on `WindowSFML`
+- [x] `input_mapper_test`; no FocusLost, no `pollDummyIntent`
+
+```mermaid
+flowchart LR
+  Poll[pollEvent] --> Closed{"Closed?"}
+  Closed -->|yes| CloseWin[close]
+  Closed -->|no| Map[InputMapper]
+  Map -->|Action| Act[handleAction]
+  Map -->|nullopt| Ev[handleEvent]
+```
+
+| Path | Role |
+|------|------|
+| [`src/input/Action.hpp`](../src/input/Action.hpp) | Enum |
+| [`src/input/InputMapper.hpp`](../src/input/InputMapper.hpp) / [`.cpp`](../src/input/InputMapper.cpp) | Table |
+| [`tests/unit_tests/InputMapperTest.cpp`](../tests/unit_tests/InputMapperTest.cpp) | `input_mapper_test` |
+| [`docs/reference/input-and-events.md`](../docs/reference/input-and-events.md) | Pump + SFML notes |

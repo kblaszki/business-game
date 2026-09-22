@@ -20,8 +20,9 @@ C++23 SFML 2D skeleton: `Game` runs against `WindowI`, `ClockI`, and `ScreenStac
 - `src/window/` — `WindowI` (extends `DrawerI`), `WindowSFML` (`WindowSFML.cpp` on executable `game`)
 - `src/time/` — `ClockI`, `ClockSFML` (on `game`), `FixedTimestep`
 - `src/screen/` — `ScreenI`, `ScreenStack`, `MainMenuScreen`, `GameplayScreen`
+- `src/input/` — `Action`, `InputMapper`
 - `src/Example.hpp` / `Example.cpp` — `gameLib`
-- `tests/unit_tests/` — `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`
+- `tests/unit_tests/` — `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`
 - `tests/mocks/` — `WindowMock`, `ClockMock`; `tests/unit_tests/fakes/ScreenSpy.hpp`
 
 Static library target: `gameLib`. Executable: `game`.
@@ -44,5 +45,6 @@ Binary: `build/<preset>/bin/game` (`.exe` on Windows).
 - `gameLib` does not **link** SFML (headers/defines only); the `game` executable links Graphics/Window/System. `menu_gameplay_test` also links Graphics because the screens construct `sf::RectangleShape` (still no window).
 - Interfaces use the `FooI` suffix (`WindowI`, `ClockI`, `DrawerI`, `ScreenI`)
 - `ScreenI::draw` takes `DrawerI&`, not `sf::RenderTarget&`. Screens must not `close()` the window
+- `Game` pump: `Closed` | `InputMapper::mapEvent` → `handleAction` | leftover `handleEvent`
 - `ScreenStack::push`/`pop`/`replace` apply immediately when idle, and after `draw` when a walk is in progress
 - Design notes: `mvp/01`–`09` (prospect). Tree names and slices: `mvp/10-engine-progress.md`

@@ -3,6 +3,7 @@
 #include <SFML/Window/Keyboard.hpp>
 
 #include <gtest/gtest.h>
+#include <input/InputMapper.hpp>
 #include <memory>
 #include <screen/GameplayScreen.hpp>
 #include <screen/MainMenuScreen.hpp>
@@ -34,12 +35,15 @@ TEST(MenuGameplayShould, startOnMainMenu)
     EXPECT_NE(dynamic_cast<MainMenuScreen*>(screens.top()), nullptr);
 }
 
-TEST(MenuGameplayShould, replaceMenuWithGameplayOnEnter)
+TEST(MenuGameplayShould, replaceMenuWithGameplayOnConfirm)
 {
     ScreenStack screens;
     screens.push(std::make_unique<MainMenuScreen>(screens));
 
-    screens.handleEvent(keyPressed(sf::Keyboard::Key::Enter));
+    const InputMapper mapper;
+    const auto action = mapper.mapEvent(keyPressed(sf::Keyboard::Key::Enter));
+    ASSERT_TRUE(action.has_value());
+    screens.handleAction(*action);
     DrawerStub drawer;
     screens.draw(drawer);
 

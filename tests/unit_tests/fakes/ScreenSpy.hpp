@@ -1,9 +1,8 @@
 #pragma once
 
+#include <cstdint>
 #include <screen/ScreenI.hpp>
 #include <screen/ScreenStack.hpp>
-
-#include <cstdint>
 
 class ScreenSpy : public ScreenI
 {
@@ -20,6 +19,13 @@ public:
     {
         ++handleEventCount;
         return consumeEvent;
+    }
+
+    bool handleAction(Action action) override
+    {
+        ++handleActionCount;
+        lastAction = action;
+        return consumeAction;
     }
 
     void update(sf::Time dt) override
@@ -48,11 +54,14 @@ public:
     }
 
     std::uint32_t handleEventCount{};
+    std::uint32_t handleActionCount{};
     std::uint32_t updateCount{};
     std::uint32_t drawCount{};
     bool updateBlocked{false};
     bool drawBlocked{false};
     bool consumeEvent{false};
+    bool consumeAction{false};
+    Action lastAction{Action::Confirm};
     bool popOnUpdate{false};
     bool* destroyed{nullptr};
     ScreenStack* stack{nullptr};

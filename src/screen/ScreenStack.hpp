@@ -22,6 +22,7 @@ public:
     void replace(std::unique_ptr<ScreenI> screen);
 
     bool handleEvent(const sf::Event& event);
+    bool handleAction(Action action);
     void update(sf::Time dt);
     void draw(DrawerI& drawer);
 

@@ -1,11 +1,13 @@
 #pragma once
 
-#include <screen/ScreenStack.hpp>
-#include <time/ClockI.hpp>
-#include <time/FixedTimestep.hpp>
 #include <window/WindowI.hpp>
 
 #include <SFML/System/Vector2.hpp>
+
+#include <input/InputMapper.hpp>
+#include <screen/ScreenStack.hpp>
+#include <time/ClockI.hpp>
+#include <time/FixedTimestep.hpp>
 
 class Game
 {
@@ -20,5 +22,6 @@ private:
     WindowI& window;
     ClockI& clock;
     ScreenStack& screens;
+    InputMapper mapper;
     FixedTimestep timestep;
 };

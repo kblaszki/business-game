@@ -23,6 +23,10 @@ void Game::run()
             {
                 window.close();
             }
+            else if(const auto action = mapper.mapEvent(*event))
+            {
+                screens.handleAction(*action);
+            }
             else
             {
                 screens.handleEvent(*event);

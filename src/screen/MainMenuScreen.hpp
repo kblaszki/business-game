@@ -12,6 +12,7 @@ public:
     explicit MainMenuScreen(ScreenStack& screens);
 
     bool handleEvent(const sf::Event& event) override;
+    bool handleAction(Action action) override;
     void update(sf::Time dt) override;
     void draw(DrawerI& drawer) override;
     [[nodiscard]] bool blocksUpdate() const override;

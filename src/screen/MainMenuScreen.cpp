@@ -1,7 +1,5 @@
 #include "MainMenuScreen.hpp"
 
-#include <SFML/Window/Keyboard.hpp>
-
 #include <Game.hpp>
 #include <memory>
 #include <screen/GameplayScreen.hpp>
@@ -15,15 +13,17 @@ MainMenuScreen::MainMenuScreen(ScreenStack& screens)
     startBar.setPosition({(Game::DESIGN_SIZE.x - 400.f) / 2.f, (Game::DESIGN_SIZE.y - 80.f) / 2.f});
 }
 
-bool MainMenuScreen::handleEvent(const sf::Event& event)
+bool MainMenuScreen::handleEvent(const sf::Event&)
 {
-    if(const auto* key = event.getIf<sf::Event::KeyPressed>())
+    return false;
+}
+
+bool MainMenuScreen::handleAction(Action action)
+{
+    if(action == Action::Confirm)
     {
-        if(key->code == sf::Keyboard::Key::Enter)
-        {
-            screens.replace(std::make_unique<GameplayScreen>(screens));
-            return true;
-        }
+        screens.replace(std::make_unique<GameplayScreen>(screens));
+        return true;
     }
 
     return false;

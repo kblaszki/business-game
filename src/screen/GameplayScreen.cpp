@@ -13,6 +13,11 @@ bool GameplayScreen::handleEvent(const sf::Event&)
     return false;
 }
 
+bool GameplayScreen::handleAction(Action)
+{
+    return false;
+}
+
 void GameplayScreen::update(sf::Time)
 {
     ++ticks;

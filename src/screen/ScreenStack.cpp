@@ -34,6 +34,24 @@ bool ScreenStack::handleEvent(const sf::Event& event)
     return consumed;
 }
 
+bool ScreenStack::handleAction(Action action)
+{
+    dispatching = true;
+    bool consumed{false};
+
+    for(std::size_t i = screens.size(); i > 0; --i)
+    {
+        consumed = screens[i - 1]->handleAction(action);
+        if(consumed)
+        {
+            break;
+        }
+    }
+
+    dispatching = false;
+    return consumed;
+}
+
 void ScreenStack::update(sf::Time dt)
 {
     dispatching = true;

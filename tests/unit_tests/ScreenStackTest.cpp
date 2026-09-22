@@ -1,20 +1,18 @@
-#include <screen/ScreenStack.hpp>
-#include <time/FixedTimestep.hpp>
-#include <unit_tests/fakes/ScreenSpy.hpp>
 #include <window/DrawerI.hpp>
 
-#include <gtest/gtest.h>
+#include <unit_tests/fakes/ScreenSpy.hpp>
 
+#include <gtest/gtest.h>
 #include <memory>
+#include <screen/ScreenStack.hpp>
+#include <time/FixedTimestep.hpp>
 
 namespace
 {
 class DrawerStub : public DrawerI
 {
 public:
-    void draw(const sf::Drawable&) override
-    {
-    }
+    void draw(const sf::Drawable&) override {}
 };
 
 ScreenSpy& pushSpy(ScreenStack& screens)
@@ -24,7 +22,7 @@ ScreenSpy& pushSpy(ScreenStack& screens)
     screens.push(std::move(spy));
     return screen;
 }
-}
+} // namespace
 
 TEST(ScreenStackShould, growWhenTwoScreensArePushed)
 {
@@ -78,6 +76,18 @@ TEST(ScreenStackShould, skipUpdateBelowBlockingTopAndStillDrawBelowOverlay)
     screens.draw(drawer);
     EXPECT_EQ(top.drawCount, 1u);
     EXPECT_EQ(below.drawCount, 1u);
+}
+
+TEST(ScreenStackShould, stopActionWalkWhenTopConsumes)
+{
+    ScreenStack screens;
+    ScreenSpy& below = pushSpy(screens);
+    ScreenSpy& top = pushSpy(screens);
+    top.consumeAction = true;
+
+    EXPECT_TRUE(screens.handleAction(Action::Confirm));
+    EXPECT_EQ(top.handleActionCount, 1u);
+    EXPECT_EQ(below.handleActionCount, 0u);
 }
 
 TEST(ScreenStackShould, noOpWhenEmpty)
