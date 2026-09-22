@@ -11,6 +11,7 @@ related_docs:
   - reference/source-layout.md
   - explanation/roadmap.md
   - ../mvp/README.md
+  - ../mvp/10-engine-progress.md
 keywords: [documentation, diataxis, index, map, navigation, docs]
 last_reviewed: 2026-09-22
 ---
@@ -46,9 +47,10 @@ flowchart TD
 | [how-to/build-and-test.md](how-to/build-and-test.md) | how-to | build, test, ctest, format, presets |
 | [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, gameLib, targets |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, skeleton, mvp |
-| [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | historical engine plan |
+| [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | prospective engine plan |
+| [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | WindowI, slices, tree names |
 
-`mvp/` is historical design notes for a future engine slice. Current facts live in the Diátaxis pages above; prefer `src/` over chapter prose if they disagree.
+`mvp/01`–`09` are prospective. Living engine progress is [`mvp/10-engine-progress.md`](../mvp/10-engine-progress.md). Current facts live in the Diátaxis pages above; prefer `src/` over chapter prose if they disagree.
 
 ## Maintenance
 

@@ -1,7 +1,7 @@
 ---
 title: Prospective SFML engine plan
 status: prospective
-last_reviewed: 2026-09-19
+last_reviewed: 2026-09-22
 related_docs:
   - 01-architecture.md
   - 02-application-loop.md
@@ -12,15 +12,16 @@ related_docs:
   - 07-levels.md
   - 08-playable-slice.md
   - 09-rollout.md
+  - 10-engine-progress.md
 ---
 
 # Prospective SFML 3.1 engine plan
 
-This directory is a **target design** for a reusable 2D application layer on top of the current empty scaffold. It is **not** a description of code that exists today.
+Chapters **01–09** are a **target design** (prospective). They are **not** rewritten when code lands.
 
-Today (`main`): [`src/Game.cpp`](../src/Game.cpp) opens a 1280×720 window, polls `sf::Event::Closed`, clears, and displays. There is no screen stack, input mapper, world, or pause.
+What exists in the tree is tracked in [10-engine-progress.md](10-engine-progress.md) (living) and in [`docs/`](../docs/index.md). In the tree: `WindowI` / `WindowSFML` / `Game` (window port). There is no screen stack, input mapper, world, or pause.
 
-Facts about the running tree belong in [`docs/`](../docs/index.md). This folder is the implementation plan for the first engine slice: **MainMenu → empty Gameplay → Pause overlay → resume or quit to menu**.
+This folder is also the implementation plan for the first playable engine slice: **MainMenu → empty Gameplay → Pause overlay → resume or quit to menu**.
 
 ## Reading order
 
@@ -34,6 +35,7 @@ Facts about the running tree belong in [`docs/`](../docs/index.md). This folder 
 8. [07-levels.md](07-levels.md) — `LevelDescriptor` as data
 9. [08-playable-slice.md](08-playable-slice.md) — player-visible acceptance
 10. [09-rollout.md](09-rollout.md) — phased files, tests, `gameLib`
+11. [10-engine-progress.md](10-engine-progress.md) — living names and slices in the tree (not prospect)
 
 ```mermaid
 flowchart TD
@@ -149,7 +151,9 @@ ECS, audio, networking, a product-grade resource manager, level editor, scriptin
 
 ## Current scaffold (do not contradict)
 
+In-tree facts: [10-engine-progress.md](10-engine-progress.md). Snapshot for authors of 01–09:
+
 - Window size: `Game::DESIGN_SIZE` = 1280×720.
-- Entry: [`src/main.cpp`](../src/main.cpp) constructs `Game` and calls `run()`.
-- Tests: [`tests/unit_tests/`](../tests/unit_tests/) (`smoke_test` asserts `DESIGN_SIZE`).
-- Design size and the empty loop stay; the plan **extends** `Game::run()`, it does not replace the executable model.
+- Entry: [`src/main.cpp`](../src/main.cpp) constructs `WindowSFML` and `Game`, then calls `run()`.
+- Tests: [`tests/unit_tests/`](../tests/unit_tests/) (`example_test`, `game_test`). Windowless.
+- Design size and the empty loop stay; later phases **extend** `Game::run()`, they do not replace the executable model.

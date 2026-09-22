@@ -8,10 +8,13 @@ related_code:
   - cmake/FetchSFML.cmake
   - cmake/FetchGTest.cmake
   - src/main.cpp
+  - src/Game.hpp
+  - src/window/WindowSFML.hpp
   - .github/workflows/ci.yml
 related_docs:
   - ../how-to/build-and-test.md
   - ../reference/source-layout.md
+  - ../../mvp/10-engine-progress.md
 keywords: [setup, toolchain, build, run, msys2, ninja, cmake, first time]
 last_reviewed: 2026-09-22
 ---
@@ -66,7 +69,7 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280×720 window titled "Business game" opens (empty clear). Close it with the window chrome.
+A 1280×720 window titled "Business game" opens (empty clear). Close it with the window chrome. `main` constructs `WindowSFML` and `Game`; the loop lives in `Game::run()`.
 
 ## Next steps
 

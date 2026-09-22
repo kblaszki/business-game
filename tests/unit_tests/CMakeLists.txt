@@ -20,3 +20,10 @@ add_unit_test(example_test
     DEPENDENCIES
         gameLib
 )
+
+add_unit_test(game_test
+    SOURCES
+        GameTest.cpp
+    DEPENDENCIES
+        gameLib
+)

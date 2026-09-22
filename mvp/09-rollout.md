@@ -1,7 +1,7 @@
 ---
 title: Phased implementation rollout
 status: prospective
-last_reviewed: 2026-09-19
+last_reviewed: 2026-09-22
 related_docs:
   - README.md
   - 01-architecture.md
@@ -16,9 +16,11 @@ related_docs:
 
 # 09 — Phased implementation rollout
 
-This chapter is the **ordered coding plan** for the first engine slice. It does not describe code that exists today. It will be executed later, one phase at a time, against the empty C++23 / SFML 3.1 scaffold on `main`.
+This chapter is the **ordered coding plan** for the first engine slice. It does not describe code that exists today. It will be executed later, one phase at a time, against the C++23 / SFML 3.1 tree on `main`.
 
-Today [`src/Game.cpp`](../src/Game.cpp) constructs a 1280×720 `sf::RenderWindow`, polls `sf::Event::Closed`, clears, and displays. [`src/CMakeLists.txt`](../src/CMakeLists.txt) compiles only `Game.cpp` into `gameLib`. Debug tests register `smoke_test` via `add_unit_test` in [`tests/unit_tests/CMakeLists.txt`](../tests/unit_tests/CMakeLists.txt). SFML Audio and Network stay off ([`cmake/FetchSFML.cmake`](../cmake/FetchSFML.cmake)).
+**In the tree today:** [10-engine-progress.md](10-engine-progress.md) (window port). This chapter stays prospective.
+
+The empty loop in `Game::run()` (Closed, clear, display, `DESIGN_SIZE`) is the starting point to extend. Window ownership is already behind `WindowI`; later phases of this chapter still start at clock / `IScreen`. Debug tests register windowless suites via `add_unit_test` in [`tests/unit_tests/CMakeLists.txt`](../tests/unit_tests/CMakeLists.txt). SFML Audio and Network stay off ([`cmake/FetchSFML.cmake`](../cmake/FetchSFML.cmake)).
 
 Facts about the running tree belong in [`docs/`](../docs/index.md). This file belongs in `mvp/` and will stay prospective until each phase lands.
 
