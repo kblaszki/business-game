@@ -8,7 +8,7 @@ alwaysApply: true
 
 # Golden Rule
 
-Behavioral guidelines to reduce common LLM coding mistakes, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls. Adapted for this C++23 / SFML / CMake codebase.
+Behavioral guidelines to reduce common LLM coding mistakes, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls. Adapted for this C++20 / SFML / CMake codebase.
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
@@ -24,8 +24,8 @@ Before implementing:
 
 Project-specific examples of assumptions to surface:
 - New `.cpp` must be listed in `src/CMakeLists.txt` (`gameLib`) or it never builds.
+- Drawing goes through `DrawerI` / `ScreenRendererI`; don't dump raw SFML into screens without reason.
 - Tests exist only in Debug (`build_ut` + `ctest --preset debug`).
-- This tree has a menu / Arkanoid / pause slice; do not assume a board-game, ResourceManager, or the old `v0.1-arkanoid` stack.
 
 ## 2. Simplicity First
 
@@ -36,7 +36,7 @@ Project-specific examples of assumptions to surface:
 - No "flexibility" or "configurability" that wasn't requested.
 - No error handling for impossible scenarios.
 - If you write 200 lines and it could be 50, rewrite it.
-- Prefer extending existing types over parallel systems.
+- Prefer extending an existing `EntityI` / `ScreenI` / manager over parallel systems.
 
 Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
 
@@ -47,7 +47,7 @@ Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, sim
 When editing existing code:
 - Don't "improve" adjacent code, comments, or formatting.
 - Don't refactor things that aren't broken.
-- Match existing style (`.clang-format`, `#pragma once`, no namespaces), even if you'd do it differently.
+- Match existing style (`.clang-format`, `#pragma once`, `*I` interfaces, no namespaces), even if you'd do it differently.
 - If you notice unrelated dead code, mention it — don't delete it unless asked.
 
 When your changes create orphans:
@@ -64,7 +64,7 @@ Transform tasks into verifiable goals:
 - "Add validation" → "Write tests for invalid inputs, then make them pass"
 - "Fix the bug" → "Write a test that reproduces it, then make it pass"
 - "Refactor X" → "Ensure tests pass before and after"
-- "Add a type" → "Listed in `gameLib`, Debug `smoke_test` (and new tests) still pass"
+- "Add entity/screen" → "Builds in `gameLib`, runs from the relevant screen, Debug tests still pass"
 
 For multi-step tasks, state a brief plan:
 ```

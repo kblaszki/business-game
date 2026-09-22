@@ -1,0 +1,21 @@
+/* Created by kblaszki */
+#pragma once
+
+#include "KeyboardManagerI.hpp"
+
+#include <unordered_map>
+
+class KeyboardManager : public KeyboardManagerI
+{
+public:
+    void handleEvent(const sf::Event& event) override;
+    [[nodiscard]] KeyUnRegisterer registerKeyHandler(sf::Keyboard::Key key, KeyHandler&& handler) override;
+    [[nodiscard]] TextUnRegisterer registerTextHandler(TextHandler&& handler) override;
+
+private:
+    void handleKeyEvent(KeyStatus status, const sf::Event::KeyPressed& event);
+    void handleTextEvent(const sf::Event::TextEntered& event);
+
+    std::unordered_map<sf::Keyboard::Key, ManagedList<KeyHandler>> keyHandlers;
+    ManagedList<TextHandler> textHandlers;
+};

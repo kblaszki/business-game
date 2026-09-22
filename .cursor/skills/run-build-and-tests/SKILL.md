@@ -11,7 +11,7 @@ Source of truth: [docs/how-to/build-and-test.md](../../../docs/how-to/build-and-
 
 ## Prerequisites
 
-- CMake ≥ 3.20, Ninja, C++23 compiler
+- CMake ≥ 3.20, Ninja, C++20 compiler
 - SFML is fetched by CMake (no manual install)
 
 ## Configure
@@ -32,7 +32,7 @@ cmake --build --preset debug --target game
 cmake --build --preset release --target game
 ```
 
-Run from the binary directory:
+Run from the binary directory (resources are copied beside the exe):
 
 - Windows: `build/debug/bin/game.exe` or `build/release/bin/game.exe`
 - Linux/macOS: `build/debug/bin/game` or `build/release/bin/game`
