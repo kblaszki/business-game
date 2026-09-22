@@ -18,8 +18,6 @@ Verify: cmake --build --preset debug --target build_ut && ctest --preset debug
 
 Owned writes **must** include the matching `docs/` paths whenever the card owns `src/`. Parallelize two cards only when owned write paths do not overlap.
 
-Typical v0.1 owned paths: `src/controllers/`, `src/managers/`, `src/screens/MenuScreen.*` / `GameScreen.*`, `src/entities/`, `tests/unit_tests/<area>/`. Matching docs: `docs/reference/architecture.md`, `docs/how-to/add-entity.md`, `docs/how-to/add-screen.md` — not FooI `screens-and-input.md`.
-
 ## Implement prompt
 
 `model: cursor-grok-4.6-high-fast`, `subagent_type: generalPurpose`.
@@ -34,12 +32,12 @@ READ FIRST:
 OWNED WRITE PATHS (only these):
 - ...
 
-FORBIDDEN: do not edit other files. This tree is v0.1-arkanoid on main; do not copy FooI IScreen/ScreenStack/GameplayScreen from v0.2-fooi-base unless the contract says so.
+FORBIDDEN: do not edit other files. Do not read git branch v0.1-arkanoid unless listed.
 
 DO:
 - Implement the goal in C++23, #pragma once, no namespaces, CamelCase types
 - List every new src/*.cpp in src/CMakeLists.txt (gameLib)
-- Add windowless GoogleTest via add_unit_test in tests/unit_tests/CMakeLists.txt under tests/unit_tests/<area>/
+- Add windowless GoogleTest via add_unit_test in tests/unit_tests/CMakeLists.txt
 - You must produce a docs/ edit if you change src/ (hard gate)
 - Update docs whose related_code lists a file you changed; last_reviewed today
 - New/removed src file or target → docs/reference/source-layout.md

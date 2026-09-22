@@ -7,20 +7,25 @@ related_code:
   - CMakeLists.txt
   - cmake/FetchSFML.cmake
   - cmake/FetchGTest.cmake
+  - src/Game.cpp
+  - .github/workflows/ci.yml
 related_docs:
   - ../how-to/build-and-test.md
-  - ../reference/architecture.md
+  - ../reference/source-layout.md
+  - ../reference/application-loop.md
+  - ../reference/screens-and-input.md
+  - ../reference/world-and-levels.md
 keywords: [setup, toolchain, build, run, msys2, ninja, cmake, first time]
-last_reviewed: 2026-09-22
+last_reviewed: 2026-09-20
 ---
 
 # Getting started
 
-Goal: from a fresh clone to a running game window. By the end you will have configured, built, and launched `game`.
+Goal: from a fresh clone to the playable slice. By the end you will have configured, built, and launched `game`: menu → Arkanoid → pause overlay.
 
 ## 1. Install the toolchain
 
-You need CMake, Ninja, and a C++23 compiler on your `PATH`. On Windows this repo is set up around MSYS2 MinGW (CMake already probes `C:\msys64\mingw64\...`).
+You need CMake, Ninja, and a C++23 compiler on your `PATH`. On Windows this repo is set up around MSYS2 MinGW.
 
 MSYS2 MinGW 64-bit shell:
 
@@ -39,7 +44,7 @@ ninja --version
 cmake --version
 ```
 
-SFML 3.1 (Graphics/Window/System only) and GoogleTest 1.18 are fetched automatically by CMake (`cmake/FetchSFML.cmake`; `cmake/FetchGTest.cmake` in Debug). No separate install.
+SFML 3.1 (Graphics/Window/System only) and GoogleTest 1.18 are fetched automatically by CMake (`cmake/FetchSFML.cmake`, `cmake/FetchGTest.cmake`). No separate SFML install. On Ubuntu, install `libfreetype6-dev` and `libharfbuzz-dev` (and the usual X11/OpenGL packages from `.github/workflows/ci.yml`) before `cmake --preset debug`. On Windows MSYS2 MinGW, install `mingw-w64-x86_64-freetype` and `mingw-w64-x86_64-harfbuzz` so CMake does not fetch static copies of those libraries.
 
 ## 2. Configure
 
@@ -64,10 +69,8 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280x720 window titled "Business game" opens on the menu screen. Click **Start** for Arkanoid (paddle, ball, bricks; 3 lives); **Exit** or Escape closes it. Clearing all bricks or losing all lives returns to the menu.
+A 1280×720 window titled "Business game" opens on the main menu: a dark panel, a green start button, and a red exit button (no labels yet). Hover brightens the button under the cursor. Click start or press Enter to begin Arkanoid (paddle, ball, 50 bricks, 3 lives). Click exit to leave. Left/Right move the paddle. Escape pauses (world freezes; overlay dims the view). Escape again resumes; Enter on the overlay returns to the menu. Clearing the bricks or losing the last life also returns to the menu. The window chrome close control always exits.
 
 ## Next steps
 
-- Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md)
-- How the pieces fit: [../reference/architecture.md](../reference/architecture.md)
-- Add your first game object: [../how-to/add-entity.md](../how-to/add-entity.md)
+Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Loop, screens, and Arkanoid: [../reference/application-loop.md](../reference/application-loop.md), [../reference/screens-and-input.md](../reference/screens-and-input.md), [../reference/world-and-levels.md](../reference/world-and-levels.md).

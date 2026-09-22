@@ -10,16 +10,13 @@ alwaysApply: false
 - Headers: `#pragma once` (not include guards)
 - No namespaces
 - Classes: `CamelCase`; methods/vars: `camelCase`
-- Interfaces: `FooI` suffix (`EntityI`, `ScreenI`, `DrawerI`, …)
-- One primary type per `.hpp` / `.cpp` pair, side by side under `src/<area>/`
-- Gameplay tick: `EntityI::update(float dt)` / `ScreenI::update(float dt)` — `dt` in seconds (fixed timestep)
-- Screen transitions: `ScreenUpdaterI::{push,pop,replace}Screen` (deferred scene stack)
+- Interfaces (when added): `FooI` suffix
+- One primary type per `.hpp` / `.cpp` pair, side by side under `src/`
 
 ## Includes
 
-- From `src/`: angle brackets — `#include <entities/Paddle.hpp>`
-- Same directory: quotes — `#include "EntityI.hpp"`
-- Prefer existing interface headers over reaching into concrete SFML types from screens
+- From `src/`: angle brackets — `#include <Game.hpp>`
+- Same directory: quotes — `#include "Game.hpp"`
 
 ## Style (match `.clang-format`)
 

@@ -4,25 +4,30 @@ diataxis: explanation
 audience: [ai, human]
 related_code:
   - src/main.cpp
-  - src/resources/ResourceManager.hpp
+  - src/Game.cpp
+  - src/ScreenStack.cpp
+  - src/MainMenuScreen.cpp
+  - src/GameplayScreen.cpp
+  - src/PauseScreen.cpp
+  - src/World.cpp
 related_docs:
   - ../reference/source-layout.md
-  - ./design-decisions.md
-  - ./sfml/index.md
-keywords: [roadmap, direction, prototype, board game, business, status, refactoring]
-last_reviewed: 2026-08-01
+  - ../reference/application-loop.md
+  - ../reference/screens-and-input.md
+  - ../reference/world-and-levels.md
+  - ../../mvp/README.md
+keywords: [roadmap, direction, playable slice, SFML, screen stack]
+last_reviewed: 2026-09-19
 ---
 
 # Project direction and status
 
 ## Where it is now
 
-A working SFML 3 prototype: menu with Start/Exit, and an **Arkanoid v1** session in `GameScreen` (paddle, ball, brick grid, 3 lives, win/lose back to menu). Engine plumbing includes window abstraction, typed event routing, a scene stack, resource caching, fixed-timestep updates, and letterboxed resize handling. SFML-oriented concepts and recommended patterns: [explanation/sfml/](./sfml/index.md).
+A C++23 SFML 3.1 playable slice: CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, and a 1280×720 window that boots `MainMenuScreen`. Enter starts `LevelId::Arkanoid` (paddle, ball, 50 bricks, 3 lives); Escape opens `PauseScreen` (world ticks stop); Enter on the overlay returns to the menu. Clearing the board or losing the last life also returns to the menu.
+
+Facts: [application-loop.md](../reference/application-loop.md), [screens-and-input.md](../reference/screens-and-input.md), [world-and-levels.md](../reference/world-and-levels.md). Historical design notes: [`mvp/`](../../mvp/README.md).
 
 ## Where it is going
 
-The longer-term intent is a business / board-style game (working name ideas like *Empire Legends* have been floated). None of that domain exists yet: there is no board, tiles, turns, players-as-domain, or economy. Do not assume board-game features are present — build them explicitly when asked. The Arkanoid session is a gameplay exercise on the engine, not the final product.
-
-## Refactoring plan
-
-A full architecture/stack audit with a phased refactoring checklist lives in [mvp/refactoring-roadmap.md](../../mvp/refactoring-roadmap.md). Phases 1–5 are complete.
+Product direction is still open. Do not assume a board-game or business sim exists — add those explicitly when asked. The current demo is a simple Arkanoid session on this engine, not a port of the old `v0.1-arkanoid` stack.

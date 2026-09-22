@@ -1,0 +1,76 @@
+---
+title: Screens and input
+diataxis: reference
+audience: [ai, human]
+related_code:
+  - src/IScreen.hpp
+  - src/ScreenStack.hpp
+  - src/ScreenStack.cpp
+  - src/MainMenuScreen.cpp
+  - src/GameplayScreen.cpp
+  - src/PauseScreen.cpp
+  - src/draw.cpp
+  - src/Action.hpp
+  - src/InputMapper.hpp
+  - src/InputMapper.cpp
+  - src/Game.cpp
+related_docs:
+  - application-loop.md
+  - world-and-levels.md
+  - source-layout.md
+keywords: [IScreen, ScreenStack, Action, InputMapper, PauseScreen, consume, overlay]
+last_reviewed: 2026-09-20
+---
+
+# Screens and input
+
+## IScreen
+
+`handleEvent` and `handleAction` return `bool` (`true` = consume, stop the walk). `update` and `draw` take `sf::Time` / `sf::RenderTarget&` (`draw` is non-const). `blocksUpdate` / `blocksDraw` affect update and draw only — not input. `isGameplay` / `isPauseOverlay` default `false`; `GameplayScreen` / `PauseScreen` override them. `gameplayIsTop` / `pauseIsTop` use those flags, not `dynamic_cast`.
+
+Pause returns `false` from `handleEvent`. `MainMenuScreen` consumes `MouseMoved` and left `MouseButtonPressed` for two unlabeled buttons (green start, red exit; hover brightens). `GameplayScreen` consumes Left/Right `KeyPressed` / `KeyReleased` to hold the paddle (not `Action`).
+
+## ScreenStack commands
+
+Requests queue; `applyCommands()` applies them FIFO **after** draw. Null push/replace is a no-op.
+
+| Request | Effect at apply |
+|---------|-----------------|
+| `requestPush` | Append screen |
+| `requestPop` | Remove top if any |
+| `requestReplace` | Pop top then push (no-op if stack empty) |
+| `requestClose` | Sets `closeRequested`; `Game` closes after apply |
+| `requestPauseOverlay` | Pushes `PauseScreen` unless already paused, a pause push is already queued, or gameplay is not top |
+
+`gameplayIsTop` / `pauseIsTop` use `isGameplay()` / `isPauseOverlay()` on `top()`. `drawStartIndex()` is the first screen in the draw walk (highest `blocksDraw == true`, or `0`).
+
+## Walks
+
+- **Events and actions:** top → bottom; stop only when a screen returns `true`. `blocksUpdate` is not a cutoff.
+- **Update:** top → bottom; call `update`, then stop after the first `blocksUpdate == true` (that screen still updates).
+- **Draw:** find the highest `blocksDraw == true`, then draw that screen through the top (bottom → top of that range). Overlay with `blocksDraw == false` still shows gameplay.
+
+## Action map
+
+`Action` is `Confirm`, `Cancel`, `Pause`. `InputMapper` maps `KeyPressed` only (`KeyReleased` is ignored).
+
+| Key | Action |
+|-----|--------|
+| Enter | Confirm |
+| NumpadEnter (scancode) | Confirm |
+| Escape | Pause |
+| (none) | Cancel — enum exists, no key |
+
+## Screen transitions
+
+| Screen | blocksUpdate / blocksDraw | Confirm | Pause | Cancel |
+|--------|---------------------------|---------|-------|--------|
+| `MainMenuScreen` | true / true | `replace(GameplayScreen{LevelId::Arkanoid})` | ignored | ignored |
+| `GameplayScreen` | true / true | ignored | `requestPauseOverlay()` | ignored |
+| `PauseScreen` | true / false | `pop` then `replace(MainMenuScreen)` | `pop` (resume) | `pop` (resume) |
+
+Clearing all bricks or losing the last life also `requestReplace(MainMenuScreen)`. Left/Right while play is top move the paddle; they are not `Action`s.
+
+Menu Confirm **replaces** (menu must not stay under play). Pause Confirm must `pop` then `replace`; a single `replace` would swap only the overlay.
+
+Clicking start (or Enter) **replaces** with play. Clicking exit calls `requestClose`. There is no on-screen text.

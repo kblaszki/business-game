@@ -12,8 +12,7 @@ Source of truth: [docs/how-to/build-and-test.md](../../../docs/how-to/build-and-
 ## Prerequisites
 
 - CMake ≥ 3.20, Ninja, C++23 compiler
-- SFML 3.1 Graphics/Window/System only, fetched by CMake (no manual install)
-- GoogleTest 1.18 is fetched only for the Debug preset
+- SFML is fetched by CMake (no manual install)
 
 ## Configure
 
@@ -33,7 +32,7 @@ cmake --build --preset debug --target game
 cmake --build --preset release --target game
 ```
 
-Run from the binary directory (resources are copied beside the exe):
+Run from the binary directory:
 
 - Windows: `build/debug/bin/game.exe` or `build/release/bin/game.exe`
 - Linux/macOS: `build/debug/bin/game` or `build/release/bin/game`

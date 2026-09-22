@@ -16,8 +16,6 @@ When speaking to the user, say **Grok 4.6**. Tool slug: `cursor-grok-4.6-high-fa
 
 Package cards and prompt skeletons: [reference.md](reference.md). Examples: [examples.md](examples.md).
 
-This tree is the **v0.1-arkanoid** layout on `main` (`controllers/`, `managers/`, `screens/MenuScreen|GameScreen`, `entities/`). Do not assume FooI `IScreen` / `ScreenStack` / `GameplayScreen` from `v0.2-fooi-base`.
-
 ## Workflow
 
 ```
@@ -41,7 +39,7 @@ Ask at most 1–2 questions that change execution:
 - Implement now vs plan-only (no code yet)
 - What verifies “done” (default: Debug `game` + `build_ut` + `ctest --preset debug`)
 
-Do not invent a board-game or FooI `ScreenStack` slice. This `main` tree **is** v0.1-arkanoid.
+Do not invent product genre. Do not read `v0.1-arkanoid` unless the user asks.
 
 ## 2. Contract (orchestrator)
 
@@ -62,7 +60,7 @@ One `Task` per package (`generalPurpose`, `cursor-grok-4.6-high-fast`). Prompt f
 - **Parallel** in one turn only if owned paths are disjoint.
 - **Sequential waves** when package B imports types package A must land first (see [examples.md](examples.md)).
 
-Each agent: owned paths only; list new `src/*.cpp` in [`src/CMakeLists.txt`](../../../src/CMakeLists.txt) (`gameLib`); register new tests with `add_unit_test` under `tests/unit_tests/<area>/`. Package cards **always** include matching `docs/` owned writes. **Agents do not `git commit`** (they would race). The orchestrator commits after stitch.
+Each agent: owned paths only; list new `src/*.cpp` in [`src/CMakeLists.txt`](../../../src/CMakeLists.txt) (`gameLib`); register new tests with `add_unit_test`. Package cards **always** include matching `docs/` owned writes. **Agents do not `git commit`** (they would race). The orchestrator commits after stitch.
 
 ## 4. Stitch, docs, verify, commit
 

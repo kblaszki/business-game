@@ -1,8 +1,6 @@
 # business-game
 
-A C++23 [SFML](https://www.sfml-dev.org/) 2D game prototype: menu screen and an Arkanoid-style game session (paddle, ball, bricks).
-
-Longer-term direction is a business / board-style game (working name ideas such as *Empire Legends* are optional only; there is no `elcp` namespace in the code yet).
+A C++23 [SFML](https://www.sfml-dev.org/) 2D playable slice: main menu, a simple Arkanoid session, pause overlay, CMake presets, and windowless unit tests.
 
 ## Table of Contents
 
@@ -22,7 +20,7 @@ Longer-term direction is a business / board-style game (working name ideas such 
 - [Ninja](https://ninja-build.org/) (used by CMake presets)
 - A C++23 compiler (GCC, Clang, or MSVC)
 
-SFML 3.1 is downloaded automatically via CMake FetchContent (`cmake/FetchSFML.cmake`), Graphics/Window/System only. A separate SFML install is not required. GoogleTest 1.18 is fetched only for Debug.
+SFML 3.1 is downloaded automatically via CMake FetchContent (`cmake/FetchSFML.cmake`; Audio and Network modules are off). A separate SFML install is not required.
 
 ```sh
 git clone git@github.com:DevKrystian/business-game.git
@@ -33,19 +31,10 @@ cd business-game
 
 | Path | Role |
 |------|------|
-| `src/main.cpp` | Entry point; wires window, resources, managers, screens, game loop |
-| `src/controllers/` | `GameController`, `EventController`, `ScreenController` (scene stack) |
-| `src/managers/` | Keyboard, mouse, game-exit, and game-window event managers |
-| `src/resources/` | `ResourceManager` (font cache, exe-relative paths) |
-| `src/screens/` | `MenuScreen`, `GameScreen` |
-| `src/entities/` | Drawable/updatable game objects (`Paddle`, `Ball`, `Brick`, `Button`) |
-| `src/handlers/` | Click / hover helpers |
-| `src/window/` | Window interfaces and SFML implementation |
-| `src/utils/` | Shared helpers (`ManagedList`, `RectCollision`) |
-| `tests/unit_tests/` | GoogleTest unit tests (Debug only) |
-| `tests/mocks/` | gmock doubles |
-| `resources/` | Fonts and other assets (copied next to the binary) |
-| `docs/` | Diátaxis documentation (tutorials, how-tos, reference, explanation) |
+| `src/main.cpp` | Entry point; runs `Game` |
+| `src/Game.hpp` / `Game.cpp` | Window, event pump, `ScreenStack`, `InputMapper` |
+| `tests/unit_tests/` | Debug GoogleTest suites (windowless) |
+| `docs/` | Diátaxis documentation |
 
 Static library target: `gameLib`. Executable target: `game`.
 
@@ -86,7 +75,7 @@ cmake --build --preset release --target game
 
 ## Running the Game
 
-After building, run the executable from the preset output directory (resources are copied beside it):
+After building, run the executable from the preset output directory:
 
 ```sh
 # Windows
@@ -100,7 +89,7 @@ After building, run the executable from the preset output directory (resources a
 
 ## Running the Tests
 
-Tests are available only for the **debug** preset.
+Tests are available only for the **debug** preset. Suites: `smoke_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
 
 ```sh
 cmake --preset debug
@@ -115,7 +104,7 @@ Contributions are welcome. Please:
 1. Fork the repository and create a feature branch.
 2. Match existing C++ style (see `.clang-format`). With a debug configure: `cmake --build --preset debug --target format`.
 3. Treat warnings as errors — keep the build clean under the project flags.
-4. For changes to controllers, managers, screens, or entities, update or add unit tests under `tests/unit_tests/` and mocks under `tests/mocks/`.
+4. Add or update unit tests under `tests/unit_tests/` when changing `gameLib`.
 5. Add every new `src/**/*.cpp` to `gameLib` in `src/CMakeLists.txt`.
 6. Keep `docs/` current for files listed in a doc's `related_code` (see `docs/index.md`).
 7. Open a pull request with a short description of the change.

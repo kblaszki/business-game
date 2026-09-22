@@ -20,9 +20,9 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-- Unit tests: `tests/unit_tests/<area>/` (e.g. `GameControllerTest.cpp`)
-- Mocks: `tests/mocks/<area>/`
+- Unit tests: `tests/unit_tests/` (`smoke_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`); GoogleTest 1.18 via FetchContent
 - Register with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`
-- Prefer `StrictMock`, fixture names like `*Should`, mirror `src/` layout
+- Prefer tests that do not open a window unless a display is required
+- Fixture names like `*Should` when adding behavioral suites
 
-When changing controllers or managers, update or add unit tests and mocks in the matching folders.
+When changing `gameLib`, update or add unit tests in `tests/unit_tests/`.
