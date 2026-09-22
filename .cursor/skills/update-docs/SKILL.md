@@ -30,11 +30,11 @@ Keep `docs/` in sync with the code. Docs are the source of truth; each file has 
 
 3. **Structural changes**:
    - New/removed/renamed `src/**` file or CMake target → update `docs/reference/source-layout.md`.
-   - New event routing, interface, or loop change → update `docs/reference/` (`architecture.md`, `interfaces.md`, `event-flow.md`).
+   - New event routing, interface, or loop change → update `docs/reference/` (`architecture.md`, `interfaces.md`, `event-flow.md`). Do not invent FooI pages such as `screens-and-input.md`.
    - New workflow → update or add a `docs/how-to/` page.
    - Any added/removed/retitled doc → update the table in `docs/index.md`.
 
-4. **Verify**: relative links resolve; every `related_code` path exists; facts (C++20, presets, targets, binary path) match `CMakeLists.txt`, `src/CMakeLists.txt`, `CMakePresets.json`.
+4. **Verify**: relative links resolve; every `related_code` path exists; facts (C++23, GTest 1.18, presets, targets, binary path) match `CMakeLists.txt`, `src/CMakeLists.txt`, `CMakePresets.json`.
 
 ## Front-matter shape
 

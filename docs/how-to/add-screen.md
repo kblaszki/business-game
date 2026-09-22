@@ -14,12 +14,12 @@ related_docs:
   - ../reference/architecture.md
   - ../explanation/sfml/screens-pause-levels.md
 keywords: [screen, ScreenI, ScreenUpdaterI, pushScreen, popScreen, replaceScreen, transition, menu]
-last_reviewed: 2026-08-01
+last_reviewed: 2026-09-22
 ---
 
 # Add a new screen
 
-Goal: a new `ScreenI` reachable via a transition. For when to push vs replace, pause overlays, and level changes, see [screens, pause, and levels](../explanation/sfml/screens-pause-levels.md).
+Goal: a new `ScreenI` reachable via a transition. The project is C++23 (`cxx_std_23` on `gameLib`). For when to push vs replace, pause overlays, and level changes, see [screens, pause, and levels](../explanation/sfml/screens-pause-levels.md).
 
 ```
 - [ ] Create src/screens/NameScreen.hpp and NameScreen.cpp

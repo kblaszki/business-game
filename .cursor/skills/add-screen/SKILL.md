@@ -9,6 +9,8 @@ description: >-
 
 Source of truth: [docs/how-to/add-screen.md](../../../docs/how-to/add-screen.md) (details) and [docs/reference/architecture.md](../../../docs/reference/architecture.md). This skill is the quick path; keep it and the doc consistent.
 
+C++23 (`cxx_std_23` on `gameLib`). `ScreenI::display` draws through `ScreenRendererI`; transitions go through `ScreenUpdaterI`. Inject `ResourceManager` like `MenuScreen` / `GameScreen`. New `.cpp` must be listed in `src/CMakeLists.txt`.
+
 ## Checklist
 
 ```

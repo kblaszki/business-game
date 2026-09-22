@@ -14,12 +14,12 @@ related_docs:
   - ../reference/interfaces.md
   - ../reference/source-layout.md
 keywords: [entity, EntityI, paddle, draw, update, spawn, ResourceManager]
-last_reviewed: 2026-08-01
+last_reviewed: 2026-09-22
 ---
 
 # Add a new entity
 
-Goal: a new `EntityI` that a screen updates and draws.
+Goal: a new `EntityI` that a screen updates and draws. The project is C++23 (`cxx_std_23` on `gameLib`).
 
 ```
 - [ ] Create src/entities/Name.hpp and Name.cpp

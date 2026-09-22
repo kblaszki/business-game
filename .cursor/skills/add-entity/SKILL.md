@@ -9,6 +9,8 @@ description: >-
 
 Source of truth: [docs/how-to/add-entity.md](../../../docs/how-to/add-entity.md) (details) and [docs/reference/interfaces.md](../../../docs/reference/interfaces.md). This skill is the quick path; keep it and the doc consistent.
 
+C++23 (`cxx_std_23` on `gameLib`). `EntityI::update(float dt)` with `dt` in seconds. New `.cpp` must be listed in `src/CMakeLists.txt`.
+
 ## Checklist
 
 ```
