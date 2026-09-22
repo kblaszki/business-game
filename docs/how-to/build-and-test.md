@@ -6,20 +6,17 @@ related_code:
   - CMakePresets.json
   - CMakeLists.txt
   - tests/unit_tests/CMakeLists.txt
-  - tests/unit_tests/fakes/SpyScreen.hpp
-  - tests/unit_tests/fakes/StubDraw.cpp
-  - src/draw.cpp
   - .github/workflows/ci.yml
 related_docs:
   - ../tutorials/getting-started.md
   - ../reference/source-layout.md
 keywords: [build, test, ctest, format, presets, build_ut, debug, release]
-last_reviewed: 2026-09-20
+last_reviewed: 2026-09-22
 ---
 
 # Build, test, and format
 
-Prerequisite: toolchain installed (see [getting-started](../tutorials/getting-started.md)).
+Prerequisite: toolchain installed (see [getting-started](../tutorials/getting-started.md)). The project is C++23; GoogleTest 1.18 is fetched only for the Debug preset.
 
 ## Configure
 
@@ -37,7 +34,7 @@ Binary: `build/<preset>/bin/game` (`.exe` on Windows).
 
 ## Run tests (Debug only)
 
-Tests and GoogleTest exist only when `CMAKE_BUILD_TYPE=Debug`.
+Tests and GoogleTest exist only when `CMAKE_BUILD_TYPE=Debug`. The suite does not open a window.
 
 ```sh
 cmake --preset debug
@@ -45,15 +42,13 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Suites (none open a window, none import `opengl32.dll`): `smoke_test` (`DESIGN_SIZE`), `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`.
-
-Draw walk tests use `ScreenStack::drawStartIndex()` instead of constructing `sf::RenderTarget`. Real `target.draw` lives in `src/draw.cpp` (the `game` binary) and empty stand-ins in `tests/unit_tests/fakes/StubDraw.cpp`. Headless Windows CI hangs if a test executable imports `opengl32.dll`.
+Suite: `example_test` (`Example::add`).
 
 `build_ut` builds every suite registered with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`.
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`) runs the same Debug tests and a Release `game` build on Ubuntu 24.04 and Windows 2022. Linux CI installs SFML Graphics deps including `libfreetype6-dev` and `libharfbuzz-dev`. Windows CI installs MSYS2 `mingw-w64-x86_64-freetype` and `mingw-w64-x86_64-harfbuzz` (SFML 3.1 `find_package(HarfBuzz)` after system FreeType). Static FetchContent copies of those two on MinGW can deadlock at process start when a test links Graphics.
+GitHub Actions (`.github/workflows/ci.yml`) runs Debug `build_ut` + `ctest`, then Release `game`, on `ubuntu-24.04` (`xvfb-run`) and `windows-2022` (MSYS2 MinGW, Mesa3D).
 
 ## Format the code
 

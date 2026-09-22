@@ -1,32 +1,28 @@
 # Examples
 
-## Code: engine slice as sequential waves
+## Code: grow the skeleton in sequential waves
 
-When the user wants the playable slice **implemented**, treat [mvp/09-rollout.md](../../../mvp/09-rollout.md) as the package list. Phases depend on each other — **one wave after the previous verifies and commits**, not nine parallel code writers.
+This tree is `src/main.cpp` (SFML window) + `src/Example.*` (`gameLib`) + `example_test`. Do not start from FooI `IScreen` / `ScreenStack` / `GameplayScreen` unless the contract names them.
 
 | Wave | Package | Owned writes (typical) |
 |------|---------|------------------------|
-| 1 | Clock + `IScreen` | `src/Game.*`, `src/IScreen.hpp`, timestep tests, `docs/reference/application-loop.md` |
-| 2 | `ScreenStack` | `src/ScreenStack.*`, stack tests, `docs/reference/screens-and-input.md` |
-| 3 | `MainMenuScreen` + `GameplayScreen` | those `src/*Screen.*` + transition tests, `docs/reference/screens-and-input.md` |
-| 4 | `Action` + `InputMapper` + FocusLost | mapper + `Game.cpp` consume path, `docs/reference/screens-and-input.md` + application-loop |
-| 5 | `PauseScreen` overlay | `src/PauseScreen.*`, pause-blocks-ticks test, screens-and-input + application-loop |
-| 6 | `World` / `GameObject` / `LevelId` | those sources + `makeWorld`, `docs/reference/world-and-levels.md` |
-| 7 | Docs leftover sweep | leftover `docs/**` only (`related_code`, `docs/index.md`) |
+| 1 | `Example` / `gameLib` types | `src/Example.*` (or a new sibling type), `tests/unit_tests/ExampleTest.cpp`, `docs/reference/source-layout.md` |
+| 2 | Window / `main` | `src/main.cpp`, `docs/tutorials/getting-started.md` |
+| 3 | Docs leftover sweep | leftover `docs/**` only (`related_code`, `docs/index.md`) |
 
-Within a wave, split only if paths stay disjoint (e.g. wave 3: one agent menu, one agent gameplay **if** they do not both edit `ScreenStack.cpp`).
+Within a wave, split only if paths stay disjoint.
 
-After each of waves 1–6:
+After each of waves 1–2:
 
-1. Same-change Diátaxis docs for every touched file. New loop / screen / world behavior updates the matching reference page, not only `source-layout.md`.
+1. Same-change Diátaxis docs for every touched file. New types update `source-layout.md` (and a new reference/how-to if behavior needs a home).
 2. Hard gate: the wave diff must include a `docs/` path. If not, write the docs before commit.
 3. Debug `build_ut` + `ctest --preset debug`.
 4. One orchestrator commit (owned paths + matching docs). Do not commit if the docs gate or verify failed.
 
-Wave 7 is a leftover-docs audit, not the first time docs are written. Commit that sweep if it changes files.
+Wave 3 is a leftover-docs audit, not the first time docs are written. Commit that sweep if it changes files.
 
-Locked names stay those in [mvp/README.md](../../../mvp/README.md).
+Locked names stay those in this tree: `Example`, `game`, `gameLib`. Engine names in [`mvp/`](../../../mvp/README.md) are notes, not current types.
 
-## Docs-only: `mvp/` book
+## Docs-only: `mvp/` snapshots
 
-Same process, packages are files: contract [mvp/README.md](../../../mvp/README.md), then nine Grok 4.6 writers for [01](../../../mvp/01-architecture.md)–[09](../../../mvp/09-rollout.md), then stitch (see that README’s locked-decisions section). Orchestrator commits after stitch if verify (links / contract lock) passes. Use this only when the user asked for a written plan, not the implementation.
+`mvp/` is **historical**. Do not rewrite it as current source facts. Use this docs-only fan-out only when the user asked for a written plan, not the implementation. Orchestrator commits after stitch if verify (links / contract lock) passes.

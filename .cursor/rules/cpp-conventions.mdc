@@ -15,8 +15,8 @@ alwaysApply: false
 
 ## Includes
 
-- From `src/`: angle brackets — `#include <Game.hpp>`
-- Same directory: quotes — `#include "Game.hpp"`
+- From `src/`: angle brackets — `#include <Example.hpp>`
+- Same directory: quotes — `#include "Example.hpp"`
 
 ## Style (match `.clang-format`)
 

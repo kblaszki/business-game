@@ -10,7 +10,7 @@ alwaysApply: false
 
 Every new implementation `.cpp` under `src/` must be added to the `gameLib` source list in `src/CMakeLists.txt`. Omitting it means the file never compiles.
 
-Executable is `game` (`src/main.cpp`); link only against `gameLib` + SFML as already set up.
+Executable is `game` (`src/main.cpp`); it links `gameLib` and SFML. `gameLib` itself does not link SFML.
 
 ## Tests (Debug only)
 
@@ -20,7 +20,7 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-- Unit tests: `tests/unit_tests/` (`smoke_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`); GoogleTest 1.18 via FetchContent
+- Unit tests: `tests/unit_tests/` (`example_test`); GoogleTest 1.18 via FetchContent
 - Register with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`
 - Prefer tests that do not open a window unless a display is required
 - Fixture names like `*Should` when adding behavioral suites

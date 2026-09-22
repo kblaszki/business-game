@@ -39,7 +39,7 @@ Ask at most 1–2 questions that change execution:
 - Implement now vs plan-only (no code yet)
 - What verifies “done” (default: Debug `game` + `build_ut` + `ctest --preset debug`)
 
-Do not invent product genre. Do not read `v0.1-arkanoid` unless the user asks.
+This tree is an SFML window plus `Example` in `gameLib`. Do not assume screens, Arkanoid, or a board-game exist. Treat [`mvp/`](../../../mvp/README.md) as historical notes, not current source.
 
 ## 2. Contract (orchestrator)
 

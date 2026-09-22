@@ -16,6 +16,8 @@ Verify: cmake --build --preset debug --target build_ut && ctest --preset debug
           (or “no code — skip build”)
 ```
 
+Typical owned paths: `src/Example.*`, `src/main.cpp`, `tests/unit_tests/ExampleTest.cpp`. Matching docs: `docs/reference/source-layout.md`, `docs/tutorials/getting-started.md`. Do not invent FooI `screens-and-input.md`.
+
 Owned writes **must** include the matching `docs/` paths whenever the card owns `src/`. Parallelize two cards only when owned write paths do not overlap.
 
 ## Implement prompt
@@ -32,7 +34,7 @@ READ FIRST:
 OWNED WRITE PATHS (only these):
 - ...
 
-FORBIDDEN: do not edit other files. Do not read git branch v0.1-arkanoid unless listed.
+FORBIDDEN: do not edit other files. This tree is an SFML skeleton (Example + main). Do not copy IScreen/ScreenStack/GameplayScreen from mvp/ or other branches unless the contract says so.
 
 DO:
 - Implement the goal in C++23, #pragma once, no namespaces, CamelCase types

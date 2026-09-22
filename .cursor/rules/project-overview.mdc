@@ -5,7 +5,7 @@ alwaysApply: true
 
 # business-game
 
-C++23 SFML 2D playable slice: menu → Arkanoid (`LevelId::Arkanoid`) → pause overlay. Do not assume a board-game or business sim exists. Do not port `v0.1-arkanoid` managers.
+C++23 SFML 2D skeleton: empty 1280×720 window plus a windowless `Example` type in `gameLib`. Longer-term notes live in `mvp/`; do not assume menu, Arkanoid, screens, or a board-game exist in the code.
 
 ## Stack
 
@@ -15,9 +15,9 @@ C++23 SFML 2D playable slice: menu → Arkanoid (`LevelId::Arkanoid`) → pause 
 
 ## Layout
 
-- `src/main.cpp` — constructs `Game` and calls `run()`
-- `src/Game.hpp` / `Game.cpp` — 1280×720 window, event pump, `ScreenStack`
-- `tests/unit_tests/` — Debug suites (`smoke_test`, stack/input/pause/world, …)
+- `src/main.cpp` — SFML window loop
+- `src/Example.hpp` / `Example.cpp` — `gameLib`
+- `tests/unit_tests/ExampleTest.cpp` — `example_test`
 
 Static library target: `gameLib`. Executable: `game`.
 
@@ -34,6 +34,6 @@ Binary: `build/<preset>/bin/game` (`.exe` on Windows).
 
 ## Agent pitfalls
 
-- New `.cpp` files must be listed in `src/CMakeLists.txt` (`gameLib`)
-- Prototype snapshot: git branch `v0.1-arkanoid` (not this tree)
-- Design notes for this slice: `mvp/`
+- New `.cpp` files that belong in the library must be listed in `src/CMakeLists.txt` (`gameLib`)
+- `gameLib` does not link SFML; the `game` executable does
+- Design notes: `mvp/` (not current source facts)

@@ -1,6 +1,8 @@
 # business-game
 
-A C++23 [SFML](https://www.sfml-dev.org/) 2D playable slice: main menu, a simple Arkanoid session, pause overlay, CMake presets, and windowless unit tests.
+A C++23 [SFML](https://www.sfml-dev.org/) 2D skeleton: an empty window, a small `gameLib` type (`Example`), CMake presets, and one windowless unit test.
+
+Longer-term direction lives in [`mvp/`](mvp/README.md); do not assume menu, Arkanoid, or board-game features exist in the code yet.
 
 ## Table of Contents
 
@@ -20,7 +22,7 @@ A C++23 [SFML](https://www.sfml-dev.org/) 2D playable slice: main menu, a simple
 - [Ninja](https://ninja-build.org/) (used by CMake presets)
 - A C++23 compiler (GCC, Clang, or MSVC)
 
-SFML 3.1 is downloaded automatically via CMake FetchContent (`cmake/FetchSFML.cmake`; Audio and Network modules are off). A separate SFML install is not required.
+SFML 3.1 is downloaded automatically via CMake FetchContent (`cmake/FetchSFML.cmake`; Audio and Network modules are off). A separate SFML install is not required. GoogleTest 1.18 is fetched only for Debug.
 
 ```sh
 git clone git@github.com:DevKrystian/business-game.git
@@ -31,10 +33,11 @@ cd business-game
 
 | Path | Role |
 |------|------|
-| `src/main.cpp` | Entry point; runs `Game` |
-| `src/Game.hpp` / `Game.cpp` | Window, event pump, `ScreenStack`, `InputMapper` |
-| `tests/unit_tests/` | Debug GoogleTest suites (windowless) |
+| `src/main.cpp` | Entry point; opens a 1280×720 SFML window |
+| `src/Example.hpp` / `Example.cpp` | Windowless helper in `gameLib` |
+| `tests/unit_tests/` | Debug GoogleTest (`example_test`) |
 | `docs/` | Diátaxis documentation |
+| `mvp/` | Historical design notes |
 
 Static library target: `gameLib`. Executable target: `game`.
 
@@ -87,9 +90,11 @@ After building, run the executable from the preset output directory:
 ./build/release/bin/game
 ```
 
+A 1280×720 window titled "Business game" opens. Close it with the window chrome.
+
 ## Running the Tests
 
-Tests are available only for the **debug** preset. Suites: `smoke_test`, `fixed_timestep_test`, `iscreen_dummy_test`, `screen_stack_test`, `screen_transition_test`, `input_mapper_test`, `pause_blocks_ticks_test`, `world_test`, `rect_collision_test`, `arkanoid_session_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
+Tests are available only for the **debug** preset. Suite: `example_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
 
 ```sh
 cmake --preset debug
@@ -105,7 +110,7 @@ Contributions are welcome. Please:
 2. Match existing C++ style (see `.clang-format`). With a debug configure: `cmake --build --preset debug --target format`.
 3. Treat warnings as errors — keep the build clean under the project flags.
 4. Add or update unit tests under `tests/unit_tests/` when changing `gameLib`.
-5. Add every new `src/**/*.cpp` to `gameLib` in `src/CMakeLists.txt`.
+5. Add every new `src/**/*.cpp` that belongs in the library to `gameLib` in `src/CMakeLists.txt`.
 6. Keep `docs/` current for files listed in a doc's `related_code` (see `docs/index.md`).
 7. Open a pull request with a short description of the change.
 

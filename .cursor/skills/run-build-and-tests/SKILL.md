@@ -12,7 +12,8 @@ Source of truth: [docs/how-to/build-and-test.md](../../../docs/how-to/build-and-
 ## Prerequisites
 
 - CMake ≥ 3.20, Ninja, C++23 compiler
-- SFML is fetched by CMake (no manual install)
+- SFML 3.1 Graphics/Window/System only, fetched by CMake (no manual install)
+- GoogleTest 1.18 is fetched only for the Debug preset
 
 ## Configure
 
