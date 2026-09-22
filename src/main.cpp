@@ -1,47 +1,17 @@
-#include <Game.hpp>
-#include <screen/ScreenI.hpp>
-#include <screen/ScreenStack.hpp>
-#include <time/ClockSFML.hpp>
 #include <window/WindowSFML.hpp>
 
+#include <Game.hpp>
 #include <memory>
-
-namespace
-{
-class DummyScreen : public ScreenI
-{
-public:
-    bool handleEvent(const sf::Event&) override
-    {
-        return false;
-    }
-
-    void update(sf::Time) override
-    {
-    }
-
-    void draw(DrawerI&) override
-    {
-    }
-
-    [[nodiscard]] bool blocksUpdate() const override
-    {
-        return false;
-    }
-
-    [[nodiscard]] bool blocksDraw() const override
-    {
-        return false;
-    }
-};
-}
+#include <screen/MainMenuScreen.hpp>
+#include <screen/ScreenStack.hpp>
+#include <time/ClockSFML.hpp>
 
 int main()
 {
     WindowSFML window{Game::DESIGN_SIZE, "Business game"};
     ClockSFML clock;
     ScreenStack screens;
-    screens.push(std::make_unique<DummyScreen>());
+    screens.push(std::make_unique<MainMenuScreen>(screens));
     Game{window, clock, screens}.run();
     return 0;
 }

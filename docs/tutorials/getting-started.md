@@ -13,6 +13,8 @@ related_code:
   - src/time/ClockSFML.hpp
   - src/screen/ScreenI.hpp
   - src/screen/ScreenStack.hpp
+  - src/screen/MainMenuScreen.hpp
+  - src/screen/GameplayScreen.hpp
   - .github/workflows/ci.yml
 related_docs:
   - ../how-to/build-and-test.md
@@ -72,7 +74,7 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280×720 window titled "Business game" opens (empty dummy screen). Close it with the window chrome. `main` constructs `WindowSFML`, `ClockSFML`, a `ScreenStack` with a file-local dummy, and `Game`; the loop lives in `Game::run()`.
+A 1280×720 window titled "Business game" opens on a menu bar. Enter replaces it with an empty gameplay rectangle. Close the window with the chrome. `main` constructs `WindowSFML`, `ClockSFML`, a `ScreenStack` seeded with `MainMenuScreen`, and `Game`.
 
 ## Next steps
 

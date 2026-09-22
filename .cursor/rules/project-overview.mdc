@@ -5,7 +5,7 @@ alwaysApply: true
 
 # business-game
 
-C++23 SFML 2D skeleton: `Game` runs against `WindowI`, `ClockI`, and `ScreenStack` of `ScreenI` (SFML adapters on the executable), plus a windowless `Example` type in `gameLib`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living); do not assume menu, Arkanoid, or a board-game exist in the code.
+C++23 SFML 2D skeleton: `Game` runs against `WindowI`, `ClockI`, and `ScreenStack` of `ScreenI` (SFML adapters on the executable), plus a windowless `Example` type in `gameLib`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living); do not assume pause, Arkanoid, or a board-game exist in the code.
 
 ## Stack
 
@@ -15,13 +15,13 @@ C++23 SFML 2D skeleton: `Game` runs against `WindowI`, `ClockI`, and `ScreenStac
 
 ## Layout
 
-- `src/main.cpp` — `WindowSFML` + `ClockSFML` + `ScreenStack` (file-local dummy) + `Game{...}.run()`
+- `src/main.cpp` — `WindowSFML` + `ClockSFML` + `ScreenStack` (`MainMenuScreen`) + `Game{...}.run()`
 - `src/Game.hpp` / `Game.cpp` — process loop (`gameLib`)
 - `src/window/` — `WindowI` (extends `DrawerI`), `WindowSFML` (`WindowSFML.cpp` on executable `game`)
 - `src/time/` — `ClockI`, `ClockSFML` (on `game`), `FixedTimestep`
-- `src/screen/` — `ScreenI`, `ScreenStack` (`ScreenStack.cpp` in `gameLib`)
+- `src/screen/` — `ScreenI`, `ScreenStack`, `MainMenuScreen`, `GameplayScreen`
 - `src/Example.hpp` / `Example.cpp` — `gameLib`
-- `tests/unit_tests/` — `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`
+- `tests/unit_tests/` — `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`
 - `tests/mocks/` — `WindowMock`, `ClockMock`; `tests/unit_tests/fakes/ScreenSpy.hpp`
 
 Static library target: `gameLib`. Executable: `game`.
@@ -41,7 +41,7 @@ Binary: `build/<preset>/bin/game` (`.exe` on Windows).
 
 - New `.cpp` files that belong in the library must be listed in `src/CMakeLists.txt` (`gameLib`)
 - `WindowSFML.cpp` and `ClockSFML.cpp` are listed on the `game` executable, not in `gameLib`
-- `gameLib` does not **link** SFML (headers/defines only); the `game` executable links Graphics/Window/System
+- `gameLib` does not **link** SFML (headers/defines only); the `game` executable links Graphics/Window/System. `menu_gameplay_test` also links Graphics because the screens construct `sf::RectangleShape` (still no window).
 - Interfaces use the `FooI` suffix (`WindowI`, `ClockI`, `DrawerI`, `ScreenI`)
 - `ScreenI::draw` takes `DrawerI&`, not `sf::RenderTarget&`. Screens must not `close()` the window
 - `ScreenStack::push`/`pop`/`replace` apply immediately when idle, and after `draw` when a walk is in progress

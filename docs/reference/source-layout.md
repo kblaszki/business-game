@@ -18,6 +18,10 @@ related_code:
   - src/screen/ScreenI.hpp
   - src/screen/ScreenStack.hpp
   - src/screen/ScreenStack.cpp
+  - src/screen/MainMenuScreen.hpp
+  - src/screen/MainMenuScreen.cpp
+  - src/screen/GameplayScreen.hpp
+  - src/screen/GameplayScreen.cpp
   - src/Example.hpp
   - src/Example.cpp
   - CMakeLists.txt
@@ -28,6 +32,7 @@ related_code:
   - tests/unit_tests/GameTest.cpp
   - tests/unit_tests/FixedTimestepTest.cpp
   - tests/unit_tests/ScreenStackTest.cpp
+  - tests/unit_tests/MenuGameplayTest.cpp
   - tests/mocks/window/WindowMock.hpp
   - tests/mocks/time/ClockMock.hpp
   - tests/unit_tests/fakes/ScreenSpy.hpp
@@ -36,7 +41,7 @@ related_docs:
   - ../how-to/build-and-test.md
   - ../../mvp/README.md
   - ../../mvp/10-engine-progress.md
-keywords: [layout, directories, gameLib, game, targets, cmake sources, Example, WindowI, ClockI, ScreenI, ScreenStack, DrawerI]
+keywords: [layout, directories, gameLib, game, targets, cmake sources, Example, WindowI, ClockI, ScreenI, ScreenStack, MainMenuScreen]
 last_reviewed: 2026-09-22
 ---
 
@@ -46,7 +51,7 @@ last_reviewed: 2026-09-22
 
 | Path | Responsibility |
 |------|----------------|
-| `src/main.cpp` | Constructs `WindowSFML`, `ClockSFML`, `ScreenStack` with a file-local dummy, and `Game`, then `run()` |
+| `src/main.cpp` | Constructs `WindowSFML`, `ClockSFML`, `ScreenStack` seeded with `MainMenuScreen`, and `Game`, then `run()` |
 | `src/Game.hpp` / `Game.cpp` | Process loop: `ClockI::restart`, Closed → `close()`, leftover events to `ScreenStack`, `FixedTimestep` drain unless top `blocksUpdate`, `update(tick)`, `clear` / `screens.draw` / `display`. Holds `WindowI&`, `ClockI&`, `ScreenStack&` |
 | `src/window/WindowI.hpp` | Window port (`DrawerI`): `isOpen`, `close`, `pollEvent`, `clear`, `display`, `draw` |
 | `src/window/DrawerI.hpp` | Draw seam: `draw(const sf::Drawable&)` |
@@ -55,7 +60,9 @@ last_reviewed: 2026-09-22
 | `src/time/ClockSFML.hpp` / `ClockSFML.cpp` | Adapter on `sf::Clock`. Compiled into executable `game` only |
 | `src/time/FixedTimestep.hpp` | Drain helper (`tick` 1/60 s, cap 0.25 s) |
 | `src/screen/ScreenI.hpp` | Screen port: `handleEvent`, `update`, `draw(DrawerI&)`, `blocksUpdate`, `blocksDraw` |
-| `src/screen/ScreenStack.hpp` / `ScreenStack.cpp` | Ordered screens; deferred `push` / `pop` / `replace` (`gameLib`) |
+| `src/screen/ScreenStack.hpp` / `ScreenStack.cpp` | Ordered screens; deferred `push` / `pop` / `replace`; `top()` (`gameLib`) |
+| `src/screen/MainMenuScreen.hpp` / `.cpp` | Enter replaces with `GameplayScreen`; wide bar |
+| `src/screen/GameplayScreen.hpp` / `.cpp` | Empty play + `tickCount`; small rectangle |
 | `src/Example.hpp` / `Example.cpp` | Windowless helper class in `gameLib` (`add`) |
 | `tests/mocks/window/` | `WindowMock` (gmock) |
 | `tests/mocks/time/` | `ClockMock` (gmock) |
@@ -64,9 +71,9 @@ last_reviewed: 2026-09-22
 
 ## Build targets
 
-- **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `screen/ScreenStack.cpp`, listed in `src/CMakeLists.txt`. C++23. Uses SFML **headers/defines** so ports can mention `sf::Event`, `sf::Time`, `sf::Drawable`, `sf::Vector2u`. Does **not** link SFML (no OpenGL in tests).
+- **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `screen/ScreenStack.cpp`, `MainMenuScreen.cpp`, `GameplayScreen.cpp`, listed in `src/CMakeLists.txt`. C++23. Uses SFML **headers/defines** so ports can mention `sf::Event`, `sf::Time`, `sf::Drawable`, `sf::Vector2u`. Does **not** link SFML (no OpenGL in tests).
 - **`game`** (executable) — `src/main.cpp`, `src/window/WindowSFML.cpp`, `src/time/ClockSFML.cpp`; links `gameLib` and SFML 3.1 Graphics/Window/System (audio and network are OFF in `cmake/FetchSFML.cmake`).
-- Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`.
+- Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`. `menu_gameplay_test` also links `SFML::Graphics` (still no window) because the screens construct `sf::RectangleShape`.
 
 ## Adding a source file
 

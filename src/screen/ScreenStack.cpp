@@ -92,6 +92,11 @@ bool ScreenStack::blocksUpdate() const
     return !screens.empty() && screens.back()->blocksUpdate();
 }
 
+ScreenI* ScreenStack::top() const
+{
+    return screens.empty() ? nullptr : screens.back().get();
+}
+
 void ScreenStack::enqueue(Command command)
 {
     commands.push_back(std::move(command));
@@ -103,7 +108,7 @@ void ScreenStack::enqueue(Command command)
 
 void ScreenStack::applyCommands()
 {
-    for(Command& command : commands)
+    for(Command& command: commands)
     {
         switch(command.type)
         {

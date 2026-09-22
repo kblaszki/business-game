@@ -1,6 +1,5 @@
 #pragma once
 
-#include <screen/ScreenI.hpp>
 #include <window/DrawerI.hpp>
 
 #include <SFML/System/Time.hpp>
@@ -8,6 +7,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <screen/ScreenI.hpp>
 #include <vector>
 
 class ScreenStack
@@ -28,6 +28,7 @@ public:
     [[nodiscard]] bool empty() const;
     [[nodiscard]] std::size_t size() const;
     [[nodiscard]] bool blocksUpdate() const;
+    [[nodiscard]] ScreenI* top() const;
 
 private:
     enum class CommandType

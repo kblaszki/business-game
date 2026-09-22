@@ -18,9 +18,9 @@ related_docs:
 
 This chapter is the **ordered coding plan** for the first engine slice. It does not describe code that exists today. It will be executed later, one phase at a time, against the C++23 / SFML 3.1 tree on `main`.
 
-**In the tree today:** [10-engine-progress.md](10-engine-progress.md) (window, clock, `ScreenI`, `ScreenStack`). This chapter stays prospective.
+**In the tree today:** [10-engine-progress.md](10-engine-progress.md) (window, clock, `ScreenStack`, `MainMenuScreen`, empty `GameplayScreen`). This chapter stays prospective.
 
-The loop in `Game::run()` (Closed, fixed tick, `ScreenStack`, `DESIGN_SIZE`) is the starting point to extend. Later phases of this chapter still start at menu / gameplay screens. Debug tests register windowless suites via `add_unit_test` in [`tests/unit_tests/CMakeLists.txt`](../tests/unit_tests/CMakeLists.txt). SFML Audio and Network stay off ([`cmake/FetchSFML.cmake`](../cmake/FetchSFML.cmake)).
+The loop in `Game::run()` (Closed, fixed tick, `ScreenStack`, `DESIGN_SIZE`) is the starting point to extend. Later phases of this chapter still start at `InputMapper` / `Action`. Debug tests register windowless suites via `add_unit_test` in [`tests/unit_tests/CMakeLists.txt`](../tests/unit_tests/CMakeLists.txt). SFML Audio and Network stay off ([`cmake/FetchSFML.cmake`](../cmake/FetchSFML.cmake)).
 
 Facts about the running tree belong in [`docs/`](../docs/index.md). This file belongs in `mvp/` and will stay prospective until each phase lands.
 

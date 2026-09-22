@@ -42,7 +42,7 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Suite: `example_test` (`Example::add`), `game_test` (`Game` + mocks; no window), `fixed_timestep_test`, `screen_stack_test`.
+Suite: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`.
 
 `build_ut` builds every suite registered with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`.
 

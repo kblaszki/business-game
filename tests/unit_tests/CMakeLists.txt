@@ -41,3 +41,11 @@ add_unit_test(screen_stack_test
     DEPENDENCIES
         gameLib
 )
+
+add_unit_test(menu_gameplay_test
+    SOURCES
+        MenuGameplayTest.cpp
+    DEPENDENCIES
+        gameLib
+        SFML::Graphics
+)

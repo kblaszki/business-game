@@ -3,6 +3,8 @@ add_library(gameLib
         Example.cpp
         Game.cpp
         screen/ScreenStack.cpp
+        screen/MainMenuScreen.cpp
+        screen/GameplayScreen.cpp
 )
 target_compile_features(gameLib PRIVATE cxx_std_23)
 target_compile_options(gameLib PRIVATE ${BASE_COMPILE_FLAGS})
