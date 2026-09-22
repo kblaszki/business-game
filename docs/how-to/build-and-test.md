@@ -48,7 +48,7 @@ Suite: `example_test` (`Example::add`).
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`) runs Debug `build_ut` + `ctest`, then Release `game`, on `ubuntu-24.04` (`xvfb-run`) and `windows-2022` (MSYS2 MinGW, Mesa3D).
+GitHub Actions (`.github/workflows/ci.yml`) runs Debug `build_ut` + `ctest`, then Release `game`, on `ubuntu-24.04` (system g++) and `windows-2022` (MSVC). Tests do not open a window.
 
 ## Format the code
 

@@ -57,25 +57,17 @@ jobs:
             ninja-build \
             ccache
 
+      - name: MSVC environment
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
       - name: Setup CCache
         uses: hendrikmuhs/ccache-action@v1
         with:
           key: ${{ matrix.os }}
 
-      - name: Add MinGW to PATH
-        if: runner.os == 'Windows'
-        run: echo "C:\\msys64\\mingw64\\bin" >> "$GITHUB_PATH"
-
-      - name: Install Windows dependencies
-        if: runner.os == 'Windows'
-        run: |
-          C:/msys64/usr/bin/pacman.exe -Sy --noconfirm --needed \
-            mingw-w64-x86_64-pkg-config \
-            mingw-w64-x86_64-freetype \
-            mingw-w64-x86_64-harfbuzz
-
       - name: Configure Debug
-        run: cmake --preset debug ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++ -DCMAKE_PREFIX_PATH=C:/msys64/mingw64' || '' }}
+        run: cmake --preset debug
 
       - name: Build tests
         run: cmake --build --preset debug --target build_ut
@@ -84,7 +76,7 @@ jobs:
         run: ctest --preset debug --output-on-failure
 
       - name: Configure Release
-        run: cmake --preset release ${{ runner.os == 'Windows' && '-DCMAKE_CXX_COMPILER=g++ -DCMAKE_PREFIX_PATH=C:/msys64/mingw64' || '' }}
+        run: cmake --preset release
 
       - name: Build game
         run: cmake --build --preset release --target game
