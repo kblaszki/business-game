@@ -29,9 +29,9 @@ TEST_F(OnHoverHandlerShould, beProperlyConstructedAndDestructed)
     StrictMock<ActionMock> actionMock{};
 
     EXPECT_CALL(actionMock, doAction()).Times(1);
-    EXPECT_CALL(mouseManagerMock, registerMoveHandler(_)).Times(1).WillOnce(Invoke([&](MouseManagerI::MoveHandler&&) {
+    EXPECT_CALL(mouseManagerMock, registerMoveHandler(_)).Times(1).WillOnce([&](MouseManagerI::MoveHandler&&) {
         return MouseManagerI::MoveUnRegisterer([&] { actionMock.doAction(); });
-    }));
+    });
 
     {
         OnHoverHandlerMock onHoverHandler{mouseManagerMock};

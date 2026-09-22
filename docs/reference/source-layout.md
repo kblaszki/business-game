@@ -10,7 +10,7 @@ related_docs:
   - ./architecture.md
   - ../how-to/build-and-test.md
 keywords: [layout, directories, gameLib, game, targets, cmake sources]
-last_reviewed: 2026-08-01
+last_reviewed: 2026-09-22
 ---
 
 # Source layout reference
@@ -34,8 +34,9 @@ last_reviewed: 2026-08-01
 
 ## Build targets
 
-- **`gameLib`** (STATIC) — all implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. Links SFML 3 (`SFML::Graphics`, `SFML::System`, `SFML::Window`).
-- **`game`** (executable) — only `src/main.cpp`, links `gameLib`.
+- **`gameLib`** (STATIC) — all implementation `.cpp` under `src/`, listed in `src/CMakeLists.txt`. Links SFML 3.1 Graphics/Window/System (`SFML::Graphics`, `SFML::System`, `SFML::Window`); audio and network are OFF in `cmake/FetchSFML.cmake`. C++23 (`cxx_std_23`).
+- **`game`** (executable) — only `src/main.cpp`, links `gameLib`, C++23.
+- Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Linux GNU links HarfBuzz with `--whole-archive`; Windows GNU uses `LINK_GROUP(RESCAN)` for HarfBuzz+FreeType (whole-archive can deadlock at process start).
 
 ## Adding a source file
 

@@ -16,12 +16,12 @@ related_docs:
   - ../explanation/sfml/game-architecture.md
   - ../explanation/sfml/screens-pause-levels.md
 keywords: [architecture, game loop, controllers, GameController, EventController, ScreenController, ResourceManager]
-last_reviewed: 2026-08-01
+last_reviewed: 2026-09-22
 ---
 
 # Architecture reference
 
-business-game is a C++20 SFML 3 prototype built as one static library (`gameLib`) plus a thin executable (`game`). The entry point wires dependencies by hand and hands them to the game loop. Broader SFML game-structure guidance: [game architecture](../explanation/sfml/game-architecture.md), [screens / pause / levels](../explanation/sfml/screens-pause-levels.md).
+business-game is a C++23 SFML 3.1 prototype (Graphics/Window/System only) built as one static library (`gameLib`) plus a thin executable (`game`). The entry point wires dependencies by hand and hands them to the game loop. Broader SFML game-structure guidance: [game architecture](../explanation/sfml/game-architecture.md), [screens / pause / levels](../explanation/sfml/screens-pause-levels.md).
 
 ## Component map
 

@@ -24,9 +24,9 @@ TEST_F(OnClickHandlerShould, beProperlyConstructedAndDestructed)
     EXPECT_CALL(actionMock, doAction()).Times(1);
     EXPECT_CALL(mouseManagerMock, registerButtonHandler(sf::Mouse::Button::Left, _))
         .Times(1)
-        .WillOnce(Invoke([&](sf::Mouse::Button, MouseManagerI::ButtonHandler&&) {
+        .WillOnce([&](sf::Mouse::Button, MouseManagerI::ButtonHandler&&) {
             return MouseManagerI::ButtonUnRegisterer([&] { actionMock.doAction(); });
-        }));
+        });
 
     {
         OnClickHandlerMock onClickHandler{mouseManagerMock, sf::Mouse::Button::Left};

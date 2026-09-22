@@ -6,7 +6,7 @@ alwaysApply: false
 
 # C++ conventions
 
-- Standard: **C++20** (not C++23)
+- Standard: **C++23**
 - Headers: `#pragma once` (not include guards)
 - No namespaces
 - Classes: `CamelCase`; methods/vars: `camelCase`

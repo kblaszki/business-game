@@ -1,5 +1,7 @@
 # Stack review
 
+> Superseded by C++23 / GoogleTest 1.18 on this tree. Historical snapshot (2026-08-01); do not treat version numbers below as current.
+
 Assessment date: 2026-08-01. Verdict: the language/tooling core is current; the two fetched dependencies and the fetch mechanism itself are outdated.
 
 ## Version matrix

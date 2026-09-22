@@ -11,7 +11,7 @@ related_docs:
   - ./game-architecture.md
   - ../../tutorials/getting-started.md
 keywords: [SFML, modules, platforms, Windows, Linux, macOS, Android, iOS, C++17, HarfBuzz, networking]
-last_reviewed: 2026-08-01
+last_reviewed: 2026-09-22
 ---
 
 # SFML 3.1 overview and platforms
@@ -34,7 +34,7 @@ You can use only the window module as an OpenGL context host, or stack Graphics 
 
 Link only what you use. With GCC, link order matters for static builds (dependents before dependencies is the usual rule; prefer CMake imported targets `SFML::Graphics`, etc.).
 
-SFML 3 raised the language baseline to **C++17** (MSVC 16 / VS 2019, GCC 9, Clang 9, AppleClang 12 as documented minima). This project builds with **C++20**.
+SFML 3 raised the language baseline to **C++17** (MSVC 16 / VS 2019, GCC 9, Clang 9, AppleClang 12 as documented minima). This project builds with **C++23** and fetches SFML with audio and network disabled (`SFML_BUILD_AUDIO` / `SFML_BUILD_NETWORK` OFF).
 
 ## Platforms
 

@@ -6,11 +6,12 @@ related_code:
   - CMakePresets.json
   - CMakeLists.txt
   - cmake/FetchSFML.cmake
+  - cmake/FetchGTest.cmake
 related_docs:
   - ../how-to/build-and-test.md
   - ../reference/architecture.md
 keywords: [setup, toolchain, build, run, msys2, ninja, cmake, first time]
-last_reviewed: 2026-08-01
+last_reviewed: 2026-09-22
 ---
 
 # Getting started
@@ -19,7 +20,7 @@ Goal: from a fresh clone to a running game window. By the end you will have conf
 
 ## 1. Install the toolchain
 
-You need CMake, Ninja, and a C++20 compiler on your `PATH`. On Windows this repo is set up around MSYS2 MinGW (CMake already probes `C:\msys64\mingw64\...`).
+You need CMake, Ninja, and a C++23 compiler on your `PATH`. On Windows this repo is set up around MSYS2 MinGW (CMake already probes `C:\msys64\mingw64\...`).
 
 MSYS2 MinGW 64-bit shell:
 
@@ -38,7 +39,7 @@ ninja --version
 cmake --version
 ```
 
-SFML 3.1 and GoogleTest are fetched automatically by CMake (`cmake/FetchSFML.cmake`). No separate install.
+SFML 3.1 (Graphics/Window/System only) and GoogleTest 1.18 are fetched automatically by CMake (`cmake/FetchSFML.cmake`; `cmake/FetchGTest.cmake` in Debug). No separate install.
 
 ## 2. Configure
 

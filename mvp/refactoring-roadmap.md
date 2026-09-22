@@ -1,5 +1,7 @@
 # Refactoring roadmap
 
+> Superseded by C++23 / GoogleTest 1.18 on this tree. Historical snapshot; do not treat the version steps below as current.
+
 The master checklist to fully refactor the project, in dependency order. Each phase is a separate branch/PR-sized unit with an explicit exit criterion; commit when the criterion holds (per the repo's golden rule). Details live in [stack-review.md](stack-review.md), [sfml3-migration.md](sfml3-migration.md), and [architecture-review.md](architecture-review.md).
 
 ```mermaid

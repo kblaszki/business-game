@@ -5,13 +5,13 @@ alwaysApply: true
 
 # business-game
 
-C++20 SFML 2D game prototype (menu + Arkanoid session). Longer-term direction is a business/board-style game; do not assume board-game features exist yet.
+C++23 SFML 2D game prototype (menu + Arkanoid session). Longer-term direction is a business/board-style game; do not assume board-game features exist yet.
 
 ## Stack
 
-- C++20, CMake ≥ 3.20, Ninja presets (`debug` / `release`)
-- SFML 3.1 via FetchContent (`cmake/FetchSFML.cmake`) — no manual SFML install
-- GoogleTest only in Debug; clang-format / clang-tidy at repo root
+- C++23, CMake ≥ 3.20, Ninja presets (`debug` / `release`)
+- SFML 3.1 via FetchContent (`cmake/FetchSFML.cmake`) — Graphics/Window/System only; no manual SFML install
+- GoogleTest 1.18 only in Debug; clang-format / clang-tidy at repo root
 
 ## Layout
 

@@ -6,8 +6,8 @@ related_code:
   - src/main.cpp
   - CMakeLists.txt
 related_docs: []
-keywords: [documentation, diataxis, index, map, navigation, docs]
-last_reviewed: 2026-08-01
+keywords: [documentation, diataxis, index, map, navigation, docs, C++23, GTest]
+last_reviewed: 2026-09-22
 ---
 
 # Documentation map
