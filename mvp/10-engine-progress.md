@@ -15,6 +15,8 @@ related_code:
   - ../src/time/ClockSFML.cpp
   - ../src/time/FixedTimestep.hpp
   - ../src/screen/ScreenI.hpp
+  - ../src/screen/ScreenStack.hpp
+  - ../src/screen/ScreenStack.cpp
   - ../src/Game.hpp
   - ../src/Game.cpp
   - ../src/main.cpp
@@ -23,6 +25,7 @@ related_code:
   - ../tests/mocks/time/ClockMock.hpp
   - ../tests/unit_tests/GameTest.cpp
   - ../tests/unit_tests/FixedTimestepTest.cpp
+  - ../tests/unit_tests/ScreenStackTest.cpp
   - ../tests/unit_tests/fakes/ScreenSpy.hpp
 ---
 
@@ -38,7 +41,7 @@ This file is the **living register** of names and files that exist in the tree. 
 | `mvp/` names with prefix `I` | Remap when that type lands — do not edit 01–09 |
 | Directories | No `engine/` vs `game/` split ([README.md](README.md) non-goal). Window: `src/window/`. Time: `src/time/`. Screen port: `src/screen/`. Process loop: `Game` in `src/` |
 | SOLID | One `WindowI` (inherits `DrawerI` because `ScreenI` must not see `close()`) |
-| `gameLib` vs SFML | `gameLib` compiles `Game.cpp` with **SFML headers only** (no SFML / OpenGL link). `WindowSFML.cpp` and `ClockSFML.cpp` live on executable `game` |
+| `gameLib` vs SFML | `gameLib` compiles `Game.cpp` and `ScreenStack.cpp` with **SFML headers only** (no SFML / OpenGL link). `WindowSFML.cpp` and `ClockSFML.cpp` live on executable `game` |
 
 ### Name remap (when those types are added)
 
@@ -58,13 +61,13 @@ Check a box only after that slice is on `main`. Paths are what landed, not a pro
 | 0 | Scaffold: `Example` in `gameLib`; empty window loop | done (loop moved in slice 1) | `src/Example.*` |
 | 1 | Window port | **done** | see slice 1 |
 | 2 | Clock + `DrawerI` + `ScreenI` | **done** | see below |
-| 3 | `ScreenStack` | not-started | — |
+| 3 | `ScreenStack` | **done** | see below |
 | 4 | Main menu + gameplay screens | not-started | — |
 | 5 | `InputMapper` + `Action` | not-started | — |
 | 6 | Pause overlay | not-started | — |
 | 7 | World, objects, levels | not-started | — |
 
-Next slice (`ScreenStack`) starts only after names and signatures are agreed in chat. Do not invent them here.
+Next slice (menu / gameplay screens) starts only after names and signatures are agreed in chat. Do not invent them here.
 
 ### Slice 1 — window port (landed)
 
@@ -83,7 +86,7 @@ Next slice (`ScreenStack`) starts only after names and signatures are agreed in 
 - [x] `FixedTimestep` — `tick` 1/60 s, `accumulatorMax` 0.25 s, `drain`
 - [x] `DrawerI` — `draw(const sf::Drawable&)`; `WindowI` inherits it
 - [x] `ScreenI` — `handleEvent`, `update`, `draw(DrawerI&)`, `blocksUpdate`, `blocksDraw` (no `handleAction`)
-- [x] `Game(WindowI&, ClockI&, ScreenI&)` — Closed in `Game`; leftover events to the screen; drain unless `blocksUpdate`; `update(tick)` N times; `clear` / `draw` / `display`
+- [x] `Game` — Closed in `Game`; leftover events to the (then single) screen; drain unless `blocksUpdate`; `update(tick)` N times; `clear` / `draw` / `display`
 - [x] File-local dummy screen in `main.cpp`
 - [x] `ClockMock`, `ScreenSpy`, `FixedTimestepTest`, extended `GameTest`
 
@@ -118,3 +121,24 @@ flowchart LR
 | [`tests/unit_tests/fakes/ScreenSpy.hpp`](../tests/unit_tests/fakes/ScreenSpy.hpp) | counters |
 | [`tests/unit_tests/GameTest.cpp`](../tests/unit_tests/GameTest.cpp) | `game_test` |
 | [`tests/unit_tests/FixedTimestepTest.cpp`](../tests/unit_tests/FixedTimestepTest.cpp) | `fixed_timestep_test` |
+
+### Slice 3 — `ScreenStack` (landed)
+
+- [x] `ScreenStack` — `push` / `pop` / `replace`; apply private (immediate when idle, after `draw` when dispatched)
+- [x] Walk: events/update top-down; draw from highest `blocksDraw` upward
+- [x] `Game(WindowI&, ClockI&, ScreenStack&)`
+- [x] Dummy `push` in `main`
+- [x] `ScreenStackTest` + `GameTest` on a stack with `ScreenSpy`
+
+```mermaid
+flowchart LR
+  Main[main.cpp] --> Stack[ScreenStack]
+  Main --> Game[Game]
+  Game --> Stack
+  Stack --> ScrI[ScreenI]
+```
+
+| Path | Role |
+|------|------|
+| [`src/screen/ScreenStack.hpp`](../src/screen/ScreenStack.hpp) / [`.cpp`](../src/screen/ScreenStack.cpp) | Stack (`gameLib`) |
+| [`tests/unit_tests/ScreenStackTest.cpp`](../tests/unit_tests/ScreenStackTest.cpp) | `screen_stack_test` |

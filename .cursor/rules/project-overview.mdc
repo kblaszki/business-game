@@ -5,7 +5,7 @@ alwaysApply: true
 
 # business-game
 
-C++23 SFML 2D skeleton: `Game` runs against `WindowI`, `ClockI`, and `ScreenI` (SFML adapters on the executable), plus a windowless `Example` type in `gameLib`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living); do not assume menu, Arkanoid, or a board-game exist in the code. There is no `ScreenStack` yet.
+C++23 SFML 2D skeleton: `Game` runs against `WindowI`, `ClockI`, and `ScreenStack` of `ScreenI` (SFML adapters on the executable), plus a windowless `Example` type in `gameLib`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living); do not assume menu, Arkanoid, or a board-game exist in the code.
 
 ## Stack
 
@@ -15,13 +15,13 @@ C++23 SFML 2D skeleton: `Game` runs against `WindowI`, `ClockI`, and `ScreenI` (
 
 ## Layout
 
-- `src/main.cpp` — `WindowSFML` + `ClockSFML` + file-local dummy `ScreenI` + `Game{...}.run()`
+- `src/main.cpp` — `WindowSFML` + `ClockSFML` + `ScreenStack` (file-local dummy) + `Game{...}.run()`
 - `src/Game.hpp` / `Game.cpp` — process loop (`gameLib`)
 - `src/window/` — `WindowI` (extends `DrawerI`), `WindowSFML` (`WindowSFML.cpp` on executable `game`)
 - `src/time/` — `ClockI`, `ClockSFML` (on `game`), `FixedTimestep`
-- `src/screen/` — `ScreenI`
+- `src/screen/` — `ScreenI`, `ScreenStack` (`ScreenStack.cpp` in `gameLib`)
 - `src/Example.hpp` / `Example.cpp` — `gameLib`
-- `tests/unit_tests/` — `example_test`, `game_test`, `fixed_timestep_test`
+- `tests/unit_tests/` — `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`
 - `tests/mocks/` — `WindowMock`, `ClockMock`; `tests/unit_tests/fakes/ScreenSpy.hpp`
 
 Static library target: `gameLib`. Executable: `game`.
@@ -44,4 +44,5 @@ Binary: `build/<preset>/bin/game` (`.exe` on Windows).
 - `gameLib` does not **link** SFML (headers/defines only); the `game` executable links Graphics/Window/System
 - Interfaces use the `FooI` suffix (`WindowI`, `ClockI`, `DrawerI`, `ScreenI`)
 - `ScreenI::draw` takes `DrawerI&`, not `sf::RenderTarget&`. Screens must not `close()` the window
+- `ScreenStack::push`/`pop`/`replace` apply immediately when idle, and after `draw` when a walk is in progress
 - Design notes: `mvp/01`–`09` (prospect). Tree names and slices: `mvp/10-engine-progress.md`

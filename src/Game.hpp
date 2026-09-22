@@ -1,6 +1,6 @@
 #pragma once
 
-#include <screen/ScreenI.hpp>
+#include <screen/ScreenStack.hpp>
 #include <time/ClockI.hpp>
 #include <time/FixedTimestep.hpp>
 #include <window/WindowI.hpp>
@@ -12,13 +12,13 @@ class Game
 public:
     static const sf::Vector2u DESIGN_SIZE;
 
-    explicit Game(WindowI& window, ClockI& clock, ScreenI& screen);
+    explicit Game(WindowI& window, ClockI& clock, ScreenStack& screens);
 
     void run();
 
 private:
     WindowI& window;
     ClockI& clock;
-    ScreenI& screen;
+    ScreenStack& screens;
     FixedTimestep timestep;
 };

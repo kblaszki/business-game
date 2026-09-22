@@ -4,10 +4,10 @@
 
 const sf::Vector2u Game::DESIGN_SIZE{1280u, 720u};
 
-Game::Game(WindowI& window, ClockI& clock, ScreenI& screen)
+Game::Game(WindowI& window, ClockI& clock, ScreenStack& screens)
     : window{window}
     , clock{clock}
-    , screen{screen}
+    , screens{screens}
 {
 }
 
@@ -25,21 +25,25 @@ void Game::run()
             }
             else
             {
-                screen.handleEvent(*event);
+                screens.handleEvent(*event);
             }
         }
 
-        if(!screen.blocksUpdate())
+        if(!screens.blocksUpdate())
         {
             const std::uint32_t steps = timestep.drain(dt);
             for(std::uint32_t i{0}; i < steps; ++i)
             {
-                screen.update(FixedTimestep::tick);
+                screens.update(FixedTimestep::tick);
             }
+        }
+        else
+        {
+            screens.update(FixedTimestep::tick);
         }
 
         window.clear();
-        screen.draw(window);
+        screens.draw(window);
         window.display();
     }
 }

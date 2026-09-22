@@ -1,7 +1,10 @@
 #include <Game.hpp>
 #include <screen/ScreenI.hpp>
+#include <screen/ScreenStack.hpp>
 #include <time/ClockSFML.hpp>
 #include <window/WindowSFML.hpp>
+
+#include <memory>
 
 namespace
 {
@@ -37,7 +40,8 @@ int main()
 {
     WindowSFML window{Game::DESIGN_SIZE, "Business game"};
     ClockSFML clock;
-    DummyScreen screen;
-    Game{window, clock, screen}.run();
+    ScreenStack screens;
+    screens.push(std::make_unique<DummyScreen>());
+    Game{window, clock, screens}.run();
     return 0;
 }

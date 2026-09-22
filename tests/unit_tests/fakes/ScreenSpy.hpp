@@ -1,22 +1,35 @@
 #pragma once
 
 #include <screen/ScreenI.hpp>
+#include <screen/ScreenStack.hpp>
 
 #include <cstdint>
 
 class ScreenSpy : public ScreenI
 {
 public:
+    ~ScreenSpy() override
+    {
+        if(destroyed)
+        {
+            *destroyed = true;
+        }
+    }
+
     bool handleEvent(const sf::Event&) override
     {
         ++handleEventCount;
-        return false;
+        return consumeEvent;
     }
 
     void update(sf::Time dt) override
     {
         ++updateCount;
         lastDt = dt;
+        if(popOnUpdate && stack)
+        {
+            stack->pop();
+        }
     }
 
     void draw(DrawerI&) override
@@ -39,5 +52,9 @@ public:
     std::uint32_t drawCount{};
     bool updateBlocked{false};
     bool drawBlocked{false};
+    bool consumeEvent{false};
+    bool popOnUpdate{false};
+    bool* destroyed{nullptr};
+    ScreenStack* stack{nullptr};
     sf::Time lastDt{};
 };

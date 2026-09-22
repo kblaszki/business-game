@@ -34,3 +34,10 @@ add_unit_test(fixed_timestep_test
     DEPENDENCIES
         gameLib
 )
+
+add_unit_test(screen_stack_test
+    SOURCES
+        ScreenStackTest.cpp
+    DEPENDENCIES
+        gameLib
+)

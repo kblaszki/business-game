@@ -1,21 +1,36 @@
 #include <Game.hpp>
 #include <mocks/time/ClockMock.hpp>
 #include <mocks/window/WindowMock.hpp>
+#include <screen/ScreenStack.hpp>
 #include <time/FixedTimestep.hpp>
 #include <unit_tests/fakes/ScreenSpy.hpp>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <memory>
+
 using ::testing::InSequence;
 using ::testing::NiceMock;
 using ::testing::Return;
+
+namespace
+{
+ScreenSpy& pushSpy(ScreenStack& screens)
+{
+    auto spy = std::make_unique<ScreenSpy>();
+    ScreenSpy& screen = *spy;
+    screens.push(std::move(spy));
+    return screen;
+}
+}
 
 TEST(GameShould, closeWhenWindowReportsClosed)
 {
     WindowMock window;
     NiceMock<ClockMock> clock;
-    ScreenSpy screen;
+    ScreenStack screens;
+    pushSpy(screens);
     InSequence seq;
 
     EXPECT_CALL(window, isOpen()).WillOnce(Return(true));
@@ -26,14 +41,15 @@ TEST(GameShould, closeWhenWindowReportsClosed)
     EXPECT_CALL(window, display());
     EXPECT_CALL(window, isOpen()).WillOnce(Return(false));
 
-    Game{window, clock, screen}.run();
+    Game{window, clock, screens}.run();
 }
 
 TEST(GameShould, updateOnceWhenClockReturnsOneTick)
 {
     WindowMock window;
     ClockMock clock;
-    ScreenSpy screen;
+    ScreenStack screens;
+    ScreenSpy& screen = pushSpy(screens);
     InSequence seq;
 
     EXPECT_CALL(window, isOpen()).WillOnce(Return(true));
@@ -43,7 +59,7 @@ TEST(GameShould, updateOnceWhenClockReturnsOneTick)
     EXPECT_CALL(window, display());
     EXPECT_CALL(window, isOpen()).WillOnce(Return(false));
 
-    Game{window, clock, screen}.run();
+    Game{window, clock, screens}.run();
 
     EXPECT_EQ(screen.updateCount, 1u);
     EXPECT_EQ(screen.drawCount, 1u);

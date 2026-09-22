@@ -12,6 +12,7 @@ related_code:
   - src/window/WindowSFML.hpp
   - src/time/ClockSFML.hpp
   - src/screen/ScreenI.hpp
+  - src/screen/ScreenStack.hpp
   - .github/workflows/ci.yml
 related_docs:
   - ../how-to/build-and-test.md
@@ -71,7 +72,7 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280×720 window titled "Business game" opens (empty dummy screen). Close it with the window chrome. `main` constructs `WindowSFML`, `ClockSFML`, a file-local dummy `ScreenI`, and `Game`; the loop lives in `Game::run()`.
+A 1280×720 window titled "Business game" opens (empty dummy screen). Close it with the window chrome. `main` constructs `WindowSFML`, `ClockSFML`, a `ScreenStack` with a file-local dummy, and `Game`; the loop lives in `Game::run()`.
 
 ## Next steps
 

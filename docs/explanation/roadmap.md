@@ -8,6 +8,7 @@ related_code:
   - src/window/WindowI.hpp
   - src/time/ClockI.hpp
   - src/screen/ScreenI.hpp
+  - src/screen/ScreenStack.hpp
 related_docs:
   - ../reference/source-layout.md
   - ../../mvp/README.md
@@ -20,11 +21,11 @@ last_reviewed: 2026-09-22
 
 ## Where it is now
 
-A C++23 SFML 3.1 skeleton with a window port, clock, and `ScreenI`: CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, `Game` driving `WindowI` / `ClockI` / `ScreenI` (SFML adapters on the `game` executable), and windowless tests (`example_test`, `game_test`, `fixed_timestep_test`).
+A C++23 SFML 3.1 skeleton with a window port, clock, `ScreenI`, and `ScreenStack`: CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, `Game` driving `WindowI` / `ClockI` / `ScreenStack` (SFML adapters on the `game` executable), and windowless tests.
 
 Facts: [source-layout.md](../reference/source-layout.md). Prospective engine notes: [`mvp/01`–`09`](../../mvp/README.md). What already landed: [`mvp/10-engine-progress.md`](../../mvp/10-engine-progress.md).
 
-There is no menu, Arkanoid session, pause overlay, or screen stack in this tree.
+There is no menu, Arkanoid session, or pause overlay in this tree.
 
 ## Where it is going
 
