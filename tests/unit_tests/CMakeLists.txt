@@ -27,3 +27,10 @@ add_unit_test(game_test
     DEPENDENCIES
         gameLib
 )
+
+add_unit_test(fixed_timestep_test
+    SOURCES
+        FixedTimestepTest.cpp
+    DEPENDENCIES
+        gameLib
+)

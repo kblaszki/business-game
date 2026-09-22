@@ -30,3 +30,8 @@ void WindowSFML::display()
 {
     window.display();
 }
+
+void WindowSFML::draw(const sf::Drawable& drawable)
+{
+    window.draw(drawable);
+}

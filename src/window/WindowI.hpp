@@ -1,10 +1,12 @@
 #pragma once
 
+#include "DrawerI.hpp"
+
 #include <SFML/Window/Event.hpp>
 
 #include <optional>
 
-class WindowI
+class WindowI : public DrawerI
 {
 public:
     virtual ~WindowI() = default;

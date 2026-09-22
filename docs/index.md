@@ -48,7 +48,7 @@ flowchart TD
 | [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, gameLib, targets |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, skeleton, mvp |
 | [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | prospective engine plan |
-| [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | WindowI, slices, tree names |
+| [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | WindowI, ClockI, ScreenI, slices, tree names |
 
 `mvp/01`–`09` are prospective. Living engine progress is [`mvp/10-engine-progress.md`](../mvp/10-engine-progress.md). Current facts live in the Diátaxis pages above; prefer `src/` over chapter prose if they disagree.
 

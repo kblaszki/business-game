@@ -1,6 +1,6 @@
 # business-game
 
-A C++23 [SFML](https://www.sfml-dev.org/) 2D skeleton: `Game` on `WindowI`, a small `gameLib` type (`Example`), CMake presets, and windowless unit tests.
+A C++23 [SFML](https://www.sfml-dev.org/) 2D skeleton: `Game` on `WindowI`, `ClockI`, and `ScreenI`, a small `gameLib` type (`Example`), CMake presets, and windowless unit tests.
 
 Longer-term direction lives in [`mvp/`](mvp/README.md) (`01`–`09` prospect, [`10`](mvp/10-engine-progress.md) living); do not assume menu, Arkanoid, or board-game features exist in the code yet.
 
@@ -33,11 +33,13 @@ cd business-game
 
 | Path | Role |
 |------|------|
-| `src/main.cpp` | Wires `WindowSFML` and `Game` |
-| `src/Game.hpp` / `Game.cpp` | Process loop (`gameLib`); `WindowI&` |
-| `src/window/` | `WindowI` and `WindowSFML` (adapter on `game`) |
+| `src/main.cpp` | Wires `WindowSFML`, `ClockSFML`, dummy `ScreenI`, and `Game` |
+| `src/Game.hpp` / `Game.cpp` | Process loop (`gameLib`); `WindowI&`, `ClockI&`, `ScreenI&` |
+| `src/window/` | `WindowI` (`DrawerI`), `WindowSFML` (adapter on `game`) |
+| `src/time/` | `ClockI`, `ClockSFML` (on `game`), `FixedTimestep` |
+| `src/screen/` | `ScreenI` |
 | `src/Example.hpp` / `Example.cpp` | Windowless helper in `gameLib` |
-| `tests/unit_tests/` | Debug GoogleTest (`example_test`, `game_test`) |
+| `tests/unit_tests/` | Debug GoogleTest (`example_test`, `game_test`, `fixed_timestep_test`) |
 | `docs/` | Diátaxis documentation |
 | `mvp/` | Prospective design (`01`–`09`) and living progress (`10`) |
 
@@ -96,7 +98,7 @@ A 1280×720 window titled "Business game" opens. Close it with the window chrome
 
 ## Running the Tests
 
-Tests are available only for the **debug** preset. Suites: `example_test`, `game_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
+Tests are available only for the **debug** preset. Suites: `example_test`, `game_test`, `fixed_timestep_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
 
 ```sh
 cmake --preset debug

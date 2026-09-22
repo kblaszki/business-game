@@ -12,4 +12,5 @@ public:
     MOCK_METHOD((std::optional<sf::Event>), pollEvent, (), (override));
     MOCK_METHOD(void, clear, (), (override));
     MOCK_METHOD(void, display, (), (override));
+    MOCK_METHOD(void, draw, (const sf::Drawable&), (override));
 };

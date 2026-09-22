@@ -16,6 +16,7 @@ public:
     std::optional<sf::Event> pollEvent() override;
     void clear() override;
     void display() override;
+    void draw(const sf::Drawable& drawable) override;
 
 private:
     sf::RenderWindow window;
