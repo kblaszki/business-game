@@ -1,16 +1,16 @@
 #pragma once
 
-#include <SFML/Graphics/RectangleShape.hpp>
-
 #include <cstdint>
 #include <screen/ScreenI.hpp>
+#include <world/LevelId.hpp>
+#include <world/World.hpp>
 
 class ScreenStack;
 
 class GameplayScreen : public ScreenI
 {
 public:
-    explicit GameplayScreen(ScreenStack& screens);
+    explicit GameplayScreen(ScreenStack& screens, LevelId id = LevelId::Sandbox);
 
     bool handleEvent(const sf::Event& event) override;
     bool handleAction(Action action) override;
@@ -20,9 +20,9 @@ public:
     [[nodiscard]] bool blocksDraw() const override;
     [[nodiscard]] bool acceptsPauseOverlay() const override;
     [[nodiscard]] std::uint32_t tickCount() const;
+    [[nodiscard]] const World& world() const;
 
 private:
     ScreenStack& screens;
-    sf::RectangleShape dummy;
-    std::uint32_t ticks{0};
+    World simulated;
 };

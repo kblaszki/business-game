@@ -18,6 +18,7 @@ related_code:
   - src/input/Action.hpp
   - src/input/InputMapper.hpp
   - src/screen/PauseScreen.hpp
+  - src/world/World.hpp
   - .github/workflows/ci.yml
 related_docs:
   - ../how-to/build-and-test.md
@@ -79,8 +80,8 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280×720 window titled "Business game" opens on a menu bar. Enter (`Action::Confirm`) starts empty gameplay. Escape (or losing window focus) opens a dim pause overlay; Escape resumes, Enter on the overlay returns to the menu. Close the window with the chrome.
+A 1280×720 window titled "Business game" opens on a menu bar. Enter starts a wrapping dummy. Escape (or losing focus) pauses — the dummy freezes; Escape resumes, Enter on the overlay returns to the menu. Close the window with the chrome.
 
 ## Next steps
 
-Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Input: [../reference/input-and-events.md](../reference/input-and-events.md). Pause: [../reference/pause-overlay.md](../reference/pause-overlay.md).
+Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Input: [../reference/input-and-events.md](../reference/input-and-events.md). Pause: [../reference/pause-overlay.md](../reference/pause-overlay.md). World: [../reference/world-and-levels.md](../reference/world-and-levels.md).

@@ -1,13 +1,12 @@
 #include "GameplayScreen.hpp"
 
 #include <screen/ScreenStack.hpp>
+#include <world/LevelDescriptor.hpp>
 
-GameplayScreen::GameplayScreen(ScreenStack& screens)
+GameplayScreen::GameplayScreen(ScreenStack& screens, LevelId id)
     : screens{screens}
-    , dummy{{40.f, 40.f}}
+    , simulated{makeWorld(levelDescriptor(id))}
 {
-    dummy.setFillColor(sf::Color{220, 80, 60});
-    dummy.setPosition({0.f, 340.f});
 }
 
 bool GameplayScreen::handleEvent(const sf::Event&)
@@ -26,14 +25,14 @@ bool GameplayScreen::handleAction(Action action)
     return false;
 }
 
-void GameplayScreen::update(sf::Time)
+void GameplayScreen::update(sf::Time dt)
 {
-    ++ticks;
+    simulated.fixedUpdate(dt);
 }
 
 void GameplayScreen::draw(DrawerI& drawer)
 {
-    drawer.draw(dummy);
+    simulated.draw(drawer);
 }
 
 bool GameplayScreen::blocksUpdate() const
@@ -53,5 +52,10 @@ bool GameplayScreen::acceptsPauseOverlay() const
 
 std::uint32_t GameplayScreen::tickCount() const
 {
-    return ticks;
+    return simulated.tickCount();
+}
+
+const World& GameplayScreen::world() const
+{
+    return simulated;
 }

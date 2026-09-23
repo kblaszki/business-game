@@ -26,6 +26,13 @@ related_code:
   - ../src/input/Action.hpp
   - ../src/input/InputMapper.hpp
   - ../src/input/InputMapper.cpp
+  - ../src/world/LevelId.hpp
+  - ../src/world/LevelDescriptor.hpp
+  - ../src/world/LevelDescriptor.cpp
+  - ../src/world/GameObject.hpp
+  - ../src/world/GameObject.cpp
+  - ../src/world/World.hpp
+  - ../src/world/World.cpp
   - ../src/Game.hpp
   - ../src/Game.cpp
   - ../src/main.cpp
@@ -38,6 +45,8 @@ related_code:
   - ../tests/unit_tests/MenuGameplayTest.cpp
   - ../tests/unit_tests/InputMapperTest.cpp
   - ../tests/unit_tests/PauseOverlayTest.cpp
+  - ../tests/unit_tests/WorldTest.cpp
+  - ../tests/unit_tests/LevelDescriptorTest.cpp
   - ../tests/unit_tests/fakes/ScreenSpy.hpp
 ---
 
@@ -77,9 +86,9 @@ Check a box only after that slice is on `main`. Paths are what landed, not a pro
 | 4 | Main menu + gameplay screens | **done** | see below |
 | 5 | `InputMapper` + `Action` | **done** | see below |
 | 6 | Pause overlay | **done** | see below |
-| 7 | World, objects, levels | not-started | — |
+| 7 | World, objects, levels | **done** | see below |
 
-Next slice (World / objects / levels) starts only after names and signatures are agreed in chat. Do not invent them here.
+Playable engine slice (menu → dummy → pause → resume / quit) is in the tree. Further work (steering, second level, genre) starts only after names are agreed in chat.
 
 ### Slice 1 — window port (landed)
 
@@ -222,3 +231,26 @@ flowchart LR
 | [`src/screen/PauseScreen.hpp`](../src/screen/PauseScreen.hpp) / [`.cpp`](../src/screen/PauseScreen.cpp) | Overlay |
 | [`tests/unit_tests/PauseOverlayTest.cpp`](../tests/unit_tests/PauseOverlayTest.cpp) | `pause_overlay_test` |
 | [`docs/reference/pause-overlay.md`](../docs/reference/pause-overlay.md) | Overlay facts |
+
+### Slice 7 — World, objects, levels (landed)
+
+- [x] `GameObject` — concrete dummy; `{40,40}`; `{240,0}` px/s; wrap
+- [x] `World` — `spawn` / `fixedUpdate` / `draw(DrawerI&)`; no pause flag
+- [x] `LevelId::Sandbox` / `levelDescriptor` / `makeWorld`
+- [x] `GameplayScreen(ScreenStack&, LevelId)` owns `World`
+- [x] Pause freezes pose because `update` is not called
+- [x] `world_test`, `level_descriptor_test`
+
+```mermaid
+flowchart LR
+  Menu[MainMenuScreen] -->|Sandbox| Play[GameplayScreen]
+  Play --> World[World]
+  World --> Dummy[GameObject]
+```
+
+| Path | Role |
+|------|------|
+| [`src/world/World.hpp`](../src/world/World.hpp) / [`.cpp`](../src/world/World.cpp) | Sim owner |
+| [`src/world/GameObject.hpp`](../src/world/GameObject.hpp) / [`.cpp`](../src/world/GameObject.cpp) | Dummy |
+| [`src/world/LevelDescriptor.hpp`](../src/world/LevelDescriptor.hpp) / [`.cpp`](../src/world/LevelDescriptor.cpp) | Data + factory |
+| [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md) | Facts |

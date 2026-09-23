@@ -22,7 +22,7 @@ bool MainMenuScreen::handleAction(Action action)
 {
     if(action == Action::Confirm)
     {
-        screens.replace(std::make_unique<GameplayScreen>(screens));
+        screens.replace(std::make_unique<GameplayScreen>(screens, LevelId::Sandbox));
         return true;
     }
 

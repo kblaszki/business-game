@@ -66,3 +66,19 @@ add_unit_test(pause_overlay_test
         gameLib
         SFML::Graphics
 )
+
+add_unit_test(world_test
+    SOURCES
+        WorldTest.cpp
+    DEPENDENCIES
+        gameLib
+        SFML::Graphics
+)
+
+add_unit_test(level_descriptor_test
+    SOURCES
+        LevelDescriptorTest.cpp
+    DEPENDENCIES
+        gameLib
+        SFML::Graphics
+)

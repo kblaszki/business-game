@@ -7,6 +7,9 @@ add_library(gameLib
         screen/MainMenuScreen.cpp
         screen/GameplayScreen.cpp
         screen/PauseScreen.cpp
+        world/GameObject.cpp
+        world/World.cpp
+        world/LevelDescriptor.cpp
 )
 target_compile_features(gameLib PRIVATE cxx_std_23)
 target_compile_options(gameLib PRIVATE ${BASE_COMPILE_FLAGS})

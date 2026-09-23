@@ -14,15 +14,16 @@ related_code:
 related_docs:
   - input-and-events.md
   - source-layout.md
+  - world-and-levels.md
   - ../../mvp/05-pause.md
   - ../../mvp/10-engine-progress.md
 keywords: [pause, overlay, PauseScreen, requestPauseOverlay, FocusLost, blocksUpdate, blocksDraw]
-last_reviewed: 2026-09-22
+last_reviewed: 2026-09-23
 ---
 
 # Pause overlay
 
-Facts about the running tree. Prospective extras (World freeze, selectable pause rows, `timeScale`) stay in [`mvp/05-pause.md`](../../mvp/05-pause.md).
+Facts about the running tree. Prospective extras (selectable pause rows, `timeScale`) stay in [`mvp/05-pause.md`](../../mvp/05-pause.md). World pose freeze: [world-and-levels.md](world-and-levels.md).
 
 ## What pause is
 
@@ -30,7 +31,7 @@ Facts about the running tree. Prospective extras (World freeze, selectable pause
 
 | Query | `PauseScreen` | Meaning |
 |-------|---------------|---------|
-| `blocksUpdate()` | `true` | Stack updates the overlay and **stops**. `GameplayScreen::update` (and `tickCount`) does not run. |
+| `blocksUpdate()` | `true` | Stack updates the overlay and **stops**. `GameplayScreen::update` does not run, so `World::fixedUpdate` does not run. Pose and `tickCount` freeze. |
 | `blocksDraw()` | `false` | Gameplay still draws underneath a dim rectangle. |
 
 `Game` still polls every frame, including `Closed`. Overlay UI may run `PauseScreen::update` once per frame when the stack reports `blocksUpdate()`; that update is empty today.
@@ -75,4 +76,4 @@ Quit **must** be that FIFO pair. Only `replace` while the overlay is top would s
 
 ## Tests
 
-`pause_overlay_test` is windowless (links Graphics only because screens hold `RectangleShape`). It asserts frozen `tickCount`, two `draw` calls while paused, resume, quit-to-menu, single enqueue, and `FocusLost` via `Game` + mocks.
+`pause_overlay_test` is windowless. It asserts frozen `tickCount` **and** dummy pose, two `draw` calls while paused, resume (pose advances 4 px / tick), quit-to-menu, single enqueue, and `FocusLost` via `Game` + mocks.

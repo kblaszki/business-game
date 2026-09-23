@@ -19,7 +19,7 @@ related_docs:
 
 Chapters **01–09** are a **target design** (prospective). They are **not** rewritten when code lands.
 
-What exists in the tree is tracked in [10-engine-progress.md](10-engine-progress.md) (living) and in [`docs/`](../docs/index.md). In the tree: window port, clock, `ScreenStack`, `InputMapper` / `Action`, menu, empty gameplay, `PauseScreen`. There is no World.
+What exists in the tree is tracked in [10-engine-progress.md](10-engine-progress.md) (living) and in [`docs/`](../docs/index.md). In the tree: screens, pause overlay, `World` / wrapping dummy, `LevelId::Sandbox`.
 
 This folder is also the implementation plan for the first playable engine slice: **MainMenu → empty Gameplay → Pause overlay → resume or quit to menu**.
 
@@ -155,5 +155,5 @@ In-tree facts: [10-engine-progress.md](10-engine-progress.md). Snapshot for auth
 
 - Window size: `Game::DESIGN_SIZE` = 1280×720.
 - Entry: [`src/main.cpp`](../src/main.cpp) constructs `WindowSFML`, `ClockSFML`, `ScreenStack` (`MainMenuScreen`), and `Game`, then calls `run()`.
-- Tests: [`tests/unit_tests/`](../tests/unit_tests/) (`example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`). Windowless.
+- Tests: [`tests/unit_tests/`](../tests/unit_tests/) including `world_test`, `level_descriptor_test`, `pause_overlay_test`. Windowless.
 - Design size and the loop stay; later phases **extend** `Game::run()`, they do not replace the executable model.

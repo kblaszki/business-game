@@ -16,7 +16,7 @@ related_docs:
 
 # World and GameObject
 
-Target design. Nothing in this chapter describes types that exist on `main` today. The running tree still has only `Game` opening a 1280×720 window. When this slice is implemented later, `GameplayScreen` will own a `World`, and `World` will own `GameObject` instances.
+This chapter is **prospective**. What landed (`World`, concrete `GameObject`, wrap) is in [10-engine-progress.md](10-engine-progress.md) and [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md). Despawn, steering, and extra object types are **not** in the tree.
 
 Use the locked names from [README.md](README.md). Do not introduce `Scene`, `Entity`, `Actor`, `DummyObject`, `IManager`, or an ECS `Registry`.
 

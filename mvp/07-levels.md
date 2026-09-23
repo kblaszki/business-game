@@ -16,7 +16,7 @@ related_docs:
 
 # Levels as data
 
-This chapter is a **target design**. Nothing described here exists on `main` today. [`src/Game.cpp`](../src/Game.cpp) will still be an empty 1280×720 loop until the rollout in [09-rollout.md](09-rollout.md) lands. Wording is prospective: types **will** look like this; they are not in the tree yet.
+This chapter is **prospective**. What landed (`LevelId::Sandbox`, `levelDescriptor`, `makeWorld`) is in [10-engine-progress.md](10-engine-progress.md) and [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md). File levels and a second row are **not** in the tree.
 
 A level will be a **record of what to spawn**, not a screen subclass and not a runtime “level object” with its own `update`. `GameplayScreen` will stay the only playing `IScreen`. `LevelId` will select a `LevelDescriptor`. A small free function will turn that descriptor into a `World`. The playable slice will ship exactly one descriptor (`LevelId::Sandbox`). A later second level will be a second row of static data, not a second screen class.
 

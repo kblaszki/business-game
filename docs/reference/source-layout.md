@@ -27,6 +27,13 @@ related_code:
   - src/screen/GameplayScreen.cpp
   - src/screen/PauseScreen.hpp
   - src/screen/PauseScreen.cpp
+  - src/world/LevelId.hpp
+  - src/world/LevelDescriptor.hpp
+  - src/world/LevelDescriptor.cpp
+  - src/world/GameObject.hpp
+  - src/world/GameObject.cpp
+  - src/world/World.hpp
+  - src/world/World.cpp
   - src/Example.hpp
   - src/Example.cpp
   - CMakeLists.txt
@@ -40,6 +47,8 @@ related_code:
   - tests/unit_tests/MenuGameplayTest.cpp
   - tests/unit_tests/InputMapperTest.cpp
   - tests/unit_tests/PauseOverlayTest.cpp
+  - tests/unit_tests/WorldTest.cpp
+  - tests/unit_tests/LevelDescriptorTest.cpp
   - tests/mocks/window/WindowMock.hpp
   - tests/mocks/time/ClockMock.hpp
   - tests/unit_tests/fakes/ScreenSpy.hpp
@@ -47,11 +56,12 @@ related_code:
 related_docs:
   - input-and-events.md
   - pause-overlay.md
+  - world-and-levels.md
   - ../how-to/build-and-test.md
   - ../../mvp/README.md
   - ../../mvp/10-engine-progress.md
-keywords: [layout, directories, gameLib, game, targets, cmake sources, Example, WindowI, ClockI, ScreenI, ScreenStack, MainMenuScreen, PauseScreen, InputMapper, Action]
-last_reviewed: 2026-09-22
+keywords: [layout, directories, gameLib, game, targets, cmake sources, Example, WindowI, ClockI, ScreenI, ScreenStack, MainMenuScreen, PauseScreen, InputMapper, Action, World]
+last_reviewed: 2026-09-23
 ---
 
 # Source layout reference
@@ -72,8 +82,12 @@ last_reviewed: 2026-09-22
 | `src/time/FixedTimestep.hpp` | Drain helper (`tick` 1/60 s, cap 0.25 s) |
 | `src/screen/ScreenI.hpp` | Screen port + `acceptsPauseOverlay` / `isPauseOverlay` (default false) |
 | `src/screen/ScreenStack.hpp` / `ScreenStack.cpp` | Stack; `requestPauseOverlay`; `top()`; `handleAction` |
-| `src/screen/MainMenuScreen.hpp` / `.cpp` | `Action::Confirm` replaces with `GameplayScreen`; wide bar |
-| `src/screen/GameplayScreen.hpp` / `.cpp` | Empty play + `tickCount`; `Action::Pause` → overlay |
+| `src/screen/MainMenuScreen.hpp` / `.cpp` | `Action::Confirm` replaces with `GameplayScreen{Sandbox}` |
+| `src/screen/GameplayScreen.hpp` / `.cpp` | Owns `World` from `LevelId`; `update` → `fixedUpdate` |
+| `src/world/LevelId.hpp` | `Sandbox` |
+| `src/world/LevelDescriptor.hpp` / `.cpp` | `SpawnSpec`, `levelDescriptor`, `makeWorld` |
+| `src/world/GameObject.hpp` / `.cpp` | Concrete dummy; move + wrap |
+| `src/world/World.hpp` / `.cpp` | Owner + `fixedUpdate` / `draw`; no pause flag |
 | `src/screen/PauseScreen.hpp` / `.cpp` | Overlay; `blocksDraw` false; resume / quit-to-menu |
 | `src/Example.hpp` / `Example.cpp` | Windowless helper class in `gameLib` (`add`) |
 | `tests/mocks/window/` | `WindowMock` (gmock) |
@@ -83,9 +97,9 @@ last_reviewed: 2026-09-22
 
 ## Build targets
 
-- **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `input/InputMapper.cpp`, `screen/ScreenStack.cpp`, `MainMenuScreen.cpp`, `GameplayScreen.cpp`, `PauseScreen.cpp`, listed in `src/CMakeLists.txt`. C++23. Uses SFML **headers/defines** so ports can mention `sf::Event`, `sf::Time`, `sf::Drawable`, `sf::Vector2u`. Does **not** link SFML (no OpenGL in tests).
+- **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `input/InputMapper.cpp`, screen sources, `world/GameObject.cpp`, `World.cpp`, `LevelDescriptor.cpp`, listed in `src/CMakeLists.txt`. C++23. Uses SFML **headers/defines**. Does **not** link SFML (no OpenGL in tests).
 - **`game`** (executable) — `src/main.cpp`, `src/window/WindowSFML.cpp`, `src/time/ClockSFML.cpp`; links `gameLib` and SFML 3.1 Graphics/Window/System (audio and network are OFF in `cmake/FetchSFML.cmake`).
-- Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`. Suites that construct screens or `Game`/`ScreenStack` (which can `push` `PauseScreen`) also link `SFML::Graphics` (still no window) because those types hold `sf::RectangleShape`.
+- Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`. Suites that construct screens, `World`, or `GameObject` also link `SFML::Graphics` (still no window) because those types hold `sf::RectangleShape`.
 
 ## Adding a source file
 
