@@ -103,6 +103,16 @@ TEST(ScreenStackShould, ignorePauseOverlayRequestOnSpyOrEmpty)
     EXPECT_NE(dynamic_cast<ScreenSpy*>(screens.top()), nullptr);
 }
 
+TEST(ScreenStackShould, latchCloseRequested)
+{
+    ScreenStack screens;
+    EXPECT_FALSE(screens.closeRequested());
+    screens.requestClose();
+    EXPECT_TRUE(screens.closeRequested());
+    screens.requestClose();
+    EXPECT_TRUE(screens.closeRequested());
+}
+
 TEST(ScreenStackShould, noOpWhenEmpty)
 {
     ScreenStack screens;

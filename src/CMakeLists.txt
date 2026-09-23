@@ -7,6 +7,7 @@ add_library(gameLib
         screen/MainMenuScreen.cpp
         screen/GameplayScreen.cpp
         screen/PauseScreen.cpp
+        screen/UiFont.cpp
         world/GameObject.cpp
         world/World.cpp
         world/LevelDescriptor.cpp
@@ -18,8 +19,10 @@ target_compile_options(gameLib PRIVATE ${BASE_COMPILE_FLAGS})
 target_include_directories(gameLib PUBLIC
     $<TARGET_PROPERTY:SFML::Graphics,INTERFACE_INCLUDE_DIRECTORIES>
 )
+file(TO_CMAKE_PATH "${CMAKE_SOURCE_DIR}/resources" ASSET_DIR_NORM)
 target_compile_definitions(gameLib PUBLIC
     $<TARGET_PROPERTY:SFML::Graphics,INTERFACE_COMPILE_DEFINITIONS>
+    ASSET_DIR="${ASSET_DIR_NORM}"
 )
 
 add_executable(game

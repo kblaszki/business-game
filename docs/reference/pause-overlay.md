@@ -5,6 +5,8 @@ audience: [ai, human]
 related_code:
   - src/screen/PauseScreen.hpp
   - src/screen/PauseScreen.cpp
+  - src/screen/UiFont.hpp
+  - src/screen/UiFont.cpp
   - src/screen/ScreenI.hpp
   - src/screen/ScreenStack.hpp
   - src/screen/ScreenStack.cpp
@@ -64,7 +66,7 @@ Quit **must** be that FIFO pair. Only `replace` while the overlay is top would s
 
 `FocusGained` is consumed by `Game` and does **not** resume.
 
-`Action::Pause` on the menu is ignored (`handleAction` → `false`).
+`Action::Pause` on the menu is ignored (`handleAction` → `false`). Menu `Cancel` is process exit (`requestClose`), not this overlay.
 
 ## Focus is not an `Action`
 
@@ -72,8 +74,8 @@ Quit **must** be that FIFO pair. Only `replace` while the overlay is top would s
 
 ## Draw
 
-`Game` clears once. The overlay draws a full-`DESIGN_SIZE` dim `RectangleShape`. It must not `clear` the target. With `blocksDraw == false` the dummy stays visible.
+`Game` clears once. The overlay draws a full-`DESIGN_SIZE` dim `RectangleShape` plus `sf::Text` (`Paused`, `Esc — resume`, `Enter — quit to menu`) from `loadUiFont` (`resources/fonts/VCR_OSD_MONO_1.001.ttf`). It must not `clear` the target. With `blocksDraw == false` the dummy stays visible.
 
 ## Tests
 
-`pause_overlay_test` is windowless. It asserts frozen `tickCount` **and** dummy pose, two `draw` calls while paused, resume (pose advances 4 px / tick), quit-to-menu, single enqueue, and `FocusLost` via `Game` + mocks.
+`pause_overlay_test` is windowless. It asserts frozen `tickCount` **and** dummy pose, five `draw` calls while paused (dummy + dim + three labels), resume (pose advances 4 px / tick, Cancel does not `requestClose`), quit-to-menu, single enqueue, and `FocusLost` via `Game` + mocks.

@@ -21,6 +21,8 @@ public:
     void pop();
     void replace(std::unique_ptr<ScreenI> screen);
     void requestPauseOverlay();
+    void requestClose();
+    [[nodiscard]] bool closeRequested() const;
 
     bool handleEvent(const sf::Event& event);
     bool handleAction(Action action);
@@ -53,4 +55,5 @@ private:
     std::vector<Command> commands;
     bool dispatching{false};
     bool pauseQueued{false};
+    bool closeWanted{false};
 };

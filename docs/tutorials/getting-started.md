@@ -27,7 +27,7 @@ related_docs:
   - ../reference/pause-overlay.md
   - ../../mvp/10-engine-progress.md
 keywords: [setup, toolchain, build, run, msys2, ninja, cmake, first time]
-last_reviewed: 2026-09-22
+last_reviewed: 2026-09-23
 ---
 
 # Getting started
@@ -80,7 +80,7 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280×720 window titled "Business game" opens on a menu bar. Enter starts a wrapping dummy. Escape (or losing focus) pauses — the dummy freezes; Escape resumes, Enter on the overlay returns to the menu. Close the window with the chrome.
+A 1280×720 window titled "Business game" opens on a labeled menu. Enter starts a wrapping dummy. Backspace on the menu quits (same close path as the window chrome). Escape (or losing focus) pauses — the dummy freezes; Escape or Backspace resumes, Enter on the overlay returns to the menu.
 
 ## Next steps
 

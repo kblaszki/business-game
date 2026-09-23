@@ -1,7 +1,7 @@
 ---
 title: Engine implementation progress
 status: living
-last_reviewed: 2026-09-22
+last_reviewed: 2026-09-23
 related_docs:
   - README.md
   - 09-rollout.md
@@ -23,6 +23,8 @@ related_code:
   - ../src/screen/GameplayScreen.cpp
   - ../src/screen/PauseScreen.hpp
   - ../src/screen/PauseScreen.cpp
+  - ../src/screen/UiFont.hpp
+  - ../src/screen/UiFont.cpp
   - ../src/input/Action.hpp
   - ../src/input/InputMapper.hpp
   - ../src/input/InputMapper.cpp
@@ -87,8 +89,9 @@ Check a box only after that slice is on `main`. Paths are what landed, not a pro
 | 5 | `InputMapper` + `Action` | **done** | see below |
 | 6 | Pause overlay | **done** | see below |
 | 7 | World, objects, levels | **done** | see below |
+| 8 | Menu Cancel + labels | **done** | see below |
 
-Playable engine slice (menu → dummy → pause → resume / quit) is in the tree. Further work (steering, second level, genre) starts only after names are agreed in chat.
+Playable engine slice (menu → dummy → pause → resume / quit, Backspace quits the menu) is in the tree. Further work (steering, second level, genre) starts only after names are agreed in chat.
 
 ### Slice 1 — window port (landed)
 
@@ -254,3 +257,25 @@ flowchart LR
 | [`src/world/GameObject.hpp`](../src/world/GameObject.hpp) / [`.cpp`](../src/world/GameObject.cpp) | Dummy |
 | [`src/world/LevelDescriptor.hpp`](../src/world/LevelDescriptor.hpp) / [`.cpp`](../src/world/LevelDescriptor.cpp) | Data + factory |
 | [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md) | Facts |
+
+### Slice 8 — Menu Cancel + labels (landed)
+
+- [x] `Key::Backspace` → `Action::Cancel`
+- [x] `ScreenStack::requestClose` / `closeRequested`; `Game` closes after the pump
+- [x] Menu Cancel requests close; gameplay ignores Cancel
+- [x] Overlay Cancel still resumes (not process exit; not quit-to-menu)
+- [x] `loadUiFont` + `sf::Text` on menu and pause (`resources/fonts/VCR_OSD_MONO_1.001.ttf`)
+
+```mermaid
+flowchart LR
+  Backspace[Backspace] --> Cancel[Cancel]
+  Cancel --> Menu[MainMenuScreen]
+  Menu --> Req[requestClose]
+  Req --> Game[Game close]
+```
+
+| Path | Role |
+|------|------|
+| [`src/screen/ScreenStack.hpp`](../src/screen/ScreenStack.hpp) | `requestClose` |
+| [`src/screen/UiFont.hpp`](../src/screen/UiFont.hpp) / [`.cpp`](../src/screen/UiFont.cpp) | Font load |
+| [`docs/reference/input-and-events.md`](../docs/reference/input-and-events.md) | Binds + close |

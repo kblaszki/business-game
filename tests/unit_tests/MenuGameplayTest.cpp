@@ -76,3 +76,16 @@ TEST(MenuGameplayShould, ignoreNonEnterKeyOnMenu)
     EXPECT_EQ(screens.size(), 1u);
     EXPECT_NE(dynamic_cast<MainMenuScreen*>(screens.top()), nullptr);
 }
+
+TEST(MenuGameplayShould, requestCloseOnCancelAndStayOnMenu)
+{
+    ScreenStack screens;
+    screens.push(std::make_unique<MainMenuScreen>(screens));
+
+    EXPECT_FALSE(screens.closeRequested());
+    EXPECT_TRUE(screens.handleAction(Action::Cancel));
+
+    EXPECT_TRUE(screens.closeRequested());
+    EXPECT_EQ(screens.size(), 1u);
+    EXPECT_NE(dynamic_cast<MainMenuScreen*>(screens.top()), nullptr);
+}

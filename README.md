@@ -1,6 +1,6 @@
 # business-game
 
-A C++23 [SFML](https://www.sfml-dev.org/) 2D skeleton: `Game` on `WindowI`, `ClockI`, `ScreenStack`, and `InputMapper` / `Action`, with menu, a wrapping dummy in `World`, and a pause overlay, CMake presets, and windowless unit tests.
+A C++23 [SFML](https://www.sfml-dev.org/) 2D skeleton: `Game` on `WindowI`, `ClockI`, `ScreenStack`, and `InputMapper` / `Action`, with a labeled menu (Backspace quits), a wrapping dummy in `World`, and a pause overlay, CMake presets, and windowless unit tests.
 
 Longer-term direction lives in [`mvp/`](mvp/README.md) (`01`–`09` prospect, [`10`](mvp/10-engine-progress.md) living); do not assume Arkanoid or board-game features exist in the code yet.
 
@@ -37,7 +37,8 @@ cd business-game
 | `src/Game.hpp` / `Game.cpp` | Process loop (`gameLib`); `WindowI&`, `ClockI&`, `ScreenStack&` |
 | `src/window/` | `WindowI` (`DrawerI`), `WindowSFML` (adapter on `game`) |
 | `src/time/` | `ClockI`, `ClockSFML` (on `game`), `FixedTimestep` |
-| `src/screen/` | `ScreenI`, `ScreenStack`, `MainMenuScreen`, `GameplayScreen`, `PauseScreen` |
+| `src/screen/` | `ScreenI`, `ScreenStack`, `MainMenuScreen`, `GameplayScreen`, `PauseScreen`, `UiFont` |
+| `resources/fonts/` | UI TTF loaded by `loadUiFont` |
 | `src/world/` | `World`, `GameObject`, `LevelId`, `LevelDescriptor` |
 | `src/input/` | `Action`, `InputMapper` |
 | `src/Example.hpp` / `Example.cpp` | Windowless helper in `gameLib` |

@@ -82,7 +82,7 @@ TEST(PauseOverlayShould, freezeGameplayTicksAndStillDrawUnderneath)
 
     CountingDrawer drawer;
     screens.draw(drawer);
-    EXPECT_EQ(drawer.drawCount, 2u);
+    EXPECT_EQ(drawer.drawCount, 5u);
 }
 
 TEST(PauseOverlayShould, resumeOnPauseOrCancelAndTickAgain)
@@ -97,6 +97,7 @@ TEST(PauseOverlayShould, resumeOnPauseOrCancelAndTickAgain)
 
     EXPECT_EQ(screens.size(), 1u);
     EXPECT_EQ(screens.top(), &play);
+    EXPECT_FALSE(screens.closeRequested());
 
     screens.update(FixedTimestep::tick);
     EXPECT_EQ(play.tickCount(), 1u);

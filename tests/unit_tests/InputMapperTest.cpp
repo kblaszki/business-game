@@ -32,6 +32,12 @@ TEST(InputMapperShould, mapEscapeToPause)
     EXPECT_EQ(mapper.mapKeyPressed(sf::Keyboard::Key::Escape), Action::Pause);
 }
 
+TEST(InputMapperShould, mapBackspaceToCancel)
+{
+    const InputMapper mapper;
+    EXPECT_EQ(mapper.mapKeyPressed(sf::Keyboard::Key::Backspace), Action::Cancel);
+}
+
 TEST(InputMapperShould, ignoreUnmappedKeyReleasedAndClosed)
 {
     const InputMapper mapper;

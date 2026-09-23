@@ -19,7 +19,7 @@ related_docs:
 
 Chapters **01–09** are a **target design** (prospective). They are **not** rewritten when code lands.
 
-What exists in the tree is tracked in [10-engine-progress.md](10-engine-progress.md) (living) and in [`docs/`](../docs/index.md). In the tree: screens, pause overlay, `World` / wrapping dummy, `LevelId::Sandbox`.
+What exists in the tree is tracked in [10-engine-progress.md](10-engine-progress.md) (living) and in [`docs/`](../docs/index.md). In the tree: screens, pause overlay, `World` / wrapping dummy, `LevelId::Sandbox`, menu Cancel → `requestClose`.
 
 This folder is also the implementation plan for the first playable engine slice: **MainMenu → empty Gameplay → Pause overlay → resume or quit to menu**.
 
@@ -115,7 +115,7 @@ Chapters 01–09 were written in parallel. These resolutions win if a signature 
 - **Start play:** `MainMenuScreen` queues **`replace`** with `GameplayScreen{LevelId::Sandbox}` — never `push` (menu must not remain under play).
 - **Quit to menu:** while `PauseScreen` is top, queue **`pop` then `replace(MainMenuScreen)`**. A single `replace` would swap only the overlay.
 - **Resume:** `Action::Pause` or `Action::Cancel` on `PauseScreen` queues `pop`. **`Action::Confirm` on the overlay quits to menu**, not resume. The slice has no highlighted dual-purpose Confirm row.
-- **Escape:** `InputMapper` maps Escape to `Action::Pause` only. `Cancel` stays in the enum; the slice does not bind a key to it. If `Cancel` is delivered (later UI), `PauseScreen` treats it as resume.
+- **Escape:** `InputMapper` maps Escape to `Action::Pause` only. What landed: Backspace → `Cancel`; menu `requestClose`; overlay Cancel still resumes. See [10](10-engine-progress.md) / [`docs/reference/input-and-events.md`](../docs/reference/input-and-events.md).
 - **FocusLost:** `Game` consumes it and calls `ScreenStack::requestPauseOverlay()`. It is **not** mapped to `Action::Pause`. `FocusGained` does not auto-resume. The overlay request no-ops if pause is already top or gameplay is not top.
 - **Consume:** `IScreen::handleEvent` and `handleAction` return **`bool`** (`true` = stop the walk). Action dispatch does **not** use `blocksUpdate` as a cutoff; that flag is for `update` only.
 - **Time while paused:** do not add this frame’s `dt` to the world accumulator, and do not call `GameplayScreen::update` / `World::fixedUpdate`. Resume must not catch up missed time.

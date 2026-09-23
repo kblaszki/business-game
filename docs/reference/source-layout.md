@@ -27,6 +27,8 @@ related_code:
   - src/screen/GameplayScreen.cpp
   - src/screen/PauseScreen.hpp
   - src/screen/PauseScreen.cpp
+  - src/screen/UiFont.hpp
+  - src/screen/UiFont.cpp
   - src/world/LevelId.hpp
   - src/world/LevelDescriptor.hpp
   - src/world/LevelDescriptor.cpp
@@ -71,24 +73,26 @@ last_reviewed: 2026-09-23
 | Path | Responsibility |
 |------|----------------|
 | `src/main.cpp` | Constructs `WindowSFML`, `ClockSFML`, `ScreenStack` seeded with `MainMenuScreen`, and `Game`, then `run()` |
-| `src/Game.hpp` / `Game.cpp` | Process loop: Closed → `close()`, `FocusLost` → `requestPauseOverlay`, `FocusGained` no-op, else map → `handleAction` or `handleEvent`; drain unless top `blocksUpdate` |
+| `src/Game.hpp` / `Game.cpp` | Process loop: Closed → `close()`, `FocusLost` → `requestPauseOverlay`, `FocusGained` no-op, else map → `handleAction` or `handleEvent`; after the pump, `closeRequested()` → `close()`; drain unless top `blocksUpdate` |
 | `src/window/WindowI.hpp` | Window port (`DrawerI`): `isOpen`, `close`, `pollEvent`, `clear`, `display`, `draw` |
 | `src/window/DrawerI.hpp` | Draw seam: `draw(const sf::Drawable&)` |
 | `src/window/WindowSFML.hpp` / `WindowSFML.cpp` | Adapter on `sf::RenderWindow`; framerate 60; key repeat off. Compiled into executable `game` only |
 | `src/input/Action.hpp` | `enum class Action` (`Confirm`, `Cancel`, `Pause`) |
-| `src/input/InputMapper.hpp` / `.cpp` | `KeyPressed` → optional `Action` (`gameLib`) |
+| `src/input/InputMapper.hpp` / `.cpp` | `KeyPressed` → optional `Action` (Enter / Escape / Backspace) |
 | `src/time/ClockI.hpp` | Clock port: `restart`, `getElapsedTime` |
 | `src/time/ClockSFML.hpp` / `ClockSFML.cpp` | Adapter on `sf::Clock`. Compiled into executable `game` only |
 | `src/time/FixedTimestep.hpp` | Drain helper (`tick` 1/60 s, cap 0.25 s) |
 | `src/screen/ScreenI.hpp` | Screen port + `acceptsPauseOverlay` / `isPauseOverlay` (default false) |
-| `src/screen/ScreenStack.hpp` / `ScreenStack.cpp` | Stack; `requestPauseOverlay`; `top()`; `handleAction` |
-| `src/screen/MainMenuScreen.hpp` / `.cpp` | `Action::Confirm` replaces with `GameplayScreen{Sandbox}` |
+| `src/screen/ScreenStack.hpp` / `ScreenStack.cpp` | Stack; `requestPauseOverlay`; `requestClose` / `closeRequested`; `top()`; `handleAction` |
+| `src/screen/MainMenuScreen.hpp` / `.cpp` | Confirm → `GameplayScreen{Sandbox}`; Cancel → `requestClose`; labels |
+| `src/screen/UiFont.hpp` / `.cpp` | `loadUiFont` / `makeUiFont` from `resources/fonts/VCR_OSD_MONO_1.001.ttf` (`ASSET_DIR`) |
+| `resources/fonts/` | UI TTF files (not FetchContent) |
 | `src/screen/GameplayScreen.hpp` / `.cpp` | Owns `World` from `LevelId`; `update` → `fixedUpdate` |
 | `src/world/LevelId.hpp` | `Sandbox` |
 | `src/world/LevelDescriptor.hpp` / `.cpp` | `SpawnSpec`, `levelDescriptor`, `makeWorld` |
 | `src/world/GameObject.hpp` / `.cpp` | Concrete dummy; move + wrap |
 | `src/world/World.hpp` / `.cpp` | Owner + `fixedUpdate` / `draw`; no pause flag |
-| `src/screen/PauseScreen.hpp` / `.cpp` | Overlay; `blocksDraw` false; resume / quit-to-menu |
+| `src/screen/PauseScreen.hpp` / `.cpp` | Overlay; labels; `blocksDraw` false; resume / quit-to-menu |
 | `src/Example.hpp` / `Example.cpp` | Windowless helper class in `gameLib` (`add`) |
 | `tests/mocks/window/` | `WindowMock` (gmock) |
 | `tests/mocks/time/` | `ClockMock` (gmock) |
@@ -97,7 +101,7 @@ last_reviewed: 2026-09-23
 
 ## Build targets
 
-- **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `input/InputMapper.cpp`, screen sources, `world/GameObject.cpp`, `World.cpp`, `LevelDescriptor.cpp`, listed in `src/CMakeLists.txt`. C++23. Uses SFML **headers/defines**. Does **not** link SFML (no OpenGL in tests).
+- **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `input/InputMapper.cpp`, screen sources including `UiFont.cpp`, `world/GameObject.cpp`, `World.cpp`, `LevelDescriptor.cpp`, listed in `src/CMakeLists.txt`. C++23. Uses SFML **headers/defines**. Does **not** link SFML (no OpenGL in tests). `ASSET_DIR` points at `resources/`.
 - **`game`** (executable) — `src/main.cpp`, `src/window/WindowSFML.cpp`, `src/time/ClockSFML.cpp`; links `gameLib` and SFML 3.1 Graphics/Window/System (audio and network are OFF in `cmake/FetchSFML.cmake`).
 - Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`. Suites that construct screens, `World`, or `GameObject` also link `SFML::Graphics` (still no window) because those types hold `sf::RectangleShape`.
 

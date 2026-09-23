@@ -18,6 +18,8 @@ std::optional<Action> InputMapper::mapKeyPressed(sf::Keyboard::Key key) const
             return Action::Confirm;
         case sf::Keyboard::Key::Escape:
             return Action::Pause;
+        case sf::Keyboard::Key::Backspace:
+            return Action::Cancel;
         default:
             return std::nullopt;
     }

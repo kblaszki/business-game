@@ -16,7 +16,7 @@ related_docs:
 
 # Events and input
 
-This chapter is **prospective**. What landed (`Action`, `InputMapper`, Closed \| map \| `handleEvent`) is in [10-engine-progress.md](10-engine-progress.md) and [`docs/reference/input-and-events.md`](../docs/reference/input-and-events.md). The target design below still describes FocusLost pause, hold poll, and remap UI that are **not** in the tree.
+This chapter is **prospective**. What landed (`Action`, `InputMapper`, Closed \| map \| `handleEvent`, Backspace → `Cancel`, `requestClose`) is in [10-engine-progress.md](10-engine-progress.md) and [`docs/reference/input-and-events.md`](../docs/reference/input-and-events.md). Rows below that still say Cancel is unbound describe the old target, not the tree.
 
 SFML is fetched at `GIT_TAG 3.1.0` ([`cmake/FetchSFML.cmake`](../cmake/FetchSFML.cmake)). Graphics, Window, and System only; no Audio or Network. Joystick, sensor, and text-entry events exist on the Window module and will be ignored for this slice.
 

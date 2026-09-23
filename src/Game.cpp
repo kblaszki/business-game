@@ -40,6 +40,11 @@ void Game::run()
             }
         }
 
+        if(screens.closeRequested())
+        {
+            window.close();
+        }
+
         if(!screens.blocksUpdate())
         {
             const std::uint32_t steps = timestep.drain(dt);

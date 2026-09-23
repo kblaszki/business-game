@@ -27,7 +27,7 @@ last_reviewed: 2026-09-23
 
 ## Where it is now
 
-A C++23 SFML 3.1 skeleton with window, clock, screens, pause overlay, and a `World` of one wrapping dummy spawned from `LevelId::Sandbox`. CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, windowless tests.
+A C++23 SFML 3.1 skeleton with window, clock, labeled screens, pause overlay, menu Cancel → `requestClose`, and a `World` of one wrapping dummy spawned from `LevelId::Sandbox`. CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, windowless tests.
 
 Facts: [source-layout.md](../reference/source-layout.md). Prospective engine notes: [`mvp/01`–`09`](../../mvp/README.md). What already landed: [`mvp/10-engine-progress.md`](../../mvp/10-engine-progress.md).
 

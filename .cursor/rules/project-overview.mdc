@@ -19,7 +19,8 @@ C++23 SFML 2D skeleton: `Game` runs against `WindowI`, `ClockI`, and `ScreenStac
 - `src/Game.hpp` / `Game.cpp` — process loop (`gameLib`)
 - `src/window/` — `WindowI` (extends `DrawerI`), `WindowSFML` (`WindowSFML.cpp` on executable `game`)
 - `src/time/` — `ClockI`, `ClockSFML` (on `game`), `FixedTimestep`
-- `src/screen/` — `ScreenI`, `ScreenStack`, `MainMenuScreen`, `GameplayScreen`, `PauseScreen`
+- `src/screen/` — `ScreenI`, `ScreenStack`, `MainMenuScreen`, `GameplayScreen`, `PauseScreen`, `UiFont`
+- `resources/fonts/` — UI TTF (`loadUiFont`)
 - `src/world/` — `World`, `GameObject`, `LevelId`, `LevelDescriptor`
 - `src/input/` — `Action`, `InputMapper`
 - `src/Example.hpp` / `Example.cpp` — `gameLib`
@@ -46,7 +47,8 @@ Binary: `build/<preset>/bin/game` (`.exe` on Windows).
 - `gameLib` does not **link** SFML (headers/defines only); the `game` executable links Graphics/Window/System. Tests that construct screens or `Game`/`ScreenStack` also link Graphics because those types hold `sf::RectangleShape` (still no window).
 - Interfaces use the `FooI` suffix (`WindowI`, `ClockI`, `DrawerI`, `ScreenI`)
 - `ScreenI::draw` takes `DrawerI&`, not `sf::RenderTarget&`. Screens must not `close()` the window
-- `Game` pump: `Closed` | `FocusLost` → `requestPauseOverlay` | `FocusGained` no-op | map → `handleAction` | leftover `handleEvent`
+- `Game` pump: `Closed` | `FocusLost` → `requestPauseOverlay` | `FocusGained` no-op | map → `handleAction` | leftover `handleEvent`; after pump, `closeRequested()` → `window.close()`
 - `PauseScreen` is the only overlay (`blocksDraw` false). Request it only through `ScreenStack::requestPauseOverlay`
+- Menu `Cancel` (Backspace) is `requestClose`; overlay `Cancel` is resume. Screens must not `close()` the window
 - `ScreenStack::push`/`pop`/`replace` apply immediately when idle, and after `draw` when a walk is in progress
 - Design notes: `mvp/01`–`09` (prospect). Tree names and slices: `mvp/10-engine-progress.md`

@@ -12,6 +12,8 @@ related_code:
   - src/screen/ScreenStack.hpp
   - src/screen/ScreenStack.cpp
   - src/screen/MainMenuScreen.cpp
+  - src/screen/UiFont.hpp
+  - src/screen/UiFont.cpp
   - src/screen/GameplayScreen.cpp
   - src/screen/PauseScreen.cpp
   - src/window/WindowSFML.cpp
@@ -25,7 +27,7 @@ related_docs:
   - ../../mvp/03-events-and-input.md
   - ../../mvp/10-engine-progress.md
 keywords: [input, Action, InputMapper, handleAction, SFML events, KeyPressed, remap, Key, Scancode]
-last_reviewed: 2026-09-22
+last_reviewed: 2026-09-23
 ---
 
 # Input and events
@@ -92,7 +94,7 @@ flowchart TD
   HasAction -->|no| StackEvent
 ```
 
-`InputMapper` is a value member of `Game`. Screens never call `pollEvent` and never `close()` the window.
+`InputMapper` is a value member of `Game`. Screens never call `pollEvent` and never `close()` the window. Menu quit is `ScreenStack::requestClose()`; `Game` calls `window.close()` after the event pump if `closeRequested()`.
 
 ## `Action` and the binding table
 
@@ -104,9 +106,10 @@ enum class Action { Confirm, Cancel, Pause };
 |----------------|--------|
 | `Enter` | `Confirm` (SFML 3 `Key::Enter` is the labeled Enter/Return; physical numpad Enter is `Scancode::NumpadEnter`, unused here) |
 | `Escape` | `Pause` |
+| `Backspace` | `Cancel` |
 | anything else | `nullopt` → `handleEvent` |
 
-`Cancel` is in the enum and **unbound** on the mapper. `GameplayScreen::handleAction(Pause)` calls `requestPauseOverlay()`. Overlay `Pause` / `Cancel` resume; `Confirm` quits to menu. `MainMenuScreen::handleAction(Confirm)` `replace`s with `GameplayScreen`.
+`GameplayScreen::handleAction(Pause)` calls `requestPauseOverlay()`. Overlay `Pause` / `Cancel` resume; `Confirm` quits to menu. Overlay Cancel does **not** request process exit. `MainMenuScreen::handleAction(Confirm)` `replace`s with `GameplayScreen`. `MainMenuScreen::handleAction(Cancel)` calls `requestClose()`. Gameplay ignores Cancel.
 
 `mapEvent` only unwraps `KeyPressed` and delegates to `mapKeyPressed`. Lifecycle events passed in by mistake yield `nullopt`.
 

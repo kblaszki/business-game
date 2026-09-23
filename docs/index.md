@@ -16,7 +16,7 @@ related_docs:
   - ../mvp/README.md
   - ../mvp/10-engine-progress.md
 keywords: [documentation, diataxis, index, map, navigation, docs]
-last_reviewed: 2026-09-22
+last_reviewed: 2026-09-23
 ---
 
 # Documentation map
@@ -54,7 +54,7 @@ flowchart TD
 | [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, GameObject, LevelId, wrap |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, skeleton, mvp |
 | [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | prospective engine plan |
-| [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | WindowI, PauseScreen, World, slices |
+| [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | WindowI, PauseScreen, World, requestClose, slices |
 
 `mvp/01`–`09` are prospective. Living engine progress is [`mvp/10-engine-progress.md`](../mvp/10-engine-progress.md). Current facts live in the Diátaxis pages above; prefer `src/` over chapter prose if they disagree.
 

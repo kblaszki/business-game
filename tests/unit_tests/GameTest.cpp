@@ -8,6 +8,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
+#include <screen/MainMenuScreen.hpp>
 #include <screen/ScreenStack.hpp>
 #include <time/FixedTimestep.hpp>
 
@@ -46,6 +47,30 @@ TEST(GameShould, closeWhenWindowReportsClosed)
 
     EXPECT_EQ(screen.handleEventCount, 0u);
     EXPECT_EQ(screen.handleActionCount, 0u);
+}
+
+TEST(GameShould, closeWhenMenuCancelIsMapped)
+{
+    WindowMock window;
+    NiceMock<ClockMock> clock;
+    ScreenStack screens;
+    screens.push(std::make_unique<MainMenuScreen>(screens));
+    InSequence seq;
+
+    sf::Event::KeyPressed pressed{};
+    pressed.code = sf::Keyboard::Key::Backspace;
+
+    EXPECT_CALL(window, isOpen()).WillOnce(Return(true));
+    EXPECT_CALL(window, pollEvent()).WillOnce(Return(sf::Event{pressed}));
+    EXPECT_CALL(window, pollEvent()).WillOnce(Return(std::optional<sf::Event>{}));
+    EXPECT_CALL(window, close());
+    EXPECT_CALL(window, clear());
+    EXPECT_CALL(window, display());
+    EXPECT_CALL(window, isOpen()).WillOnce(Return(false));
+
+    Game{window, clock, screens}.run();
+
+    EXPECT_TRUE(screens.closeRequested());
 }
 
 TEST(GameShould, routeEnterToHandleActionNotHandleEvent)

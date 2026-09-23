@@ -16,7 +16,7 @@ related_docs:
 
 # Playable slice: player-visible acceptance
 
-This chapter is the **acceptance contract** for the first player-visible engine slice. The other `mvp/` chapters describe how the layers will be built; this one states what a human must be able to **see and do** once those layers exist. It is target design, not a description of [`src/Game.cpp`](../src/Game.cpp) today.
+This chapter is **prospective**. What landed (menu → dummy → pause, Backspace Cancel, labels) is in [10-engine-progress.md](10-engine-progress.md) and [`docs/`](../docs/index.md). Overlay Cancel in the tree is **resume**, not quit-to-menu (that is Confirm). The rest of this file stays target wording.
 
 Today, `Game::run()` opens a 1280×720 window titled `"Business game"`, polls `sf::Event::Closed`, clears, and displays. After this slice is implemented, the same `Game::run()` will still own that window, but the first frame will show `MainMenuScreen` on `ScreenStack` instead of an empty clear.
 

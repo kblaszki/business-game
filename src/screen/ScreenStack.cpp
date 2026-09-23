@@ -35,6 +35,16 @@ void ScreenStack::requestPauseOverlay()
     push(std::make_unique<PauseScreen>(*this));
 }
 
+void ScreenStack::requestClose()
+{
+    closeWanted = true;
+}
+
+bool ScreenStack::closeRequested() const
+{
+    return closeWanted;
+}
+
 bool ScreenStack::handleEvent(const sf::Event& event)
 {
     dispatching = true;

@@ -1,6 +1,8 @@
 #pragma once
 
+#include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 #include <screen/ScreenI.hpp>
 
@@ -20,5 +22,9 @@ public:
 
 private:
     ScreenStack& screens;
+    sf::Font font;
     sf::RectangleShape startBar;
+    sf::Text title;
+    sf::Text startHint;
+    sf::Text quitHint;
 };
