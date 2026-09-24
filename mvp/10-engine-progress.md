@@ -37,6 +37,8 @@ related_code:
   - ../src/world/BreakoutArt.hpp
   - ../src/world/World.hpp
   - ../src/world/World.cpp
+  - ../src/world/PowerUp.hpp
+  - ../src/world/PowerUp.cpp
   - ../src/Game.hpp
   - ../src/Game.cpp
   - ../src/main.cpp
@@ -93,8 +95,9 @@ Check a box only after that slice is on `main`. Paths are what landed, not a pro
 | 7 | World, objects, levels | **done** | see below |
 | 8 | Menu Cancel + labels | **done** | see below |
 | 9 | Classic breakout | **done** | see below |
+| 10 | Stages + power-ups | **done** | see below |
 
-One breakout stage is in the tree (menu Start/Quit → play → pause → win/lose). Power-ups and a second stage start only after names are agreed in chat.
+Three stages and four power-ups are wired in `World` (menu Start → Stage1 → Stage2 → Stage3; donor capsules; timed Wide/Slow). `01`–`09` stay prospective design notes.
 
 ### Slice 1 — window port (landed)
 
@@ -295,3 +298,20 @@ flowchart LR
 |------|------|
 | [`src/world/World.hpp`](../src/world/World.hpp) | Breakout sim |
 | [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md) | Facts |
+
+### Slice 10 — Stages and power-ups (landed)
+
+- [x] `World` owns `std::vector<Ball>` and `std::vector<PowerUp>`; `ball()` is the first ball
+- [x] Donor bricks (`index % 4 == 0`); kind cycles Wide, MultiBall, Slow, ExtraLife
+- [x] Catch applies one timed effect (Wide / Slow share 8 s); MultiBall extras; ExtraLife
+- [x] Miss = all balls off the bottom; some fallen balls are erased without a life loss
+- [x] `GameplayScreen` advances Stage1→Stage2→Stage3 keeping score/lives; only Stage3 shows You win
+- [x] HUD third label is `activePowerUpName()`; lose / Stage3 Confirm still retries that level
+
+| Path | Role |
+|------|------|
+| [`src/world/World.hpp`](../src/world/World.hpp) / [`.cpp`](../src/world/World.cpp) | Many balls, capsules, `applyPowerUp` |
+| [`src/world/PowerUp.hpp`](../src/world/PowerUp.hpp) | Capsule type |
+| [`src/screen/GameplayScreen.hpp`](../src/screen/GameplayScreen.hpp) / [`.cpp`](../src/screen/GameplayScreen.cpp) | Stage advance + power HUD |
+| [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md) | Stage + ball facts |
+| [`docs/reference/power-ups.md`](../docs/reference/power-ups.md) | Spawn / catch / effects |

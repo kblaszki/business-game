@@ -1,10 +1,10 @@
 #include "PowerUp.hpp"
 
-#include <Game.hpp>
-#include <time/FixedTimestep.hpp>
-
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Image.hpp>
+
+#include <Game.hpp>
+#include <time/FixedTimestep.hpp>
 
 namespace
 {
@@ -14,14 +14,14 @@ sf::Color tintFor(PowerUpKind kind)
 {
     switch(kind)
     {
-    case PowerUpKind::Wide:
-        return {240, 210, 90};
-    case PowerUpKind::MultiBall:
-        return {80, 200, 230};
-    case PowerUpKind::Slow:
-        return {90, 140, 240};
-    case PowerUpKind::ExtraLife:
-        return {80, 200, 90};
+        case PowerUpKind::Wide:
+            return {240, 210, 90};
+        case PowerUpKind::MultiBall:
+            return {80, 200, 230};
+        case PowerUpKind::Slow:
+            return {90, 140, 240};
+        case PowerUpKind::ExtraLife:
+            return {80, 200, 90};
     }
     return sf::Color::White;
 }

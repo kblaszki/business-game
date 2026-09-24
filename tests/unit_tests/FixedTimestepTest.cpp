@@ -1,6 +1,5 @@
-#include <time/FixedTimestep.hpp>
-
 #include <gtest/gtest.h>
+#include <time/FixedTimestep.hpp>
 
 TEST(FixedTimestepShould, drainOneTickFromExactTick)
 {

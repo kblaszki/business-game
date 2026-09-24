@@ -1,9 +1,8 @@
-#include <gtest/gtest.h>
-#include <world/LevelDescriptor.hpp>
-
 #include <algorithm>
 #include <cstdint>
+#include <gtest/gtest.h>
 #include <span>
+#include <world/LevelDescriptor.hpp>
 
 namespace
 {

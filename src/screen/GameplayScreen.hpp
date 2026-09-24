@@ -6,6 +6,7 @@
 
 #include <cstdint>
 #include <screen/ScreenI.hpp>
+#include <string>
 #include <world/LevelId.hpp>
 #include <world/World.hpp>
 
@@ -24,12 +25,16 @@ public:
     [[nodiscard]] bool blocksDraw() const override;
     [[nodiscard]] bool acceptsPauseOverlay() const override;
     [[nodiscard]] std::uint32_t tickCount() const;
+    [[nodiscard]] LevelId levelId() const;
+    [[nodiscard]] std::string bannerTitleText() const;
+    [[nodiscard]] World& world();
     [[nodiscard]] const World& world() const;
 
 private:
     void applyPaddleInput();
     void refreshHud();
     void restart();
+    void advanceStage();
 
     ScreenStack& screens;
     LevelId level;
@@ -37,6 +42,7 @@ private:
     sf::Font font;
     sf::Text scoreLabel;
     sf::Text livesLabel;
+    sf::Text powerLabel;
     sf::RectangleShape banner;
     sf::Text bannerTitle;
     sf::Text bannerHint;

@@ -1,7 +1,6 @@
 #include "LevelDescriptor.hpp"
 
 #include <Game.hpp>
-
 #include <array>
 
 namespace

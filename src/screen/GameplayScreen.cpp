@@ -26,12 +26,14 @@ GameplayScreen::GameplayScreen(ScreenStack& screens, LevelId id)
     , font{makeUiFont()}
     , scoreLabel{font, "Score 0", 22}
     , livesLabel{font, "Lives 3", 22}
+    , powerLabel{font, "", 22}
     , banner{{640.f, 180.f}}
     , bannerTitle{font, "", 40}
     , bannerHint{font, "Enter - retry   Backspace - menu", 20}
 {
     placeHud(scoreLabel, 32.f, 16.f);
     placeHud(livesLabel, 1040.f, 16.f);
+    placeHud(powerLabel, 560.f, 16.f);
     banner.setFillColor(sf::Color{10, 10, 18, 210});
     banner.setPosition({320.f, 260.f});
     bannerTitle.setFillColor(sf::Color{255, 230, 140});
@@ -57,14 +59,19 @@ void GameplayScreen::refreshHud()
 {
     scoreLabel.setString("Score " + std::to_string(simulated.score()));
     livesLabel.setString("Lives " + std::to_string(simulated.lives()));
+    powerLabel.setString(simulated.activePowerUpName());
 
-    if(simulated.won())
+    if(simulated.won() && level == LevelId::Stage3)
     {
         bannerTitle.setString("You win");
     }
     else if(simulated.lost())
     {
         bannerTitle.setString("You lose");
+    }
+    else
+    {
+        bannerTitle.setString("");
     }
 
     if(simulated.won() || simulated.lost())
@@ -87,6 +94,17 @@ void GameplayScreen::restart()
     rightHeld = false;
     applyPaddleInput();
     refreshHud();
+}
+
+void GameplayScreen::advanceStage()
+{
+    const auto savedScore = simulated.score();
+    const auto savedLives = simulated.lives();
+    level = (level == LevelId::Stage1) ? LevelId::Stage2 : LevelId::Stage3;
+    simulated = makeWorld(levelDescriptor(level));
+    simulated.setScore(savedScore);
+    simulated.setLives(savedLives);
+    applyPaddleInput();
 }
 
 bool GameplayScreen::handleEvent(const sf::Event& event)
@@ -161,6 +179,10 @@ bool GameplayScreen::handleAction(Action action)
 void GameplayScreen::update(sf::Time dt)
 {
     simulated.fixedUpdate(dt);
+    if(simulated.won() && (level == LevelId::Stage1 || level == LevelId::Stage2))
+    {
+        advanceStage();
+    }
     refreshHud();
 }
 
@@ -169,6 +191,7 @@ void GameplayScreen::draw(DrawerI& drawer)
     simulated.draw(drawer);
     drawer.draw(scoreLabel);
     drawer.draw(livesLabel);
+    drawer.draw(powerLabel);
     if(simulated.won() || simulated.lost())
     {
         drawer.draw(banner);
@@ -195,6 +218,21 @@ bool GameplayScreen::acceptsPauseOverlay() const
 std::uint32_t GameplayScreen::tickCount() const
 {
     return simulated.tickCount();
+}
+
+LevelId GameplayScreen::levelId() const
+{
+    return level;
+}
+
+std::string GameplayScreen::bannerTitleText() const
+{
+    return bannerTitle.getString().toAnsiString();
+}
+
+World& GameplayScreen::world()
+{
+    return simulated;
 }
 
 const World& GameplayScreen::world() const

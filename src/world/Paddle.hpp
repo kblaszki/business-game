@@ -12,6 +12,7 @@ public:
     Paddle(sf::Vector2f position, const sf::Texture& texture);
 
     void setSpeed(float pxPerSec);
+    void setDisplayWidth(float width);
     void fixedUpdate(sf::Time tick);
     void draw(DrawerI& drawer) const;
     [[nodiscard]] sf::Vector2f position() const;

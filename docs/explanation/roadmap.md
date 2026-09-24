@@ -27,11 +27,11 @@ last_reviewed: 2026-09-24
 
 ## Where it is now
 
-A C++23 SFML 3.1 breakout on the engine skeleton: Start/Quit menu, one `Stage1` world (paddle, ball, bricks), pause overlay, windowless tests.
+A C++23 SFML 3.1 breakout on the engine skeleton: Start/Quit menu, three stages (`Stage1` → `Stage2` → `Stage3`), four power-ups in play (Wide, MultiBall, Slow, ExtraLife), pause overlay, windowless tests.
 
 Facts: [source-layout.md](../reference/source-layout.md). Prospective engine notes: [`mvp/01`–`09`](../../mvp/README.md). What already landed: [`mvp/10-engine-progress.md`](../../mvp/10-engine-progress.md).
 
-There is one breakout stage. No power-ups and no second `LevelId`.
+Three breakout stages are in the tree. The four power-up kinds spawn from donor bricks and apply in `World`.
 
 ## Where it is going
 

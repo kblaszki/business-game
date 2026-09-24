@@ -9,6 +9,11 @@ namespace
 {
 constexpr float launchX{160.f};
 constexpr float launchY{-360.f};
+constexpr float defaultPaddleWidth{120.f};
+constexpr float widePaddleWidth{200.f};
+constexpr float slowFactor{0.6f};
+constexpr float multiSpread{120.f};
+constexpr std::uint32_t timedTicks{480};
 
 bool overlaps(sf::Vector2f center, float radius, sf::Vector2f pos, sf::Vector2f size)
 {
@@ -19,16 +24,27 @@ bool overlaps(sf::Vector2f center, float radius, sf::Vector2f pos, sf::Vector2f 
     return dx * dx + dy * dy <= radius * radius;
 }
 
+bool aabbOverlap(sf::Vector2f aPos, sf::Vector2f aSize, sf::Vector2f bPos, sf::Vector2f bSize)
+{
+    return aPos.x < bPos.x + bSize.x && aPos.x + aSize.x > bPos.x && aPos.y < bPos.y + bSize.y
+           && aPos.y + aSize.y > bPos.y;
+}
+
 sf::Vector2f launchVelocity()
 {
     return {launchX, launchY};
 }
+
+bool offScreen(const Ball& sphere)
+{
+    return sphere.position().y >= static_cast<float>(Game::DESIGN_SIZE.y);
+}
 } // namespace
 
 World::World()
-    : bat{{(static_cast<float>(Game::DESIGN_SIZE.x) - 120.f) * 0.5f, 680.f}, art.paddle}
-    , sphere{{0.f, 0.f}, art.ball}
+    : bat{{(static_cast<float>(Game::DESIGN_SIZE.x) - defaultPaddleWidth) * 0.5f, 680.f}, art.paddle}
 {
+    spheres.emplace_back(sf::Vector2f{0.f, 0.f}, art.ball);
     stickBallToPaddle();
 }
 
@@ -39,20 +55,39 @@ void World::setPaddleSpeed(float pxPerSec)
 
 void World::launch()
 {
-    if(!sphere.stuck() || won() || lost())
+    if(won() || lost())
     {
         return;
     }
 
-    sphere.setStuck(false);
-    sphere.setVelocity(launchVelocity());
+    for(auto& sphere: spheres)
+    {
+        if(!sphere.stuck())
+        {
+            continue;
+        }
+
+        sphere.setStuck(false);
+        auto vel = launchVelocity();
+        if(slowActive)
+        {
+            vel *= slowFactor;
+        }
+        sphere.setVelocity(vel);
+        return;
+    }
 }
 
 void World::placeBall(sf::Vector2f position, sf::Vector2f velocity, bool stuck)
 {
-    sphere.setPosition(position);
-    sphere.setVelocity(velocity);
-    sphere.setStuck(stuck);
+    if(spheres.empty())
+    {
+        spheres.emplace_back(position, art.ball);
+    }
+
+    spheres.front().setPosition(position);
+    spheres.front().setVelocity(velocity);
+    spheres.front().setStuck(stuck);
 }
 
 void World::addBrick(sf::Vector2f position, sf::Color tint)
@@ -60,25 +95,94 @@ void World::addBrick(sf::Vector2f position, sf::Color tint)
     bricks.emplace_back(position, tint, art.brick);
 }
 
+void World::killBrick(std::size_t index)
+{
+    if(index >= bricks.size())
+    {
+        throw std::out_of_range{"World::killBrick"};
+    }
+
+    if(!bricks[index].alive())
+    {
+        return;
+    }
+
+    bricks[index].kill();
+    points += 10;
+    spawnDonorCapsule(index);
+}
+
+void World::setScore(std::uint32_t value)
+{
+    points = value;
+}
+
+void World::setLives(std::uint32_t value)
+{
+    remaining = value;
+}
+
+void World::applyPowerUp(PowerUpKind kind)
+{
+    switch(kind)
+    {
+        case PowerUpKind::Wide:
+            expireTimedEffect();
+            bat.setDisplayWidth(widePaddleWidth);
+            timedEffect = PowerUpKind::Wide;
+            timedRemaining = timedTicks;
+            break;
+        case PowerUpKind::Slow:
+            expireTimedEffect();
+            for(auto& sphere: spheres)
+            {
+                sphere.setVelocity(sphere.velocity() * slowFactor);
+            }
+            slowActive = true;
+            timedEffect = PowerUpKind::Slow;
+            timedRemaining = timedTicks;
+            break;
+        case PowerUpKind::ExtraLife:
+            ++remaining;
+            break;
+        case PowerUpKind::MultiBall:
+            applyMultiBall();
+            break;
+    }
+}
+
 void World::fixedUpdate(sf::Time tick)
 {
     ++ticks;
     if(won() || lost())
     {
+        updatePowerUps(tick);
         return;
     }
 
+    tickTimedEffect();
     bat.fixedUpdate(tick);
-    if(sphere.stuck())
+
+    for(auto& sphere: spheres)
     {
-        stickBallToPaddle();
-        return;
+        if(sphere.stuck())
+        {
+            stickBall(sphere);
+            continue;
+        }
+
+        if(offScreen(sphere))
+        {
+            continue;
+        }
+
+        sphere.fixedUpdate(tick);
+        bounceWalls(sphere);
+        bouncePaddle(sphere);
+        bounceBricks(sphere);
     }
 
-    sphere.fixedUpdate(tick);
-    bounceWalls();
-    bouncePaddle();
-    bounceBricks();
+    updatePowerUps(tick);
     missCheck();
 }
 
@@ -89,8 +193,18 @@ void World::draw(DrawerI& drawer) const
     {
         brick.draw(drawer);
     }
+    for(const auto& capsule: capsules)
+    {
+        capsule.draw(drawer);
+    }
     bat.draw(drawer);
-    sphere.draw(drawer);
+    for(const auto& sphere: spheres)
+    {
+        if(!offScreen(sphere))
+        {
+            sphere.draw(drawer);
+        }
+    }
 }
 
 std::uint32_t World::tickCount() const
@@ -130,7 +244,22 @@ const Paddle& World::paddle() const
 
 const Ball& World::ball() const
 {
-    return sphere;
+    return spheres.front();
+}
+
+std::size_t World::ballCount() const
+{
+    return spheres.size();
+}
+
+const Ball& World::ballAt(std::size_t index) const
+{
+    if(index >= spheres.size())
+    {
+        throw std::out_of_range{"World::ballAt"};
+    }
+
+    return spheres[index];
 }
 
 std::size_t World::brickCount() const
@@ -148,7 +277,43 @@ const Brick& World::brickAt(std::size_t index) const
     return bricks[index];
 }
 
-void World::stickBallToPaddle()
+std::size_t World::powerUpCount() const
+{
+    return capsules.size();
+}
+
+const PowerUp& World::powerUpAt(std::size_t index) const
+{
+    if(index >= capsules.size())
+    {
+        throw std::out_of_range{"World::powerUpAt"};
+    }
+
+    return capsules[index];
+}
+
+std::string World::activePowerUpName() const
+{
+    if(!timedEffect.has_value() || timedRemaining == 0)
+    {
+        return {};
+    }
+
+    switch(*timedEffect)
+    {
+        case PowerUpKind::Wide:
+            return "Wide";
+        case PowerUpKind::Slow:
+            return "Slow";
+        case PowerUpKind::MultiBall:
+        case PowerUpKind::ExtraLife:
+            break;
+    }
+
+    return {};
+}
+
+void World::stickBall(Ball& sphere)
 {
     const auto paddlePos = bat.position();
     const auto paddleSize = bat.size();
@@ -158,7 +323,17 @@ void World::stickBallToPaddle()
     sphere.setStuck(true);
 }
 
-void World::bounceWalls()
+void World::stickBallToPaddle()
+{
+    if(spheres.empty())
+    {
+        spheres.emplace_back(sf::Vector2f{0.f, 0.f}, art.ball);
+    }
+
+    stickBall(spheres.front());
+}
+
+void World::bounceWalls(Ball& sphere)
 {
     auto pos = sphere.position();
     auto vel = sphere.velocity();
@@ -185,7 +360,7 @@ void World::bounceWalls()
     sphere.setVelocity(vel);
 }
 
-void World::bouncePaddle()
+void World::bouncePaddle(Ball& sphere)
 {
     if(sphere.velocity().y <= 0.f)
     {
@@ -205,10 +380,11 @@ void World::bouncePaddle()
     sphere.setPosition({sphere.position().x, bat.position().y - sphere.size().y});
 }
 
-void World::bounceBricks()
+void World::bounceBricks(Ball& sphere)
 {
-    for(auto& brick: bricks)
+    for(std::size_t i = 0; i < bricks.size(); ++i)
     {
+        auto& brick = bricks[i];
         if(!brick.alive())
         {
             continue;
@@ -221,6 +397,7 @@ void World::bounceBricks()
 
         brick.kill();
         points += 10;
+        spawnDonorCapsule(i);
 
         const auto brickPos = brick.position();
         const auto brickSize = brick.size();
@@ -253,19 +430,141 @@ void World::bounceBricks()
 
 void World::missCheck()
 {
-    const float height = static_cast<float>(Game::DESIGN_SIZE.y);
-    if(sphere.position().y < height)
+    if(spheres.empty())
     {
         return;
     }
 
-    if(remaining > 0)
+    const bool allFallen = std::all_of(spheres.begin(), spheres.end(), offScreen);
+    if(allFallen)
     {
-        --remaining;
+        if(remaining > 0)
+        {
+            --remaining;
+        }
+
+        if(remaining > 0)
+        {
+            spheres.clear();
+            spheres.emplace_back(sf::Vector2f{0.f, 0.f}, art.ball);
+            stickBallToPaddle();
+        }
+        return;
     }
 
-    if(remaining > 0)
+    std::erase_if(spheres, offScreen);
+}
+
+void World::spawnDonorCapsule(std::size_t index)
+{
+    if(index % 4 != 0)
     {
-        stickBallToPaddle();
+        return;
     }
+
+    const auto kind = static_cast<PowerUpKind>((index / 4) % 4);
+    capsules.emplace_back(bricks[index].position(), kind);
+}
+
+void World::updatePowerUps(sf::Time tick)
+{
+    for(auto& capsule: capsules)
+    {
+        capsule.fixedUpdate(tick);
+    }
+
+    std::erase_if(capsules, [](const PowerUp& capsule) { return !capsule.alive(); });
+
+    std::size_t i = 0;
+    while(i < capsules.size())
+    {
+        if(aabbOverlap(capsules[i].position(), capsules[i].size(), bat.position(), bat.size()))
+        {
+            const auto kind = capsules[i].kind();
+            capsules.erase(capsules.begin() + static_cast<std::ptrdiff_t>(i));
+            applyPowerUp(kind);
+        }
+        else
+        {
+            ++i;
+        }
+    }
+}
+
+void World::tickTimedEffect()
+{
+    if(timedRemaining == 0)
+    {
+        return;
+    }
+
+    --timedRemaining;
+    if(timedRemaining == 0)
+    {
+        expireTimedEffect();
+    }
+}
+
+void World::expireTimedEffect()
+{
+    if(!timedEffect.has_value())
+    {
+        timedRemaining = 0;
+        return;
+    }
+
+    if(*timedEffect == PowerUpKind::Wide)
+    {
+        bat.setDisplayWidth(defaultPaddleWidth);
+    }
+    else if(*timedEffect == PowerUpKind::Slow && slowActive)
+    {
+        for(auto& sphere: spheres)
+        {
+            if(!offScreen(sphere))
+            {
+                sphere.setVelocity(sphere.velocity() / slowFactor);
+            }
+        }
+        slowActive = false;
+    }
+
+    timedEffect.reset();
+    timedRemaining = 0;
+}
+
+void World::applyMultiBall()
+{
+    if(spheres.empty())
+    {
+        return;
+    }
+
+    const auto& first = spheres.front();
+    const auto pos = first.position();
+    sf::Vector2f leftVel;
+    sf::Vector2f rightVel;
+    if(first.stuck())
+    {
+        leftVel = {launchX - multiSpread, launchY};
+        rightVel = {launchX + multiSpread, launchY};
+        if(slowActive)
+        {
+            leftVel *= slowFactor;
+            rightVel *= slowFactor;
+        }
+    }
+    else
+    {
+        const auto vel = first.velocity();
+        leftVel = {vel.x - multiSpread, vel.y};
+        rightVel = {vel.x + multiSpread, vel.y};
+    }
+
+    spheres.emplace_back(pos, art.ball);
+    spheres.back().setStuck(false);
+    spheres.back().setVelocity(leftVel);
+    spheres.emplace_back(pos, art.ball);
+    spheres.back().setStuck(false);
+    spheres.back().setVelocity(rightVel);
 }

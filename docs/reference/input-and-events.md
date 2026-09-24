@@ -109,7 +109,7 @@ enum class Action { Confirm, Cancel, Pause };
 | `Backspace` | `Cancel` |
 | anything else | `nullopt` → `handleEvent` |
 
-`GameplayScreen::handleAction(Pause)` calls `requestPauseOverlay()`. Overlay `Pause` / `Cancel` resume; `Confirm` quits to menu. Menu Confirm / Start starts `Stage1`. Menu Cancel / Quit calls `requestClose()`. In play, Confirm launches the ball; Cancel is ignored until win/lose (retry / menu). Paddle hold is `handleEvent` on Left/Right/A/D, not an `Action`.
+`GameplayScreen::handleAction(Pause)` calls `requestPauseOverlay()`. Overlay `Pause` / `Cancel` resume; `Confirm` quits to menu. Menu Confirm / Start starts `Stage1`. Menu Cancel / Quit calls `requestClose()`. In play, Confirm launches the ball. Clearing Stage1 or Stage2 mid-run loads the next stage (score and lives kept) and does not show You win. Confirm retry is for lose or Stage3 win (same level from scratch); Cancel then returns to menu. Paddle hold is `handleEvent` on Left/Right/A/D, not an `Action`.
 
 `mapEvent` only unwraps `KeyPressed` and delegates to `mapKeyPressed`. Lifecycle events passed in by mistake yield `nullopt`.
 

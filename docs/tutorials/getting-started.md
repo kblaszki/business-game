@@ -80,7 +80,7 @@ cmake --build --preset debug --target game
 ./build/debug/bin/game
 ```
 
-A 1280×720 window titled "Business game" opens on a Start / Quit menu. Start or Enter plays one breakout stage (arrows or A/D move the paddle, Enter launches). Escape pauses. Backspace on the menu quits.
+A 1280×720 window titled "Business game" opens on a Start / Quit menu. Start or Enter plays Stage1 (arrows or A/D move the paddle, Enter launches). Clearing a stage loads the next; Stage3 is the last. Escape pauses. Backspace on the menu quits.
 
 ## Next steps
 

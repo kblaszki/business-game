@@ -9,6 +9,7 @@
 #include <screen/MainMenuScreen.hpp>
 #include <screen/ScreenStack.hpp>
 #include <time/FixedTimestep.hpp>
+#include <world/LevelId.hpp>
 
 namespace
 {
@@ -50,6 +51,7 @@ TEST(MenuGameplayShould, replaceMenuWithGameplayOnConfirm)
     EXPECT_EQ(screens.size(), 1u);
     auto* play = dynamic_cast<GameplayScreen*>(screens.top());
     ASSERT_NE(play, nullptr);
+    EXPECT_EQ(play->levelId(), LevelId::Stage1);
 
     screens.update(FixedTimestep::tick);
     EXPECT_EQ(play->tickCount(), 1u);
@@ -124,4 +126,39 @@ TEST(MenuGameplayShould, requestCloseOnCancelAndStayOnMenu)
     EXPECT_TRUE(screens.closeRequested());
     EXPECT_EQ(screens.size(), 1u);
     EXPECT_NE(dynamic_cast<MainMenuScreen*>(screens.top()), nullptr);
+}
+
+TEST(MenuGameplayShould, clearingStage1LoadsStage2WithSameScore)
+{
+    ScreenStack screens;
+    GameplayScreen play{screens, LevelId::Stage1};
+
+    for(std::size_t i = 0; i < play.world().brickCount(); ++i)
+    {
+        play.world().killBrick(i);
+    }
+
+    const auto score = play.world().score();
+    play.update(FixedTimestep::tick);
+
+    EXPECT_EQ(play.levelId(), LevelId::Stage2);
+    EXPECT_EQ(play.world().score(), score);
+    EXPECT_NE(play.bannerTitleText(), "You win");
+}
+
+TEST(MenuGameplayShould, stage3WinKeepsBanner)
+{
+    ScreenStack screens;
+    GameplayScreen play{screens, LevelId::Stage3};
+
+    for(std::size_t i = 0; i < play.world().brickCount(); ++i)
+    {
+        play.world().killBrick(i);
+    }
+
+    play.update(FixedTimestep::tick);
+
+    EXPECT_EQ(play.levelId(), LevelId::Stage3);
+    EXPECT_TRUE(play.world().won());
+    EXPECT_EQ(play.bannerTitleText(), "You win");
 }

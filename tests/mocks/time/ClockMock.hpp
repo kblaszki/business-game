@@ -1,8 +1,7 @@
 #pragma once
 
-#include <time/ClockI.hpp>
-
 #include <gmock/gmock.h>
+#include <time/ClockI.hpp>
 
 class ClockMock : public ClockI
 {

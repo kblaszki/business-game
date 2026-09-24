@@ -75,3 +75,35 @@ TEST(WorldShould, alwaysAdvanceTickCount)
     world.fixedUpdate(FixedTimestep::tick);
     EXPECT_EQ(world.tickCount(), 2u);
 }
+
+TEST(WorldShould, widePowerUpWidensPaddle)
+{
+    World world;
+    world.applyPowerUp(PowerUpKind::Wide);
+
+    EXPECT_GT(world.paddle().size().x, 120.f);
+}
+
+TEST(WorldShould, extraLifeIncreasesLives)
+{
+    World world;
+    world.applyPowerUp(PowerUpKind::ExtraLife);
+
+    EXPECT_EQ(world.lives(), 4u);
+}
+
+TEST(WorldShould, missedCapsuleDisappears)
+{
+    World world;
+    world.addBrick({200.f, 80.f}, sf::Color::Red);
+    world.killBrick(0);
+
+    ASSERT_EQ(world.powerUpCount(), 1u);
+
+    for(int i = 0; i < 600 && world.powerUpCount() > 0; ++i)
+    {
+        world.fixedUpdate(FixedTimestep::tick);
+    }
+
+    EXPECT_EQ(world.powerUpCount(), 0u);
+}

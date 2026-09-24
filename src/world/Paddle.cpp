@@ -14,6 +14,27 @@ void Paddle::setSpeed(float pxPerSec)
     speed = pxPerSec;
 }
 
+void Paddle::setDisplayWidth(float width)
+{
+    const float native = sprite.getLocalBounds().size.x;
+    if(native > 0.f)
+    {
+        sprite.setScale({width / native, sprite.getScale().y});
+    }
+
+    auto pos = sprite.getPosition();
+    const float maxX = static_cast<float>(Game::DESIGN_SIZE.x) - size().x;
+    if(pos.x < 0.f)
+    {
+        pos.x = 0.f;
+    }
+    if(pos.x > maxX)
+    {
+        pos.x = maxX;
+    }
+    sprite.setPosition(pos);
+}
+
 void Paddle::fixedUpdate(sf::Time tick)
 {
     auto pos = sprite.getPosition();
@@ -43,5 +64,6 @@ sf::Vector2f Paddle::position() const
 sf::Vector2f Paddle::size() const
 {
     const auto bounds = sprite.getLocalBounds();
-    return bounds.size;
+    const auto scale = sprite.getScale();
+    return {bounds.size.x * scale.x, bounds.size.y * scale.y};
 }
