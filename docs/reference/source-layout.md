@@ -45,7 +45,10 @@ related_code:
   - CMakeLists.txt
   - cmake/FetchSFML.cmake
   - cmake/FetchGTest.cmake
+  - cmake/AddUnitTest.cmake
+  - engine/core/include/eng/core/Features.hpp
   - tests/unit_tests/CMakeLists.txt
+
   - tests/unit_tests/ExampleTest.cpp
   - tests/unit_tests/GameTest.cpp
   - tests/unit_tests/FixedTimestepTest.cpp
@@ -106,7 +109,28 @@ last_reviewed: 2026-09-24
 | `tests/unit_tests/fakes/` | `ScreenSpy` |
 | `tests/unit_tests/` | GoogleTest suites (Debug only; no window) |
 
+## Engine split (skeleton)
+
+New engine and game trees are wired into CMake; `src/` `gameLib` / `game` still build until cutover.
+
+| Path | Targets |
+|------|---------|
+| `engine/core/` | `eng_core` (INTERFACE); `Features.hpp` capability asserts |
+| `engine/input/` | `eng_input` (INTERFACE) → `eng_core` |
+| `engine/scene/` | `eng_scene` (INTERFACE) → `eng_input` |
+| `engine/render/` | `eng_render` (INTERFACE) → `eng_core` |
+| `engine/collision/` | `eng_collision` (INTERFACE) → `eng_core` |
+| `engine/resources/` | `eng_resources` (INTERFACE) → `eng_core` |
+| `engine/loop/` | `eng_loop` (INTERFACE) → `eng_scene`, `eng_render` |
+| `engine/sfml/` | `eng_sfml` (STATIC); only target that links SFML |
+| `games/arkanoid/sim/` | `arkanoid_sim` (INTERFACE) → `eng_collision` |
+| `games/arkanoid/app/` | `arkanoid_app` (INTERFACE) → `arkanoid_sim`, `eng_loop`, `eng_resources` |
+| `tests/engine/`, `tests/arkanoid/` | Per-module test leaves; `features_test` under `tests/engine/core/` |
+
+Include layout: `<eng/<module>/X.hpp>` under `engine/<module>/include/`. Only `engine/sfml` and `games/arkanoid/main.cpp` may include SFML.
+
 ## Build targets
+
 
 - **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `input/InputMapper.cpp`, screens, `world/Paddle.cpp` / `Ball.cpp` / `Brick.cpp` / `BreakoutArt.cpp` / `PowerUp.cpp` / `World.cpp` / `LevelDescriptor.cpp`. C++23. SFML **headers/defines** only. `ASSET_DIR` points at `resources/`.
 - **`game`** (executable) — `src/main.cpp`, `src/window/WindowSFML.cpp`, `src/time/ClockSFML.cpp`; links `gameLib` and SFML 3.1 Graphics/Window/System (audio and network are OFF in `cmake/FetchSFML.cmake`).

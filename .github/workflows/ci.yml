@@ -46,6 +46,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+            g++-14 \
             libgl1-mesa-dev \
             libudev-dev \
             libxrandr-dev \
@@ -56,6 +57,12 @@ jobs:
             libharfbuzz-dev \
             ninja-build \
             ccache
+
+      - name: Use g++-14 on Linux
+        if: runner.os == 'Linux'
+        run: |
+          echo "CC=gcc-14" >> "$GITHUB_ENV"
+          echo "CXX=g++-14" >> "$GITHUB_ENV"
 
       - name: MSVC environment
         if: runner.os == 'Windows'

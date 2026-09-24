@@ -18,6 +18,9 @@ list(APPEND
 
 include(FetchSFML)
 
+add_subdirectory(engine)
+add_subdirectory(games)
+
 include_directories(src)
 add_subdirectory(src)
 

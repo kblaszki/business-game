@@ -11,12 +11,13 @@ related_docs:
   - ../tutorials/getting-started.md
   - ../reference/source-layout.md
 keywords: [build, test, ctest, format, presets, build_ut, debug, release]
-last_reviewed: 2026-09-22
+last_reviewed: 2026-09-24
 ---
 
 # Build, test, and format
 
-Prerequisite: toolchain installed (see [getting-started](../tutorials/getting-started.md)). The project is C++23; GoogleTest 1.18 is fetched only for the Debug preset.
+Prerequisite: toolchain installed (see [getting-started](../tutorials/getting-started.md)). The project is C++23; GoogleTest 1.18 is fetched only for the Debug preset. Ubuntu CI uses g++-14.
+
 
 ## Configure
 
@@ -42,13 +43,13 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Suite: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`, `power_up_test`.
+Suite: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`, `power_up_test`, `features_test`.
 
-`build_ut` builds every suite registered with `add_unit_test(...)` in `tests/unit_tests/CMakeLists.txt`.
+`build_ut` builds every suite registered with `add_unit_test(...)` (`cmake/AddUnitTest.cmake`; legacy suites in `tests/unit_tests/`, engine suites under `tests/engine/`).
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`) runs Debug `build_ut` + `ctest`, then Release `game`, on `ubuntu-24.04` (system g++) and `windows-2022` (MSVC). Tests do not open a window.
+GitHub Actions (`.github/workflows/ci.yml`) runs Debug `build_ut` + `ctest`, then Release `game`, on `ubuntu-24.04` (g++-14) and `windows-2022` (MSVC). Tests do not open a window.
 
 ## Format the code
 

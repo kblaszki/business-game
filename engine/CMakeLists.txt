@@ -1,0 +1,8 @@
+add_subdirectory(core)
+add_subdirectory(input)
+add_subdirectory(scene)
+add_subdirectory(render)
+add_subdirectory(collision)
+add_subdirectory(resources)
+add_subdirectory(loop)
+add_subdirectory(sfml)
