@@ -5,7 +5,7 @@ alwaysApply: true
 
 # business-game
 
-C++23 SFML engine split in progress. New code lives in `engine/` (`namespace eng`) and `games/arkanoid/` (`namespace arkanoid`). The legacy breakout under `src/` (`gameLib`, executable `game`) stays runnable until cutover; do not add features there. Contract: `docs/explanation/architecture.md`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living).
+C++23 SFML engine and Arkanoid game. Code lives in `engine/` (`namespace eng`) and `games/arkanoid/` (`namespace arkanoid`, executable `arkanoid`). Contract: `docs/explanation/architecture.md`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living).
 
 ## Stack
 
@@ -15,41 +15,40 @@ C++23 SFML engine split in progress. New code lives in `engine/` (`namespace eng
 
 ## Layout
 
-- `src/main.cpp` — `WindowSFML` + `ClockSFML` + `ScreenStack` (`MainMenuScreen`) + `Game{...}.run()`
-- `src/Game.hpp` / `Game.cpp` — process loop (`gameLib`)
-- `src/window/` — `WindowI` (extends `DrawerI`), `WindowSFML` (`WindowSFML.cpp` on executable `game`)
-- `src/time/` — `ClockI`, `ClockSFML` (on `game`), `FixedTimestep`
-- `src/screen/` — `ScreenI`, `ScreenStack`, `MainMenuScreen`, `GameplayScreen`, `PauseScreen`, `UiFont`
-- `resources/fonts/` — UI TTF (`loadUiFont`)
-- `src/world/` — `World`, `Paddle`, `Ball`, `Brick`, `BreakoutArt`, `LevelId`, `LevelDescriptor`
-- `src/input/` — `Action`, `InputMapper`
-- `src/Example.hpp` / `Example.cpp` — `gameLib`
-- `tests/unit_tests/` — `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`
-- `tests/mocks/` — `WindowMock`, `ClockMock`; `tests/unit_tests/fakes/ScreenSpy.hpp`
-
-Static library target: `gameLib`. Executable: `game`.
+- `engine/core/` — value types (`eng_core`)
+- `engine/input/` — `InputEvent`, `ActionMap`, `InputState` (`eng_input`)
+- `engine/scene/` — `SceneI`, `SceneStack`, `SceneRequest` (`eng_scene`)
+- `engine/loop/` — `FixedStepLoop`, `App`, `PlatformI`, `ClockI` (`eng_loop`)
+- `engine/render/` — `RenderQueue`, `RendererI` (`eng_render`)
+- `engine/collision/` — sweep / reflect (`eng_collision`)
+- `engine/resources/` — `ResourceCache` (`eng_resources`)
+- `engine/sfml/` — SFML adapters (`eng_sfml`); only engine target that links SFML
+- `games/arkanoid/sim/` — headless breakout (`arkanoid_sim`)
+- `games/arkanoid/app/` — scenes, HUD, assets (`arkanoid_app`)
+- `games/arkanoid/main.cpp` — executable `arkanoid`
+- `resources/fonts/` — UI TTF (`ASSET_DIR`)
+- `tests/engine/`, `tests/arkanoid/` — GoogleTest suites (Debug only)
+- `tests/mocks/` — `ClockMock`, `PlatformMock`, `RendererMock`
 
 ## Build / test
 
 ```sh
 cmake --preset debug
-cmake --build --preset debug --target game
+cmake --build --preset debug --target arkanoid
 cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Binary: `build/<preset>/bin/game` (`.exe` on Windows).
+Binary: `build/<preset>/bin/arkanoid` (`.exe` on Windows).
 
 ## Agent pitfalls
 
-- New engine `.cpp` files belong in that module's `engine/<module>/CMakeLists.txt`, not in `src/CMakeLists.txt`
-- New `.cpp` files that still belong in the legacy library must be listed in `src/CMakeLists.txt` (`gameLib`)
-- `WindowSFML.cpp` and `ClockSFML.cpp` are listed on the `game` executable, not in `gameLib`
-- `gameLib` does not **link** SFML (headers/defines only); the `game` executable links Graphics/Window/System. Tests that construct screens or `Game`/`ScreenStack` also link Graphics because those types hold `sf::RectangleShape` (still no window).
-- Interfaces use the `FooI` suffix (`WindowI`, `ClockI`, `DrawerI`, `ScreenI`)
-- `ScreenI::draw` takes `DrawerI&`, not `sf::RenderTarget&`. Screens must not `close()` the window
-- `Game` pump: `Closed` | `FocusLost` → `requestPauseOverlay` | `FocusGained` no-op | map → `handleAction` | leftover `handleEvent`; after pump, `closeRequested()` → `window.close()`
-- `PauseScreen` is the only overlay (`blocksDraw` false). Request it only through `ScreenStack::requestPauseOverlay`
-- Menu `Cancel` (Backspace) is `requestClose`; overlay `Cancel` is resume. Screens must not `close()` the window
-- `ScreenStack::push`/`pop`/`replace` apply immediately when idle, and after `draw` when a walk is in progress
+- New `.cpp` files belong in that module’s own `CMakeLists.txt` (`engine/<module>/` or `games/arkanoid/<sim|app>/`)
+- Only `engine/sfml` and `games/arkanoid/main.cpp` may include SFML; `arkanoid/sim` stays headless
+- Tests are headless except `event_translate_test`, which links `SFML::Window` and does not open a window
+- Interfaces use the `FooI` suffix (`SceneI`, `RendererI`, `PlatformI`, `ClockI`)
+- Scenes must not `close()` the platform; quit is `QuitApp` / `closeRequested`
+- Pause is `RequestPause` when top is `pausable`; overlay is `PauseScene` (`opaque` false)
+- Menu cancel is `QuitApp`; overlay cancel is resume (`PopScene`)
+- `SceneStack` applies push/pop/replace after the update walk
 - Design notes: `mvp/01`–`09` (prospect). Tree names and slices: `mvp/10-engine-progress.md`

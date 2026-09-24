@@ -3,23 +3,18 @@ title: Project direction and status
 diataxis: explanation
 audience: [ai, human]
 related_code:
-  - src/main.cpp
-  - src/Game.cpp
-  - src/window/WindowI.hpp
-  - src/time/ClockI.hpp
-  - src/screen/ScreenI.hpp
-  - src/screen/ScreenStack.hpp
-  - src/screen/MainMenuScreen.hpp
-  - src/screen/GameplayScreen.hpp
-  - src/input/Action.hpp
-  - src/input/InputMapper.hpp
-  - src/screen/PauseScreen.hpp
-  - src/world/World.hpp
+  - games/arkanoid/main.cpp
+  - games/arkanoid/sim/include/arkanoid/sim/State.hpp
+  - games/arkanoid/app/include/arkanoid/app/Scenes.hpp
+  - engine/scene/include/eng/scene/SceneStack.hpp
+  - engine/loop/include/eng/loop/App.hpp
 related_docs:
   - ../reference/source-layout.md
+  - ../reference/arkanoid-sim.md
+  - architecture.md
   - ../../mvp/README.md
   - ../../mvp/10-engine-progress.md
-keywords: [roadmap, direction, skeleton, SFML, mvp, WindowI]
+keywords: [roadmap, direction, stages, power-ups, eng, arkanoid, engine split]
 last_reviewed: 2026-09-24
 ---
 
@@ -27,11 +22,9 @@ last_reviewed: 2026-09-24
 
 ## Where it is now
 
-A C++23 SFML 3.1 breakout on the engine skeleton: Start/Quit menu, three stages (`Stage1` → `Stage2` → `Stage3`), four power-ups in play (Wide, MultiBall, Slow, ExtraLife), pause overlay, windowless tests.
+A C++23 SFML 3.1 breakout on the landed engine split (`engine/` / `games/arkanoid/`): Start/Quit menu, three stages (Stage1 → Stage2 → Stage3), four power-ups (Wide, MultiBall, Slow, ExtraLife), pause overlay via `SceneStack`, headless tests. Legacy `src/` is removed.
 
-Facts: [source-layout.md](../reference/source-layout.md). Prospective engine notes: [`mvp/01`–`09`](../../mvp/README.md). What already landed: [`mvp/10-engine-progress.md`](../../mvp/10-engine-progress.md).
-
-Three breakout stages are in the tree. The four power-up kinds spawn from donor bricks and apply in `World`.
+Facts: [source-layout.md](../reference/source-layout.md), [arkanoid-sim.md](../reference/arkanoid-sim.md). Contract: [architecture.md](architecture.md). Prospective notes: [`mvp/01`–`09`](../../mvp/README.md). Landed slices: [`mvp/10-engine-progress.md`](../../mvp/10-engine-progress.md).
 
 ## Where it is going
 

@@ -8,7 +8,7 @@ The orchestrator fills one card per agent:
 
 ```
 Goal: (one sentence)
-Owned write paths: (src/..., tests/..., and the matching docs/ pages — always include docs/ when src/ is owned)
+Owned write paths: (engine/..., games/arkanoid/..., tests/..., and the matching docs/ pages — always include docs/ when code is owned)
 Forbidden paths: (everything else, especially siblings in this wave)
 Locked signatures: (paste from contract)
 Read first: (existing headers, contract, listed mvp/ or docs)
@@ -16,9 +16,9 @@ Verify: cmake --build --preset debug --target build_ut && ctest --preset debug
           (or “no code — skip build”)
 ```
 
-Typical owned paths: `src/Example.*`, `src/main.cpp`, `tests/unit_tests/ExampleTest.cpp`. Matching docs: `docs/reference/source-layout.md`, `docs/tutorials/getting-started.md`. Do not invent FooI `screens-and-input.md`.
+Typical owned paths: `engine/input/src/…`, `games/arkanoid/sim/…`, `tests/engine/input/…`. Matching docs: `docs/reference/source-layout.md`, the matching `docs/reference/engine-*.md` or `arkanoid-*.md`. Do not invent legacy `ScreenStack` / `gameLib` names.
 
-Owned writes **must** include the matching `docs/` paths whenever the card owns `src/`. Parallelize two cards only when owned write paths do not overlap.
+Owned writes **must** include the matching `docs/` paths whenever the card owns `engine/` or `games/arkanoid/`. Parallelize two cards only when owned write paths do not overlap. Each module owns its `CMakeLists.txt` — parallel agents must not edit a shared sources list.
 
 ## Implement prompt
 
@@ -30,19 +30,20 @@ You own ONE work package. Implement it.
 READ FIRST:
 - CONTRACT / locked signatures (do not invent synonyms)
 - SOURCE_PATHS (do not contradict the current tree)
+- docs/explanation/architecture.md
 
 OWNED WRITE PATHS (only these):
 - ...
 
-FORBIDDEN: do not edit other files. This tree is an SFML skeleton (Example + main). Do not copy IScreen/ScreenStack/GameplayScreen from mvp/ or other branches unless the contract says so.
+FORBIDDEN: do not edit other files. Do not reintroduce src/, gameLib, ScreenStack, WindowI, or DrawerI.
 
 DO:
-- Implement the goal in C++23, #pragma once, no namespaces, CamelCase types
-- List every new src/*.cpp in src/CMakeLists.txt (gameLib)
-- Add windowless GoogleTest via add_unit_test in tests/unit_tests/CMakeLists.txt
-- You must produce a docs/ edit if you change src/ (hard gate)
+- Implement the goal in C++23, #pragma once, namespaces eng / arkanoid
+- List every new .cpp in that module’s own CMakeLists.txt
+- Add windowless GoogleTest via add_unit_test in the matching tests leaf
+- You must produce a docs/ edit if you change engine/ or games/arkanoid/ (hard gate)
 - Update docs whose related_code lists a file you changed; last_reviewed today
-- New/removed src file or target → docs/reference/source-layout.md
+- New/removed source file or target → docs/reference/source-layout.md
 - New type or new player-visible / loop behavior → update or add a docs/reference/ (or how-to) page; source-layout inventory alone is not enough
 - New/removed/retitled doc → docs/index.md
 - Do not git commit (the orchestrator commits after stitch)
@@ -77,9 +78,9 @@ no style, colors, or click.
 - Build and tests (when the wave included code)
 - Signature / name drift vs contract
 - Two agents wrote the same path
-- New `.cpp` missing from `gameLib`
+- New `.cpp` missing from its module `CMakeLists.txt`
 - Docs `related_code` current; `last_reviewed` today; `source-layout.md` / `index.md` if structure changed
-- Hard gate: `src/` in the wave diff without any `docs/` path → incomplete, no commit
+- Hard gate: `engine/` or `games/arkanoid/` in the wave diff without any `docs/` path → incomplete, no commit
 - New behavior has a reference/how-to page, not only a source-layout row
 - Contract / todos updated with locked decisions
 - Docs hard gate or verify failed → no commit

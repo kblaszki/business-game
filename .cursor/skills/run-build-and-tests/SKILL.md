@@ -28,15 +28,15 @@ Outputs go to `build/debug/` or `build/release/`.
 ## Build game
 
 ```sh
-cmake --build --preset debug --target game
+cmake --build --preset debug --target arkanoid
 # or
-cmake --build --preset release --target game
+cmake --build --preset release --target arkanoid
 ```
 
 Run from the binary directory:
 
-- Windows: `build/debug/bin/game.exe` or `build/release/bin/game.exe`
-- Linux/macOS: `build/debug/bin/game` or `build/release/bin/game`
+- Windows: `build/debug/bin/arkanoid.exe` or `build/release/bin/arkanoid.exe`
+- Linux/macOS: `build/debug/bin/arkanoid` or `build/release/bin/arkanoid`
 
 ## Tests (Debug only)
 
@@ -59,6 +59,6 @@ cmake --build --preset debug --target format
 ## Typical verify loop after code changes
 
 1. Configure debug (if needed)
-2. Build `game` and/or `build_ut`
+2. Build `arkanoid` and/or `build_ut`
 3. Run `ctest --preset debug`
 4. Optionally run `format` before commit

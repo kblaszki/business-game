@@ -52,7 +52,7 @@ Presentation helpers in `namespace arkanoid` for the playable shell. Static libr
 | `TextureSpec` | `{key, build}` where `build` returns an `eng::Image` |
 | `textureSpecs()` | Span of all eight specs |
 
-Image sizes match the legacy breakout art: background **1280×720** (dark blue with horizontal stripes), brick **110×28**, paddle **120×20**, ball **16×16** (circle with transparent outside), capsules **32×16** (ellipse, transparent outside). Capsule tints: gold / cyan / blue / green with a white highlight band — same palette as legacy `PowerUp.cpp`.
+Image sizes match the breakout art: background **1280×720** (dark blue with horizontal stripes), brick **110×28**, paddle **120×20**, ball **16×16** (circle with transparent outside), capsules **32×16** (ellipse, transparent outside). Capsule tints: gold / cyan / blue / green with a white highlight band.
 
 `Theme.hpp` holds inline constexpr colors (title gold, HUD text, banner fill, menu button fills/labels) and HUD anchor positions: score `(32,16)`, power `(560,16)`, lives `(1040,16)`. Design size is `designSize` from `arkanoid::designWidth` / `designHeight`.
 

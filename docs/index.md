@@ -3,8 +3,8 @@ title: Documentation map
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - src/main.cpp
   - CMakeLists.txt
+  - games/arkanoid/main.cpp
 related_docs:
   - tutorials/getting-started.md
   - how-to/build-and-test.md
@@ -21,7 +21,6 @@ related_docs:
   - reference/arkanoid-app.md
   - reference/input-and-events.md
   - reference/pause-overlay.md
-  - reference/world-and-levels.md
   - explanation/roadmap.md
   - explanation/architecture.md
   - ../mvp/README.md
@@ -42,7 +41,7 @@ flowchart TD
   Index --> How[how-to/ tasks]
   Index --> Ref[reference/ facts]
   Index --> Exp[explanation/ rationale]
-  Ref -->|related_code| Code[src/ code]
+  Ref -->|related_code| Code[engine/ and games/]
   How -->|related_code| Code
 ```
 
@@ -59,7 +58,7 @@ flowchart TD
 |----------|------|----------|
 | [tutorials/getting-started.md](tutorials/getting-started.md) | tutorial | setup, toolchain, build, run, msys2 |
 | [how-to/build-and-test.md](how-to/build-and-test.md) | how-to | build, test, ctest, format, presets |
-| [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, gameLib, targets |
+| [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, eng, arkanoid, targets |
 | [reference/engine-core.md](reference/engine-core.md) | reference | eng, Vec2, Rect, Handle, Image |
 | [reference/engine-input.md](reference/engine-input.md) | reference | InputEvent, ActionMap, InputState |
 | [reference/engine-scene.md](reference/engine-scene.md) | reference | SceneStack, SceneRequest, pause |
@@ -70,16 +69,14 @@ flowchart TD
 | [reference/engine-sfml.md](reference/engine-sfml.md) | reference | SfmlPlatform, EventTranslate, letterbox |
 | [reference/arkanoid-sim.md](reference/arkanoid-sim.md) | reference | arkanoid sim, StageId, power-ups |
 | [reference/arkanoid-app.md](reference/arkanoid-app.md) | reference | Theme, Assets, HudModel, SceneRender |
-| [reference/input-and-events.md](reference/input-and-events.md) | reference | Action, InputMapper, SFML events, handleAction |
-| [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScreen, overlay, FocusLost, requestPauseOverlay |
-| [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, Paddle, Ball, Brick, Stage1 |
-| [reference/power-ups.md](reference/power-ups.md) | reference | PowerUp, PowerUpKind, capsule, Wide, MultiBall |
-| [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, skeleton, mvp |
+| [reference/input-and-events.md](reference/input-and-events.md) | reference | InputEvent, ActionMap, defaultBindings |
+| [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScene, RequestPause, FocusLost, pausable |
+| [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, stages, power-ups, engine split |
 | [explanation/architecture.md](explanation/architecture.md) | explanation | ADR, eng, arkanoid, boundaries, ECS |
 | [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | prospective engine plan |
-| [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | WindowI, PauseScreen, World, requestClose, slices |
+| [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | slices, eng modules, arkanoid |
 
-`mvp/01`–`09` are prospective. Living engine progress is [`mvp/10-engine-progress.md`](../mvp/10-engine-progress.md). Current facts live in the Diátaxis pages above; prefer `src/` over chapter prose if they disagree.
+`mvp/01`–`09` are prospective. Living engine progress is [`mvp/10-engine-progress.md`](../mvp/10-engine-progress.md). Current facts live in the Diátaxis pages above; prefer `engine/` and `games/arkanoid/` over chapter prose if they disagree.
 
 ## Maintenance
 

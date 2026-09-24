@@ -16,11 +16,10 @@ related_code:
 related_docs:
   - engine-collision.md
   - engine-core.md
-  - world-and-levels.md
-  - power-ups.md
+  - arkanoid-app.md
   - source-layout.md
   - ../explanation/architecture.md
-keywords: [arkanoid, sim, State, step, SimInput, SimEvent, makeState, PowerUpKind, StageId, sweep]
+keywords: [arkanoid, sim, State, step, SimInput, SimEvent, makeState, PowerUpKind, StageId, sweep, Wide, MultiBall, Slow, ExtraLife]
 last_reviewed: 2026-09-24
 ---
 
@@ -28,7 +27,7 @@ last_reviewed: 2026-09-24
 
 Headless breakout rules in `namespace arkanoid`. Static library target `arkanoid_sim` links `PUBLIC` `eng_collision` (which pulls `eng_core`). No SFML. Include as `<arkanoid/sim/X.hpp>`.
 
-Design space is **1280×720** with **+y down**, matching the legacy `World` donor under `src/world/`.
+Design space is **1280×720** with **+y down**.
 
 ## Types
 
@@ -44,7 +43,7 @@ Design space is **1280×720** with **+y down**, matching the legacy `World` dono
 
 ## Levels and donors
 
-`level(id)` returns Stage1/2/3 masks and row colors (same palette as `src/world/LevelDescriptor.cpp`). Unknown ids fall back to Stage1.
+`level(id)` returns Stage1/2/3 masks and row colors. Unknown ids fall back to Stage1.
 
 `makeState` builds a centered paddle, one **Stuck** ball on the paddle, and bricks only where the mask is `1`:
 

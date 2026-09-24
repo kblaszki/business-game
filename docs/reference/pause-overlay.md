@@ -3,79 +3,57 @@ title: Pause overlay
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - src/screen/PauseScreen.hpp
-  - src/screen/PauseScreen.cpp
-  - src/screen/UiFont.hpp
-  - src/screen/UiFont.cpp
-  - src/screen/ScreenI.hpp
-  - src/screen/ScreenStack.hpp
-  - src/screen/ScreenStack.cpp
-  - src/screen/GameplayScreen.cpp
-  - src/Game.cpp
-  - tests/unit_tests/PauseOverlayTest.cpp
+  - engine/scene/include/eng/scene/SceneTraits.hpp
+  - engine/scene/include/eng/scene/SceneRequest.hpp
+  - engine/scene/include/eng/scene/SceneStack.hpp
+  - engine/scene/src/SceneStack.cpp
+  - games/arkanoid/app/include/arkanoid/app/PauseScene.hpp
+  - games/arkanoid/app/src/PauseScene.cpp
+  - games/arkanoid/app/include/arkanoid/app/GameplayScene.hpp
+  - games/arkanoid/app/src/GameplayScene.cpp
+  - games/arkanoid/app/include/arkanoid/app/Scenes.hpp
+  - tests/engine/scene/SceneStackTest.cpp
+  - tests/arkanoid/app/ScenesTest.cpp
 related_docs:
+  - engine-scene.md
+  - engine-input.md
   - input-and-events.md
+  - arkanoid-app.md
   - source-layout.md
-  - world-and-levels.md
   - ../../mvp/05-pause.md
-  - ../../mvp/10-engine-progress.md
-keywords: [pause, overlay, PauseScreen, requestPauseOverlay, FocusLost, blocksUpdate, blocksDraw]
+keywords: [pause, overlay, PauseScene, RequestPause, SceneTraits, pausable, FocusLost, SceneStack]
 last_reviewed: 2026-09-24
 ---
 
 # Pause overlay
 
-Facts about the running tree. Prospective extras (selectable pause rows, `timeScale`) stay in [`mvp/05-pause.md`](../../mvp/05-pause.md). World pose freeze: [world-and-levels.md](world-and-levels.md).
+Facts about the running tree. Engine stack rules: [engine-scene.md](engine-scene.md). Prospective extras stay in [`mvp/05-pause.md`](../../mvp/05-pause.md).
 
 ## What pause is
 
-`PauseScreen` is a **stack overlay** on `GameplayScreen`. The paused state **is** “`PauseScreen` is top”. It is not a `bool` on gameplay, not a flag on a future `World` / `GameObject`, and not `timeScale = 0`.
+Paused state **is** “`PauseScene` is top of `SceneStack`”. It is not a `bool` on the sim `State`, not a flag on gameplay, and not `timeScale = 0`.
 
-| Query | `PauseScreen` | Meaning |
-|-------|---------------|---------|
-| `blocksUpdate()` | `true` | Stack updates the overlay and **stops**. `GameplayScreen::update` does not run, so `World::fixedUpdate` does not run. Pose and `tickCount` freeze. |
-| `blocksDraw()` | `false` | Gameplay still draws underneath a dim rectangle. |
-
-`Game` still polls every frame, including `Closed`. Overlay UI may run `PauseScreen::update` once per frame when the stack reports `blocksUpdate()`; that update is empty today.
-
-A later optional `World::timeScale` (slow-mo) would still **call** `fixedUpdate`. Overlay pause **does not call** the gameplay tick. Do not set `timeScale = 0` to mean pause.
+| Trait / query | `PauseScene` | Meaning |
+|---------------|--------------|---------|
+| `opaque` | `false` | Gameplay still renders underneath |
+| `blocksUpdate` | `true` | Stack stops the update walk; `GameplayScene::update` (and `step`) do not run |
+| `pausable` | `false` | A second pause does not stack |
 
 ## How it is requested
 
-`ScreenStack::requestPauseOverlay()` is the **only** `push` of `PauseScreen`. `Game` (on `FocusLost`) and `GameplayScreen` (on `Action::Pause`) call that method. They never `push` the overlay ad hoc.
+`SceneRequest::RequestPause` is the only path that pushes the pause-overlay factory. `SceneStack::update` enqueues it when:
 
-No-op when:
+- `input.focusLost()` is set, or a scene explicitly `request(RequestPause)`
+- top scene `traits().pausable` is true
+- a pause was not already queued this frame
 
-- the stack is empty
-- top `isPauseOverlay()`
-- top does not `acceptsPauseOverlay()` (menu, spies)
-- a pause push is already queued this frame (`pauseQueued`)
-
-`ScreenI` defaults both queries to `false`. `GameplayScreen` accepts; `PauseScreen` is the overlay. `ScreenStack` does not `dynamic_cast` concrete screens.
-
-Same-frame `Action::Pause` + `FocusLost` still yields **one** overlay.
+`GameplayScene` is pausable only while playing (`!cleared && !over`). Menu and pause are not pausable. No-op when the stack is empty or top is not pausable.
 
 ## Resume vs quit
 
-| Input on overlay | Queue | After `draw` |
-|------------------|-------|----------------|
-| `Action::Pause` or `Cancel` | `pop` | `[GameplayScreen]` |
-| `Action::Confirm` | `pop` then `replace(MainMenuScreen)` | `[MainMenuScreen]` |
+| Input on overlay | Requests |
+|------------------|----------|
+| Pause or Cancel | `PopScene` → back to gameplay |
+| Confirm | `PopScene` then `ReplaceScene{mainMenu}` |
 
-Quit **must** be that FIFO pair. Only `replace` while the overlay is top would swap the overlay for the menu and leave gameplay underneath. Only `pop` resumes.
-
-`FocusGained` is consumed by `Game` and does **not** resume.
-
-`Action::Pause` on the menu is ignored (`handleAction` → `false`). Menu `Cancel` is process exit (`requestClose`), not this overlay.
-
-## Focus is not an `Action`
-
-`InputMapper::mapEvent(FocusLost)` is `nullopt`. `Game` consumes `FocusLost` / `FocusGained` before the mapper. Remap later must not bind “OS unfocus” to Escape.
-
-## Draw
-
-`Game` clears once. The overlay draws a full-`DESIGN_SIZE` dim `RectangleShape` plus `sf::Text` (`Paused`, `Esc - resume`, `Enter - quit to menu`) from `loadUiFont` (`resources/fonts/upheavtt.ttf`). It must not `clear` the target. With `blocksDraw == false` the dummy stays visible.
-
-## Tests
-
-`pause_overlay_test` is windowless. It asserts frozen `tickCount` and ball pose under the overlay, resume (ball moves again), Cancel does not `requestClose`, quit-to-menu, single enqueue, and `FocusLost` via `Game` + mocks.
+`FocusGained` does not resume. Focus lost is an `InputEvent`, not a remappable action; see [engine-input.md](engine-input.md).

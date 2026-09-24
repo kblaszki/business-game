@@ -23,10 +23,11 @@ Before implementing:
 - If something is unclear, stop. Name what's confusing. Ask.
 
 Project-specific examples of assumptions to surface:
-- New engine `.cpp` must be listed in that module's CMakeLists, or it never builds. Legacy `src/` still uses `src/CMakeLists.txt` (`gameLib`).
+- New `.cpp` must be listed in that module’s own `CMakeLists.txt`, or it never builds.
 - Tests exist only in Debug (`build_ut` + `ctest --preset debug`).
-- New code uses namespaces `eng` and `arkanoid`. Legacy `src/` stays namespace-free until cutover.
+- Code uses namespaces `eng` and `arkanoid`.
 - Only `engine/sfml` and `games/arkanoid/main.cpp` include SFML. `arkanoid/sim` stays headless.
+- Tests are headless except `event_translate_test` (links `SFML::Window`, opens no window).
 
 ## 2. Simplicity First
 
@@ -48,7 +49,7 @@ Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, sim
 When editing existing code:
 - Don't "improve" adjacent code, comments, or formatting.
 - Don't refactor things that aren't broken.
-- Match existing style (`.clang-format`, `#pragma once`). New engine and game code uses `eng` / `arkanoid`. Legacy `src/` stays namespace-free.
+- Match existing style (`.clang-format`, `#pragma once`). Engine and game code uses `eng` / `arkanoid`.
 - If you notice unrelated dead code, mention it — don't delete it unless asked.
 
 When your changes create orphans:
@@ -65,7 +66,7 @@ Transform tasks into verifiable goals:
 - "Add validation" → "Write tests for invalid inputs, then make them pass"
 - "Fix the bug" → "Write a test that reproduces it, then make it pass"
 - "Refactor X" → "Ensure tests pass before and after"
-- "Add a type" → "Listed in `gameLib`, Debug `example_test` (and new tests) still pass"
+- "Add a type" → "Listed in the module CMakeLists, Debug suites still pass"
 
 For multi-step tasks, state a brief plan:
 ```
@@ -74,7 +75,7 @@ For multi-step tasks, state a brief plan:
 3. [Step] → verify: [check]
 ```
 
-Prefer concrete checks from this repo: `cmake --build --preset debug --target game`, `build_ut`, `ctest --preset debug`.
+Prefer concrete checks from this repo: `cmake --build --preset debug --target arkanoid`, `build_ut`, `ctest --preset debug`.
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
@@ -82,7 +83,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 **After each coherent, verified unit of work, create a git commit. Do not leave sensible completed changes uncommitted.**
 
-- Treat a finished step from the plan (feature slice, bugfix, rule/skill/docs update, green tests) as commit-worthy.
+- Treat a finished step from the plan (feature slice, bug fix, rule/skill/docs update, green tests) as commit-worthy.
 - One logical change per commit; message focuses on why.
 - Verify before committing (build/tests when the change warrants it).
 - Do not batch unrelated finished work into one mega-commit, and do not commit broken mid-steps or secrets.

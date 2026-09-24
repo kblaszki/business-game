@@ -39,7 +39,7 @@ Platform-independent fixed-timestep pump in `namespace eng`, included as `<eng/l
 - `ClockI` — `virtual Seconds restart() = 0`
 - `PlatformI` — `isOpen`, `close`, `poll` → `std::optional<InputEvent>`, `renderer()` → `RendererI&`
 
-GMock doubles live at `tests/mocks/ClockMock.hpp` and `tests/mocks/PlatformMock.hpp` (engine ports; legacy SFML mocks stay under `tests/mocks/time` and `tests/mocks/window`).
+GMock doubles live at `tests/mocks/ClockMock.hpp`, `tests/mocks/PlatformMock.hpp`, and `tests/mocks/RendererMock.hpp`.
 
 ## App
 

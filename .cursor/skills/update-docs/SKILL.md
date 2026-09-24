@@ -29,12 +29,12 @@ Keep `docs/` in sync with the code. Docs are the source of truth; each file has 
 2. **Map to docs**: search `docs/` for each changed path inside `related_code`. Update every matching doc so its statements match the new code. Then bump `last_reviewed` to today.
 
 3. **Structural changes**:
-   - New/removed/renamed `src/**` file or CMake target → update `docs/reference/source-layout.md`.
-   - New event routing, interface, or loop change → update or add a `docs/reference/` page (this skeleton has `source-layout.md` only).
+   - New/removed/renamed `engine/**` or `games/arkanoid/**` file or CMake target → update `docs/reference/source-layout.md`.
+   - New event routing, interface, or loop change → update the matching `docs/reference/engine-*.md` or `arkanoid-*.md` page.
    - New workflow → update or add a `docs/how-to/` page.
    - Any added/removed/retitled doc → update the table in `docs/index.md`.
 
-4. **Verify**: relative links resolve; every `related_code` path exists; facts (C++23, GTest 1.18, presets, targets, binary path) match `CMakeLists.txt`, `src/CMakeLists.txt`, `CMakePresets.json`.
+4. **Verify**: relative links resolve; every `related_code` path exists; facts (C++23, GTest 1.18, presets, targets, binary path) match root `CMakeLists.txt`, module `CMakeLists.txt` files, and `CMakePresets.json`. Do not list removed trees (`src/`, `gameLib`, executable `game`).
 
 ## Front-matter shape
 

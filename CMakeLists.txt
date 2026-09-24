@@ -18,11 +18,17 @@ list(APPEND
 
 include(FetchSFML)
 
+add_custom_target(
+    check_boundaries
+    COMMAND ${CMAKE_COMMAND}
+        -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
+        -P ${CMAKE_SOURCE_DIR}/cmake/CheckBoundaries.cmake
+    COMMENT "Checking engine/games boundary includes"
+    VERBATIM
+)
+
 add_subdirectory(engine)
 add_subdirectory(games)
-
-include_directories(src)
-add_subdirectory(src)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     list(APPEND
@@ -35,8 +41,11 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
            "$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:-g>"
             "$<$<CXX_COMPILER_ID:MSVC>:/Zi>")
 
-    file(GLOB_RECURSE FORMAT_SOURCES "src/*.cpp" "src/*.hpp" "tests/*.cpp" "tests/*.hpp")
-    
+    file(GLOB_RECURSE FORMAT_SOURCES
+        "engine/*.cpp" "engine/*.hpp"
+        "games/*.cpp" "games/*.hpp"
+        "tests/*.cpp" "tests/*.hpp")
+
     add_custom_target(
         format
         COMMAND clang-format -i ${FORMAT_SOURCES}

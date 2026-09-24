@@ -1,16 +1,16 @@
 # Examples
 
-## Code: grow the skeleton in sequential waves
+## Code: grow a module in sequential waves
 
-This tree is `src/main.cpp` (SFML window) + `src/Example.*` (`gameLib`) + `example_test`. Do not start from FooI `IScreen` / `ScreenStack` / `GameplayScreen` unless the contract names them.
+This tree is `engine/` (`eng`) + `games/arkanoid/` (`arkanoid`, executable `arkanoid`). Contract: [`docs/explanation/architecture.md`](../../../docs/explanation/architecture.md). Use `SceneI` / `SceneStack`, not legacy `ScreenStack`.
 
 | Wave | Package | Owned writes (typical) |
 |------|---------|------------------------|
-| 1 | `Example` / `gameLib` types | `src/Example.*` (or a new sibling type), `tests/unit_tests/ExampleTest.cpp`, `docs/reference/source-layout.md` |
-| 2 | Window / `main` | `src/main.cpp`, `docs/tutorials/getting-started.md` |
+| 1 | Engine module type | `engine/<module>/…`, `tests/engine/<module>/…`, matching `docs/reference/engine-*.md` + `source-layout.md` |
+| 2 | Game sim or app | `games/arkanoid/<sim|app>/…`, `tests/arkanoid/…`, matching `docs/reference/arkanoid-*.md` |
 | 3 | Docs leftover sweep | leftover `docs/**` only (`related_code`, `docs/index.md`) |
 
-Within a wave, split only if paths stay disjoint.
+Within a wave, split only if paths stay disjoint and each agent owns its module `CMakeLists.txt`.
 
 After each of waves 1–2:
 
@@ -21,8 +21,8 @@ After each of waves 1–2:
 
 Wave 3 is a leftover-docs audit, not the first time docs are written. Commit that sweep if it changes files.
 
-Locked names stay those in this tree: `Example`, `game`, `gameLib`. Engine names in [`mvp/`](../../../mvp/README.md) are notes, not current types.
+Locked names stay those in this tree: `eng::*`, `arkanoid::*`, executable `arkanoid`. Prospective spelling in [`mvp/`](../../../mvp/README.md) is notes, not current types.
 
 ## Docs-only: `mvp/` snapshots
 
-`mvp/` is **historical**. Do not rewrite it as current source facts. Use this docs-only fan-out only when the user asked for a written plan, not the implementation. Orchestrator commits after stitch if verify (links / contract lock) passes.
+`mvp/01`–`09` are **prospective**. Do not rewrite them as current source facts. Use this docs-only fan-out only when the user asked for a written plan, not the implementation. Orchestrator commits after stitch if verify (links / contract lock) passes.

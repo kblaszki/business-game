@@ -14,7 +14,7 @@ last_reviewed: 2026-09-24
 
 # Engine architecture decisions
 
-Locked contract for the engine split. The legacy breakout under `src/` stays runnable until the cutover wave. New engine and game code follows this page.
+Locked contract for the engine split. The running tree is `engine/` and `games/arkanoid/`; this page is the source of truth for boundaries and names.
 
 ## Layout and names
 
@@ -63,7 +63,3 @@ Allowed: `std::expected`, `std::optional`, `std::variant`, `std::span`, ranges a
 Forbidden: `std::mdspan`, `std::print`, exceptions for control flow, raw `new`/`delete`, function-local static GPU resources.
 
 CI uses GCC 14 and MSVC so `std::expected` and `std::move_only_function` are available.
-
-## Legacy tree
-
-`src/` (`gameLib`, executable `game`) remains until the cutover deletes it. Do not add features there. Keep it building so existing tests stay green during the strangler migration.

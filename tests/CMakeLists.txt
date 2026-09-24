@@ -5,12 +5,11 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 include(FetchGTest)
 include(GoogleTest)
 
-include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/tests)
 
 include(AddUnitTest)
 
-add_subdirectory(unit_tests)
+add_custom_target(build_ut)
 
 add_subdirectory(engine/core)
 add_subdirectory(engine/input)

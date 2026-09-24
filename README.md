@@ -1,8 +1,8 @@
 # business-game
 
-A C++23 [SFML](https://www.sfml-dev.org/) 2D breakout on an engine skeleton: Start/Quit menu, one stage (paddle, ball, bricks), pause overlay, CMake presets, and windowless unit tests.
+A C++23 [SFML](https://www.sfml-dev.org/) breakout on a small 2D/2.5D engine: three stages, four power-ups, pause overlay, CMake presets, and windowless unit tests.
 
-Longer-term direction lives in [`mvp/`](mvp/README.md) (`01`–`09` prospect, [`10`](mvp/10-engine-progress.md) living); do not assume Arkanoid or board-game features exist in the code yet.
+The engine lives in `engine/` (`namespace eng`). The game lives in `games/arkanoid/` (`namespace arkanoid`). Prospective notes stay in [`mvp/`](mvp/README.md) (`01`–`09`); what landed is [`mvp/10`](mvp/10-engine-progress.md). The contract is [`docs/explanation/architecture.md`](docs/explanation/architecture.md).
 
 ## Table of Contents
 
@@ -33,20 +33,14 @@ cd business-game
 
 | Path | Role |
 |------|------|
-| `src/main.cpp` | Wires `WindowSFML`, `ClockSFML`, `ScreenStack` + `MainMenuScreen`, and `Game` |
-| `src/Game.hpp` / `Game.cpp` | Process loop (`gameLib`); `WindowI&`, `ClockI&`, `ScreenStack&` |
-| `src/window/` | `WindowI` (`DrawerI`), `WindowSFML` (adapter on `game`) |
-| `src/time/` | `ClockI`, `ClockSFML` (on `game`), `FixedTimestep` |
-| `src/screen/` | `ScreenI`, `ScreenStack`, `MainMenuScreen`, `GameplayScreen`, `PauseScreen`, `UiFont` |
-| `resources/fonts/` | UI TTF loaded by `loadUiFont` |
-| `src/world/` | `World`, `Paddle`, `Ball`, `Brick`, `BreakoutArt`, `LevelId`, `LevelDescriptor` |
-| `src/input/` | `Action`, `InputMapper` |
-| `src/Example.hpp` / `Example.cpp` | Windowless helper in `gameLib` |
-| `tests/unit_tests/` | Debug GoogleTest (`example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`) |
+| `engine/` | Engine modules (`eng_core`, input, scene, loop, render, collision, resources, `eng_sfml`) |
+| `games/arkanoid/` | Headless sim, scenes, and the `arkanoid` executable |
+| `resources/fonts/` | UI TTF |
+| `tests/engine/`, `tests/arkanoid/` | Debug GoogleTest (no window, except event translation) |
 | `docs/` | Diátaxis documentation |
 | `mvp/` | Prospective design (`01`–`09`) and living progress (`10`) |
 
-Static library target: `gameLib`. Executable target: `game`.
+Executable target: `arkanoid`. Only `engine/sfml` and `games/arkanoid/main.cpp` include SFML.
 
 ## Building the Project
 
@@ -74,13 +68,13 @@ cmake --preset release
 2. Build the game:
 
 ```sh
-cmake --build --preset debug --target game
+cmake --build --preset debug --target arkanoid
 ```
 
 or:
 
 ```sh
-cmake --build --preset release --target game
+cmake --build --preset release --target arkanoid
 ```
 
 ## Running the Game
@@ -89,19 +83,19 @@ After building, run the executable from the preset output directory:
 
 ```sh
 # Windows
-./build/debug/bin/game.exe
-./build/release/bin/game.exe
+./build/debug/bin/arkanoid.exe
+./build/release/bin/arkanoid.exe
 
 # Linux / macOS
-./build/debug/bin/game
-./build/release/bin/game
+./build/debug/bin/arkanoid
+./build/release/bin/arkanoid
 ```
 
-A 1280×720 window titled "Business game" opens on a menu bar. Enter starts a wrapping dummy; Escape (or focus lost) pauses. Close it with the window chrome.
+A 1280×720 window titled "Business game" opens on a Start / Quit menu. Enter starts Stage1. Clearing a stage loads the next one. Escape pauses.
 
 ## Running the Tests
 
-Tests are available only for the **debug** preset. Suites include `world_test` and `level_descriptor_test`. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
+Tests are available only for the **debug** preset. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).
 
 ```sh
 cmake --preset debug
@@ -116,8 +110,8 @@ Contributions are welcome. Please:
 1. Fork the repository and create a feature branch.
 2. Match existing C++ style (see `.clang-format`). With a debug configure: `cmake --build --preset debug --target format`.
 3. Treat warnings as errors — keep the build clean under the project flags.
-4. Add or update unit tests under `tests/unit_tests/` when changing `gameLib`.
-5. Add every new `src/**/*.cpp` that belongs in the library to `gameLib` in `src/CMakeLists.txt`.
+4. Add or update unit tests under `tests/engine/` or `tests/arkanoid/`.
+5. List every new `.cpp` in that module's `CMakeLists.txt`.
 6. Keep `docs/` current for files listed in a doc's `related_code` (see `docs/index.md`).
 7. Open a pull request with a short description of the change.
 

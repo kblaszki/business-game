@@ -26,6 +26,6 @@ When a change touches code, update docs in the same change:
 - Update every doc whose `related_code` lists a file you changed; set its `last_reviewed` to today.
 - New/removed source file, target, or directory → update `reference/source-layout.md`.
 - New behavior/workflow → update the matching how-to or reference; if a new doc is added, also add it to `docs/index.md`.
-- Keep facts (C++23, presets, targets, paths) consistent with `CMakeLists.txt`, `src/CMakeLists.txt`, `CMakePresets.json`.
+- Keep facts (C++23, presets, targets, paths) consistent with `CMakeLists.txt`, module `CMakeLists.txt` files under `engine/` and `games/`, and `CMakePresets.json`.
 
 For a full sweep after larger changes, use the `update-docs` skill.

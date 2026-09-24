@@ -7,32 +7,25 @@ related_code:
   - CMakeLists.txt
   - cmake/FetchSFML.cmake
   - cmake/FetchGTest.cmake
-  - src/main.cpp
-  - src/Game.hpp
-  - src/window/WindowSFML.hpp
-  - src/time/ClockSFML.hpp
-  - src/screen/ScreenI.hpp
-  - src/screen/ScreenStack.hpp
-  - src/screen/MainMenuScreen.hpp
-  - src/screen/GameplayScreen.hpp
-  - src/input/Action.hpp
-  - src/input/InputMapper.hpp
-  - src/screen/PauseScreen.hpp
-  - src/world/World.hpp
+  - games/arkanoid/main.cpp
+  - games/arkanoid/app/include/arkanoid/app/Scenes.hpp
+  - games/arkanoid/sim/include/arkanoid/sim/State.hpp
   - .github/workflows/ci.yml
 related_docs:
   - ../how-to/build-and-test.md
   - ../reference/source-layout.md
   - ../reference/input-and-events.md
   - ../reference/pause-overlay.md
+  - ../reference/arkanoid-sim.md
+  - ../explanation/architecture.md
   - ../../mvp/10-engine-progress.md
-keywords: [setup, toolchain, build, run, msys2, ninja, cmake, first time]
+keywords: [setup, toolchain, build, run, msys2, ninja, cmake, first time, arkanoid]
 last_reviewed: 2026-09-24
 ---
 
 # Getting started
 
-Goal: from a fresh clone to a running window. By the end you will have configured, built, and launched `game`.
+Goal: from a fresh clone to a running window. By the end you will have configured, built, and launched `arkanoid`.
 
 ## 1. Install the toolchain
 
@@ -68,20 +61,20 @@ This creates `build/debug/` and downloads dependencies on first run (can take a 
 ## 3. Build the game
 
 ```sh
-cmake --build --preset debug --target game
+cmake --build --preset debug --target arkanoid
 ```
 
 ## 4. Run it
 
 ```sh
 # Windows
-./build/debug/bin/game.exe
+./build/debug/bin/arkanoid.exe
 # Linux / macOS
-./build/debug/bin/game
+./build/debug/bin/arkanoid
 ```
 
-A 1280×720 window titled "Business game" opens on a Start / Quit menu. Start or Enter plays Stage1 (arrows or A/D move the paddle, Enter launches). Clearing a stage loads the next; Stage3 is the last. Escape pauses. Backspace on the menu quits.
+A 1280×720 window opens on a Start / Quit menu. Start or Enter plays Stage1 (arrows or A/D move the paddle, Enter launches). Clearing a stage loads the next; Stage3 is the last. Escape pauses. Backspace on the menu quits. Donor bricks drop Wide, MultiBall, Slow, and ExtraLife capsules.
 
 ## Next steps
 
-Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Input: [../reference/input-and-events.md](../reference/input-and-events.md). Pause: [../reference/pause-overlay.md](../reference/pause-overlay.md). World: [../reference/world-and-levels.md](../reference/world-and-levels.md).
+Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Input: [../reference/input-and-events.md](../reference/input-and-events.md). Pause: [../reference/pause-overlay.md](../reference/pause-overlay.md). Sim rules: [../reference/arkanoid-sim.md](../reference/arkanoid-sim.md).

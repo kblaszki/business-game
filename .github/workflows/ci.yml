@@ -85,5 +85,5 @@ jobs:
       - name: Configure Release
         run: cmake --preset release
 
-      - name: Build game
-        run: cmake --build --preset release --target game
+      - name: Build arkanoid
+        run: cmake --build --preset release --target arkanoid

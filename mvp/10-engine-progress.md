@@ -5,55 +5,23 @@ last_reviewed: 2026-09-24
 related_docs:
   - README.md
   - 09-rollout.md
+  - ../docs/explanation/architecture.md
+  - ../docs/reference/source-layout.md
 related_code:
-  - ../src/window/WindowI.hpp
-  - ../src/window/WindowSFML.hpp
-  - ../src/window/WindowSFML.cpp
-  - ../src/window/DrawerI.hpp
-  - ../src/time/ClockI.hpp
-  - ../src/time/ClockSFML.hpp
-  - ../src/time/ClockSFML.cpp
-  - ../src/time/FixedTimestep.hpp
-  - ../src/screen/ScreenI.hpp
-  - ../src/screen/ScreenStack.hpp
-  - ../src/screen/ScreenStack.cpp
-  - ../src/screen/MainMenuScreen.hpp
-  - ../src/screen/MainMenuScreen.cpp
-  - ../src/screen/GameplayScreen.hpp
-  - ../src/screen/GameplayScreen.cpp
-  - ../src/screen/PauseScreen.hpp
-  - ../src/screen/PauseScreen.cpp
-  - ../src/screen/UiFont.hpp
-  - ../src/screen/UiFont.cpp
-  - ../src/input/Action.hpp
-  - ../src/input/InputMapper.hpp
-  - ../src/input/InputMapper.cpp
-  - ../src/world/LevelId.hpp
-  - ../src/world/LevelDescriptor.hpp
-  - ../src/world/LevelDescriptor.cpp
-  - ../src/world/Paddle.hpp
-  - ../src/world/Ball.hpp
-  - ../src/world/Brick.hpp
-  - ../src/world/BreakoutArt.hpp
-  - ../src/world/World.hpp
-  - ../src/world/World.cpp
-  - ../src/world/PowerUp.hpp
-  - ../src/world/PowerUp.cpp
-  - ../src/Game.hpp
-  - ../src/Game.cpp
-  - ../src/main.cpp
-  - ../src/CMakeLists.txt
-  - ../tests/mocks/window/WindowMock.hpp
-  - ../tests/mocks/time/ClockMock.hpp
-  - ../tests/unit_tests/GameTest.cpp
-  - ../tests/unit_tests/FixedTimestepTest.cpp
-  - ../tests/unit_tests/ScreenStackTest.cpp
-  - ../tests/unit_tests/MenuGameplayTest.cpp
-  - ../tests/unit_tests/InputMapperTest.cpp
-  - ../tests/unit_tests/PauseOverlayTest.cpp
-  - ../tests/unit_tests/WorldTest.cpp
-  - ../tests/unit_tests/LevelDescriptorTest.cpp
-  - ../tests/unit_tests/fakes/ScreenSpy.hpp
+  - ../engine/core/include/eng/core/Features.hpp
+  - ../engine/input/include/eng/input/InputEvent.hpp
+  - ../engine/scene/include/eng/scene/SceneStack.hpp
+  - ../engine/loop/include/eng/loop/App.hpp
+  - ../engine/render/include/eng/render/RenderQueue.hpp
+  - ../engine/collision/include/eng/collision/Collision.hpp
+  - ../engine/resources/include/eng/resources/ResourceCache.hpp
+  - ../engine/sfml/include/eng/sfml/SfmlPlatform.hpp
+  - ../games/arkanoid/sim/include/arkanoid/sim/State.hpp
+  - ../games/arkanoid/app/include/arkanoid/app/Scenes.hpp
+  - ../games/arkanoid/main.cpp
+  - ../tests/engine/core/CMakeLists.txt
+  - ../tests/arkanoid/sim/CMakeLists.txt
+  - ../tests/arkanoid/app/CMakeLists.txt
 ---
 
 # Engine implementation progress
@@ -64,17 +32,17 @@ This file is the **living register** of names and files that exist in the tree. 
 
 | Rule | In this tree |
 |------|----------------|
-| Interfaces | Suffix `FooI` (example: `WindowI`, `ClockI`, `DrawerI`, `ScreenI`) |
+| Interfaces | Suffix `FooI` (`SceneI`, `RendererI`, `PlatformI`, `ClockI`) |
 | `mvp/` names with prefix `I` | Remap when that type lands — do not edit 01–09 |
-| Directories | Split is in progress: `engine/` (`eng`) and `games/arkanoid/` (`arkanoid`). The old "no engine/ vs game/" non-goal is revoked. Legacy breakout remains under `src/` until cutover. Contract: [`docs/explanation/architecture.md`](../docs/explanation/architecture.md) |
-| SOLID | One `WindowI` (inherits `DrawerI` because `ScreenI` must not see `close()`) |
-| `gameLib` vs SFML | `gameLib` compiles `Game.cpp`, `InputMapper.cpp`, `ScreenStack.cpp`, and the menu/gameplay screens with **SFML headers only** (no SFML / OpenGL link). `WindowSFML.cpp` and `ClockSFML.cpp` live on executable `game`. `menu_gameplay_test` links Graphics because those screens construct `sf::RectangleShape` |
+| Directories | Engine split **landed**: `engine/` (`eng`) and `games/arkanoid/` (`arkanoid`, executable `arkanoid`). Contract: [`docs/explanation/architecture.md`](../docs/explanation/architecture.md) |
+| SFML | Only `engine/sfml` and `games/arkanoid/main.cpp` include SFML. `arkanoid/sim` stays headless |
+| CMake | Each module owns its `CMakeLists.txt` |
 
 ### Name remap (when those types are added)
 
-| Locked in 01–09 | Name to use in `src/` |
+| Locked in 01–09 | Name to use in the tree |
 |-----------------|------------------------|
-| `IScreen` | `ScreenI` (landed) |
+| `IScreen` | `SceneI` (landed) |
 | (other `IFoo` from mvp) | `FooI` |
 
 Until a row is implemented, the mvp spelling in 01–09 is still the design vocabulary for those chapters.
@@ -85,233 +53,46 @@ Check a box only after that slice is on `main`. Paths are what landed, not a pro
 
 | # | Slice | Status | In the tree |
 |---|-------|--------|-------------|
-| 0 | Scaffold: `Example` in `gameLib`; empty window loop | done (loop moved in slice 1) | `src/Example.*` |
-| 1 | Window port | **done** | see slice 1 |
-| 2 | Clock + `DrawerI` + `ScreenI` | **done** | see below |
-| 3 | `ScreenStack` | **done** | see below |
-| 4 | Main menu + gameplay screens | **done** | see below |
-| 5 | `InputMapper` + `Action` | **done** | see below |
-| 6 | Pause overlay | **done** | see below |
-| 7 | World, objects, levels | **done** | see below |
-| 8 | Menu Cancel + labels | **done** | see below |
-| 9 | Classic breakout | **done** | see below |
-| 10 | Stages + power-ups | **done** | see below |
+| 0–10 | Pre-cutover breakout under former `src/` | **superseded** | removed at cutover; historical notes below |
+| 11 | Engine split | **done** | see Slice 11 |
 
-Three stages and four power-ups are wired in `World` (menu Start → Stage1 → Stage2 → Stage3; donor capsules; timed Wide/Slow). `01`–`09` stay prospective design notes.
+Three stages and four power-ups live in `arkanoid_sim` / `arkanoid_app`. `01`–`09` stay prospective design notes.
 
-### Slice 1 — window port (landed)
+### Slices 0–10 — pre-cutover (historical)
 
-- [x] `WindowI` — `isOpen`, `close`, `pollEvent`, `clear`, `display` (now also `DrawerI`)
-- [x] `WindowSFML` — adapter on `sf::RenderWindow`; framerate cap 60
-- [x] `Game` — process loop; holds `WindowI&`, **not** `sf::RenderWindow`; `DESIGN_SIZE` `{1280u, 720u}`
-- [x] `main.cpp` — wires adapters + `Game`
-- [x] `WindowMock` + `GameTest`
-- [x] CMake: `Game.cpp` in `gameLib`; `WindowSFML.cpp` on `game`
+Slices 0–10 built the former `src/` breakout (`ScreenStack`, `World`, stages, power-ups). That tree is **gone**. Do not treat those paths as current. Detail lives in git history if needed; current facts are in [`docs/`](../docs/index.md) and Slice 11.
 
-`pollEvent` returns `std::optional<sf::Event>`. That is a test seam for the window, not a full platform abstraction.
+### Slice 11 — engine split (landed)
 
-### Slice 2 — clock, `DrawerI`, `ScreenI` (landed)
-
-- [x] `ClockI` / `ClockSFML` — `restart`, `getElapsedTime`; adapter on `game`
-- [x] `FixedTimestep` — `tick` 1/60 s, `accumulatorMax` 0.25 s, `drain`
-- [x] `DrawerI` — `draw(const sf::Drawable&)`; `WindowI` inherits it
-- [x] `ScreenI` — `handleEvent`, `update`, `draw(DrawerI&)`, `blocksUpdate`, `blocksDraw` (no `handleAction`)
-- [x] `Game` — Closed in `Game`; leftover events to the (then single) screen; drain unless `blocksUpdate`; `update(tick)` N times; `clear` / `draw` / `display`
-- [x] File-local dummy screen in `main.cpp`
-- [x] `ClockMock`, `ScreenSpy`, `FixedTimestepTest`, extended `GameTest`
+- [x] `eng_core` — Vec2, Rect, Handle, Image, Features
+- [x] `eng_input` — InputEvent, ActionMap, InputState
+- [x] `eng_scene` — SceneI, SceneStack, SceneRequest, SceneTraits
+- [x] `eng_loop` — FixedStepLoop, App, PlatformI, ClockI
+- [x] `eng_render` — RenderQueue, DrawCommand, Projection
+- [x] `eng_collision` — intersect, sweep, reflect
+- [x] `eng_resources` — ResourceCache, ResourceError
+- [x] `eng_sfml` — SfmlPlatform, EventTranslate, SfmlRenderer, SfmlAssets, SfmlClock
+- [x] `arkanoid_sim` — headless State / step / levels / power-ups
+- [x] `arkanoid_app` — MainMenuScene, GameplayScene, PauseScene, HUD, assets, bindings
+- [x] executable `arkanoid` — `games/arkanoid/main.cpp`
+- [x] Headless tests under `tests/engine/` and `tests/arkanoid/` (`event_translate_test` links SFML::Window, opens no window)
 
 ```mermaid
 flowchart LR
-  Main[main.cpp] --> SFMLWin[WindowSFML]
-  Main --> SFMLClk[ClockSFML]
-  Main --> Dummy[DummyScreen]
-  Main --> Game[Game]
-  Game --> WinI[WindowI]
-  Game --> ClkI[ClockI]
-  Game --> ScrI[ScreenI]
-  SFMLWin -.-> WinI
-  SFMLClk -.-> ClkI
-  Dummy -.-> ScrI
-  WinI --> DrwI[DrawerI]
+  Main[main.cpp] --> App[eng::App]
+  Main --> Plat[SfmlPlatform]
+  Main --> Stack[SceneStack]
+  App --> Plat
+  App --> Stack
+  Stack --> Menu[MainMenuScene]
+  Stack --> Play[GameplayScene]
+  Stack --> Pause[PauseScene]
+  Play --> Sim[arkanoid_sim]
 ```
 
 | Path | Role |
 |------|------|
-| [`src/window/WindowI.hpp`](../src/window/WindowI.hpp) | Window port (`DrawerI`) |
-| [`src/window/DrawerI.hpp`](../src/window/DrawerI.hpp) | Draw seam |
-| [`src/window/WindowSFML.hpp`](../src/window/WindowSFML.hpp) / [`.cpp`](../src/window/WindowSFML.cpp) | SFML window adapter (`game`) |
-| [`src/time/ClockI.hpp`](../src/time/ClockI.hpp) | Clock port |
-| [`src/time/ClockSFML.hpp`](../src/time/ClockSFML.hpp) / [`.cpp`](../src/time/ClockSFML.cpp) | SFML clock adapter (`game`) |
-| [`src/time/FixedTimestep.hpp`](../src/time/FixedTimestep.hpp) | Drain helper |
-| [`src/screen/ScreenI.hpp`](../src/screen/ScreenI.hpp) | Screen port |
-| [`src/Game.hpp`](../src/Game.hpp) / [`Game.cpp`](../src/Game.cpp) | Loop (`gameLib`) |
-| [`src/main.cpp`](../src/main.cpp) | Wires adapters + dummy + `Game` |
-| [`tests/mocks/window/WindowMock.hpp`](../tests/mocks/window/WindowMock.hpp) | gmock window |
-| [`tests/mocks/time/ClockMock.hpp`](../tests/mocks/time/ClockMock.hpp) | gmock clock |
-| [`tests/unit_tests/fakes/ScreenSpy.hpp`](../tests/unit_tests/fakes/ScreenSpy.hpp) | counters |
-| [`tests/unit_tests/GameTest.cpp`](../tests/unit_tests/GameTest.cpp) | `game_test` |
-| [`tests/unit_tests/FixedTimestepTest.cpp`](../tests/unit_tests/FixedTimestepTest.cpp) | `fixed_timestep_test` |
-
-### Slice 3 — `ScreenStack` (landed)
-
-- [x] `ScreenStack` — `push` / `pop` / `replace`; apply private (immediate when idle, after `draw` when dispatched)
-- [x] Walk: events/update top-down; draw from highest `blocksDraw` upward
-- [x] `Game(WindowI&, ClockI&, ScreenStack&)`
-- [x] Seed in `main` (now `MainMenuScreen`)
-- [x] `ScreenStackTest` + `GameTest` on a stack with `ScreenSpy`
-
-```mermaid
-flowchart LR
-  Main[main.cpp] --> Stack[ScreenStack]
-  Main --> Game[Game]
-  Game --> Stack
-  Stack --> ScrI[ScreenI]
-```
-
-| Path | Role |
-|------|------|
-| [`src/screen/ScreenStack.hpp`](../src/screen/ScreenStack.hpp) / [`.cpp`](../src/screen/ScreenStack.cpp) | Stack (`gameLib`) |
-| [`tests/unit_tests/ScreenStackTest.cpp`](../tests/unit_tests/ScreenStackTest.cpp) | `screen_stack_test` |
-
-### Slice 4 — menu and gameplay (landed)
-
-- [x] `MainMenuScreen` — Enter `replace`s with `GameplayScreen`; `blocksUpdate`/`blocksDraw` true; wide bar shape
-- [x] `GameplayScreen` — `tickCount`; small dummy rectangle; no World / velocity
-- [x] `ScreenStack::top()`
-- [x] Dummy removed from `main`
-- [x] `menu_gameplay_test`
-
-```mermaid
-flowchart LR
-  Main[main] --> Menu[MainMenuScreen]
-  Menu -->|"Enter replace"| Play[GameplayScreen]
-```
-
-| Path | Role |
-|------|------|
-| [`src/screen/MainMenuScreen.hpp`](../src/screen/MainMenuScreen.hpp) / [`.cpp`](../src/screen/MainMenuScreen.cpp) | Menu |
-| [`src/screen/GameplayScreen.hpp`](../src/screen/GameplayScreen.hpp) / [`.cpp`](../src/screen/GameplayScreen.cpp) | Empty play |
-| [`tests/unit_tests/MenuGameplayTest.cpp`](../tests/unit_tests/MenuGameplayTest.cpp) | `menu_gameplay_test` |
-
-### Slice 5 — `InputMapper` and `Action` (landed)
-
-- [x] `Action` — `Confirm`, `Cancel` (unbound), `Pause`
-- [x] `InputMapper` — `mapEvent` / `mapKeyPressed`; Enter → Confirm; Escape → Pause
-- [x] `ScreenI::handleAction` / `ScreenStack::handleAction` (stop on consume only)
-- [x] `Game` pump: Closed \| map → handleAction \| handleEvent
-- [x] Menu Start = `Confirm`; gameplay ignores `Pause`
-- [x] `setKeyRepeatEnabled(false)` on `WindowSFML`
-- [x] `input_mapper_test`; no FocusLost, no `pollDummyIntent`
-
-```mermaid
-flowchart LR
-  Poll[pollEvent] --> Closed{"Closed?"}
-  Closed -->|yes| CloseWin[close]
-  Closed -->|no| Map[InputMapper]
-  Map -->|Action| Act[handleAction]
-  Map -->|nullopt| Ev[handleEvent]
-```
-
-| Path | Role |
-|------|------|
-| [`src/input/Action.hpp`](../src/input/Action.hpp) | Enum |
-| [`src/input/InputMapper.hpp`](../src/input/InputMapper.hpp) / [`.cpp`](../src/input/InputMapper.cpp) | Table |
-| [`tests/unit_tests/InputMapperTest.cpp`](../tests/unit_tests/InputMapperTest.cpp) | `input_mapper_test` |
-| [`docs/reference/input-and-events.md`](../docs/reference/input-and-events.md) | Pump + SFML notes |
-
-### Slice 6 — pause overlay (landed)
-
-- [x] `PauseScreen` — `blocksUpdate` true, `blocksDraw` false; dim full-view rect
-- [x] `ScreenI::acceptsPauseOverlay` / `isPauseOverlay` (defaults false)
-- [x] `ScreenStack::requestPauseOverlay` (only push path; `pauseQueued`)
-- [x] Gameplay `Action::Pause` → request; overlay Pause/Cancel → pop; Confirm → pop+replace menu
-- [x] `Game`: `FocusLost` → request; `FocusGained` does not resume
-- [x] `pause_overlay_test`; freeze = `tickCount` unchanged
-
-```mermaid
-flowchart LR
-  Play[GameplayScreen] -->|"Pause or FocusLost"| Overlay[PauseScreen]
-  Overlay -->|"Pause or Cancel"| Play
-  Overlay -->|"Confirm"| Menu[MainMenuScreen]
-```
-
-| Path | Role |
-|------|------|
-| [`src/screen/PauseScreen.hpp`](../src/screen/PauseScreen.hpp) / [`.cpp`](../src/screen/PauseScreen.cpp) | Overlay |
-| [`tests/unit_tests/PauseOverlayTest.cpp`](../tests/unit_tests/PauseOverlayTest.cpp) | `pause_overlay_test` |
-| [`docs/reference/pause-overlay.md`](../docs/reference/pause-overlay.md) | Overlay facts |
-
-### Slice 7 — World, objects, levels (landed)
-
-- [x] `GameObject` — concrete dummy; `{40,40}`; `{240,0}` px/s; wrap
-- [x] `World` — `spawn` / `fixedUpdate` / `draw(DrawerI&)`; no pause flag
-- [x] `LevelId::Sandbox` / `levelDescriptor` / `makeWorld`
-- [x] `GameplayScreen(ScreenStack&, LevelId)` owns `World`
-- [x] Pause freezes pose because `update` is not called
-- [x] `world_test`, `level_descriptor_test`
-
-```mermaid
-flowchart LR
-  Menu[MainMenuScreen] -->|Sandbox| Play[GameplayScreen]
-  Play --> World[World]
-  World --> Dummy[GameObject]
-```
-
-| Path | Role |
-|------|------|
-| [`src/world/World.hpp`](../src/world/World.hpp) / [`.cpp`](../src/world/World.cpp) | Sim owner |
-| [`src/world/GameObject.hpp`](../src/world/GameObject.hpp) / [`.cpp`](../src/world/GameObject.cpp) | Dummy |
-| [`src/world/LevelDescriptor.hpp`](../src/world/LevelDescriptor.hpp) / [`.cpp`](../src/world/LevelDescriptor.cpp) | Data + factory |
-| [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md) | Facts |
-
-### Slice 8 — Menu Cancel + labels (landed)
-
-- [x] `Key::Backspace` → `Action::Cancel`
-- [x] `ScreenStack::requestClose` / `closeRequested`; `Game` closes after the pump
-- [x] Menu Cancel requests close; gameplay ignores Cancel
-- [x] Overlay Cancel still resumes (not process exit; not quit-to-menu)
-- [x] `loadUiFont` + `sf::Text` on menu and pause (`resources/fonts/upheavtt.ttf`)
-
-```mermaid
-flowchart LR
-  Backspace[Backspace] --> Cancel[Cancel]
-  Cancel --> Menu[MainMenuScreen]
-  Menu --> Req[requestClose]
-  Req --> Game[Game close]
-```
-
-| Path | Role |
-|------|------|
-| [`src/screen/ScreenStack.hpp`](../src/screen/ScreenStack.hpp) | `requestClose` |
-| [`src/screen/UiFont.hpp`](../src/screen/UiFont.hpp) / [`.cpp`](../src/screen/UiFont.cpp) | Font load |
-| [`docs/reference/input-and-events.md`](../docs/reference/input-and-events.md) | Binds + close |
-
-### Slice 9 — Classic breakout (landed)
-
-- [x] `Paddle` / `Ball` / `Brick` / `BreakoutArt` (generated textures)
-- [x] `World` score, lives, launch, collisions; no `GameObject`
-- [x] `LevelId::Stage1` brick grid
-- [x] Menu Start/Quit buttons + mouse
-- [x] HUD, win/lose, paddle hold keys
-
-| Path | Role |
-|------|------|
-| [`src/world/World.hpp`](../src/world/World.hpp) | Breakout sim |
-| [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md) | Facts |
-
-### Slice 10 — Stages and power-ups (landed)
-
-- [x] `World` owns `std::vector<Ball>` and `std::vector<PowerUp>`; `ball()` is the first ball
-- [x] Donor bricks (`index % 4 == 0`); kind cycles Wide, MultiBall, Slow, ExtraLife
-- [x] Catch applies one timed effect (Wide / Slow share 8 s); MultiBall extras; ExtraLife
-- [x] Miss = all balls off the bottom; some fallen balls are erased without a life loss
-- [x] `GameplayScreen` advances Stage1→Stage2→Stage3 keeping score/lives; only Stage3 shows You win
-- [x] HUD third label is `activePowerUpName()`; lose / Stage3 Confirm still retries that level
-
-| Path | Role |
-|------|------|
-| [`src/world/World.hpp`](../src/world/World.hpp) / [`.cpp`](../src/world/World.cpp) | Many balls, capsules, `applyPowerUp` |
-| [`src/world/PowerUp.hpp`](../src/world/PowerUp.hpp) | Capsule type |
-| [`src/screen/GameplayScreen.hpp`](../src/screen/GameplayScreen.hpp) / [`.cpp`](../src/screen/GameplayScreen.cpp) | Stage advance + power HUD |
-| [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md) | Stage + ball facts |
-| [`docs/reference/power-ups.md`](../docs/reference/power-ups.md) | Spawn / catch / effects |
+| [`docs/explanation/architecture.md`](../docs/explanation/architecture.md) | Contract |
+| [`docs/reference/source-layout.md`](../docs/reference/source-layout.md) | Targets and suites |
+| [`docs/reference/arkanoid-sim.md`](../docs/reference/arkanoid-sim.md) | Sim rules |
+| [`docs/reference/arkanoid-app.md`](../docs/reference/arkanoid-app.md) | Scenes and HUD |
