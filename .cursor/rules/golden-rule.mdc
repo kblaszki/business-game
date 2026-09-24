@@ -23,9 +23,10 @@ Before implementing:
 - If something is unclear, stop. Name what's confusing. Ask.
 
 Project-specific examples of assumptions to surface:
-- New `.cpp` must be listed in `src/CMakeLists.txt` (`gameLib`) or it never builds.
+- New engine `.cpp` must be listed in that module's CMakeLists, or it never builds. Legacy `src/` still uses `src/CMakeLists.txt` (`gameLib`).
 - Tests exist only in Debug (`build_ut` + `ctest --preset debug`).
-- This tree is an SFML window + `Example` in `gameLib`; do not assume screens, Arkanoid, or a board-game exist.
+- New code uses namespaces `eng` and `arkanoid`. Legacy `src/` stays namespace-free until cutover.
+- Only `engine/sfml` and `games/arkanoid/main.cpp` include SFML. `arkanoid/sim` stays headless.
 
 ## 2. Simplicity First
 
@@ -47,7 +48,7 @@ Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, sim
 When editing existing code:
 - Don't "improve" adjacent code, comments, or formatting.
 - Don't refactor things that aren't broken.
-- Match existing style (`.clang-format`, `#pragma once`, no namespaces), even if you'd do it differently.
+- Match existing style (`.clang-format`, `#pragma once`). New engine and game code uses `eng` / `arkanoid`. Legacy `src/` stays namespace-free.
 - If you notice unrelated dead code, mention it — don't delete it unless asked.
 
 When your changes create orphans:

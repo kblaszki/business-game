@@ -13,6 +13,7 @@ related_docs:
   - reference/pause-overlay.md
   - reference/world-and-levels.md
   - explanation/roadmap.md
+  - explanation/architecture.md
   - ../mvp/README.md
   - ../mvp/10-engine-progress.md
 keywords: [documentation, diataxis, index, map, navigation, docs]
@@ -54,6 +55,7 @@ flowchart TD
 | [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, Paddle, Ball, Brick, Stage1 |
 | [reference/power-ups.md](reference/power-ups.md) | reference | PowerUp, PowerUpKind, capsule, Wide, MultiBall |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, skeleton, mvp |
+| [explanation/architecture.md](explanation/architecture.md) | explanation | ADR, eng, arkanoid, boundaries, ECS |
 | [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | prospective engine plan |
 | [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | WindowI, PauseScreen, World, requestClose, slices |
 

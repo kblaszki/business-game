@@ -66,7 +66,7 @@ This file is the **living register** of names and files that exist in the tree. 
 |------|----------------|
 | Interfaces | Suffix `FooI` (example: `WindowI`, `ClockI`, `DrawerI`, `ScreenI`) |
 | `mvp/` names with prefix `I` | Remap when that type lands — do not edit 01–09 |
-| Directories | No `engine/` vs `game/` split ([README.md](README.md) non-goal). Window: `src/window/`. Time: `src/time/`. Screen port: `src/screen/`. Process loop: `Game` in `src/` |
+| Directories | Split is in progress: `engine/` (`eng`) and `games/arkanoid/` (`arkanoid`). The old "no engine/ vs game/" non-goal is revoked. Legacy breakout remains under `src/` until cutover. Contract: [`docs/explanation/architecture.md`](../docs/explanation/architecture.md) |
 | SOLID | One `WindowI` (inherits `DrawerI` because `ScreenI` must not see `close()`) |
 | `gameLib` vs SFML | `gameLib` compiles `Game.cpp`, `InputMapper.cpp`, `ScreenStack.cpp`, and the menu/gameplay screens with **SFML headers only** (no SFML / OpenGL link). `WindowSFML.cpp` and `ClockSFML.cpp` live on executable `game`. `menu_gameplay_test` links Graphics because those screens construct `sf::RectangleShape` |
 

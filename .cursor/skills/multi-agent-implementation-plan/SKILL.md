@@ -2,7 +2,7 @@
 name: multi-agent-implementation-plan
 description: >-
   Splits an implementation plan into work packages and assigns each to a
-  parallel Grok 4.6 subagent (code, tests, or docs). Each verified wave updates
+  parallel Grok 4.7 subagent (code, tests, or docs). Each verified wave updates
   Diátaxis docs in the same change and the orchestrator commits per golden-rule.
   Use when the user wants many Grok agents, a multi-agent implementation,
   parallel subagents, or a plan fanned out across slices.
@@ -10,9 +10,9 @@ description: >-
 
 # Multi-agent implementation plan
 
-Split a plan into **work packages** and run one Grok 4.6 agent per package. Packages may implement C++, add tests, or (only if asked) write docs. Markdown chapters are optional, not the default.
+Split a plan into **work packages** and run one Grok 4.7 agent per package. Packages may implement C++, add tests, or (only if asked) write docs. Markdown chapters are optional, not the default.
 
-When speaking to the user, say **Grok 4.6**. Tool slug: `cursor-grok-4.6-high-fast`.
+When speaking to the user, say **Grok 4.7**. Tool slug: `grok-4.7-high-fast`.
 
 Package cards and prompt skeletons: [reference.md](reference.md). Examples: [examples.md](examples.md).
 
@@ -55,7 +55,7 @@ The contract can stay in the orchestrator prompt and todos. Write a short file o
 
 ## 3. Fan-out
 
-One `Task` per package (`generalPurpose`, `cursor-grok-4.6-high-fast`). Prompt from [reference.md](reference.md).
+One `Task` per package (`generalPurpose`, `grok-4.7-high-fast`). Prompt from [reference.md](reference.md).
 
 - **Parallel** in one turn only if owned paths are disjoint.
 - **Sequential waves** when package B imports types package A must land first (see [examples.md](examples.md)).

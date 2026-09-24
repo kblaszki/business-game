@@ -22,7 +22,7 @@ Owned writes **must** include the matching `docs/` paths whenever the card owns 
 
 ## Implement prompt
 
-`model: cursor-grok-4.6-high-fast`, `subagent_type: generalPurpose`.
+`model: grok-4.7-high-fast`, `subagent_type: generalPurpose`.
 
 ```
 You own ONE work package. Implement it.
