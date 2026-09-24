@@ -9,6 +9,7 @@ related_docs:
   - tutorials/getting-started.md
   - how-to/build-and-test.md
   - reference/source-layout.md
+  - reference/engine-core.md
   - reference/input-and-events.md
   - reference/pause-overlay.md
   - reference/world-and-levels.md
@@ -50,6 +51,7 @@ flowchart TD
 | [tutorials/getting-started.md](tutorials/getting-started.md) | tutorial | setup, toolchain, build, run, msys2 |
 | [how-to/build-and-test.md](how-to/build-and-test.md) | how-to | build, test, ctest, format, presets |
 | [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, gameLib, targets |
+| [reference/engine-core.md](reference/engine-core.md) | reference | eng, Vec2, Rect, Handle, Image |
 | [reference/input-and-events.md](reference/input-and-events.md) | reference | Action, InputMapper, SFML events, handleAction |
 | [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScreen, overlay, FocusLost, requestPauseOverlay |
 | [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, Paddle, Ball, Brick, Stage1 |
