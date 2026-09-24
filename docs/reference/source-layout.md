@@ -47,6 +47,9 @@ related_code:
   - cmake/FetchGTest.cmake
   - cmake/AddUnitTest.cmake
   - engine/core/include/eng/core/Features.hpp
+  - engine/resources/include/eng/resources/ResourceCache.hpp
+  - engine/resources/include/eng/resources/ResourceError.hpp
+  - tests/engine/resources/ResourceCacheTest.cpp
   - tests/unit_tests/CMakeLists.txt
 
   - tests/unit_tests/ExampleTest.cpp

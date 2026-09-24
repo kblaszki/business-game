@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <concepts>
+#include <cstdint>
 #include <optional>
 
 namespace eng
@@ -51,6 +52,14 @@ struct Vec2
 
 using Vec2f = Vec2<float>;
 
+struct Vec2u
+{
+    std::uint32_t x{};
+    std::uint32_t y{};
+
+    constexpr bool operator==(const Vec2u&) const = default;
+};
+
 template<std::floating_point T>
 constexpr T dot(const Vec2<T>& a, const Vec2<T>& b) noexcept
 {
@@ -75,4 +84,4 @@ constexpr std::optional<Vec2<T>> normalized(const Vec2<T>& v) noexcept
     return Vec2<T>{v.x * invLen, v.y * invLen};
 }
 
-}  // namespace eng
+} // namespace eng

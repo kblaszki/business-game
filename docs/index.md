@@ -15,6 +15,8 @@ related_docs:
   - reference/engine-loop.md
   - reference/engine-render.md
   - reference/engine-collision.md
+  - reference/engine-resources.md
+  - reference/engine-sfml.md
   - reference/input-and-events.md
   - reference/pause-overlay.md
   - reference/world-and-levels.md
@@ -62,6 +64,8 @@ flowchart TD
 | [reference/engine-loop.md](reference/engine-loop.md) | reference | FixedStepLoop, App, PlatformI |
 | [reference/engine-render.md](reference/engine-render.md) | reference | RenderQueue, SortKey, Projection |
 | [reference/engine-collision.md](reference/engine-collision.md) | reference | intersect, sweep, reflect |
+| [reference/engine-resources.md](reference/engine-resources.md) | reference | ResourceCache, ResourceError |
+| [reference/engine-sfml.md](reference/engine-sfml.md) | reference | SfmlPlatform, EventTranslate, letterbox |
 | [reference/input-and-events.md](reference/input-and-events.md) | reference | Action, InputMapper, SFML events, handleAction |
 | [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScreen, overlay, FocusLost, requestPauseOverlay |
 | [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, Paddle, Ball, Brick, Stage1 |

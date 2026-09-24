@@ -1,1 +1,6 @@
-# Empty for now — engine/resources tests land in a later task.
+add_unit_test(resource_cache_test
+    SOURCES
+        ResourceCacheTest.cpp
+    DEPENDENCIES
+        eng_resources
+)

@@ -1,5 +1,8 @@
 add_library(eng_sfml STATIC
-    src/SfmlModule.cpp
+    src/SfmlClock.cpp
+    src/SfmlAssets.cpp
+    src/SfmlRenderer.cpp
+    src/SfmlPlatform.cpp
 )
 target_include_directories(eng_sfml PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include

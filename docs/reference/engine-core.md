@@ -17,7 +17,7 @@ related_code:
   - tests/engine/core/ImageTest.cpp
 related_docs:
   - source-layout.md
-keywords: [eng, Vec2, Vec3, Vec2f, Vec3f, Rect, Color, Time, Seconds, kTick, Handle, EntityId, Image]
+keywords: [eng, Vec2, Vec3, Vec2f, Vec2u, Vec3f, Rect, Color, Time, Seconds, kTick, Handle, EntityId, Image]
 last_reviewed: 2026-09-24
 ---
 
@@ -27,7 +27,7 @@ Header-only POD-style types in `namespace eng`, included as `<eng/core/X.hpp>`. 
 
 ## Vectors
 
-`Vec2<T>` / `Vec3<T>` require `std::floating_point T`. Aliases: `Vec2f`, `Vec3f`.
+`Vec2<T>` / `Vec3<T>` require `std::floating_point T`. Aliases: `Vec2f`, `Vec3f`. `Vec2u` is a separate integer size type (`x`, `y` as `uint32_t`) used for design resolutions.
 
 - Arithmetic: `+`, `-`, `*` (scalar either side), `+=`
 - Comparison: defaulted `==` and `<=>`
