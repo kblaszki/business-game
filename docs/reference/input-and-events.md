@@ -27,7 +27,7 @@ related_docs:
   - ../../mvp/03-events-and-input.md
   - ../../mvp/10-engine-progress.md
 keywords: [input, Action, InputMapper, handleAction, SFML events, KeyPressed, remap, Key, Scancode]
-last_reviewed: 2026-09-23
+last_reviewed: 2026-09-24
 ---
 
 # Input and events
@@ -109,7 +109,7 @@ enum class Action { Confirm, Cancel, Pause };
 | `Backspace` | `Cancel` |
 | anything else | `nullopt` → `handleEvent` |
 
-`GameplayScreen::handleAction(Pause)` calls `requestPauseOverlay()`. Overlay `Pause` / `Cancel` resume; `Confirm` quits to menu. Overlay Cancel does **not** request process exit. `MainMenuScreen::handleAction(Confirm)` `replace`s with `GameplayScreen`. `MainMenuScreen::handleAction(Cancel)` calls `requestClose()`. Gameplay ignores Cancel.
+`GameplayScreen::handleAction(Pause)` calls `requestPauseOverlay()`. Overlay `Pause` / `Cancel` resume; `Confirm` quits to menu. Menu Confirm / Start starts `Stage1`. Menu Cancel / Quit calls `requestClose()`. In play, Confirm launches the ball; Cancel is ignored until win/lose (retry / menu). Paddle hold is `handleEvent` on Left/Right/A/D, not an `Action`.
 
 `mapEvent` only unwraps `KeyPressed` and delegates to `mapKeyPressed`. Lifecycle events passed in by mistake yield `nullopt`.
 

@@ -2,5 +2,5 @@
 
 enum class LevelId
 {
-    Sandbox
+    Stage1
 };

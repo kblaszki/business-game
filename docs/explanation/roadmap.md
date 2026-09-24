@@ -20,18 +20,18 @@ related_docs:
   - ../../mvp/README.md
   - ../../mvp/10-engine-progress.md
 keywords: [roadmap, direction, skeleton, SFML, mvp, WindowI]
-last_reviewed: 2026-09-23
+last_reviewed: 2026-09-24
 ---
 
 # Project direction and status
 
 ## Where it is now
 
-A C++23 SFML 3.1 skeleton with window, clock, labeled screens, pause overlay, menu Cancel → `requestClose`, and a `World` of one wrapping dummy spawned from `LevelId::Sandbox`. CMake presets, FetchContent for SFML (no Audio/Network) and GoogleTest 1.18, windowless tests.
+A C++23 SFML 3.1 breakout on the engine skeleton: Start/Quit menu, one `Stage1` world (paddle, ball, bricks), pause overlay, windowless tests.
 
 Facts: [source-layout.md](../reference/source-layout.md). Prospective engine notes: [`mvp/01`–`09`](../../mvp/README.md). What already landed: [`mvp/10-engine-progress.md`](../../mvp/10-engine-progress.md).
 
-There is no Arkanoid session, player steering, or second level in this tree.
+There is one breakout stage. No power-ups and no second `LevelId`.
 
 ## Where it is going
 

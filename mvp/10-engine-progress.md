@@ -1,7 +1,7 @@
 ---
 title: Engine implementation progress
 status: living
-last_reviewed: 2026-09-23
+last_reviewed: 2026-09-24
 related_docs:
   - README.md
   - 09-rollout.md
@@ -31,8 +31,10 @@ related_code:
   - ../src/world/LevelId.hpp
   - ../src/world/LevelDescriptor.hpp
   - ../src/world/LevelDescriptor.cpp
-  - ../src/world/GameObject.hpp
-  - ../src/world/GameObject.cpp
+  - ../src/world/Paddle.hpp
+  - ../src/world/Ball.hpp
+  - ../src/world/Brick.hpp
+  - ../src/world/BreakoutArt.hpp
   - ../src/world/World.hpp
   - ../src/world/World.cpp
   - ../src/Game.hpp
@@ -90,8 +92,9 @@ Check a box only after that slice is on `main`. Paths are what landed, not a pro
 | 6 | Pause overlay | **done** | see below |
 | 7 | World, objects, levels | **done** | see below |
 | 8 | Menu Cancel + labels | **done** | see below |
+| 9 | Classic breakout | **done** | see below |
 
-Playable engine slice (menu → dummy → pause → resume / quit, Backspace quits the menu) is in the tree. Further work (steering, second level, genre) starts only after names are agreed in chat.
+One breakout stage is in the tree (menu Start/Quit → play → pause → win/lose). Power-ups and a second stage start only after names are agreed in chat.
 
 ### Slice 1 — window port (landed)
 
@@ -264,7 +267,7 @@ flowchart LR
 - [x] `ScreenStack::requestClose` / `closeRequested`; `Game` closes after the pump
 - [x] Menu Cancel requests close; gameplay ignores Cancel
 - [x] Overlay Cancel still resumes (not process exit; not quit-to-menu)
-- [x] `loadUiFont` + `sf::Text` on menu and pause (`resources/fonts/VCR_OSD_MONO_1.001.ttf`)
+- [x] `loadUiFont` + `sf::Text` on menu and pause (`resources/fonts/upheavtt.ttf`)
 
 ```mermaid
 flowchart LR
@@ -279,3 +282,16 @@ flowchart LR
 | [`src/screen/ScreenStack.hpp`](../src/screen/ScreenStack.hpp) | `requestClose` |
 | [`src/screen/UiFont.hpp`](../src/screen/UiFont.hpp) / [`.cpp`](../src/screen/UiFont.cpp) | Font load |
 | [`docs/reference/input-and-events.md`](../docs/reference/input-and-events.md) | Binds + close |
+
+### Slice 9 — Classic breakout (landed)
+
+- [x] `Paddle` / `Ball` / `Brick` / `BreakoutArt` (generated textures)
+- [x] `World` score, lives, launch, collisions; no `GameObject`
+- [x] `LevelId::Stage1` brick grid
+- [x] Menu Start/Quit buttons + mouse
+- [x] HUD, win/lose, paddle hold keys
+
+| Path | Role |
+|------|------|
+| [`src/world/World.hpp`](../src/world/World.hpp) | Breakout sim |
+| [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md) | Facts |

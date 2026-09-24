@@ -21,7 +21,7 @@ C++23 SFML 2D skeleton: `Game` runs against `WindowI`, `ClockI`, and `ScreenStac
 - `src/time/` — `ClockI`, `ClockSFML` (on `game`), `FixedTimestep`
 - `src/screen/` — `ScreenI`, `ScreenStack`, `MainMenuScreen`, `GameplayScreen`, `PauseScreen`, `UiFont`
 - `resources/fonts/` — UI TTF (`loadUiFont`)
-- `src/world/` — `World`, `GameObject`, `LevelId`, `LevelDescriptor`
+- `src/world/` — `World`, `Paddle`, `Ball`, `Brick`, `BreakoutArt`, `LevelId`, `LevelDescriptor`
 - `src/input/` — `Action`, `InputMapper`
 - `src/Example.hpp` / `Example.cpp` — `gameLib`
 - `tests/unit_tests/` — `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`

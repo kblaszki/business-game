@@ -1,42 +1,66 @@
 #include <gtest/gtest.h>
-#include <memory>
 #include <time/FixedTimestep.hpp>
-#include <world/GameObject.hpp>
 #include <world/World.hpp>
 
-TEST(WorldShould, advanceDummyFourPixelsPerTick)
+TEST(WorldShould, clampPaddleInsideDesignWidth)
 {
     World world;
-    world.spawn(std::make_unique<GameObject>(sf::Vector2f{0.f, 340.f}, sf::Vector2f{240.f, 0.f}));
+    world.setPaddleSpeed(20000.f);
+    for(int i = 0; i < 60; ++i)
+    {
+        world.fixedUpdate(FixedTimestep::tick);
+    }
 
-    world.fixedUpdate(FixedTimestep::tick);
-    world.fixedUpdate(FixedTimestep::tick);
-    world.fixedUpdate(FixedTimestep::tick);
-
-    EXPECT_EQ(world.tickCount(), 3u);
-    EXPECT_FLOAT_EQ(world.objectAt(0).position().x, 12.f);
-    EXPECT_FLOAT_EQ(world.objectAt(0).position().y, 340.f);
+    EXPECT_GE(world.paddle().position().x, 0.f);
+    EXPECT_LE(world.paddle().position().x + world.paddle().size().x, 1280.f);
 }
 
-TEST(WorldShould, wrapOriginWhenLeavingDesignWidth)
+TEST(WorldShould, bounceBallOffLeftWall)
 {
     World world;
-    world.spawn(std::make_unique<GameObject>(sf::Vector2f{1276.f, 340.f}, sf::Vector2f{240.f, 0.f}));
-
+    world.placeBall({2.f, 300.f}, {-240.f, 0.f}, false);
     world.fixedUpdate(FixedTimestep::tick);
 
-    EXPECT_GE(world.objectAt(0).position().x, 0.f);
-    EXPECT_LT(world.objectAt(0).position().x, 1280.f);
-    EXPECT_FLOAT_EQ(world.objectAt(0).position().x, 0.f);
+    EXPECT_GE(world.ball().position().x, 0.f);
+    EXPECT_GT(world.ball().velocity().x, 0.f);
 }
 
-TEST(WorldShould, alwaysMoveOnFixedUpdate)
+TEST(WorldShould, breakBrickAndRaiseScore)
 {
     World world;
-    world.spawn(std::make_unique<GameObject>(sf::Vector2f{0.f, 340.f}, sf::Vector2f{240.f, 0.f}));
+    world.addBrick({200.f, 80.f}, sf::Color::Red);
+    world.placeBall({247.f, 96.f}, {0.f, -300.f}, false);
+    world.fixedUpdate(FixedTimestep::tick);
 
+    EXPECT_FALSE(world.brickAt(0).alive());
+    EXPECT_EQ(world.score(), 10u);
+}
+
+TEST(WorldShould, loseLifeAndRestickWhenBallExitsBottom)
+{
+    World world;
+    world.placeBall({400.f, 730.f}, {0.f, 240.f}, false);
     world.fixedUpdate(FixedTimestep::tick);
-    EXPECT_FLOAT_EQ(world.objectAt(0).position().x, 4.f);
+
+    EXPECT_EQ(world.lives(), 2u);
+    EXPECT_TRUE(world.ball().stuck());
+    EXPECT_FALSE(world.lost());
+}
+
+TEST(WorldShould, winWhenLastBrickDies)
+{
+    World world;
+    world.addBrick({200.f, 80.f}, sf::Color::Red);
+    world.placeBall({247.f, 96.f}, {0.f, -300.f}, false);
     world.fixedUpdate(FixedTimestep::tick);
-    EXPECT_FLOAT_EQ(world.objectAt(0).position().x, 8.f);
+
+    EXPECT_TRUE(world.won());
+}
+
+TEST(WorldShould, alwaysAdvanceTickCount)
+{
+    World world;
+    world.fixedUpdate(FixedTimestep::tick);
+    world.fixedUpdate(FixedTimestep::tick);
+    EXPECT_EQ(world.tickCount(), 2u);
 }

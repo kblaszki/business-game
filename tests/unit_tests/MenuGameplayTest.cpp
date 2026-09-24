@@ -77,6 +77,42 @@ TEST(MenuGameplayShould, ignoreNonEnterKeyOnMenu)
     EXPECT_NE(dynamic_cast<MainMenuScreen*>(screens.top()), nullptr);
 }
 
+sf::Event clickAt(int x, int y)
+{
+    sf::Event::MouseButtonPressed pressed{};
+    pressed.button = sf::Mouse::Button::Left;
+    pressed.position = {x, y};
+    return sf::Event{pressed};
+}
+
+TEST(MenuGameplayShould, startFromStartButtonClick)
+{
+    ScreenStack screens;
+    auto menu = std::make_unique<MainMenuScreen>(screens);
+    const auto start = menu->startButtonBounds();
+    screens.push(std::move(menu));
+
+    const int x = static_cast<int>(start.position.x + start.size.x / 2.f);
+    const int y = static_cast<int>(start.position.y + start.size.y / 2.f);
+    screens.handleEvent(clickAt(x, y));
+    DrawerStub drawer;
+    screens.draw(drawer);
+
+    EXPECT_NE(dynamic_cast<GameplayScreen*>(screens.top()), nullptr);
+}
+
+TEST(MenuGameplayShould, ignoreClickOutsideButtons)
+{
+    ScreenStack screens;
+    screens.push(std::make_unique<MainMenuScreen>(screens));
+
+    screens.handleEvent(clickAt(8, 8));
+    DrawerStub drawer;
+    screens.draw(drawer);
+
+    EXPECT_NE(dynamic_cast<MainMenuScreen*>(screens.top()), nullptr);
+}
+
 TEST(MenuGameplayShould, requestCloseOnCancelAndStayOnMenu)
 {
     ScreenStack screens;

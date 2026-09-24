@@ -5,6 +5,7 @@
 #include <SFML/Graphics/Text.hpp>
 
 #include <screen/ScreenI.hpp>
+#include <world/BreakoutArt.hpp>
 
 class ScreenStack;
 
@@ -19,12 +20,22 @@ public:
     void draw(DrawerI& drawer) override;
     [[nodiscard]] bool blocksUpdate() const override;
     [[nodiscard]] bool blocksDraw() const override;
+    [[nodiscard]] sf::FloatRect startButtonBounds() const;
 
 private:
+    void startGame();
+    void paintButtons();
+    [[nodiscard]] bool hitStart(sf::Vector2f point) const;
+    [[nodiscard]] bool hitQuit(sf::Vector2f point) const;
+
     ScreenStack& screens;
+    BreakoutArt art;
     sf::Font font;
-    sf::RectangleShape startBar;
+    sf::RectangleShape startButton;
+    sf::RectangleShape quitButton;
     sf::Text title;
-    sf::Text startHint;
-    sf::Text quitHint;
+    sf::Text startLabel;
+    sf::Text quitLabel;
+    bool startHover{false};
+    bool quitHover{false};
 };

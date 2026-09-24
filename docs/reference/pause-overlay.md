@@ -20,7 +20,7 @@ related_docs:
   - ../../mvp/05-pause.md
   - ../../mvp/10-engine-progress.md
 keywords: [pause, overlay, PauseScreen, requestPauseOverlay, FocusLost, blocksUpdate, blocksDraw]
-last_reviewed: 2026-09-23
+last_reviewed: 2026-09-24
 ---
 
 # Pause overlay
@@ -74,8 +74,8 @@ Quit **must** be that FIFO pair. Only `replace` while the overlay is top would s
 
 ## Draw
 
-`Game` clears once. The overlay draws a full-`DESIGN_SIZE` dim `RectangleShape` plus `sf::Text` (`Paused`, `Esc — resume`, `Enter — quit to menu`) from `loadUiFont` (`resources/fonts/VCR_OSD_MONO_1.001.ttf`). It must not `clear` the target. With `blocksDraw == false` the dummy stays visible.
+`Game` clears once. The overlay draws a full-`DESIGN_SIZE` dim `RectangleShape` plus `sf::Text` (`Paused`, `Esc - resume`, `Enter - quit to menu`) from `loadUiFont` (`resources/fonts/upheavtt.ttf`). It must not `clear` the target. With `blocksDraw == false` the dummy stays visible.
 
 ## Tests
 
-`pause_overlay_test` is windowless. It asserts frozen `tickCount` **and** dummy pose, five `draw` calls while paused (dummy + dim + three labels), resume (pose advances 4 px / tick, Cancel does not `requestClose`), quit-to-menu, single enqueue, and `FocusLost` via `Game` + mocks.
+`pause_overlay_test` is windowless. It asserts frozen `tickCount` and ball pose under the overlay, resume (ball moves again), Cancel does not `requestClose`, quit-to-menu, single enqueue, and `FocusLost` via `Game` + mocks.

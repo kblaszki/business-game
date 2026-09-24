@@ -32,8 +32,10 @@ related_code:
   - src/world/LevelId.hpp
   - src/world/LevelDescriptor.hpp
   - src/world/LevelDescriptor.cpp
-  - src/world/GameObject.hpp
-  - src/world/GameObject.cpp
+  - src/world/Paddle.hpp
+  - src/world/Ball.hpp
+  - src/world/Brick.hpp
+  - src/world/BreakoutArt.hpp
   - src/world/World.hpp
   - src/world/World.cpp
   - src/Example.hpp
@@ -63,7 +65,7 @@ related_docs:
   - ../../mvp/README.md
   - ../../mvp/10-engine-progress.md
 keywords: [layout, directories, gameLib, game, targets, cmake sources, Example, WindowI, ClockI, ScreenI, ScreenStack, MainMenuScreen, PauseScreen, InputMapper, Action, World]
-last_reviewed: 2026-09-23
+last_reviewed: 2026-09-24
 ---
 
 # Source layout reference
@@ -84,14 +86,14 @@ last_reviewed: 2026-09-23
 | `src/time/FixedTimestep.hpp` | Drain helper (`tick` 1/60 s, cap 0.25 s) |
 | `src/screen/ScreenI.hpp` | Screen port + `acceptsPauseOverlay` / `isPauseOverlay` (default false) |
 | `src/screen/ScreenStack.hpp` / `ScreenStack.cpp` | Stack; `requestPauseOverlay`; `requestClose` / `closeRequested`; `top()`; `handleAction` |
-| `src/screen/MainMenuScreen.hpp` / `.cpp` | Confirm → `GameplayScreen{Sandbox}`; Cancel → `requestClose`; labels |
-| `src/screen/UiFont.hpp` / `.cpp` | `loadUiFont` / `makeUiFont` from `resources/fonts/VCR_OSD_MONO_1.001.ttf` (`ASSET_DIR`) |
+| `src/screen/MainMenuScreen.hpp` / `.cpp` | Start/Quit buttons; Confirm → `Stage1`; Cancel → `requestClose` |
+| `src/screen/UiFont.hpp` / `.cpp` | `loadUiFont` / `makeUiFont` from `resources/fonts/upheavtt.ttf` (`ASSET_DIR`) |
 | `resources/fonts/` | UI TTF files (not FetchContent) |
-| `src/screen/GameplayScreen.hpp` / `.cpp` | Owns `World` from `LevelId`; `update` → `fixedUpdate` |
-| `src/world/LevelId.hpp` | `Sandbox` |
-| `src/world/LevelDescriptor.hpp` / `.cpp` | `SpawnSpec`, `levelDescriptor`, `makeWorld` |
-| `src/world/GameObject.hpp` / `.cpp` | Concrete dummy; move + wrap |
-| `src/world/World.hpp` / `.cpp` | Owner + `fixedUpdate` / `draw`; no pause flag |
+| `src/screen/GameplayScreen.hpp` / `.cpp` | Owns breakout `World`; paddle keys; HUD / win-lose |
+| `src/world/LevelId.hpp` | `Stage1` |
+| `src/world/LevelDescriptor.hpp` / `.cpp` | Brick grid + `makeWorld` |
+| `src/world/Paddle.hpp` / `Ball.hpp` / `Brick.hpp` / `BreakoutArt.hpp` | Breakout pieces + generated textures |
+| `src/world/World.hpp` / `.cpp` | Paddle, ball, bricks, score, lives |
 | `src/screen/PauseScreen.hpp` / `.cpp` | Overlay; labels; `blocksDraw` false; resume / quit-to-menu |
 | `src/Example.hpp` / `Example.cpp` | Windowless helper class in `gameLib` (`add`) |
 | `tests/mocks/window/` | `WindowMock` (gmock) |
@@ -101,9 +103,9 @@ last_reviewed: 2026-09-23
 
 ## Build targets
 
-- **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `input/InputMapper.cpp`, screen sources including `UiFont.cpp`, `world/GameObject.cpp`, `World.cpp`, `LevelDescriptor.cpp`, listed in `src/CMakeLists.txt`. C++23. Uses SFML **headers/defines**. Does **not** link SFML (no OpenGL in tests). `ASSET_DIR` points at `resources/`.
+- **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `input/InputMapper.cpp`, screens, `world/Paddle.cpp` / `Ball.cpp` / `Brick.cpp` / `BreakoutArt.cpp` / `World.cpp` / `LevelDescriptor.cpp`. C++23. SFML **headers/defines** only. `ASSET_DIR` points at `resources/`.
 - **`game`** (executable) — `src/main.cpp`, `src/window/WindowSFML.cpp`, `src/time/ClockSFML.cpp`; links `gameLib` and SFML 3.1 Graphics/Window/System (audio and network are OFF in `cmake/FetchSFML.cmake`).
-- Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`. Suites that construct screens, `World`, or `GameObject` also link `SFML::Graphics` (still no window) because those types hold `sf::RectangleShape`.
+- Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`. Suites that construct screens or `World` also link `SFML::Graphics` (still no window).
 
 ## Adding a source file
 

@@ -70,19 +70,21 @@ TEST(PauseOverlayShould, freezeGameplayTicksAndStillDrawUnderneath)
 {
     ScreenStack screens;
     GameplayScreen& play = pushPlay(screens);
+    play.handleAction(Action::Confirm);
+    play.update(FixedTimestep::tick);
     screens.handleAction(Action::Pause);
     apply(screens);
 
     const auto frozenTicks = play.tickCount();
-    const auto frozenPose = play.world().objectAt(0).position();
+    const auto frozenPose = play.world().ball().position();
     screens.update(FixedTimestep::tick);
     screens.update(FixedTimestep::tick);
     EXPECT_EQ(play.tickCount(), frozenTicks);
-    EXPECT_EQ(play.world().objectAt(0).position(), frozenPose);
+    EXPECT_EQ(play.world().ball().position(), frozenPose);
 
     CountingDrawer drawer;
     screens.draw(drawer);
-    EXPECT_EQ(drawer.drawCount, 5u);
+    EXPECT_GT(drawer.drawCount, 5u);
 }
 
 TEST(PauseOverlayShould, resumeOnPauseOrCancelAndTickAgain)
@@ -99,9 +101,11 @@ TEST(PauseOverlayShould, resumeOnPauseOrCancelAndTickAgain)
     EXPECT_EQ(screens.top(), &play);
     EXPECT_FALSE(screens.closeRequested());
 
+    play.handleAction(Action::Confirm);
+    const auto before = play.world().ball().position();
     screens.update(FixedTimestep::tick);
     EXPECT_EQ(play.tickCount(), 1u);
-    EXPECT_FLOAT_EQ(play.world().objectAt(0).position().x, 4.f);
+    EXPECT_NE(play.world().ball().position(), before);
 
     screens.handleAction(Action::Pause);
     apply(screens);

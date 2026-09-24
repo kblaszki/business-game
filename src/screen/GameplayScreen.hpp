@@ -1,5 +1,9 @@
 #pragma once
 
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
+
 #include <cstdint>
 #include <screen/ScreenI.hpp>
 #include <world/LevelId.hpp>
@@ -10,7 +14,7 @@ class ScreenStack;
 class GameplayScreen : public ScreenI
 {
 public:
-    explicit GameplayScreen(ScreenStack& screens, LevelId id = LevelId::Sandbox);
+    explicit GameplayScreen(ScreenStack& screens, LevelId id = LevelId::Stage1);
 
     bool handleEvent(const sf::Event& event) override;
     bool handleAction(Action action) override;
@@ -23,6 +27,19 @@ public:
     [[nodiscard]] const World& world() const;
 
 private:
+    void applyPaddleInput();
+    void refreshHud();
+    void restart();
+
     ScreenStack& screens;
+    LevelId level;
     World simulated;
+    sf::Font font;
+    sf::Text scoreLabel;
+    sf::Text livesLabel;
+    sf::RectangleShape banner;
+    sf::Text bannerTitle;
+    sf::Text bannerHint;
+    bool leftHeld{false};
+    bool rightHeld{false};
 };

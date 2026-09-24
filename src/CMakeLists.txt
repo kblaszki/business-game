@@ -8,7 +8,10 @@ add_library(gameLib
         screen/GameplayScreen.cpp
         screen/PauseScreen.cpp
         screen/UiFont.cpp
-        world/GameObject.cpp
+        world/Paddle.cpp
+        world/Ball.cpp
+        world/Brick.cpp
+        world/BreakoutArt.cpp
         world/World.cpp
         world/LevelDescriptor.cpp
 )

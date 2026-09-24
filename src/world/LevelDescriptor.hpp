@@ -1,21 +1,23 @@
 #pragma once
 
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/Color.hpp>
 
+#include <cstdint>
 #include <span>
 #include <world/LevelId.hpp>
 #include <world/World.hpp>
 
-struct SpawnSpec
+struct BrickRow
 {
-    sf::Vector2f position{};
-    sf::Vector2f velocity{};
+    sf::Color color{};
 };
 
 struct LevelDescriptor
 {
-    LevelId id{LevelId::Sandbox};
-    std::span<const SpawnSpec> spawns{};
+    LevelId id{LevelId::Stage1};
+    std::uint32_t columns{10};
+    std::uint32_t rows{6};
+    std::span<const BrickRow> palette{};
 };
 
 [[nodiscard]] const LevelDescriptor& levelDescriptor(LevelId id);

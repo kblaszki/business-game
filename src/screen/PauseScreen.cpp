@@ -20,16 +20,18 @@ PauseScreen::PauseScreen(ScreenStack& screens)
     : screens{screens}
     , font{makeUiFont()}
     , dim{{static_cast<float>(Game::DESIGN_SIZE.x), static_cast<float>(Game::DESIGN_SIZE.y)}}
+    , panel{{520.f, 240.f}}
     , title{font, "Paused", 42}
-    , resumeHint{font, "Esc — resume", 22}
-    , quitHint{font, "Enter — quit to menu", 22}
+    , resumeHint{font, "Esc - resume", 22}
+    , quitHint{font, "Enter - quit to menu", 22}
 {
-    dim.setFillColor(sf::Color{0, 0, 0, 140});
-
-    title.setFillColor(sf::Color::White);
+    dim.setFillColor(sf::Color{0, 0, 0, 150});
+    panel.setFillColor(sf::Color{24, 28, 48, 230});
+    panel.setPosition({380.f, 240.f});
+    title.setFillColor(sf::Color{255, 230, 160});
     resumeHint.setFillColor(sf::Color::White);
     quitHint.setFillColor(sf::Color::White);
-    centerAt(title, 280.f);
+    centerAt(title, 300.f);
     centerAt(resumeHint, 360.f);
     centerAt(quitHint, 400.f);
 }
@@ -62,6 +64,7 @@ void PauseScreen::update(sf::Time) {}
 void PauseScreen::draw(DrawerI& drawer)
 {
     drawer.draw(dim);
+    drawer.draw(panel);
     drawer.draw(title);
     drawer.draw(resumeHint);
     drawer.draw(quitHint);

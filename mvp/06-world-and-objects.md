@@ -16,7 +16,7 @@ related_docs:
 
 # World and GameObject
 
-This chapter is **prospective**. What landed (`World`, concrete `GameObject`, wrap) is in [10-engine-progress.md](10-engine-progress.md) and [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md). Despawn, steering, and extra object types are **not** in the tree.
+This chapter is **prospective**. What landed (breakout `World`, paddle/ball/bricks) is in [10-engine-progress.md](10-engine-progress.md) and [`docs/reference/world-and-levels.md`](../docs/reference/world-and-levels.md). The dummy wrap below is old target wording.
 
 Use the locked names from [README.md](README.md). Do not introduce `Scene`, `Entity`, `Actor`, `DummyObject`, `IManager`, or an ECS `Registry`.
 

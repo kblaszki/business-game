@@ -19,7 +19,7 @@ related_docs:
 
 Chapters **01–09** are a **target design** (prospective). They are **not** rewritten when code lands.
 
-What exists in the tree is tracked in [10-engine-progress.md](10-engine-progress.md) (living) and in [`docs/`](../docs/index.md). In the tree: screens, pause overlay, `World` / wrapping dummy, `LevelId::Sandbox`, menu Cancel → `requestClose`.
+What exists in the tree is tracked in [10-engine-progress.md](10-engine-progress.md) (living) and in [`docs/`](../docs/index.md). In the tree: breakout `Stage1`, Start/Quit menu, pause, `requestClose`.
 
 This folder is also the implementation plan for the first playable engine slice: **MainMenu → empty Gameplay → Pause overlay → resume or quit to menu**.
 

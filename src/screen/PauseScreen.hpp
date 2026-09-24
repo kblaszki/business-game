@@ -25,6 +25,7 @@ private:
     ScreenStack& screens;
     sf::Font font;
     sf::RectangleShape dim;
+    sf::RectangleShape panel;
     sf::Text title;
     sf::Text resumeHint;
     sf::Text quitHint;

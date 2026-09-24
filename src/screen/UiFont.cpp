@@ -4,7 +4,7 @@
 
 bool loadUiFont(sf::Font& font)
 {
-    return font.openFromFile(std::filesystem::path{ASSET_DIR} / "fonts" / "VCR_OSD_MONO_1.001.ttf");
+    return font.openFromFile(std::filesystem::path{ASSET_DIR} / "fonts" / "upheavtt.ttf");
 }
 
 sf::Font makeUiFont()

@@ -2,20 +2,22 @@
 
 #include <window/DrawerI.hpp>
 
-#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
 
-class GameObject
+class Paddle
 {
 public:
-    GameObject(sf::Vector2f position, sf::Vector2f velocity);
+    Paddle(sf::Vector2f position, const sf::Texture& texture);
 
+    void setSpeed(float pxPerSec);
     void fixedUpdate(sf::Time tick);
     void draw(DrawerI& drawer) const;
     [[nodiscard]] sf::Vector2f position() const;
+    [[nodiscard]] sf::Vector2f size() const;
 
 private:
-    sf::RectangleShape shape;
-    sf::Vector2f velocity;
+    sf::Sprite sprite;
+    float speed{0.f};
 };
