@@ -42,9 +42,10 @@ bool offScreen(const Ball& sphere)
 } // namespace
 
 World::World()
-    : bat{{(static_cast<float>(Game::DESIGN_SIZE.x) - defaultPaddleWidth) * 0.5f, 680.f}, art.paddle}
+    : art{std::make_unique<BreakoutArt>()}
+    , bat{{(static_cast<float>(Game::DESIGN_SIZE.x) - defaultPaddleWidth) * 0.5f, 680.f}, art->paddle}
 {
-    spheres.emplace_back(sf::Vector2f{0.f, 0.f}, art.ball);
+    spheres.emplace_back(sf::Vector2f{0.f, 0.f}, art->ball);
     stickBallToPaddle();
 }
 
@@ -82,7 +83,7 @@ void World::placeBall(sf::Vector2f position, sf::Vector2f velocity, bool stuck)
 {
     if(spheres.empty())
     {
-        spheres.emplace_back(position, art.ball);
+        spheres.emplace_back(position, art->ball);
     }
 
     spheres.front().setPosition(position);
@@ -92,7 +93,7 @@ void World::placeBall(sf::Vector2f position, sf::Vector2f velocity, bool stuck)
 
 void World::addBrick(sf::Vector2f position, sf::Color tint)
 {
-    bricks.emplace_back(position, tint, art.brick);
+    bricks.emplace_back(position, tint, art->brick);
 }
 
 void World::killBrick(std::size_t index)
@@ -188,7 +189,7 @@ void World::fixedUpdate(sf::Time tick)
 
 void World::draw(DrawerI& drawer) const
 {
-    drawer.draw(art.background);
+    drawer.draw(art->background);
     for(const auto& brick: bricks)
     {
         brick.draw(drawer);
@@ -327,7 +328,7 @@ void World::stickBallToPaddle()
 {
     if(spheres.empty())
     {
-        spheres.emplace_back(sf::Vector2f{0.f, 0.f}, art.ball);
+        spheres.emplace_back(sf::Vector2f{0.f, 0.f}, art->ball);
     }
 
     stickBall(spheres.front());
@@ -446,7 +447,7 @@ void World::missCheck()
         if(remaining > 0)
         {
             spheres.clear();
-            spheres.emplace_back(sf::Vector2f{0.f, 0.f}, art.ball);
+            spheres.emplace_back(sf::Vector2f{0.f, 0.f}, art->ball);
             stickBallToPaddle();
         }
         return;
@@ -561,10 +562,10 @@ void World::applyMultiBall()
         rightVel = {vel.x + multiSpread, vel.y};
     }
 
-    spheres.emplace_back(pos, art.ball);
+    spheres.emplace_back(pos, art->ball);
     spheres.back().setStuck(false);
     spheres.back().setVelocity(leftVel);
-    spheres.emplace_back(pos, art.ball);
+    spheres.emplace_back(pos, art->ball);
     spheres.back().setStuck(false);
     spheres.back().setVelocity(rightVel);
 }

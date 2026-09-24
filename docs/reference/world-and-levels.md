@@ -41,7 +41,7 @@ Facts about the running tree. Prospective extras (ECS, laser, a fifth level) sta
 
 ## Ownership
 
-`GameplayScreen` owns one `World` (by value). `World` owns a `Paddle`, `std::vector<Ball>`, `std::vector<Brick>`, and `std::vector<PowerUp>`. `ball()` is the first ball so older tests still compile; `ballCount()` / `ballAt` cover the rest. Menu and pause do not own a world. `World` does not see `Action` or the window.
+`GameplayScreen` owns one `World` (by value). `World` owns `BreakoutArt` on the heap (`unique_ptr`) so move-assign (stage advance / restart) keeps paddle, ball, and brick sprites bound to live textures. It also owns a `Paddle`, `std::vector<Ball>`, `std::vector<Brick>`, and `std::vector<PowerUp>`. `ball()` is the first ball so older tests still compile; `ballCount()` / `ballAt` cover the rest. Menu and pause do not own a world. `World` does not see `Action` or the window.
 
 `GameObject` is gone. Types are concrete: no virtual base, no ECS.
 

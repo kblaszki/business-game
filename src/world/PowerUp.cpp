@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 #include <Game.hpp>
 #include <time/FixedTimestep.hpp>
@@ -60,11 +61,30 @@ sf::Texture makeTexture(PowerUpKind kind)
     }
     return texture;
 }
+
+const sf::Texture& sharedTexture(PowerUpKind kind)
+{
+    static const sf::Texture wide = makeTexture(PowerUpKind::Wide);
+    static const sf::Texture multi = makeTexture(PowerUpKind::MultiBall);
+    static const sf::Texture slow = makeTexture(PowerUpKind::Slow);
+    static const sf::Texture extra = makeTexture(PowerUpKind::ExtraLife);
+    switch(kind)
+    {
+        case PowerUpKind::Wide:
+            return wide;
+        case PowerUpKind::MultiBall:
+            return multi;
+        case PowerUpKind::Slow:
+            return slow;
+        case PowerUpKind::ExtraLife:
+            return extra;
+    }
+    return wide;
+}
 } // namespace
 
 PowerUp::PowerUp(sf::Vector2f position, PowerUpKind kind)
-    : texture{makeTexture(kind)}
-    , sprite{texture}
+    : sprite{sharedTexture(kind)}
     , powerKind{kind}
 {
     sprite.setPosition(position);

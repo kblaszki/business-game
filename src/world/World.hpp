@@ -7,6 +7,7 @@
 #include <SFML/System/Vector2.hpp>
 
 #include <cstdint>
+#include <memory>
 #include <optional>
 #include <string>
 #include <vector>
@@ -60,7 +61,7 @@ private:
     void expireTimedEffect();
     void applyMultiBall();
 
-    BreakoutArt art;
+    std::unique_ptr<BreakoutArt> art;
     Paddle bat;
     std::vector<Ball> spheres;
     std::vector<Brick> bricks;

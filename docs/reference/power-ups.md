@@ -24,7 +24,7 @@ last_reviewed: 2026-09-24
 
 ## Type
 
-`PowerUp` is a concrete type (no virtual base). The constructor takes a spawn position and a `PowerUpKind`. Texture is a small generated `sf::Image` capsule in `PowerUp.cpp`, tinted by kind. No font or asset file. Not trivially copyable (owns `Texture` + `Sprite`); `World` only `emplace`s / moves.
+`PowerUp` is a concrete type (no virtual base). The constructor takes a spawn position and a `PowerUpKind`. Texture is a small generated `sf::Image` capsule in `PowerUp.cpp`, tinted by kind, stored as a process-static `sf::Texture` per kind (sprites must not own a texture that moves with `std::vector` reallocation or `erase`). No font or asset file.
 
 | Kind | Tint role |
 |------|-----------|
@@ -60,6 +60,6 @@ Exactly one timed effect at a time. Wide and Slow share one 8 s timer (480 ticks
 
 ## Tests
 
-`power_up_test` spawns at `{100, 100}` and checks `y` increases across ticks, and places a capsule near the bottom so one tick sets `alive()` false.
+`power_up_test` spawns at `{100, 100}` and checks `y` increases across ticks, places a capsule near the bottom so one tick sets `alive()` false, and reallocates a `vector<PowerUp>` so the first capsule still reports kind and pose.
 
 `world_test` covers `applyPowerUp(Wide)` widening the paddle, `ExtraLife` going to 4 lives, and a missed donor capsule reaching `powerUpCount() == 0`.

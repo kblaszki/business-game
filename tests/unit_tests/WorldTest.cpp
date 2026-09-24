@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <time/FixedTimestep.hpp>
+#include <utility>
 #include <world/World.hpp>
 
 TEST(WorldShould, clampPaddleInsideDesignWidth)
@@ -90,6 +91,18 @@ TEST(WorldShould, extraLifeIncreasesLives)
     world.applyPowerUp(PowerUpKind::ExtraLife);
 
     EXPECT_EQ(world.lives(), 4u);
+}
+
+TEST(WorldShould, remainPlayableAfterMoveAssign)
+{
+    World world;
+    world.addBrick({200.f, 80.f}, sf::Color::Red);
+    World other;
+    other = std::move(world);
+
+    EXPECT_EQ(other.brickCount(), 1u);
+    other.fixedUpdate(FixedTimestep::tick);
+    EXPECT_EQ(other.tickCount(), 1u);
 }
 
 TEST(WorldShould, missedCapsuleDisappears)
