@@ -126,7 +126,7 @@ New engine and game trees are wired into CMake; `src/` `gameLib` / `game` still 
 | `engine/resources/` | `eng_resources` (INTERFACE) → `eng_core` |
 | `engine/loop/` | `eng_loop` (STATIC) → `eng_scene`, `eng_render` |
 | `engine/sfml/` | `eng_sfml` (STATIC); only target that links SFML |
-| `games/arkanoid/sim/` | `arkanoid_sim` (INTERFACE) → `eng_collision` |
+| `games/arkanoid/sim/` | `arkanoid_sim` (STATIC) → `eng_collision` |
 | `games/arkanoid/app/` | `arkanoid_app` (INTERFACE) → `arkanoid_sim`, `eng_loop`, `eng_resources` |
 | `tests/engine/`, `tests/arkanoid/` | Per-module test leaves; `features_test` under `tests/engine/core/` |
 
@@ -137,7 +137,7 @@ Include layout: `<eng/<module>/X.hpp>` under `engine/<module>/include/`. Only `e
 
 - **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `input/InputMapper.cpp`, screens, `world/Paddle.cpp` / `Ball.cpp` / `Brick.cpp` / `BreakoutArt.cpp` / `PowerUp.cpp` / `World.cpp` / `LevelDescriptor.cpp`. C++23. SFML **headers/defines** only. `ASSET_DIR` points at `resources/`.
 - **`game`** (executable) — `src/main.cpp`, `src/window/WindowSFML.cpp`, `src/time/ClockSFML.cpp`; links `gameLib` and SFML 3.1 Graphics/Window/System (audio and network are OFF in `cmake/FetchSFML.cmake`).
-- Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`, `power_up_test`. Suites that construct screens or `World` also link `SFML::Graphics` (still no window).
+- Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`, `power_up_test`, plus per-module suites under `tests/engine/` and `tests/arkanoid/` (e.g. `arkanoid_sim_test`). Suites that construct screens or `World` also link `SFML::Graphics` (still no window).
 
 ## Adding a source file
 

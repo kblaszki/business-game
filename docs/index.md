@@ -17,6 +17,7 @@ related_docs:
   - reference/engine-collision.md
   - reference/engine-resources.md
   - reference/engine-sfml.md
+  - reference/arkanoid-sim.md
   - reference/input-and-events.md
   - reference/pause-overlay.md
   - reference/world-and-levels.md
@@ -66,6 +67,7 @@ flowchart TD
 | [reference/engine-collision.md](reference/engine-collision.md) | reference | intersect, sweep, reflect |
 | [reference/engine-resources.md](reference/engine-resources.md) | reference | ResourceCache, ResourceError |
 | [reference/engine-sfml.md](reference/engine-sfml.md) | reference | SfmlPlatform, EventTranslate, letterbox |
+| [reference/arkanoid-sim.md](reference/arkanoid-sim.md) | reference | arkanoid sim, StageId, power-ups |
 | [reference/input-and-events.md](reference/input-and-events.md) | reference | Action, InputMapper, SFML events, handleAction |
 | [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScreen, overlay, FocusLost, requestPauseOverlay |
 | [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, Paddle, Ball, Brick, Stage1 |
