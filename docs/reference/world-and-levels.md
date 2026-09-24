@@ -56,4 +56,10 @@ When `won()` or `lost()`, later ticks still increment `tickCount` but skip motio
 
 ## Levels
 
-`LevelId::Stage1` + `levelDescriptor` (10×6, kolory wierszy). `makeWorld` stawia paletkę, przyklejoną piłkę i cegły. Menu podaje `Stage1`; nie zna współrzędnych.
+`LevelId` is `Stage1`, `Stage2`, or `Stage3`. `levelDescriptor` returns a 10×6 row-colored grid plus a row-major `mask` (`0` hole, `1` brick). Unknown ids fall back to `Stage1`.
+
+- `Stage1`: full mask (60 bricks), same row colors as before.
+- `Stage2`: checkerboard (`1` when `(row + col) % 2 == 0`).
+- `Stage3`: border frame, hollow center.
+
+`makeWorld` spawns a brick only where the mask is `1`. Menu still passes `Stage1`; it does not know coordinates.

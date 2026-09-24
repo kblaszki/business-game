@@ -82,3 +82,11 @@ add_unit_test(level_descriptor_test
         gameLib
         SFML::Graphics
 )
+
+add_unit_test(power_up_test
+    SOURCES
+        PowerUpTest.cpp
+    DEPENDENCIES
+        gameLib
+        SFML::Graphics
+)

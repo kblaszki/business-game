@@ -90,9 +90,10 @@ last_reviewed: 2026-09-24
 | `src/screen/UiFont.hpp` / `.cpp` | `loadUiFont` / `makeUiFont` from `resources/fonts/upheavtt.ttf` (`ASSET_DIR`) |
 | `resources/fonts/` | UI TTF files (not FetchContent) |
 | `src/screen/GameplayScreen.hpp` / `.cpp` | Owns breakout `World`; paddle keys; HUD / win-lose |
-| `src/world/LevelId.hpp` | `Stage1` |
-| `src/world/LevelDescriptor.hpp` / `.cpp` | Brick grid + `makeWorld` |
+| `src/world/LevelId.hpp` | `Stage1`, `Stage2`, `Stage3` |
+| `src/world/LevelDescriptor.hpp` / `.cpp` | Brick grid, row-major mask, `makeWorld` |
 | `src/world/Paddle.hpp` / `Ball.hpp` / `Brick.hpp` / `BreakoutArt.hpp` | Breakout pieces + generated textures |
+| `src/world/PowerUp.hpp` / `.cpp` | Falling capsule (`PowerUpKind`) |
 | `src/world/World.hpp` / `.cpp` | Paddle, ball, bricks, score, lives |
 | `src/screen/PauseScreen.hpp` / `.cpp` | Overlay; labels; `blocksDraw` false; resume / quit-to-menu |
 | `src/Example.hpp` / `Example.cpp` | Windowless helper class in `gameLib` (`add`) |
@@ -103,7 +104,7 @@ last_reviewed: 2026-09-24
 
 ## Build targets
 
-- **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `input/InputMapper.cpp`, screens, `world/Paddle.cpp` / `Ball.cpp` / `Brick.cpp` / `BreakoutArt.cpp` / `World.cpp` / `LevelDescriptor.cpp`. C++23. SFML **headers/defines** only. `ASSET_DIR` points at `resources/`.
+- **`gameLib`** (STATIC) — `Example.cpp`, `Game.cpp`, `input/InputMapper.cpp`, screens, `world/Paddle.cpp` / `Ball.cpp` / `Brick.cpp` / `BreakoutArt.cpp` / `PowerUp.cpp` / `World.cpp` / `LevelDescriptor.cpp`. C++23. SFML **headers/defines** only. `ASSET_DIR` points at `resources/`.
 - **`game`** (executable) — `src/main.cpp`, `src/window/WindowSFML.cpp`, `src/time/ClockSFML.cpp`; links `gameLib` and SFML 3.1 Graphics/Window/System (audio and network are OFF in `cmake/FetchSFML.cmake`).
 - Unit tests (Debug only) — GoogleTest 1.18 via `cmake/FetchGTest.cmake`. Suites: `example_test`, `game_test`, `fixed_timestep_test`, `screen_stack_test`, `menu_gameplay_test`, `input_mapper_test`, `pause_overlay_test`, `world_test`, `level_descriptor_test`. Suites that construct screens or `World` also link `SFML::Graphics` (still no window).
 

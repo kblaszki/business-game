@@ -52,6 +52,7 @@ flowchart TD
 | [reference/input-and-events.md](reference/input-and-events.md) | reference | Action, InputMapper, SFML events, handleAction |
 | [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScreen, overlay, FocusLost, requestPauseOverlay |
 | [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, Paddle, Ball, Brick, Stage1 |
+| [reference/power-ups.md](reference/power-ups.md) | reference | PowerUp, PowerUpKind, capsule, Wide, MultiBall |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, skeleton, mvp |
 | [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | prospective engine plan |
 | [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | WindowI, PauseScreen, World, requestClose, slices |

@@ -18,6 +18,7 @@ struct LevelDescriptor
     std::uint32_t columns{10};
     std::uint32_t rows{6};
     std::span<const BrickRow> palette{};
+    std::span<const std::uint8_t> mask{};
 };
 
 [[nodiscard]] const LevelDescriptor& levelDescriptor(LevelId id);
