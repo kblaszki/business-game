@@ -26,7 +26,7 @@ C++23 SFML engine and Arkanoid game. Code lives in `engine/` (`namespace eng`) a
 - `games/arkanoid/sim/` — headless breakout (`arkanoid_sim`)
 - `games/arkanoid/app/` — scenes, HUD, assets (`arkanoid_app`)
 - `games/arkanoid/main.cpp` — executable `arkanoid`
-- `resources/fonts/` — UI TTF (`ASSET_DIR`)
+- `assets/fonts/` — UI TTF (`ASSET_DIR`). Not `engine/resources/` (that module is the cache)
 - `tests/engine/`, `tests/arkanoid/` — GoogleTest suites (Debug only)
 - `tests/mocks/` — `ClockMock`, `PlatformMock`, `RendererMock`
 

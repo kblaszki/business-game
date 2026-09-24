@@ -82,7 +82,7 @@ Running tree after cutover: `engine/` (`namespace eng`) and `games/arkanoid/` (`
 | `games/arkanoid/sim/` | Headless breakout rules (`State`, `step`, levels, power-ups); `arkanoid_sim` |
 | `games/arkanoid/app/` | Scenes, HUD, assets, bindings; `arkanoid_app` |
 | `games/arkanoid/main.cpp` | Wires `SfmlPlatform`, assets, `SceneStack`, `eng::App`; executable `arkanoid` |
-| `resources/fonts/` | UI TTF (`ASSET_DIR` → `resources/`) |
+| `assets/fonts/` | UI TTF (`ASSET_DIR` → `assets/`) |
 | `tests/engine/` | Per-module engine suites (Debug only) |
 | `tests/arkanoid/` | Sim and app suites (Debug only) |
 | `tests/mocks/` | `ClockMock`, `PlatformMock`, `RendererMock` (engine ports) |
@@ -103,7 +103,7 @@ Include layout: `<eng/<module>/X.hpp>`, `<arkanoid/<sim|app>/X.hpp>`. Only `engi
 | `eng_sfml` | STATIC | → `eng_loop`, `eng_resources`; links SFML Graphics/Window/System |
 | `arkanoid_sim` | STATIC | → `eng_collision`; no SFML |
 | `arkanoid_app` | STATIC | → `arkanoid_sim`, `eng_loop`, `eng_resources`; no SFML includes |
-| `arkanoid` | executable | `games/arkanoid/main.cpp` → `arkanoid_app`, `eng_sfml`; `ASSET_DIR` → `resources/` |
+| `arkanoid` | executable | `games/arkanoid/main.cpp` → `arkanoid_app`, `eng_sfml`; `ASSET_DIR` → `assets/` |
 
 ## Unit test suites (Debug)
 

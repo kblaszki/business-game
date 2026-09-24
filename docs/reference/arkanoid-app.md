@@ -39,7 +39,7 @@ last_reviewed: 2026-09-24
 
 # Arkanoid app
 
-Presentation helpers in `namespace arkanoid` for the playable shell. Static library target `arkanoid_app`. No SFML includes — pixel art is `eng::Image`, input uses `eng::ActionMap`. Include as `<arkanoid/app/X.hpp>`. Executable target `arkanoid` (`games/arkanoid/main.cpp`) links `arkanoid_app` and `eng_sfml`, defines `ASSET_DIR` to the repo `resources/` root.
+Presentation helpers in `namespace arkanoid` for the playable shell. Static library target `arkanoid_app`. No SFML includes — pixel art is `eng::Image`, input uses `eng::ActionMap`. Include as `<arkanoid/app/X.hpp>`. Executable target `arkanoid` (`games/arkanoid/main.cpp`) links `arkanoid_app` and `eng_sfml`, defines `ASSET_DIR` to the repo `assets/` root.
 
 ## Assets
 
@@ -48,7 +48,7 @@ Presentation helpers in `namespace arkanoid` for the playable shell. Static libr
 | Symbol | Role |
 |--------|------|
 | `AssetKeys` | `string_view` keys: `background`, `brick`, `paddle`, `ball`, `capsuleWide` / `Multi` / `Slow` / `Extra` |
-| `uiFontRelativePath` | `"fonts/upheavtt.ttf"` (relative to the resources root) |
+| `uiFontRelativePath` | `"fonts/upheavtt.ttf"` (relative to the assets root) |
 | `TextureSpec` | `{key, build}` where `build` returns an `eng::Image` |
 | `textureSpecs()` | Span of all eight specs |
 

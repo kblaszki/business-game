@@ -35,7 +35,7 @@ cd business-game
 |------|------|
 | `engine/` | Engine modules (`eng_core`, input, scene, loop, render, collision, resources, `eng_sfml`) |
 | `games/arkanoid/` | Headless sim, scenes, and the `arkanoid` executable |
-| `resources/fonts/` | UI TTF |
+| `assets/fonts/` | UI TTF (`ASSET_DIR`) |
 | `tests/engine/`, `tests/arkanoid/` | Debug GoogleTest (no window, except event translation) |
 | `docs/` | Diátaxis documentation |
 | `mvp/` | Prospective design (`01`–`09`) and living progress (`10`) |
