@@ -1,7 +1,7 @@
 ---
 name: run-build-and-tests
 description: >-
-  Configures, builds, formats, and runs tests for business-game using CMake presets.
+  Configures, builds, formats, and runs tests for sfml-game-lab using CMake presets.
   Use when building the game, running unit tests, formatting code, or verifying CI-like steps.
 ---
 

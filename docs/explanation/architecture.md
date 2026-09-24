@@ -14,14 +14,14 @@ last_reviewed: 2026-09-24
 
 # Engine architecture decisions
 
-Locked contract for the engine split. The running tree is `engine/` and `games/arkanoid/`; this page is the source of truth for boundaries and names.
+Locked contract for the engine split in **sfml-game-lab**. The running tree is `engine/` and `games/arkanoid/`; further games are siblings under `games/<title>/`. This page is the source of truth for boundaries and names.
 
 ## Layout and names
 
 | Decision | Choice |
 |----------|--------|
 | Engine root | `engine/` |
-| Game root | `games/arkanoid/` |
+| First game | `games/arkanoid/` |
 | Engine namespace | `eng` |
 | SFML backend | `eng::sfml` |
 | Engine internals | `eng::detail` |

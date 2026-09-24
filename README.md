@@ -1,8 +1,8 @@
-# business-game
+# sfml-game-lab
 
-A C++23 [SFML](https://www.sfml-dev.org/) breakout on a small 2D/2.5D engine: three stages, four power-ups, pause overlay, CMake presets, and windowless unit tests.
+A lab of small C++23 games on a shared [SFML](https://www.sfml-dev.org/) 3.1 engine (2D now, 2.5D-ready). The first title is a three-stage breakout in `games/arkanoid/`: four power-ups, a pause overlay, CMake presets, and windowless unit tests. Later games, such as Tetris and other classics, will sit beside it under `games/`.
 
-The engine lives in `engine/` (`namespace eng`). The game lives in `games/arkanoid/` (`namespace arkanoid`). Prospective notes stay in [`mvp/`](mvp/README.md) (`01`–`09`); what landed is [`mvp/10`](mvp/10-engine-progress.md). The contract is [`docs/explanation/architecture.md`](docs/explanation/architecture.md).
+The engine lives in `engine/` (`namespace eng`). Prospective notes stay in [`mvp/`](mvp/README.md) (`01`–`09`); what landed is [`mvp/10`](mvp/10-engine-progress.md). The contract is [`docs/explanation/architecture.md`](docs/explanation/architecture.md).
 
 ## Table of Contents
 
@@ -25,8 +25,8 @@ The engine lives in `engine/` (`namespace eng`). The game lives in `games/arkano
 SFML 3.1 is downloaded automatically via CMake FetchContent (`cmake/FetchSFML.cmake`; Audio and Network modules are off). A separate SFML install is not required. GoogleTest 1.18 is fetched only for Debug.
 
 ```sh
-git clone git@github.com:DevKrystian/business-game.git
-cd business-game
+git clone git@github.com:DevKrystian/sfml-game-lab.git
+cd sfml-game-lab
 ```
 
 ## Project structure
@@ -91,7 +91,7 @@ After building, run the executable from the preset output directory:
 ./build/release/bin/arkanoid
 ```
 
-A 1280×720 window titled "Business game" opens on a Start / Quit menu. Enter starts Stage1. Clearing a stage loads the next one. Escape pauses.
+A 1280×720 window titled "Arkanoid" opens on a Start / Quit menu. Enter starts Stage1. Clearing a stage loads the next one. Escape pauses.
 
 ## Running the Tests
 

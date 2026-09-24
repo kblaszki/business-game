@@ -25,7 +25,7 @@ last_reviewed: 2026-09-24
 
 # Getting started
 
-Goal: from a fresh clone to a running window. By the end you will have configured, built, and launched `arkanoid`.
+Goal: from a fresh clone of sfml-game-lab to a running window. This tutorial launches the first game in the lab. By the end you will have configured, built, and launched `arkanoid`.
 
 ## 1. Install the toolchain
 
@@ -73,7 +73,7 @@ cmake --build --preset debug --target arkanoid
 ./build/debug/bin/arkanoid
 ```
 
-A 1280×720 window opens on a Start / Quit menu. Start or Enter plays Stage1 (arrows or A/D move the paddle, Enter launches). Clearing a stage loads the next; Stage3 is the last. Escape pauses. Backspace on the menu quits. Donor bricks drop Wide, MultiBall, Slow, and ExtraLife capsules.
+A 1280×720 window titled "Arkanoid" opens on a Start / Quit menu. Start or Enter plays Stage1 (arrows or A/D move the paddle, Enter launches). Clearing a stage loads the next; Stage3 is the last. Escape pauses. Backspace on the menu quits. Donor bricks drop Wide, MultiBall, Slow, and ExtraLife capsules.
 
 ## Next steps
 

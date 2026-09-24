@@ -26,7 +26,7 @@ namespace
 
 int main()
 {
-    eng::sfml::SfmlPlatform platform{{1280u, 720u}, "Business game"};
+    eng::sfml::SfmlPlatform platform{{1280u, 720u}, "Arkanoid"};
 
     eng::TextureId background{};
     eng::TextureId brick{};

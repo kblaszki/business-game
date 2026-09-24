@@ -31,7 +31,7 @@ last_reviewed: 2026-09-24
 
 # Documentation map
 
-This directory documents **business-game** following the [Diataxis](https://diataxis.fr/) framework. Every document starts with a YAML front-matter block; agents should search by the `related_code` and `keywords` fields to find the right page.
+This directory documents **sfml-game-lab** following the [Diataxis](https://diataxis.fr/) framework. Every document starts with a YAML front-matter block; agents should search by the `related_code` and `keywords` fields to find the right page.
 
 ## How the docs are organized
 

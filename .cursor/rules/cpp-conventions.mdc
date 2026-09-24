@@ -1,5 +1,5 @@
 ---
-description: C++ coding conventions for business-game sources
+description: C++ coding conventions for sfml-game-lab sources
 globs: "**/*.{hpp,cpp}"
 alwaysApply: false
 ---

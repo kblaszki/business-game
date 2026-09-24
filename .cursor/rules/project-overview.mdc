@@ -1,11 +1,11 @@
 ---
-description: Project overview, architecture, and build commands for business-game
+description: Project overview, architecture, and build commands for sfml-game-lab
 alwaysApply: true
 ---
 
-# business-game
+# sfml-game-lab
 
-C++23 SFML engine and Arkanoid game. Code lives in `engine/` (`namespace eng`) and `games/arkanoid/` (`namespace arkanoid`, executable `arkanoid`). Contract: `docs/explanation/architecture.md`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living).
+C++23 SFML 3.1 game lab. The engine lives in `engine/` (`namespace eng`). Games live under `games/`; the first is `games/arkanoid/` (`namespace arkanoid`, executable `arkanoid`). Contract: `docs/explanation/architecture.md`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living).
 
 ## Stack
 
