@@ -13,7 +13,6 @@ target_link_libraries(eng_sfml
     PUBLIC
         eng_loop
         eng_resources
-    PRIVATE
         SFML::Graphics
         SFML::Window
         SFML::System

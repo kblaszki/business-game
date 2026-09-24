@@ -35,7 +35,7 @@ last_reviewed: 2026-09-24
 | `SceneFactory` | `std::move_only_function<std::unique_ptr<SceneI>()>` |
 | `SceneRequest` | `std::variant` of `PushScene`, `PopScene`, `ReplaceScene`, `RequestPause`, `QuitApp` |
 | `SceneContext` | Built by `SceneStack` for a walk; `input()`, `request(SceneRequest)` |
-| `SceneStack` | Owns scenes; constructed with a pause-overlay `SceneFactory` |
+| `SceneStack` | Owns scenes; constructed with a pause-overlay `SceneFactory`; `top()` returns the top scene or null |
 
 No concrete game scenes live in `engine/scene/`.
 

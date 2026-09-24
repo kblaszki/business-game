@@ -1,2 +1,9 @@
 add_subdirectory(sim)
 add_subdirectory(app)
+
+add_executable(arkanoid main.cpp)
+target_compile_features(arkanoid PRIVATE cxx_std_23)
+target_compile_options(arkanoid PRIVATE ${BASE_COMPILE_FLAGS})
+target_link_libraries(arkanoid PRIVATE arkanoid_app eng_sfml)
+file(TO_CMAKE_PATH "${CMAKE_SOURCE_DIR}/resources" ASSET_DIR_NORM)
+target_compile_definitions(arkanoid PRIVATE ASSET_DIR="${ASSET_DIR_NORM}")

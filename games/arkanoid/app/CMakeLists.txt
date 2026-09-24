@@ -3,6 +3,10 @@ add_library(arkanoid_app STATIC
     src/Bindings.cpp
     src/HudModel.cpp
     src/SceneRender.cpp
+    src/Scenes.cpp
+    src/MainMenuScene.cpp
+    src/GameplayScene.cpp
+    src/PauseScene.cpp
 )
 target_include_directories(arkanoid_app PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include

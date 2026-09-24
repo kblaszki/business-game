@@ -135,6 +135,15 @@ std::size_t SceneStack::size() const
     return scenes_.size();
 }
 
+SceneI* SceneStack::top() const
+{
+    if(scenes_.empty())
+    {
+        return nullptr;
+    }
+    return scenes_.back().get();
+}
+
 void SceneStack::enqueue(SceneRequest request)
 {
     if(std::holds_alternative<RequestPause>(request))

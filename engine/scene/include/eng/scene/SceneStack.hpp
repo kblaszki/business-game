@@ -31,6 +31,7 @@ public:
     [[nodiscard]] bool quitRequested() const;
     [[nodiscard]] bool empty() const;
     [[nodiscard]] std::size_t size() const;
+    [[nodiscard]] SceneI* top() const;
 
 private:
     friend class SceneContext;
