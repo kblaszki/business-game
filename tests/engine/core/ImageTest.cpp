@@ -1,5 +1,4 @@
 #include <eng/core/Image.hpp>
-
 #include <gtest/gtest.h>
 
 TEST(ImageTest, FilledSize)
@@ -9,7 +8,7 @@ TEST(ImageTest, FilledSize)
     EXPECT_EQ(image.width, 3u);
     EXPECT_EQ(image.height, 2u);
     ASSERT_EQ(image.pixels.size(), 6u);
-    for(const auto& pixel : image.pixels)
+    for(const auto& pixel: image.pixels)
     {
         EXPECT_EQ(pixel, (eng::Color{1, 2, 3, 4}));
     }

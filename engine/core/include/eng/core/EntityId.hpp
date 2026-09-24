@@ -13,4 +13,4 @@ struct EntityId
     bool operator==(const EntityId&) const = default;
 };
 
-}  // namespace eng
+} // namespace eng

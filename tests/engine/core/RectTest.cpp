@@ -1,5 +1,4 @@
 #include <eng/core/Rect.hpp>
-
 #include <gtest/gtest.h>
 
 TEST(RectTest, ContainsIsHalfOpen)

@@ -30,4 +30,4 @@ struct Rect
     }
 };
 
-}  // namespace eng
+} // namespace eng

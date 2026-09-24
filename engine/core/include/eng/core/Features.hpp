@@ -10,4 +10,4 @@ static_assert(__cpp_lib_move_only_function >= 202110L, "eng requires std::move_o
 static_assert(__cpp_lib_ranges >= 201911L, "eng requires std::ranges");
 static_assert(__cpp_concepts >= 201907L, "eng requires concepts");
 
-}  // namespace eng
+} // namespace eng

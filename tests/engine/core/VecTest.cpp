@@ -1,6 +1,5 @@
 #include <eng/core/Vec2.hpp>
 #include <eng/core/Vec3.hpp>
-
 #include <gtest/gtest.h>
 
 static_assert(eng::Vec2f{1, 2} + eng::Vec2f{3, 4} == eng::Vec2f{4, 6});

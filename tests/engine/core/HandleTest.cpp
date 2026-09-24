@@ -1,8 +1,6 @@
 #include <eng/core/EntityId.hpp>
 #include <eng/core/Handle.hpp>
-
 #include <gtest/gtest.h>
-
 #include <unordered_set>
 
 TEST(HandleTest, OrderingAndEquality)

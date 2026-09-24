@@ -79,4 +79,4 @@ constexpr std::optional<Vec3<T>> normalized(const Vec3<T>& v) noexcept
     return Vec3<T>{v.x * invLen, v.y * invLen, v.z * invLen};
 }
 
-}  // namespace eng
+} // namespace eng

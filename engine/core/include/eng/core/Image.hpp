@@ -1,8 +1,7 @@
 #pragma once
 
-#include <eng/core/Color.hpp>
-
 #include <cstdint>
+#include <eng/core/Color.hpp>
 #include <optional>
 #include <vector>
 
@@ -44,4 +43,4 @@ struct Image
     }
 };
 
-}  // namespace eng
+} // namespace eng

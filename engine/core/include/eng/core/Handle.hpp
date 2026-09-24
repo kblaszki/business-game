@@ -14,7 +14,7 @@ struct Handle
     auto operator<=>(const Handle&) const = default;
 };
 
-}  // namespace eng
+} // namespace eng
 
 namespace std
 {
@@ -28,4 +28,4 @@ struct hash<eng::Handle<Tag>>
     }
 };
 
-}  // namespace std
+} // namespace std
