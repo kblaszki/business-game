@@ -10,6 +10,11 @@ related_docs:
   - how-to/build-and-test.md
   - reference/source-layout.md
   - reference/engine-core.md
+  - reference/engine-input.md
+  - reference/engine-scene.md
+  - reference/engine-loop.md
+  - reference/engine-render.md
+  - reference/engine-collision.md
   - reference/input-and-events.md
   - reference/pause-overlay.md
   - reference/world-and-levels.md
@@ -52,6 +57,11 @@ flowchart TD
 | [how-to/build-and-test.md](how-to/build-and-test.md) | how-to | build, test, ctest, format, presets |
 | [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, gameLib, targets |
 | [reference/engine-core.md](reference/engine-core.md) | reference | eng, Vec2, Rect, Handle, Image |
+| [reference/engine-input.md](reference/engine-input.md) | reference | InputEvent, ActionMap, InputState |
+| [reference/engine-scene.md](reference/engine-scene.md) | reference | SceneStack, SceneRequest, pause |
+| [reference/engine-loop.md](reference/engine-loop.md) | reference | FixedStepLoop, App, PlatformI |
+| [reference/engine-render.md](reference/engine-render.md) | reference | RenderQueue, SortKey, Projection |
+| [reference/engine-collision.md](reference/engine-collision.md) | reference | intersect, sweep, reflect |
 | [reference/input-and-events.md](reference/input-and-events.md) | reference | Action, InputMapper, SFML events, handleAction |
 | [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScreen, overlay, FocusLost, requestPauseOverlay |
 | [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, Paddle, Ball, Brick, Stage1 |

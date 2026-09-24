@@ -1,1 +1,7 @@
-# Empty for now — engine/scene tests land in a later task.
+add_unit_test(scene_stack_test
+    SOURCES
+        SceneStackTest.cpp
+        fakes/SceneSpy.cpp
+    DEPENDENCIES
+        eng_scene
+)

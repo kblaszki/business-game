@@ -1,1 +1,6 @@
-# Empty for now — engine/input tests land in a later task.
+add_unit_test(input_state_test
+    SOURCES
+        InputStateTest.cpp
+    DEPENDENCIES
+        eng_input
+)

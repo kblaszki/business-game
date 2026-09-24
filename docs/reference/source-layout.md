@@ -116,12 +116,12 @@ New engine and game trees are wired into CMake; `src/` `gameLib` / `game` still 
 | Path | Targets |
 |------|---------|
 | `engine/core/` | `eng_core` (INTERFACE); `Features.hpp` capability asserts |
-| `engine/input/` | `eng_input` (INTERFACE) → `eng_core` |
-| `engine/scene/` | `eng_scene` (INTERFACE) → `eng_input` |
-| `engine/render/` | `eng_render` (INTERFACE) → `eng_core` |
-| `engine/collision/` | `eng_collision` (INTERFACE) → `eng_core` |
+| `engine/input/` | `eng_input` (STATIC) → `eng_core` |
+| `engine/scene/` | `eng_scene` (STATIC) → `eng_input` |
+| `engine/render/` | `eng_render` (STATIC) → `eng_core` |
+| `engine/collision/` | `eng_collision` (STATIC) → `eng_core` |
 | `engine/resources/` | `eng_resources` (INTERFACE) → `eng_core` |
-| `engine/loop/` | `eng_loop` (INTERFACE) → `eng_scene`, `eng_render` |
+| `engine/loop/` | `eng_loop` (STATIC) → `eng_scene`, `eng_render` |
 | `engine/sfml/` | `eng_sfml` (STATIC); only target that links SFML |
 | `games/arkanoid/sim/` | `arkanoid_sim` (INTERFACE) → `eng_collision` |
 | `games/arkanoid/app/` | `arkanoid_app` (INTERFACE) → `arkanoid_sim`, `eng_loop`, `eng_resources` |
