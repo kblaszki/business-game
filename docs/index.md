@@ -18,6 +18,7 @@ related_docs:
   - reference/engine-resources.md
   - reference/engine-sfml.md
   - reference/arkanoid-sim.md
+  - reference/arkanoid-app.md
   - reference/input-and-events.md
   - reference/pause-overlay.md
   - reference/world-and-levels.md
@@ -68,6 +69,7 @@ flowchart TD
 | [reference/engine-resources.md](reference/engine-resources.md) | reference | ResourceCache, ResourceError |
 | [reference/engine-sfml.md](reference/engine-sfml.md) | reference | SfmlPlatform, EventTranslate, letterbox |
 | [reference/arkanoid-sim.md](reference/arkanoid-sim.md) | reference | arkanoid sim, StageId, power-ups |
+| [reference/arkanoid-app.md](reference/arkanoid-app.md) | reference | Theme, Assets, HudModel, SceneRender |
 | [reference/input-and-events.md](reference/input-and-events.md) | reference | Action, InputMapper, SFML events, handleAction |
 | [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScreen, overlay, FocusLost, requestPauseOverlay |
 | [reference/world-and-levels.md](reference/world-and-levels.md) | reference | World, Paddle, Ball, Brick, Stage1 |

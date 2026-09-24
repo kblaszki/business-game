@@ -127,7 +127,7 @@ New engine and game trees are wired into CMake; `src/` `gameLib` / `game` still 
 | `engine/loop/` | `eng_loop` (STATIC) → `eng_scene`, `eng_render` |
 | `engine/sfml/` | `eng_sfml` (STATIC); only target that links SFML |
 | `games/arkanoid/sim/` | `arkanoid_sim` (STATIC) → `eng_collision` |
-| `games/arkanoid/app/` | `arkanoid_app` (INTERFACE) → `arkanoid_sim`, `eng_loop`, `eng_resources` |
+| `games/arkanoid/app/` | `arkanoid_app` (STATIC) → `arkanoid_sim`, `eng_loop`, `eng_resources` |
 | `tests/engine/`, `tests/arkanoid/` | Per-module test leaves; `features_test` under `tests/engine/core/` |
 
 Include layout: `<eng/<module>/X.hpp>` under `engine/<module>/include/`. Only `engine/sfml` and `games/arkanoid/main.cpp` may include SFML.
