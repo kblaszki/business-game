@@ -36,6 +36,17 @@ TEST(WorldShould, breakBrickAndRaiseScore)
     EXPECT_EQ(world.score(), 10u);
 }
 
+TEST(WorldShould, bounceDownWhenHittingBrickFromBelow)
+{
+    World world;
+    world.addBrick({200.f, 80.f}, sf::Color::Red);
+    world.placeBall({247.f, 100.f}, {0.f, -300.f}, false);
+    world.fixedUpdate(FixedTimestep::tick);
+
+    EXPECT_FALSE(world.brickAt(0).alive());
+    EXPECT_GT(world.ball().velocity().y, 0.f);
+}
+
 TEST(WorldShould, loseLifeAndRestickWhenBallExitsBottom)
 {
     World world;

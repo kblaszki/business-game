@@ -225,21 +225,26 @@ void World::bounceBricks()
         const auto brickPos = brick.position();
         const auto brickSize = brick.size();
         const auto center = sphere.center();
-        const float overlapX =
-            sphere.radius()
-            - std::min(std::abs(center.x - brickPos.x), std::abs(center.x - (brickPos.x + brickSize.x)));
-        const float overlapY =
-            sphere.radius()
-            - std::min(std::abs(center.y - brickPos.y), std::abs(center.y - (brickPos.y + brickSize.y)));
+        const float nearestX = std::clamp(center.x, brickPos.x, brickPos.x + brickSize.x);
+        const float nearestY = std::clamp(center.y, brickPos.y, brickPos.y + brickSize.y);
+        float nx = center.x - nearestX;
+        float ny = center.y - nearestY;
+
+        if(nx == 0.f && ny == 0.f)
+        {
+            const auto brickCenter = brickPos + brickSize * 0.5f;
+            nx = center.x - brickCenter.x;
+            ny = center.y - brickCenter.y;
+        }
 
         auto vel = sphere.velocity();
-        if(overlapX < overlapY)
+        if(std::abs(nx) > std::abs(ny))
         {
-            vel.x = -vel.x;
+            vel.x = std::copysign(std::abs(vel.x), nx);
         }
         else
         {
-            vel.y = -vel.y;
+            vel.y = std::copysign(std::abs(vel.y), ny);
         }
         sphere.setVelocity(vel);
         return;

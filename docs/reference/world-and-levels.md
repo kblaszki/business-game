@@ -49,7 +49,7 @@ When `won()` or `lost()`, later ticks still increment `tickCount` but skip motio
 ## Breakout rules
 
 - Paletka: `setPaddleSpeed` from gameplay key hold (Left/Right/A/D). Clamp to design width.
-- Piłka: `Stuck` na paletce aż `launch()` (Enter). Lot, odbicia od ścian i paletki, jedna cegła na tick.
+- Piłka: `Stuck` na paletce aż `launch()` (Enter). Lot, odbicia od ścian i paletki, jedna cegła na tick. Odbicie od cegły idzie na zewnątrz ściany kontaktu (normalna od najbliższego punktu AABB).
 - Spód ekranu: −1 życie, znowu `Stuck`. 0 żyć = `lost()`.
 - 0 żywych cegieł (przy niepustej siatce) = `won()`.
 - Tekstury: `BreakoutArt` buduje `sf::Image` w kodzie. Bez PNG.
