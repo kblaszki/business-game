@@ -112,3 +112,4 @@ Namespace `sgl`, targets `sgl_*`, games `sgl::arkanoid` and `sgl::tetris`. New m
 - [x] Tetris app and executable `tetris`
 - [x] Arkanoid result overlay and `arkanoid.scores` (capacity 5)
 - [x] Tetris sounds, particles, and `tetris.scores` (capacity 5)
+- [x] Arkanoid sounds and brick particles

@@ -2,6 +2,8 @@
 #include <arkanoid/app/Bindings.hpp>
 #include <arkanoid/app/SceneRender.hpp>
 #include <arkanoid/app/Scenes.hpp>
+#include <arkanoid/app/Sounds.hpp>
+#include <array>
 #include <filesystem>
 #include <iostream>
 #include <sgl/loop/App.hpp>
@@ -12,8 +14,11 @@
 #include <sgl/save/SaveFile.hpp>
 #include <sgl/save/SaveFormat.hpp>
 #include <sgl/scene/SceneStack.hpp>
+#include <sgl/sfml/SfmlAudio.hpp>
 #include <sgl/sfml/SfmlClock.hpp>
 #include <sgl/sfml/SfmlPlatform.hpp>
+#include <string_view>
+#include <utility>
 
 namespace
 {
@@ -50,14 +55,17 @@ int main()
 {
     sgl::sfml::SfmlPlatform platform{{1280u, 720u}, "Arkanoid"};
 
-    sgl::TextureId background{};
-    sgl::TextureId brick{};
-    sgl::TextureId paddle{};
-    sgl::TextureId ball{};
-    sgl::TextureId capsuleWide{};
-    sgl::TextureId capsuleMulti{};
-    sgl::TextureId capsuleSlow{};
-    sgl::TextureId capsuleExtra{};
+    sgl::arkanoid::TextureIds textures{};
+    const std::array<std::pair<std::string_view, sgl::TextureId*>, 8> textureSlots{{
+        {sgl::arkanoid::AssetKeys::background, &textures.background},
+        {sgl::arkanoid::AssetKeys::brick, &textures.brick},
+        {sgl::arkanoid::AssetKeys::paddle, &textures.paddle},
+        {sgl::arkanoid::AssetKeys::ball, &textures.ball},
+        {sgl::arkanoid::AssetKeys::capsuleWide, &textures.capsule[0]},
+        {sgl::arkanoid::AssetKeys::capsuleMulti, &textures.capsule[1]},
+        {sgl::arkanoid::AssetKeys::capsuleSlow, &textures.capsule[2]},
+        {sgl::arkanoid::AssetKeys::capsuleExtra, &textures.capsule[3]},
+    }};
 
     for(const sgl::arkanoid::TextureSpec& spec: sgl::arkanoid::textureSpecs())
     {
@@ -67,37 +75,13 @@ int main()
             return fail(loaded.error());
         }
 
-        if(spec.key == sgl::arkanoid::AssetKeys::background)
+        for(const auto& [key, slot]: textureSlots)
         {
-            background = *loaded;
-        }
-        else if(spec.key == sgl::arkanoid::AssetKeys::brick)
-        {
-            brick = *loaded;
-        }
-        else if(spec.key == sgl::arkanoid::AssetKeys::paddle)
-        {
-            paddle = *loaded;
-        }
-        else if(spec.key == sgl::arkanoid::AssetKeys::ball)
-        {
-            ball = *loaded;
-        }
-        else if(spec.key == sgl::arkanoid::AssetKeys::capsuleWide)
-        {
-            capsuleWide = *loaded;
-        }
-        else if(spec.key == sgl::arkanoid::AssetKeys::capsuleMulti)
-        {
-            capsuleMulti = *loaded;
-        }
-        else if(spec.key == sgl::arkanoid::AssetKeys::capsuleSlow)
-        {
-            capsuleSlow = *loaded;
-        }
-        else if(spec.key == sgl::arkanoid::AssetKeys::capsuleExtra)
-        {
-            capsuleExtra = *loaded;
+            if(key == spec.key)
+            {
+                *slot = *loaded;
+                break;
+            }
         }
     }
 
@@ -109,13 +93,35 @@ int main()
     }
     const sgl::FontId fontId = *fontLoaded;
 
-    const sgl::arkanoid::TextureIds textures{
-        .background = background,
-        .brick = brick,
-        .paddle = paddle,
-        .ball = ball,
-        .capsule = {capsuleWide, capsuleMulti, capsuleSlow, capsuleExtra},
-    };
+    auto& sfmlAudio = static_cast<sgl::sfml::SfmlAudio&>(platform.audio());
+    sgl::arkanoid::SoundIds sounds{};
+    const std::array<std::pair<std::string_view, sgl::SoundId*>, 9> soundSlots{{
+        {"paddle", &sounds.paddle},
+        {"brick", &sounds.brick},
+        {"wall", &sounds.wall},
+        {"launch", &sounds.launch},
+        {"powerUp", &sounds.powerUp},
+        {"ballLost", &sounds.ballLost},
+        {"lifeLost", &sounds.lifeLost},
+        {"stageClear", &sounds.stageClear},
+        {"gameOver", &sounds.gameOver},
+    }};
+    for(const sgl::arkanoid::SoundSpec& spec: sgl::arkanoid::soundSpecs())
+    {
+        const auto uploaded = sfmlAudio.upload(spec.key, spec.pcm);
+        if(!uploaded)
+        {
+            return fail(uploaded.error());
+        }
+        for(const auto& [key, slot]: soundSlots)
+        {
+            if(key == spec.key)
+            {
+                *slot = *uploaded;
+                break;
+            }
+        }
+    }
 
     const sgl::arkanoid::Actions actions = sgl::arkanoid::makeActions();
     sgl::ActionMap map = sgl::arkanoid::defaultBindings(actions);
@@ -131,7 +137,8 @@ int main()
     }
     sgl::HighScoreTable highScores = loadHighScores(scoresPath);
 
-    const sgl::arkanoid::AppServices services{actions, textures, fontId, highScores, scoresPath};
+    const sgl::arkanoid::AppServices services{
+        actions, textures, fontId, platform.audio(), sounds, highScores, scoresPath};
 
     sgl::SceneStack stack{sgl::arkanoid::pause(services)};
     stack.push(sgl::arkanoid::mainMenu(services)());

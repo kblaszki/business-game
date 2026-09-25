@@ -16,10 +16,17 @@
 
 namespace sgl::arkanoid
 {
+namespace
+{
+
+constexpr std::uint64_t kFeedbackSeed{42};
+
+} // namespace
 
 GameplayScene::GameplayScene(const AppServices& services, StageId stage)
     : services_{services}
     , state_{makeState(stage)}
+    , feedback_{services.audio, services.sounds, sgl::Pcg32{kFeedbackSeed}}
 {
 }
 
@@ -62,6 +69,8 @@ void GameplayScene::update(sgl::SceneContext& ctx, sgl::Seconds dt)
         .launch = input.action(actions.confirm).pressed,
     };
     const std::vector<SimEvent> events = step(state_, simInput, dt);
+    feedback_.onEvents(events, state_);
+    feedback_.update(dt);
 
     for(const SimEvent& event: events)
     {
@@ -123,6 +132,8 @@ void GameplayScene::render(sgl::RenderQueue& queue) const
                    .position = hudPowerPos,
                    .color = hudText,
                });
+
+    feedback_.render(queue);
 }
 
 sgl::SceneTraits GameplayScene::traits() const

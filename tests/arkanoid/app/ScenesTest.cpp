@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <gtest/gtest.h>
 #include <memory>
+#include <sgl/audio/NullAudio.hpp>
 #include <sgl/core/Time.hpp>
 #include <sgl/core/Vec2.hpp>
 #include <sgl/input/InputEvent.hpp>
@@ -34,9 +35,11 @@ struct Fixture
     sgl::arkanoid::Actions actions = sgl::arkanoid::makeActions();
     sgl::arkanoid::TextureIds textures{};
     sgl::FontId font{};
+    sgl::NullAudio audio{};
+    sgl::arkanoid::SoundIds sounds{};
     std::filesystem::path scoresPath = uniqueTempPath(".scores");
     sgl::HighScoreTable highScores{sgl::arkanoid::kHighScoreCapacity};
-    sgl::arkanoid::AppServices services{actions, textures, font, highScores, scoresPath};
+    sgl::arkanoid::AppServices services{actions, textures, font, audio, sounds, highScores, scoresPath};
     sgl::ActionMap map = sgl::arkanoid::defaultBindings(actions);
     sgl::SceneStack stack{sgl::arkanoid::pause(services)};
 

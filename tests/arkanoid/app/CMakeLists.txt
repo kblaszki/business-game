@@ -34,3 +34,17 @@ add_unit_test(arkanoid_result_scene_test
         arkanoid_app
         sgl_render
 )
+
+add_unit_test(arkanoid_sounds_test
+    SOURCES
+        SoundsTest.cpp
+    DEPENDENCIES
+        arkanoid_app
+)
+
+add_unit_test(arkanoid_feedback_test
+    SOURCES
+        FeedbackTest.cpp
+    DEPENDENCIES
+        arkanoid_app
+)

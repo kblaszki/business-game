@@ -1,5 +1,6 @@
 #pragma once
 
+#include <arkanoid/app/Feedback.hpp>
 #include <arkanoid/app/HudModel.hpp>
 #include <arkanoid/app/Scenes.hpp>
 #include <arkanoid/sim/State.hpp>
@@ -27,6 +28,7 @@ private:
 
     AppServices services_;
     State state_;
+    Feedback feedback_;
 };
 
 } // namespace sgl::arkanoid

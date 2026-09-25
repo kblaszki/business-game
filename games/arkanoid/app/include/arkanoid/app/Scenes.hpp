@@ -2,10 +2,12 @@
 
 #include <arkanoid/app/Bindings.hpp>
 #include <arkanoid/app/SceneRender.hpp>
+#include <arkanoid/app/Sounds.hpp>
 #include <arkanoid/sim/State.hpp>
 #include <cstdint>
 #include <filesystem>
 #include <optional>
+#include <sgl/audio/AudioI.hpp>
 #include <sgl/render/AssetIds.hpp>
 #include <sgl/save/HighScoreTable.hpp>
 #include <sgl/scene/SceneRequest.hpp>
@@ -26,6 +28,8 @@ struct AppServices
     const Actions& actions;
     const TextureIds& textures;
     sgl::FontId font;
+    sgl::AudioI& audio;
+    SoundIds sounds{};
     sgl::HighScoreTable& highScores;
     std::filesystem::path scoresPath;
 };

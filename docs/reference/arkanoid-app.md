@@ -8,6 +8,8 @@ related_code:
   - games/arkanoid/app/include/arkanoid/app/Bindings.hpp
   - games/arkanoid/app/include/arkanoid/app/HudModel.hpp
   - games/arkanoid/app/include/arkanoid/app/SceneRender.hpp
+  - games/arkanoid/app/include/arkanoid/app/Sounds.hpp
+  - games/arkanoid/app/include/arkanoid/app/Feedback.hpp
   - games/arkanoid/app/include/arkanoid/app/Scenes.hpp
   - games/arkanoid/app/include/arkanoid/app/MainMenuScene.hpp
   - games/arkanoid/app/include/arkanoid/app/GameplayScene.hpp
@@ -17,6 +19,8 @@ related_code:
   - games/arkanoid/app/src/SceneRender.cpp
   - games/arkanoid/app/src/Bindings.cpp
   - games/arkanoid/app/src/HudModel.cpp
+  - games/arkanoid/app/src/Sounds.cpp
+  - games/arkanoid/app/src/Feedback.cpp
   - games/arkanoid/app/src/Scenes.cpp
   - games/arkanoid/app/src/MainMenuScene.cpp
   - games/arkanoid/app/src/GameplayScene.cpp
@@ -28,6 +32,8 @@ related_code:
   - tests/arkanoid/app/SceneRenderTest.cpp
   - tests/arkanoid/app/ScenesTest.cpp
   - tests/arkanoid/app/ResultSceneTest.cpp
+  - tests/arkanoid/app/SoundsTest.cpp
+  - tests/arkanoid/app/FeedbackTest.cpp
 related_docs:
   - arkanoid-sim.md
   - engine-core.md
@@ -38,13 +44,13 @@ related_docs:
   - pause-overlay.md
   - source-layout.md
   - ../explanation/architecture.md
-keywords: [arkanoid, app, Theme, Assets, Bindings, HudModel, textureSpecs, makeHud, Scenes, MainMenuScene, GameplayScene, PauseScene, ResultScene, HighScoreTable]
+keywords: [arkanoid, app, Theme, Assets, Bindings, HudModel, textureSpecs, makeHud, Sounds, Feedback, Scenes, MainMenuScene, GameplayScene, PauseScene, ResultScene, HighScoreTable]
 last_reviewed: 2026-09-25
 ---
 
 # Arkanoid app
 
-Presentation helpers in `namespace sgl::arkanoid` for the playable shell. Static library target `arkanoid_app` (links `arkanoid_sim`, `sgl_loop`, `sgl_resources`, `sgl_save`). No SFML includes — pixel art is `sgl::Image`, input uses `sgl::ActionMap`. Include as `<arkanoid/app/X.hpp>`. Executable target `arkanoid` (`games/arkanoid/main.cpp`) links `arkanoid_app` and `sgl_sfml`, defines `ASSET_DIR` to the repo `assets/` root.
+Presentation helpers in `namespace sgl::arkanoid` for the playable shell. Static library target `arkanoid_app` (links `arkanoid_sim`, `sgl_loop`, `sgl_resources`, `sgl_audio`, `sgl_fx`, `sgl_save`). No SFML includes — pixel art is `sgl::Image`, input uses `sgl::ActionMap`. Include as `<arkanoid/app/X.hpp>`. Executable target `arkanoid` (`games/arkanoid/main.cpp`) links `arkanoid_app` and `sgl_sfml`, defines `ASSET_DIR` to the repo `assets/` root.
 
 ## Assets
 
@@ -78,13 +84,21 @@ Image sizes match the breakout art: background **1280×720** (dark blue with hor
 
 `GameplayScene` draws only `score`, `lives`, and `effect` on `Layer::Hud`. Win/lose outcome UI is `ResultScene`, not the HUD banner path. `banner` / `hint` remain filled by `makeHud` but are unused by the draw path.
 
+## Sounds
+
+`soundSpecs()` returns a span of `{key, Pcm}` for **paddle**, **brick**, **wall**, **launch**, **powerUp**, **ballLost**, **lifeLost**, **stageClear**, and **gameOver**. Each buffer is built with `sgl::tone`. `SoundIds` holds the uploaded `SoundId` handles. `main.cpp` uploads every spec through `SfmlAudio::upload` (via `platform.audio()`) and stores the ids plus `AudioI&` in `AppServices`.
+
+## Feedback
+
+`Feedback(AudioI&, SoundIds, Pcg32)` maps every `SimEvent` to exactly one sound (`BrickDestroyed` → brick, `LifeLost` → lifeLost, `StageCleared` → stageClear, `GameOver` → gameOver, `PowerUpCaught` → powerUp, `PaddleHit` → paddle, `WallHit` → wall, `BallLaunched` → launch, `BallLost` → ballLost). `BrickDestroyed` also emits **12** particles in that brick’s `tint` (`ParticleSystem` capacity **1024**). `update(Seconds)` and `render(RenderQueue&)` draw on `Layer::Overlay`. `GameplayScene` owns `Feedback` and feeds it `step` events each tick.
+
 ## Render
 
 `renderState` pushes draw commands from a `State` snapshot. Background is `Layer::Background`. Alive bricks are `Layer::World` with depth `box.pos.y`. Paddle, balls, and capsules are `Layer::Actors` with depth equal to their y. Dead bricks are skipped. A wide paddle uses `scale.x = width / 120`. Capsule texture index follows `PowerUpKind`.
 
 ## Scenes
 
-`AppServices` bundles `{const Actions& actions; const TextureIds& textures; sgl::FontId font; sgl::HighScoreTable& highScores; std::filesystem::path scoresPath}` for scene factories. High-score capacity is `kHighScoreCapacity` (**5**). Factories return `sgl::SceneFactory`:
+`AppServices` bundles `{const Actions& actions; const TextureIds& textures; sgl::FontId font; sgl::AudioI& audio; SoundIds sounds; sgl::HighScoreTable& highScores; std::filesystem::path scoresPath}` for scene factories. High-score capacity is `kHighScoreCapacity` (**5**). Factories return `sgl::SceneFactory`:
 
 | Factory | Scene | Traits |
 |---------|-------|--------|
@@ -95,10 +109,14 @@ Image sizes match the breakout art: background **1280×720** (dark blue with hor
 
 `MainMenuScene` draws title `"Breakout"`, best score (`"Best N"` from `highScores.entries()` front, or `0`), and Start/Quit buttons. Confirm or `pointerPressed` inside Start → `ReplaceScene{gameplay(..., Stage1)}`; cancel or Quit click → `QuitApp`. Hover alone does nothing.
 
-`GameplayScene` owns `sim::State` from `makeState`. Each update builds `SimInput` from paddle axis + confirm, calls `step`. Stage1/2 `StageCleared` advances via `makeState(next, score, lives)`. On `GameOver` or Stage3 `StageCleared`: `highScores.insert(score)`, `writeTextFileAtomic(scoresPath, serialize(...))` (creates parent dirs first), then `PushScene{result(...)}`. Save failure sets `saveFailed` on the result overlay; play continues. While playing, pause → `RequestPause`. Exposes `state()` (const and mutable) and `hud()`.
+`GameplayScene` owns `sim::State` from `makeState` and `Feedback`. Each update builds `SimInput` from paddle axis + confirm, calls `step`, runs feedback, then handles stage/outcome. Stage1/2 `StageCleared` advances via `makeState(next, score, lives)`. On `GameOver` or Stage3 `StageCleared`: `highScores.insert(score)`, `writeTextFileAtomic(scoresPath, serialize(...))` (creates parent dirs first), then `PushScene{result(...)}`. Save failure sets `saveFailed` on the result overlay; play continues. While playing, pause → `RequestPause`. Exposes `state()` (const and mutable) and `hud()`.
 
 `ResultScene` is the win/lose overlay (`Outcome::Won` / `Lost`). Shows title, score, optional `"New record"` when `rank` has a value, and `"Could not save high score"` when `saveFailed`. Retry (confirm or Retry click) → `PopScene` then `ReplaceScene{gameplay(..., Stage1)}` with default score/lives. Menu (cancel or Menu click) → `PopScene` then `ReplaceScene{mainMenu}`.
 
 `PauseScene` dims the screen and shows a `"Paused"` panel. Pause/cancel → `PopScene`; confirm → `PopScene` then `ReplaceScene{mainMenu}` (uses `mainMenu()` from `Scenes.hpp`, not `MainMenuScene.hpp`).
 
-`main.cpp` loads every `textureSpecs()` entry and the UI font through `SfmlPlatform::assets()`, resolves `userDataDir("sfml-game-lab") / "arkanoid.scores"`, loads the table with `parse` (`NotFound` or `Corrupt` → empty table; `Corrupt` also writes one line to stderr), builds `AppServices`, constructs `SceneStack` with the pause factory, pushes the main menu, and runs `sgl::App`.
+`main.cpp` loads every `textureSpecs()` entry via a key→slot table and the UI font through `SfmlPlatform::assets()`, uploads `soundSpecs()`, resolves `userDataDir("sfml-game-lab") / "arkanoid.scores"`, loads the table with `parse` (`NotFound` or `Corrupt` → empty table; `Corrupt` also writes one line to stderr), builds `AppServices`, constructs `SceneStack` with the pause factory, pushes the main menu, and runs `sgl::App`.
+
+## Tests
+
+Headless suites under `tests/arkanoid/app/`: `AssetsTest`, `HudModelTest`, `SceneRenderTest`, `ScenesTest`, `ResultSceneTest`, `SoundsTest`, `FeedbackTest` (`AudioSpy`).

@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <fstream>
 #include <gtest/gtest.h>
+#include <sgl/audio/NullAudio.hpp>
 #include <sgl/core/Time.hpp>
 #include <sgl/input/InputEvent.hpp>
 #include <sgl/input/InputState.hpp>
@@ -58,9 +59,11 @@ TEST(ResultSceneTest, newRecordShownForTopScore)
     sgl::arkanoid::Actions actions = sgl::arkanoid::makeActions();
     sgl::arkanoid::TextureIds textures{};
     sgl::FontId font{};
+    sgl::NullAudio audio{};
+    sgl::arkanoid::SoundIds sounds{};
     const std::filesystem::path scoresPath = uniqueTempPath(".scores");
     sgl::HighScoreTable highScores{sgl::arkanoid::kHighScoreCapacity};
-    const sgl::arkanoid::AppServices services{actions, textures, font, highScores, scoresPath};
+    const sgl::arkanoid::AppServices services{actions, textures, font, audio, sounds, highScores, scoresPath};
 
     sgl::arkanoid::ResultScene scene{services, sgl::arkanoid::Outcome::Won, 999u, 0u, false};
     sgl::RenderQueue queue;
@@ -78,6 +81,8 @@ TEST(ResultSceneTest, saveFailureShownNotFatal)
     sgl::arkanoid::Actions actions = sgl::arkanoid::makeActions();
     sgl::arkanoid::TextureIds textures{};
     sgl::FontId font{};
+    sgl::NullAudio audio{};
+    sgl::arkanoid::SoundIds sounds{};
 
     const std::filesystem::path blocker = uniqueTempPath(".blocker");
     {
@@ -87,7 +92,7 @@ TEST(ResultSceneTest, saveFailureShownNotFatal)
     const std::filesystem::path scoresPath = blocker / "arkanoid.scores";
 
     sgl::HighScoreTable highScores{sgl::arkanoid::kHighScoreCapacity};
-    const sgl::arkanoid::AppServices services{actions, textures, font, highScores, scoresPath};
+    const sgl::arkanoid::AppServices services{actions, textures, font, audio, sounds, highScores, scoresPath};
     sgl::ActionMap map = sgl::arkanoid::defaultBindings(actions);
     sgl::SceneStack stack{sgl::arkanoid::pause(services)};
     stack.push(sgl::arkanoid::gameplay(services, sgl::arkanoid::StageId::Stage3)());
