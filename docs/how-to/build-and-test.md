@@ -103,7 +103,7 @@ GitHub Actions (`.github/workflows/ci.yml`):
 
 - `build` — Debug `build_ut` + `ctest`, then Release `arkanoid` and `tetris`, on `ubuntu-24.04` (g++-14) and `windows-2022` (MSVC)
 - `asan` — Linux g++-14, preset `asan`, `build_ut` + `ctest`
-- `tidy` — Linux clang + blocking `tidy` target over `engine/` and `games/`
+- `tidy` — Linux clang + blocking `tidy` target over `engine/` and `games/`; the job also installs `g++-14` so Clang can see libstdc++ headers. FetchContent of SFML sets `CMAKE_POLICY_VERSION_MINIMUM` to 3.5 so Vorbis configures under CMake 4.
 - `coverage` — Linux g++-14, preset `coverage`, gcovr with `--fail-under-line 90` filtered to `engine/` (excluding `engine/sfml`) and `games/*/sim`; HTML artifact uploaded
 
 ## Format the code
