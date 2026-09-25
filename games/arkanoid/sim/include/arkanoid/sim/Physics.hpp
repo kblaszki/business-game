@@ -2,11 +2,10 @@
 
 #include <arkanoid/sim/Events.hpp>
 #include <arkanoid/sim/State.hpp>
-#include <eng/core/Time.hpp>
-
+#include <sgl/core/Time.hpp>
 #include <vector>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 struct SimInput
@@ -15,8 +14,8 @@ struct SimInput
     bool launch{};
 };
 
-[[nodiscard]] std::vector<SimEvent> step(State& state, const SimInput& input, eng::Seconds dt);
+[[nodiscard]] std::vector<SimEvent> step(State& state, const SimInput& input, sgl::Seconds dt);
 
 void applyPowerUp(State& state, PowerUpKind kind);
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

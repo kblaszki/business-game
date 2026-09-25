@@ -1,6 +1,6 @@
-#include <eng/loop/FixedStepLoop.hpp>
+#include <sgl/loop/FixedStepLoop.hpp>
 
-namespace eng
+namespace sgl
 {
 
 FixedStepLoop::FixedStepLoop(Seconds tick, Seconds maxFrame)
@@ -28,4 +28,4 @@ StepResult FixedStepLoop::advance(Seconds frame) noexcept
     return StepResult{steps, accumulator / tick};
 }
 
-} // namespace eng
+} // namespace sgl

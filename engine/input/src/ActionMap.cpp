@@ -1,6 +1,6 @@
-#include <eng/input/ActionMap.hpp>
+#include <sgl/input/ActionMap.hpp>
 
-namespace eng
+namespace sgl
 {
 namespace
 {
@@ -33,4 +33,4 @@ std::span<const ActionMap::AxisBind> ActionMap::axes() const
     return std::span<const AxisBind>{axes_.data(), axes_.size()};
 }
 
-} // namespace eng
+} // namespace sgl

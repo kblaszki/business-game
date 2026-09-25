@@ -1,11 +1,10 @@
 #pragma once
 
 #include <arkanoid/sim/State.hpp>
-
 #include <optional>
 #include <string>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 struct HudModel
@@ -19,4 +18,4 @@ struct HudModel
 
 [[nodiscard]] HudModel makeHud(const State& state);
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

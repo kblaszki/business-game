@@ -3,13 +3,13 @@ title: Engine input
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - engine/input/include/eng/input/Key.hpp
-  - engine/input/include/eng/input/MouseButton.hpp
-  - engine/input/include/eng/input/InputEvent.hpp
-  - engine/input/include/eng/input/ActionId.hpp
-  - engine/input/include/eng/input/ActionState.hpp
-  - engine/input/include/eng/input/ActionMap.hpp
-  - engine/input/include/eng/input/InputState.hpp
+  - engine/input/include/sgl/input/Key.hpp
+  - engine/input/include/sgl/input/MouseButton.hpp
+  - engine/input/include/sgl/input/InputEvent.hpp
+  - engine/input/include/sgl/input/ActionId.hpp
+  - engine/input/include/sgl/input/ActionState.hpp
+  - engine/input/include/sgl/input/ActionMap.hpp
+  - engine/input/include/sgl/input/InputState.hpp
   - engine/input/src/ActionMap.cpp
   - engine/input/src/InputState.cpp
   - engine/input/CMakeLists.txt
@@ -18,13 +18,13 @@ related_code:
 related_docs:
   - source-layout.md
   - engine-core.md
-keywords: [eng, eng_input, Key, MouseButton, InputEvent, ActionMap, InputState, ActionId, AxisId, ActionState]
-last_reviewed: 2026-09-24
+keywords: [eng, sgl_input, Key, MouseButton, InputEvent, ActionMap, InputState, ActionId, AxisId, ActionState]
+last_reviewed: 2026-09-25
 ---
 
 # Engine input
 
-SFML-free input types in `namespace eng`, included as `<eng/input/X.hpp>`. Target `eng_input` is a STATIC library that PUBLIC-links `eng_core`.
+SFML-free input types in `namespace sgl`, included as `<sgl/input/X.hpp>`. Target `sgl_input` is a STATIC library that PUBLIC-links `sgl_core`.
 
 ## Keys and events
 

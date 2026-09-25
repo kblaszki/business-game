@@ -2,7 +2,7 @@ add_unit_test(event_translate_test
     SOURCES
         EventTranslateTest.cpp
     DEPENDENCIES
-        eng_input
+        sgl_input
         SFML::Window
 )
 target_include_directories(event_translate_test PRIVATE

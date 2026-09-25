@@ -21,12 +21,12 @@ Source of truth: [docs/reference/source-layout.md](../../../docs/reference/sourc
 
 ## Steps
 
-1. **Header** — `#pragma once`, `namespace eng` or `arkanoid`, one primary type, CamelCase:
+1. **Header** — `#pragma once`, `namespace sgl` or `arkanoid`, one primary type, CamelCase:
 
 ```cpp
 #pragma once
 
-namespace eng
+namespace sgl
 {
 
 class Name
@@ -35,7 +35,7 @@ public:
     int doWork() const;
 };
 
-} // namespace eng
+} // namespace sgl
 ```
 
 2. **Implementation** — keep sim and most app code SFML-free. Only `engine/sfml` and `games/arkanoid/main.cpp` may include SFML.

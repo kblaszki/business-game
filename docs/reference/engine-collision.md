@@ -3,10 +3,10 @@ title: Engine collision
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - engine/collision/include/eng/collision/Circle.hpp
-  - engine/collision/include/eng/collision/Contact.hpp
-  - engine/collision/include/eng/collision/Hit.hpp
-  - engine/collision/include/eng/collision/Collision.hpp
+  - engine/collision/include/sgl/collision/Circle.hpp
+  - engine/collision/include/sgl/collision/Contact.hpp
+  - engine/collision/include/sgl/collision/Hit.hpp
+  - engine/collision/include/sgl/collision/Collision.hpp
   - engine/collision/src/Collision.cpp
   - engine/collision/CMakeLists.txt
   - tests/engine/collision/CollisionTest.cpp
@@ -14,12 +14,12 @@ related_docs:
   - engine-core.md
   - source-layout.md
 keywords: [eng, collision, Circle, Aabb, Contact, Hit, intersect, sweep, reflect, Minkowski]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Engine collision
 
-Static library target `eng_collision` (`namespace eng`), linked `PUBLIC` to `eng_core`. No SFML. Include as `<eng/collision/X.hpp>`.
+Static library target `sgl_collision` (`namespace sgl`), linked `PUBLIC` to `sgl_core`. No SFML. Include as `<sgl/collision/X.hpp>`.
 
 Coordinate convention matches the legacy game and SFML: **+y points down**.
 
@@ -32,7 +32,7 @@ Coordinate convention matches the legacy game and SFML: **+y points down**.
 | `Contact` | static overlap: outward `normal`, penetration `depth` |
 | `Hit` | sweep result: entry `time` in `[0, 1]`, outward axis `normal` |
 
-`eng::detail::nearlyZero(v, eps = 1e-5f)` is used instead of `==` on floats.
+`sgl::detail::nearlyZero(v, eps = 1e-5f)` is used instead of `==` on floats.
 
 ## `intersect(circle, box)`
 

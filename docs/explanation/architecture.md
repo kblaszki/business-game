@@ -14,7 +14,7 @@ last_reviewed: 2026-09-25
 
 # Engine architecture decisions
 
-Locked contract for **sfml-game-lab**. The running tree is `engine/` plus games under `games/<title>/`. This page is the source of truth for boundaries and names. Phase II renames the engine namespace from `eng` to `sgl`; until that rename lands, the tree still spells `eng`.
+Locked contract for **sfml-game-lab**. The running tree is `engine/` plus games under `games/<title>/`. This page is the source of truth for boundaries and names.
 
 ## Layout and names
 
@@ -46,7 +46,7 @@ Link direction: input, collision, resources, and render depend on core; scene de
 
 ## Simulation vs presentation
 
-Simulation stores positions and sizes as values (`eng::Vec2f`, `eng::Rect`). Sprites do not own simulation state. Rendering reads a snapshot and pushes `DrawCommand` into `RenderQueue`, sorted by `SortKey` (layer, depth, sequence).
+Simulation stores positions and sizes as values (`sgl::Vec2f`, `sgl::Rect`). Sprites do not own simulation state. Rendering reads a snapshot and pushes `DrawCommand` into `RenderQueue`, sorted by `SortKey` (layer, depth, sequence).
 
 ## 2.5D
 

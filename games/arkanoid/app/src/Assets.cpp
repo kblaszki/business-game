@@ -1,19 +1,18 @@
 #include <arkanoid/app/Assets.hpp>
-
 #include <arkanoid/sim/Tuning.hpp>
-#include <eng/core/Color.hpp>
-
 #include <array>
 #include <cstdint>
+#include <sgl/core/Color.hpp>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 namespace
 {
 
-constexpr eng::Color kTransparent{0, 0, 0, 0};
+constexpr sgl::Color kTransparent{0, 0, 0, 0};
 
-void fillBox(eng::Image& image, std::uint32_t x0, std::uint32_t y0, std::uint32_t x1, std::uint32_t y1, eng::Color color)
+void fillBox(
+    sgl::Image& image, std::uint32_t x0, std::uint32_t y0, std::uint32_t x1, std::uint32_t y1, sgl::Color color)
 {
     for(std::uint32_t y = y0; y < y1; ++y)
     {
@@ -24,11 +23,11 @@ void fillBox(eng::Image& image, std::uint32_t x0, std::uint32_t y0, std::uint32_
     }
 }
 
-eng::Image makeBackground()
+sgl::Image makeBackground()
 {
     const auto w = static_cast<std::uint32_t>(designWidth);
     const auto h = static_cast<std::uint32_t>(designHeight);
-    eng::Image image = eng::Image::filled(w, h, eng::Color{12, 16, 32});
+    sgl::Image image = sgl::Image::filled(w, h, sgl::Color{12, 16, 32});
     for(std::uint32_t y = 0; y < h; y += 24)
     {
         for(std::uint32_t x = 0; x < w; ++x)
@@ -47,25 +46,25 @@ eng::Image makeBackground()
     return image;
 }
 
-eng::Image makeBrick()
+sgl::Image makeBrick()
 {
-    eng::Image image = eng::Image::filled(110, 28, eng::Color{40, 20, 30});
-    fillBox(image, 2, 2, 108, 26, eng::Color{255, 255, 255});
-    fillBox(image, 2, 2, 108, 6, eng::Color{255, 255, 255, 80});
+    sgl::Image image = sgl::Image::filled(110, 28, sgl::Color{40, 20, 30});
+    fillBox(image, 2, 2, 108, 26, sgl::Color{255, 255, 255});
+    fillBox(image, 2, 2, 108, 6, sgl::Color{255, 255, 255, 80});
     return image;
 }
 
-eng::Image makePaddle()
+sgl::Image makePaddle()
 {
-    eng::Image image = eng::Image::filled(120, 20, eng::Color{20, 20, 28});
-    fillBox(image, 2, 2, 118, 18, eng::Color{240, 210, 90});
-    fillBox(image, 2, 2, 118, 6, eng::Color{255, 240, 160});
+    sgl::Image image = sgl::Image::filled(120, 20, sgl::Color{20, 20, 28});
+    fillBox(image, 2, 2, 118, 18, sgl::Color{240, 210, 90});
+    fillBox(image, 2, 2, 118, 6, sgl::Color{255, 240, 160});
     return image;
 }
 
-eng::Image makeBall()
+sgl::Image makeBall()
 {
-    eng::Image image = eng::Image::filled(16, 16, kTransparent);
+    sgl::Image image = sgl::Image::filled(16, 16, kTransparent);
     constexpr int cx = 8;
     constexpr int cy = 8;
     for(int y = 0; y < 16; ++y)
@@ -77,19 +76,20 @@ eng::Image makeBall()
             if(dx * dx + dy * dy <= 49)
             {
                 const bool highlight = dx + dy < -2;
-                image.set(static_cast<std::uint32_t>(x), static_cast<std::uint32_t>(y),
-                          highlight ? eng::Color{255, 240, 220} : eng::Color{230, 90, 70});
+                image.set(static_cast<std::uint32_t>(x),
+                          static_cast<std::uint32_t>(y),
+                          highlight ? sgl::Color{255, 240, 220} : sgl::Color{230, 90, 70});
             }
         }
     }
     return image;
 }
 
-eng::Image makeCapsule(eng::Color tint)
+sgl::Image makeCapsule(sgl::Color tint)
 {
     constexpr std::uint32_t w = 32;
     constexpr std::uint32_t h = 16;
-    eng::Image image = eng::Image::filled(w, h, kTransparent);
+    sgl::Image image = sgl::Image::filled(w, h, kTransparent);
     constexpr float cx = 15.5f;
     constexpr float cy = 7.5f;
     constexpr float rx = 14.f;
@@ -103,31 +103,31 @@ eng::Image makeCapsule(eng::Color tint)
             if(dx * dx + dy * dy <= 1.f)
             {
                 const bool highlight = dy < -0.35f;
-                image.set(x, y, highlight ? eng::Color{255, 255, 255, 220} : tint);
+                image.set(x, y, highlight ? sgl::Color{255, 255, 255, 220} : tint);
             }
         }
     }
     return image;
 }
 
-eng::Image makeCapsuleWide()
+sgl::Image makeCapsuleWide()
 {
-    return makeCapsule(eng::Color{240, 210, 90});
+    return makeCapsule(sgl::Color{240, 210, 90});
 }
 
-eng::Image makeCapsuleMulti()
+sgl::Image makeCapsuleMulti()
 {
-    return makeCapsule(eng::Color{80, 200, 230});
+    return makeCapsule(sgl::Color{80, 200, 230});
 }
 
-eng::Image makeCapsuleSlow()
+sgl::Image makeCapsuleSlow()
 {
-    return makeCapsule(eng::Color{90, 140, 240});
+    return makeCapsule(sgl::Color{90, 140, 240});
 }
 
-eng::Image makeCapsuleExtra()
+sgl::Image makeCapsuleExtra()
 {
-    return makeCapsule(eng::Color{80, 200, 90});
+    return makeCapsule(sgl::Color{80, 200, 90});
 }
 
 const std::array<TextureSpec, 8> kSpecs{{
@@ -148,4 +148,4 @@ std::span<const TextureSpec> textureSpecs()
     return std::span<const TextureSpec>{kSpecs.data(), kSpecs.size()};
 }
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

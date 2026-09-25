@@ -34,12 +34,12 @@ related_docs:
   - source-layout.md
   - ../explanation/architecture.md
 keywords: [arkanoid, app, Theme, Assets, Bindings, HudModel, textureSpecs, makeHud, Scenes, MainMenuScene, GameplayScene, PauseScene]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Arkanoid app
 
-Presentation helpers in `namespace arkanoid` for the playable shell. Static library target `arkanoid_app`. No SFML includes — pixel art is `eng::Image`, input uses `eng::ActionMap`. Include as `<arkanoid/app/X.hpp>`. Executable target `arkanoid` (`games/arkanoid/main.cpp`) links `arkanoid_app` and `eng_sfml`, defines `ASSET_DIR` to the repo `assets/` root.
+Presentation helpers in `namespace sgl::arkanoid` for the playable shell. Static library target `arkanoid_app`. No SFML includes — pixel art is `sgl::Image`, input uses `sgl::ActionMap`. Include as `<arkanoid/app/X.hpp>`. Executable target `arkanoid` (`games/arkanoid/main.cpp`) links `arkanoid_app` and `sgl_sfml`, defines `ASSET_DIR` to the repo `assets/` root.
 
 ## Assets
 
@@ -49,12 +49,12 @@ Presentation helpers in `namespace arkanoid` for the playable shell. Static libr
 |--------|------|
 | `AssetKeys` | `string_view` keys: `background`, `brick`, `paddle`, `ball`, `capsuleWide` / `Multi` / `Slow` / `Extra` |
 | `uiFontRelativePath` | `"fonts/upheavtt.ttf"` (relative to the assets root) |
-| `TextureSpec` | `{key, build}` where `build` returns an `eng::Image` |
+| `TextureSpec` | `{key, build}` where `build` returns an `sgl::Image` |
 | `textureSpecs()` | Span of all eight specs |
 
 Image sizes match the breakout art: background **1280×720** (dark blue with horizontal stripes), brick **110×28**, paddle **120×20**, ball **16×16** (circle with transparent outside), capsules **32×16** (ellipse, transparent outside). Capsule tints: gold / cyan / blue / green with a white highlight band.
 
-`Theme.hpp` holds inline constexpr colors (title gold, HUD text, banner fill, menu button fills/labels) and HUD anchor positions: score `(32,16)`, power `(560,16)`, lives `(1040,16)`. Design size is `designSize` from `arkanoid::designWidth` / `designHeight`.
+`Theme.hpp` holds inline constexpr colors (title gold, HUD text, banner fill, menu button fills/labels) and HUD anchor positions: score `(32,16)`, power `(560,16)`, lives `(1040,16)`. Design size is `designSize` from `sgl::arkanoid::designWidth` / `designHeight`.
 
 ## Bindings
 
@@ -77,7 +77,7 @@ Image sizes match the breakout art: background **1280×720** (dark blue with hor
 
 ## Scenes
 
-`AppServices` bundles `{const Actions& actions; const TextureIds& textures; eng::FontId font}` for scene factories. Factories return `eng::SceneFactory`:
+`AppServices` bundles `{const Actions& actions; const TextureIds& textures; sgl::FontId font}` for scene factories. Factories return `sgl::SceneFactory`:
 
 | Factory | Scene | Traits |
 |---------|-------|--------|
@@ -91,4 +91,4 @@ Image sizes match the breakout art: background **1280×720** (dark blue with hor
 
 `PauseScene` dims the screen and shows a `"Paused"` panel. Pause/cancel → `PopScene`; confirm → `PopScene` then `ReplaceScene{mainMenu}` (uses `mainMenu()` from `Scenes.hpp`, not `MainMenuScene.hpp`).
 
-`main.cpp` loads every `textureSpecs()` entry and the UI font through `SfmlPlatform::assets()`, builds `AppServices`, constructs `SceneStack` with the pause factory, pushes the main menu, and runs `eng::App`.
+`main.cpp` loads every `textureSpecs()` entry and the UI font through `SfmlPlatform::assets()`, builds `AppServices`, constructs `SceneStack` with the pause factory, pushes the main menu, and runs `sgl::App`.

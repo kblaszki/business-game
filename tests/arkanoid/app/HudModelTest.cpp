@@ -1,22 +1,19 @@
 #include <arkanoid/app/Bindings.hpp>
 #include <arkanoid/app/HudModel.hpp>
-
 #include <arkanoid/sim/State.hpp>
-
-#include <eng/core/Time.hpp>
-#include <eng/input/InputEvent.hpp>
-#include <eng/input/InputState.hpp>
-#include <eng/input/Key.hpp>
-
 #include <gtest/gtest.h>
+#include <sgl/core/Time.hpp>
+#include <sgl/input/InputEvent.hpp>
+#include <sgl/input/InputState.hpp>
+#include <sgl/input/Key.hpp>
 
 TEST(HudModelShould, midGameHasNoBanner)
 {
-    arkanoid::State state{};
+    sgl::arkanoid::State state{};
     state.score = 40;
     state.lives = 2;
 
-    const arkanoid::HudModel hud = arkanoid::makeHud(state);
+    const sgl::arkanoid::HudModel hud = sgl::arkanoid::makeHud(state);
 
     EXPECT_EQ(hud.score, "Score 40");
     EXPECT_EQ(hud.lives, "Lives 2");
@@ -27,11 +24,11 @@ TEST(HudModelShould, midGameHasNoBanner)
 
 TEST(HudModelShould, stage3ClearedShowsYouWin)
 {
-    arkanoid::State state{};
+    sgl::arkanoid::State state{};
     state.cleared = true;
-    state.stage = arkanoid::StageId::Stage3;
+    state.stage = sgl::arkanoid::StageId::Stage3;
 
-    const arkanoid::HudModel hud = arkanoid::makeHud(state);
+    const sgl::arkanoid::HudModel hud = sgl::arkanoid::makeHud(state);
 
     ASSERT_TRUE(hud.banner.has_value());
     EXPECT_EQ(*hud.banner, "You win");
@@ -41,11 +38,11 @@ TEST(HudModelShould, stage3ClearedShowsYouWin)
 
 TEST(HudModelShould, stage1ClearedShowsNoBanner)
 {
-    arkanoid::State state{};
+    sgl::arkanoid::State state{};
     state.cleared = true;
-    state.stage = arkanoid::StageId::Stage1;
+    state.stage = sgl::arkanoid::StageId::Stage1;
 
-    const arkanoid::HudModel hud = arkanoid::makeHud(state);
+    const sgl::arkanoid::HudModel hud = sgl::arkanoid::makeHud(state);
 
     EXPECT_FALSE(hud.banner.has_value());
     EXPECT_FALSE(hud.hint.has_value());
@@ -53,10 +50,10 @@ TEST(HudModelShould, stage1ClearedShowsNoBanner)
 
 TEST(HudModelShould, overShowsYouLose)
 {
-    arkanoid::State state{};
+    sgl::arkanoid::State state{};
     state.over = true;
 
-    const arkanoid::HudModel hud = arkanoid::makeHud(state);
+    const sgl::arkanoid::HudModel hud = sgl::arkanoid::makeHud(state);
 
     ASSERT_TRUE(hud.banner.has_value());
     EXPECT_EQ(*hud.banner, "You lose");
@@ -66,22 +63,22 @@ TEST(HudModelShould, overShowsYouLose)
 
 TEST(HudModelShould, wideEffectStringWhenTimedRemaining)
 {
-    arkanoid::State state{};
-    state.effects.timed = arkanoid::PowerUpKind::Wide;
-    state.effects.remaining = eng::Seconds{4.f};
+    sgl::arkanoid::State state{};
+    state.effects.timed = sgl::arkanoid::PowerUpKind::Wide;
+    state.effects.remaining = sgl::Seconds{4.f};
 
-    const arkanoid::HudModel hud = arkanoid::makeHud(state);
+    const sgl::arkanoid::HudModel hud = sgl::arkanoid::makeHud(state);
 
     EXPECT_EQ(hud.effect, "Wide");
 }
 
 TEST(HudModelShould, defaultBindingsMapsEnterToConfirm)
 {
-    const arkanoid::Actions actions = arkanoid::makeActions();
-    const eng::ActionMap map = arkanoid::defaultBindings(actions);
+    const sgl::arkanoid::Actions actions = sgl::arkanoid::makeActions();
+    const sgl::ActionMap map = sgl::arkanoid::defaultBindings(actions);
 
-    eng::InputState input;
-    input.apply(eng::KeyDown{.key = eng::Key::Enter}, map);
+    sgl::InputState input;
+    input.apply(sgl::KeyDown{.key = sgl::Key::Enter}, map);
 
     EXPECT_TRUE(input.action(actions.confirm).pressed);
 }

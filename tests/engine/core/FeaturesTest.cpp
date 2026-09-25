@@ -1,5 +1,5 @@
-#include <eng/core/Features.hpp>
 #include <gtest/gtest.h>
+#include <sgl/core/Features.hpp>
 
 TEST(FeaturesTest, Compiles)
 {

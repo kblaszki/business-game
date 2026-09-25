@@ -1,11 +1,11 @@
-#include <eng/core/Time.hpp>
-#include <eng/loop/App.hpp>
-#include <eng/render/RenderQueue.hpp>
-#include <eng/render/RendererI.hpp>
-#include <eng/scene/SceneStack.hpp>
+#include <sgl/core/Time.hpp>
+#include <sgl/loop/App.hpp>
+#include <sgl/render/RenderQueue.hpp>
+#include <sgl/render/RendererI.hpp>
+#include <sgl/scene/SceneStack.hpp>
 #include <utility>
 
-namespace eng
+namespace sgl
 {
 
 App::App(PlatformI& platform, ClockI& clock, ActionMap map, SceneStack& stack, RenderQueue& queue)
@@ -81,4 +81,4 @@ void App::runFrame()
     alpha = step.alpha;
 }
 
-} // namespace eng
+} // namespace sgl

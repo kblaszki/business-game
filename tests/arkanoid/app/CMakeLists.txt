@@ -17,7 +17,7 @@ add_unit_test(arkanoid_scene_render_test
         SceneRenderTest.cpp
     DEPENDENCIES
         arkanoid_app
-        eng_render
+        sgl_render
 )
 
 add_unit_test(arkanoid_scenes_test

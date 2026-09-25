@@ -10,13 +10,13 @@ description: >-
 
 Source of truth: [docs/reference/engine-scene.md](../../../docs/reference/engine-scene.md), [docs/reference/arkanoid-app.md](../../../docs/reference/arkanoid-app.md), [docs/explanation/architecture.md](../../../docs/explanation/architecture.md).
 
-Concrete game scenes live in `games/arkanoid/app/` (`namespace arkanoid`), not in `engine/scene/`. Engine provides `SceneI`, `SceneStack`, `SceneRequest`, `SceneTraits`.
+Concrete game scenes live in `games/arkanoid/app/` (`namespace sgl::arkanoid`), not in `engine/scene/`. Engine provides `SceneI`, `SceneStack`, `SceneRequest`, `SceneTraits`.
 
 ## Checklist
 
 ```
 - [ ] Create FooScene.hpp / FooScene.cpp under games/arkanoid/app/
-- [ ] Implement eng::SceneI (update, render, traits)
+- [ ] Implement sgl::SceneI (update, render, traits)
 - [ ] Add FooScene.cpp to games/arkanoid/app/CMakeLists.txt
 - [ ] Expose a SceneFactory from Scenes.hpp / Scenes.cpp if the stack needs it
 - [ ] Cover with a windowless test under tests/arkanoid/app/

@@ -1,17 +1,16 @@
 #include <arkanoid/sim/Levels.hpp>
 #include <arkanoid/sim/Tuning.hpp>
-
 #include <array>
 #include <cstddef>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 namespace
 {
 
 constexpr std::size_t kCells = levelColumns * levelRows;
 
-constexpr eng::Color stageColors[levelRows]{
+constexpr sgl::Color stageColors[levelRows]{
     {220, 70, 80},
     {230, 140, 50},
     {230, 200, 60},
@@ -112,8 +111,8 @@ State makeState(StageId id, std::uint32_t score, std::uint32_t lives)
     std::size_t liveIndex = 0;
     for(std::uint32_t row = 0; row < data.rows; ++row)
     {
-        const eng::Color tint = data.rowColors.empty() ? eng::Color{255, 255, 255}
-                                                       : data.rowColors[row % data.rowColors.size()];
+        const sgl::Color tint =
+            data.rowColors.empty() ? sgl::Color{255, 255, 255} : data.rowColors[row % data.rowColors.size()];
         for(std::uint32_t col = 0; col < data.columns; ++col)
         {
             if(!occupiesCell(data, row, col))
@@ -142,4 +141,4 @@ State makeState(StageId id, std::uint32_t score, std::uint32_t lives)
     return state;
 }
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

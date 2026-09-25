@@ -1,9 +1,9 @@
 #include <algorithm>
 #include <cmath>
-#include <eng/collision/Collision.hpp>
 #include <limits>
+#include <sgl/collision/Collision.hpp>
 
-namespace eng
+namespace sgl
 {
 namespace
 {
@@ -170,4 +170,4 @@ Vec2f reflect(Vec2f velocity, Vec2f normal) noexcept
     return velocity - 2.f * d * normal;
 }
 
-} // namespace eng
+} // namespace sgl

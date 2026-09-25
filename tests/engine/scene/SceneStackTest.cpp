@@ -1,38 +1,38 @@
-#include <eng/core/Time.hpp>
-#include <eng/input/InputState.hpp>
-#include <eng/scene/SceneStack.hpp>
 #include <engine/scene/fakes/SceneSpy.hpp>
 #include <gtest/gtest.h>
 #include <memory>
+#include <sgl/core/Time.hpp>
+#include <sgl/input/InputState.hpp>
+#include <sgl/scene/SceneStack.hpp>
 
 namespace
 {
 
-eng::SceneFactory pauseOverlayFactory()
+sgl::SceneFactory pauseOverlayFactory()
 {
     return [] {
-        auto overlay = std::make_unique<eng::SceneSpy>();
-        overlay->traits_ = eng::SceneTraits{.opaque = false, .blocksUpdate = true, .pausable = false};
+        auto overlay = std::make_unique<sgl::SceneSpy>();
+        overlay->traits_ = sgl::SceneTraits{.opaque = false, .blocksUpdate = true, .pausable = false};
         return overlay;
     };
 }
 
-eng::SceneSpy& pushSpy(eng::SceneStack& stack, eng::SceneTraits traits = {})
+sgl::SceneSpy& pushSpy(sgl::SceneStack& stack, sgl::SceneTraits traits = {})
 {
-    auto spy = std::make_unique<eng::SceneSpy>();
+    auto spy = std::make_unique<sgl::SceneSpy>();
     spy->traits_ = traits;
-    eng::SceneSpy& ref = *spy;
+    sgl::SceneSpy& ref = *spy;
     stack.push(std::move(spy));
     return ref;
 }
 
-eng::InputState makeInput(bool focusLost = false)
+sgl::InputState makeInput(bool focusLost = false)
 {
-    eng::InputState input;
+    sgl::InputState input;
     if(focusLost)
     {
-        eng::ActionMap map;
-        input.apply(eng::FocusLost{}, map);
+        sgl::ActionMap map;
+        input.apply(sgl::FocusLost{}, map);
     }
     return input;
 }
@@ -41,18 +41,18 @@ eng::InputState makeInput(bool focusLost = false)
 
 TEST(SceneStackShould, applyDeferredRequestsAfterWalk)
 {
-    eng::SceneStack stack{pauseOverlayFactory()};
-    eng::SceneSpy& below = pushSpy(stack, {.opaque = true, .blocksUpdate = false, .pausable = false});
-    eng::SceneSpy& top = pushSpy(stack, {.opaque = false, .blocksUpdate = true, .pausable = false});
+    sgl::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneSpy& below = pushSpy(stack, {.opaque = true, .blocksUpdate = false, .pausable = false});
+    sgl::SceneSpy& top = pushSpy(stack, {.opaque = false, .blocksUpdate = true, .pausable = false});
 
     std::uint32_t topUpdatesWhileAlive{};
-    top.onUpdate = [&](eng::SceneContext& ctx) {
+    top.onUpdate = [&](sgl::SceneContext& ctx) {
         topUpdatesWhileAlive = top.updateCount;
-        ctx.request(eng::PopScene{});
+        ctx.request(sgl::PopScene{});
     };
 
     EXPECT_EQ(stack.size(), 2u);
-    stack.update(makeInput(), eng::kTick);
+    stack.update(makeInput(), sgl::kTick);
 
     EXPECT_EQ(topUpdatesWhileAlive, 1u);
     EXPECT_EQ(below.updateCount, 0u);
@@ -61,65 +61,65 @@ TEST(SceneStackShould, applyDeferredRequestsAfterWalk)
 
 TEST(SceneStackShould, replaceOnEmptyActsAsPush)
 {
-    eng::SceneStack stack{pauseOverlayFactory()};
-    eng::SceneSpy& spy = pushSpy(stack);
+    sgl::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneSpy& spy = pushSpy(stack);
 
-    spy.onUpdate = [](eng::SceneContext& ctx) {
-        ctx.request(eng::PopScene{});
-        ctx.request(eng::ReplaceScene{[] { return std::make_unique<eng::SceneSpy>(); }});
+    spy.onUpdate = [](sgl::SceneContext& ctx) {
+        ctx.request(sgl::PopScene{});
+        ctx.request(sgl::ReplaceScene{[] { return std::make_unique<sgl::SceneSpy>(); }});
     };
 
-    stack.update(makeInput(), eng::kTick);
+    stack.update(makeInput(), sgl::kTick);
     EXPECT_EQ(stack.size(), 1u);
     EXPECT_FALSE(stack.empty());
 }
 
 TEST(SceneStackShould, ignorePauseWhenNotPausable)
 {
-    eng::SceneStack stack{pauseOverlayFactory()};
-    eng::SceneSpy& spy = pushSpy(stack, {.opaque = true, .blocksUpdate = true, .pausable = false});
-    spy.onUpdate = [](eng::SceneContext& ctx) { ctx.request(eng::RequestPause{}); };
+    sgl::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneSpy& spy = pushSpy(stack, {.opaque = true, .blocksUpdate = true, .pausable = false});
+    spy.onUpdate = [](sgl::SceneContext& ctx) { ctx.request(sgl::RequestPause{}); };
 
-    stack.update(makeInput(), eng::kTick);
+    stack.update(makeInput(), sgl::kTick);
     EXPECT_EQ(stack.size(), 1u);
 }
 
 TEST(SceneStackShould, ignoreDoublePauseInOneUpdate)
 {
-    eng::SceneStack stack{pauseOverlayFactory()};
-    eng::SceneSpy& spy = pushSpy(stack, {.opaque = true, .blocksUpdate = true, .pausable = true});
-    spy.onUpdate = [](eng::SceneContext& ctx) {
-        ctx.request(eng::RequestPause{});
-        ctx.request(eng::RequestPause{});
+    sgl::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneSpy& spy = pushSpy(stack, {.opaque = true, .blocksUpdate = true, .pausable = true});
+    spy.onUpdate = [](sgl::SceneContext& ctx) {
+        ctx.request(sgl::RequestPause{});
+        ctx.request(sgl::RequestPause{});
     };
 
-    stack.update(makeInput(), eng::kTick);
+    stack.update(makeInput(), sgl::kTick);
     EXPECT_EQ(stack.size(), 2u);
 }
 
 TEST(SceneStackShould, setQuitRequestedOnQuitApp)
 {
-    eng::SceneStack stack{pauseOverlayFactory()};
-    eng::SceneSpy& spy = pushSpy(stack);
-    spy.onUpdate = [](eng::SceneContext& ctx) { ctx.request(eng::QuitApp{}); };
+    sgl::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneSpy& spy = pushSpy(stack);
+    spy.onUpdate = [](sgl::SceneContext& ctx) { ctx.request(sgl::QuitApp{}); };
 
     EXPECT_FALSE(stack.quitRequested());
-    stack.update(makeInput(), eng::kTick);
+    stack.update(makeInput(), sgl::kTick);
     EXPECT_TRUE(stack.quitRequested());
 }
 
 TEST(SceneStackShould, pushPauseOverlayOnFocusLost)
 {
-    eng::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneStack stack{pauseOverlayFactory()};
     pushSpy(stack, {.opaque = true, .blocksUpdate = true, .pausable = true});
 
-    stack.update(makeInput(true), eng::kTick);
+    stack.update(makeInput(true), sgl::kTick);
     EXPECT_EQ(stack.size(), 2u);
 }
 
 TEST(SceneStackShould, reportSizeAndEmpty)
 {
-    eng::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneStack stack{pauseOverlayFactory()};
     EXPECT_TRUE(stack.empty());
     EXPECT_EQ(stack.size(), 0u);
 
@@ -133,12 +133,12 @@ TEST(SceneStackShould, reportSizeAndEmpty)
 
 TEST(SceneStackShould, stopUpdateWalkAtFirstBlockingScene)
 {
-    eng::SceneStack stack{pauseOverlayFactory()};
-    eng::SceneSpy& below = pushSpy(stack, {.opaque = true, .blocksUpdate = false, .pausable = false});
-    eng::SceneSpy& mid = pushSpy(stack, {.opaque = false, .blocksUpdate = true, .pausable = false});
-    eng::SceneSpy& top = pushSpy(stack, {.opaque = false, .blocksUpdate = false, .pausable = false});
+    sgl::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneSpy& below = pushSpy(stack, {.opaque = true, .blocksUpdate = false, .pausable = false});
+    sgl::SceneSpy& mid = pushSpy(stack, {.opaque = false, .blocksUpdate = true, .pausable = false});
+    sgl::SceneSpy& top = pushSpy(stack, {.opaque = false, .blocksUpdate = false, .pausable = false});
 
-    stack.update(makeInput(), eng::kTick);
+    stack.update(makeInput(), sgl::kTick);
     EXPECT_EQ(top.updateCount, 1u);
     EXPECT_EQ(mid.updateCount, 1u);
     EXPECT_EQ(below.updateCount, 0u);

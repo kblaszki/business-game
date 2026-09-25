@@ -8,14 +8,14 @@ related_docs:
   - ../docs/explanation/architecture.md
   - ../docs/reference/source-layout.md
 related_code:
-  - ../engine/core/include/eng/core/Features.hpp
-  - ../engine/input/include/eng/input/InputEvent.hpp
-  - ../engine/scene/include/eng/scene/SceneStack.hpp
-  - ../engine/loop/include/eng/loop/App.hpp
-  - ../engine/render/include/eng/render/RenderQueue.hpp
-  - ../engine/collision/include/eng/collision/Collision.hpp
-  - ../engine/resources/include/eng/resources/ResourceCache.hpp
-  - ../engine/sfml/include/eng/sfml/SfmlPlatform.hpp
+  - ../engine/core/include/sgl/core/Features.hpp
+  - ../engine/input/include/sgl/input/InputEvent.hpp
+  - ../engine/scene/include/sgl/scene/SceneStack.hpp
+  - ../engine/loop/include/sgl/loop/App.hpp
+  - ../engine/render/include/sgl/render/RenderQueue.hpp
+  - ../engine/collision/include/sgl/collision/Collision.hpp
+  - ../engine/resources/include/sgl/resources/ResourceCache.hpp
+  - ../engine/sfml/include/sgl/sfml/SfmlPlatform.hpp
   - ../games/arkanoid/sim/include/arkanoid/sim/State.hpp
   - ../games/arkanoid/app/include/arkanoid/app/Scenes.hpp
   - ../games/arkanoid/main.cpp
@@ -34,7 +34,7 @@ This file is the **living register** of names and files that exist in the tree. 
 |------|----------------|
 | Interfaces | Suffix `FooI` (`SceneI`, `RendererI`, `PlatformI`, `ClockI`) |
 | `mvp/` names with prefix `I` | Remap when that type lands — do not edit 01–09 |
-| Directories | Engine split **landed**: `engine/` (`eng`) and `games/arkanoid/` (`arkanoid`, executable `arkanoid`). Contract: [`docs/explanation/architecture.md`](../docs/explanation/architecture.md) |
+| Directories | Engine split **landed**: `engine/` (`sgl`) and `games/arkanoid/` (`sgl::arkanoid`, executable `arkanoid`). Contract: [`docs/explanation/architecture.md`](../docs/explanation/architecture.md) |
 | SFML | Only `engine/sfml` and `games/arkanoid/main.cpp` include SFML. `arkanoid/sim` stays headless |
 | CMake | Each module owns its `CMakeLists.txt` |
 
@@ -65,14 +65,14 @@ Slices 0–10 built the former `src/` breakout (`ScreenStack`, `World`, stages, 
 
 ### Slice 11 — engine split (landed)
 
-- [x] `eng_core` — Vec2, Rect, Handle, Image, Features
-- [x] `eng_input` — InputEvent, ActionMap, InputState
-- [x] `eng_scene` — SceneI, SceneStack, SceneRequest, SceneTraits
-- [x] `eng_loop` — FixedStepLoop, App, PlatformI, ClockI
-- [x] `eng_render` — RenderQueue, DrawCommand, Projection
-- [x] `eng_collision` — intersect, sweep, reflect
-- [x] `eng_resources` — ResourceCache, ResourceError
-- [x] `eng_sfml` — SfmlPlatform, EventTranslate, SfmlRenderer, SfmlAssets, SfmlClock
+- [x] `sgl_core` — Vec2, Rect, Handle, Image, Features
+- [x] `sgl_input` — InputEvent, ActionMap, InputState
+- [x] `sgl_scene` — SceneI, SceneStack, SceneRequest, SceneTraits
+- [x] `sgl_loop` — FixedStepLoop, App, PlatformI, ClockI
+- [x] `sgl_render` — RenderQueue, DrawCommand, Projection
+- [x] `sgl_collision` — intersect, sweep, reflect
+- [x] `sgl_resources` — ResourceCache, ResourceError
+- [x] `sgl_sfml` — SfmlPlatform, EventTranslate, SfmlRenderer, SfmlAssets, SfmlClock
 - [x] `arkanoid_sim` — headless State / step / levels / power-ups
 - [x] `arkanoid_app` — MainMenuScene, GameplayScene, PauseScene, HUD, assets, bindings
 - [x] executable `arkanoid` — `games/arkanoid/main.cpp`
@@ -80,7 +80,7 @@ Slices 0–10 built the former `src/` breakout (`ScreenStack`, `World`, stages, 
 
 ```mermaid
 flowchart LR
-  Main[main.cpp] --> App[eng::App]
+  Main[main.cpp] --> App[sgl::App]
   Main --> Plat[SfmlPlatform]
   Main --> Stack[SceneStack]
   App --> Plat
@@ -102,7 +102,7 @@ flowchart LR
 
 Namespace `sgl`, targets `sgl_*`, games `sgl::arkanoid` and `sgl::tetris`. New modules: `sgl_audio`, `sgl_fx`, `sgl_save`. Simulation randomness is `sgl::Pcg32` only. Timed effects are data. Tetris sim stays headless (grid, SRS, DAS/ARR).
 
-- [ ] Rename `eng` → `sgl` (includes, namespaces, targets)
+- [x] Rename `eng` → `sgl` (includes, namespaces, targets)
 - [ ] Input edges survive a zero-step frame; multi-key `held` stays down
 - [ ] Rounded circle sweep; Arkanoid paddle, speed, and seam fixes
 - [ ] Power-ups as `std::variant` with pure derived values

@@ -7,4 +7,4 @@ target_include_directories(arkanoid_sim PUBLIC
 )
 target_compile_features(arkanoid_sim PUBLIC cxx_std_23)
 target_compile_options(arkanoid_sim PRIVATE ${BASE_COMPILE_FLAGS})
-target_link_libraries(arkanoid_sim PUBLIC eng_collision)
+target_link_libraries(arkanoid_sim PUBLIC sgl_collision)

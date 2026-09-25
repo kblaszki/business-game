@@ -1,37 +1,37 @@
-#include <eng/core/Vec2.hpp>
-#include <eng/input/ActionId.hpp>
-#include <eng/input/ActionMap.hpp>
-#include <eng/input/ActionState.hpp>
-#include <eng/input/InputEvent.hpp>
-#include <eng/input/InputState.hpp>
-#include <eng/input/Key.hpp>
-#include <eng/input/MouseButton.hpp>
 #include <gtest/gtest.h>
+#include <sgl/core/Vec2.hpp>
+#include <sgl/input/ActionId.hpp>
+#include <sgl/input/ActionMap.hpp>
+#include <sgl/input/ActionState.hpp>
+#include <sgl/input/InputEvent.hpp>
+#include <sgl/input/InputState.hpp>
+#include <sgl/input/Key.hpp>
+#include <sgl/input/MouseButton.hpp>
 
 namespace
 {
 
-constexpr eng::ActionId kJump{.id = 1};
-constexpr eng::ActionId kFire{.id = 2};
-constexpr eng::AxisId kMoveX{.id = 10};
+constexpr sgl::ActionId kJump{.id = 1};
+constexpr sgl::ActionId kFire{.id = 2};
+constexpr sgl::AxisId kMoveX{.id = 10};
 
 } // namespace
 
 TEST(InputStateTest, EdgeLastsOneFrame)
 {
-    eng::ActionMap map;
-    map.bind(eng::Key::Space, kJump);
+    sgl::ActionMap map;
+    map.bind(sgl::Key::Space, kJump);
 
-    eng::InputState state;
-    state.apply(eng::KeyDown{.key = eng::Key::Space}, map);
+    sgl::InputState state;
+    state.apply(sgl::KeyDown{.key = sgl::Key::Space}, map);
 
-    const eng::ActionState pressed = state.action(kJump);
+    const sgl::ActionState pressed = state.action(kJump);
     EXPECT_TRUE(pressed.pressed);
     EXPECT_TRUE(pressed.held);
     EXPECT_FALSE(pressed.released);
 
     state.beginFrame();
-    const eng::ActionState heldOnly = state.action(kJump);
+    const sgl::ActionState heldOnly = state.action(kJump);
     EXPECT_FALSE(heldOnly.pressed);
     EXPECT_TRUE(heldOnly.held);
     EXPECT_FALSE(heldOnly.released);
@@ -39,11 +39,11 @@ TEST(InputStateTest, EdgeLastsOneFrame)
 
 TEST(InputStateTest, HoldPersistsAcrossBeginFrame)
 {
-    eng::ActionMap map;
-    map.bind(eng::Key::A, kFire);
+    sgl::ActionMap map;
+    map.bind(sgl::Key::A, kFire);
 
-    eng::InputState state;
-    state.apply(eng::KeyDown{.key = eng::Key::A}, map);
+    sgl::InputState state;
+    state.apply(sgl::KeyDown{.key = sgl::Key::A}, map);
     state.beginFrame();
     state.beginFrame();
 
@@ -54,43 +54,43 @@ TEST(InputStateTest, HoldPersistsAcrossBeginFrame)
 
 TEST(InputStateTest, BothAxisKeysYieldZero)
 {
-    eng::ActionMap map;
-    map.bindAxis(eng::Key::Left, eng::Key::Right, kMoveX);
+    sgl::ActionMap map;
+    map.bindAxis(sgl::Key::Left, sgl::Key::Right, kMoveX);
 
-    eng::InputState state;
-    state.apply(eng::KeyDown{.key = eng::Key::Left}, map);
-    state.apply(eng::KeyDown{.key = eng::Key::Right}, map);
+    sgl::InputState state;
+    state.apply(sgl::KeyDown{.key = sgl::Key::Left}, map);
+    state.apply(sgl::KeyDown{.key = sgl::Key::Right}, map);
 
     EXPECT_FLOAT_EQ(state.axis(kMoveX), 0.f);
 }
 
 TEST(InputStateTest, OneAxisKeyYieldsSignedValue)
 {
-    eng::ActionMap map;
-    map.bindAxis(eng::Key::Left, eng::Key::Right, kMoveX);
+    sgl::ActionMap map;
+    map.bindAxis(sgl::Key::Left, sgl::Key::Right, kMoveX);
 
-    eng::InputState state;
-    state.apply(eng::KeyDown{.key = eng::Key::Left}, map);
+    sgl::InputState state;
+    state.apply(sgl::KeyDown{.key = sgl::Key::Left}, map);
     EXPECT_FLOAT_EQ(state.axis(kMoveX), -1.f);
 
-    state.apply(eng::KeyUp{.key = eng::Key::Left}, map);
-    state.apply(eng::KeyDown{.key = eng::Key::Right}, map);
+    state.apply(sgl::KeyUp{.key = sgl::Key::Left}, map);
+    state.apply(sgl::KeyDown{.key = sgl::Key::Right}, map);
     EXPECT_FLOAT_EQ(state.axis(kMoveX), 1.f);
 }
 
 TEST(InputStateTest, FocusLostClearsHold)
 {
-    eng::ActionMap map;
-    map.bind(eng::Key::D, kFire);
-    map.bindAxis(eng::Key::Left, eng::Key::Right, kMoveX);
+    sgl::ActionMap map;
+    map.bind(sgl::Key::D, kFire);
+    map.bindAxis(sgl::Key::Left, sgl::Key::Right, kMoveX);
 
-    eng::InputState state;
-    state.apply(eng::KeyDown{.key = eng::Key::D}, map);
-    state.apply(eng::KeyDown{.key = eng::Key::Right}, map);
+    sgl::InputState state;
+    state.apply(sgl::KeyDown{.key = sgl::Key::D}, map);
+    state.apply(sgl::KeyDown{.key = sgl::Key::Right}, map);
     EXPECT_TRUE(state.action(kFire).held);
     EXPECT_FLOAT_EQ(state.axis(kMoveX), 1.f);
 
-    state.apply(eng::FocusLost{}, map);
+    state.apply(sgl::FocusLost{}, map);
     EXPECT_TRUE(state.focusLost());
     EXPECT_FALSE(state.action(kFire).held);
     EXPECT_FLOAT_EQ(state.axis(kMoveX), 0.f);
@@ -98,11 +98,11 @@ TEST(InputStateTest, FocusLostClearsHold)
 
 TEST(InputStateTest, UnboundKeyIsNoOp)
 {
-    eng::ActionMap map;
-    map.bind(eng::Key::A, kJump);
+    sgl::ActionMap map;
+    map.bind(sgl::Key::A, kJump);
 
-    eng::InputState state;
-    state.apply(eng::KeyDown{.key = eng::Key::Escape}, map);
+    sgl::InputState state;
+    state.apply(sgl::KeyDown{.key = sgl::Key::Escape}, map);
 
     EXPECT_FALSE(state.action(kJump).pressed);
     EXPECT_FALSE(state.action(kJump).held);
@@ -112,10 +112,10 @@ TEST(InputStateTest, UnboundKeyIsNoOp)
 
 TEST(InputStateTest, MouseDownSetsPointer)
 {
-    eng::ActionMap map;
-    eng::InputState state;
+    sgl::ActionMap map;
+    sgl::InputState state;
 
-    state.apply(eng::MouseDown{.button = eng::MouseButton::Left, .pos = eng::Vec2f{.x = 12.f, .y = 34.f}}, map);
+    state.apply(sgl::MouseDown{.button = sgl::MouseButton::Left, .pos = sgl::Vec2f{.x = 12.f, .y = 34.f}}, map);
 
     ASSERT_TRUE(state.pointer().has_value());
     EXPECT_FLOAT_EQ(state.pointer()->x, 12.f);
@@ -124,10 +124,10 @@ TEST(InputStateTest, MouseDownSetsPointer)
 
 TEST(InputStateTest, CloseRequestedOnWindowClosed)
 {
-    eng::ActionMap map;
-    eng::InputState state;
+    sgl::ActionMap map;
+    sgl::InputState state;
 
-    state.apply(eng::WindowClosed{}, map);
+    state.apply(sgl::WindowClosed{}, map);
     EXPECT_TRUE(state.closeRequested());
 
     state.beginFrame();
@@ -136,11 +136,11 @@ TEST(InputStateTest, CloseRequestedOnWindowClosed)
 
 TEST(ActionMapTest, OneKeyMapsToSeveralActions)
 {
-    eng::ActionMap map;
-    map.bind(eng::Key::Enter, kJump);
-    map.bind(eng::Key::Enter, kFire);
+    sgl::ActionMap map;
+    map.bind(sgl::Key::Enter, kJump);
+    map.bind(sgl::Key::Enter, kFire);
 
-    const auto actions = map.actionsFor(eng::Key::Enter);
+    const auto actions = map.actionsFor(sgl::Key::Enter);
     ASSERT_EQ(actions.size(), 2u);
     EXPECT_EQ(actions[0], kJump);
     EXPECT_EQ(actions[1], kFire);

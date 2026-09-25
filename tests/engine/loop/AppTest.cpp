@@ -2,21 +2,21 @@
 #include <mocks/PlatformMock.hpp>
 #include <mocks/RendererMock.hpp>
 
-#include <eng/core/Time.hpp>
-#include <eng/input/ActionId.hpp>
-#include <eng/input/ActionMap.hpp>
-#include <eng/input/InputEvent.hpp>
-#include <eng/input/Key.hpp>
-#include <eng/loop/App.hpp>
-#include <eng/render/RenderQueue.hpp>
-#include <eng/scene/SceneContext.hpp>
-#include <eng/scene/SceneRequest.hpp>
-#include <eng/scene/SceneStack.hpp>
 #include <engine/scene/fakes/SceneSpy.hpp>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <memory>
 #include <optional>
+#include <sgl/core/Time.hpp>
+#include <sgl/input/ActionId.hpp>
+#include <sgl/input/ActionMap.hpp>
+#include <sgl/input/InputEvent.hpp>
+#include <sgl/input/Key.hpp>
+#include <sgl/loop/App.hpp>
+#include <sgl/render/RenderQueue.hpp>
+#include <sgl/scene/SceneContext.hpp>
+#include <sgl/scene/SceneRequest.hpp>
+#include <sgl/scene/SceneStack.hpp>
 #include <vector>
 
 using ::testing::_;
@@ -25,21 +25,21 @@ using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::ReturnRef;
 
-using eng::ActionId;
-using eng::ActionMap;
-using eng::App;
-using eng::InputEvent;
-using eng::Key;
-using eng::KeyDown;
-using eng::kTick;
-using eng::QuitApp;
-using eng::RendererMock;
-using eng::RenderQueue;
-using eng::SceneFactory;
-using eng::SceneSpy;
-using eng::SceneStack;
-using eng::Seconds;
-using eng::WindowClosed;
+using sgl::ActionId;
+using sgl::ActionMap;
+using sgl::App;
+using sgl::InputEvent;
+using sgl::Key;
+using sgl::KeyDown;
+using sgl::kTick;
+using sgl::QuitApp;
+using sgl::RendererMock;
+using sgl::RenderQueue;
+using sgl::SceneFactory;
+using sgl::SceneSpy;
+using sgl::SceneStack;
+using sgl::Seconds;
+using sgl::WindowClosed;
 
 namespace
 {
@@ -87,7 +87,7 @@ TEST(AppShould, closePlatformWhenSceneRequestsQuit)
     SceneStack stack{idlePause()};
 
     auto spy = std::make_unique<SceneSpy>();
-    spy->onUpdate = [](eng::SceneContext& ctx) { ctx.request(QuitApp{}); };
+    spy->onUpdate = [](sgl::SceneContext& ctx) { ctx.request(QuitApp{}); };
     stack.push(std::move(spy));
 
     InSequence seq;
@@ -115,7 +115,7 @@ TEST(AppShould, deliverActionEdgesOnlyOnFirstStepOfMultiStepFrame)
 
     std::vector<bool> pressedPerStep;
     auto spy = std::make_unique<SceneSpy>();
-    spy->onUpdate = [&](eng::SceneContext& ctx) { pressedPerStep.push_back(ctx.input().action(jump).pressed); };
+    spy->onUpdate = [&](sgl::SceneContext& ctx) { pressedPerStep.push_back(ctx.input().action(jump).pressed); };
     stack.push(std::move(spy));
 
     InSequence seq;

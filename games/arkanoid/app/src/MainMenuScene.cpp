@@ -1,24 +1,23 @@
 #include <arkanoid/app/MainMenuScene.hpp>
-
 #include <arkanoid/app/Theme.hpp>
 #include <arkanoid/sim/Tuning.hpp>
-#include <eng/render/DrawCommand.hpp>
-#include <eng/render/RenderQueue.hpp>
-#include <eng/scene/SceneContext.hpp>
+#include <sgl/render/DrawCommand.hpp>
+#include <sgl/render/RenderQueue.hpp>
+#include <sgl/scene/SceneContext.hpp>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 namespace
 {
 
-constexpr eng::Vec2f kButtonSize{400.f, 72.f};
+constexpr sgl::Vec2f kButtonSize{400.f, 72.f};
 constexpr float kStartY{320.f};
 constexpr float kQuitY{420.f};
 constexpr float kTitleY{200.f};
 
-[[nodiscard]] eng::Rect<float> centeredButton(float y)
+[[nodiscard]] sgl::Rect<float> centeredButton(float y)
 {
-    return eng::Rect<float>{
+    return sgl::Rect<float>{
         .pos = {(designWidth - kButtonSize.x) * 0.5f, y},
         .size = kButtonSize,
     };
@@ -33,19 +32,19 @@ MainMenuScene::MainMenuScene(const AppServices& services)
 {
 }
 
-bool MainMenuScene::hitStart(eng::Vec2f point) const
+bool MainMenuScene::hitStart(sgl::Vec2f point) const
 {
     return startButton_.contains(point);
 }
 
-bool MainMenuScene::hitQuit(eng::Vec2f point) const
+bool MainMenuScene::hitQuit(sgl::Vec2f point) const
 {
     return quitButton_.contains(point);
 }
 
-void MainMenuScene::update(eng::SceneContext& ctx, eng::Seconds)
+void MainMenuScene::update(sgl::SceneContext& ctx, sgl::Seconds)
 {
-    const eng::InputState& input = ctx.input();
+    const sgl::InputState& input = ctx.input();
 
     if(const auto pointer = input.pointer())
     {
@@ -55,12 +54,12 @@ void MainMenuScene::update(eng::SceneContext& ctx, eng::Seconds)
         // InputState keeps the last pointer from MouseDown/MouseMove; treat a hit as a click.
         if(startHover_)
         {
-            ctx.request(eng::ReplaceScene{gameplay(services_, StageId::Stage1)});
+            ctx.request(sgl::ReplaceScene{gameplay(services_, StageId::Stage1)});
             return;
         }
         if(quitHover_)
         {
-            ctx.request(eng::QuitApp{});
+            ctx.request(sgl::QuitApp{});
             return;
         }
     }
@@ -72,64 +71,69 @@ void MainMenuScene::update(eng::SceneContext& ctx, eng::Seconds)
 
     if(input.action(services_.actions.confirm).pressed)
     {
-        ctx.request(eng::ReplaceScene{gameplay(services_, StageId::Stage1)});
+        ctx.request(sgl::ReplaceScene{gameplay(services_, StageId::Stage1)});
         return;
     }
 
     if(input.action(services_.actions.cancel).pressed)
     {
-        ctx.request(eng::QuitApp{});
+        ctx.request(sgl::QuitApp{});
     }
 }
 
-void MainMenuScene::render(eng::RenderQueue& queue) const
+void MainMenuScene::render(sgl::RenderQueue& queue) const
 {
-    queue.push(eng::Layer::Hud, 0.f,
-               eng::TextCmd{
+    queue.push(sgl::Layer::Hud,
+               0.f,
+               sgl::TextCmd{
                    .font = services_.font,
                    .text = "Breakout",
                    .size = 56,
                    .position = {designWidth * 0.5f, kTitleY},
                    .color = titleGold,
-                   .anchor = eng::Anchor::Center,
+                   .anchor = sgl::Anchor::Center,
                });
 
-    queue.push(eng::Layer::Hud, 1.f,
-               eng::RectCmd{
+    queue.push(sgl::Layer::Hud,
+               1.f,
+               sgl::RectCmd{
                    .rect = startButton_,
                    .fill = startHover_ ? startButtonHover : startButton,
                });
-    queue.push(eng::Layer::Hud, 2.f,
-               eng::TextCmd{
+    queue.push(sgl::Layer::Hud,
+               2.f,
+               sgl::TextCmd{
                    .font = services_.font,
                    .text = "Start",
                    .size = 28,
                    .position = {startButton_.pos.x + startButton_.size.x * 0.5f,
                                 startButton_.pos.y + startButton_.size.y * 0.5f},
                    .color = startLabel,
-                   .anchor = eng::Anchor::Center,
+                   .anchor = sgl::Anchor::Center,
                });
 
-    queue.push(eng::Layer::Hud, 3.f,
-               eng::RectCmd{
+    queue.push(sgl::Layer::Hud,
+               3.f,
+               sgl::RectCmd{
                    .rect = quitButton_,
                    .fill = quitHover_ ? quitButtonHover : quitButton,
                });
-    queue.push(eng::Layer::Hud, 4.f,
-               eng::TextCmd{
-                   .font = services_.font,
-                   .text = "Quit",
-                   .size = 28,
-                   .position = {quitButton_.pos.x + quitButton_.size.x * 0.5f,
-                                quitButton_.pos.y + quitButton_.size.y * 0.5f},
-                   .color = quitLabel,
-                   .anchor = eng::Anchor::Center,
-               });
+    queue.push(
+        sgl::Layer::Hud,
+        4.f,
+        sgl::TextCmd{
+            .font = services_.font,
+            .text = "Quit",
+            .size = 28,
+            .position = {quitButton_.pos.x + quitButton_.size.x * 0.5f, quitButton_.pos.y + quitButton_.size.y * 0.5f},
+            .color = quitLabel,
+            .anchor = sgl::Anchor::Center,
+        });
 }
 
-eng::SceneTraits MainMenuScene::traits() const
+sgl::SceneTraits MainMenuScene::traits() const
 {
-    return eng::SceneTraits{.opaque = true, .blocksUpdate = true, .pausable = false};
+    return sgl::SceneTraits{.opaque = true, .blocksUpdate = true, .pausable = false};
 }
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

@@ -1,11 +1,11 @@
-#include <eng/core/Time.hpp>
-#include <eng/loop/FixedStepLoop.hpp>
 #include <gtest/gtest.h>
+#include <sgl/core/Time.hpp>
+#include <sgl/loop/FixedStepLoop.hpp>
 
-using eng::FixedStepLoop;
-using eng::kTick;
-using eng::Seconds;
-using eng::StepResult;
+using sgl::FixedStepLoop;
+using sgl::kTick;
+using sgl::Seconds;
+using sgl::StepResult;
 
 TEST(FixedStepLoopShould, advanceOneStepFromExactTick)
 {

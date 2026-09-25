@@ -3,24 +3,24 @@ title: Engine resource cache
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - engine/resources/include/eng/resources/ResourceCache.hpp
-  - engine/resources/include/eng/resources/ResourceError.hpp
+  - engine/resources/include/sgl/resources/ResourceCache.hpp
+  - engine/resources/include/sgl/resources/ResourceError.hpp
   - engine/resources/CMakeLists.txt
-  - engine/render/include/eng/render/AssetIds.hpp
+  - engine/render/include/sgl/render/AssetIds.hpp
   - tests/engine/resources/ResourceCacheTest.cpp
 related_docs:
   - source-layout.md
   - engine-render.md
   - ../explanation/architecture.md
 keywords: [eng, ResourceCache, ResourceError, TextureId, FontId, load, get, find]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Engine resource cache
 
-Header-only keyed cache in `namespace eng`, included as `<eng/resources/X.hpp>`. Target `eng_resources` is an INTERFACE library that INTERFACE-links `eng_core`. No SFML dependency.
+Header-only keyed cache in `namespace sgl`, included as `<sgl/resources/X.hpp>`. Target `sgl_resources` is an INTERFACE library that INTERFACE-links `sgl_core`. No SFML dependency.
 
-Asset identity types `TextureId` / `FontId` come from `<eng/render/AssetIds.hpp>`; this module does not redefine them. Typical usage is `ResourceCache<TextureId, T>` / `ResourceCache<FontId, T>` with a caller-supplied loader.
+Asset identity types `TextureId` / `FontId` come from `<sgl/render/AssetIds.hpp>`; this module does not redefine them. Typical usage is `ResourceCache<TextureId, T>` / `ResourceCache<FontId, T>` with a caller-supplied loader.
 
 ## ResourceError
 

@@ -3,11 +3,11 @@ title: Engine scene stack
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - engine/scene/include/eng/scene/SceneTraits.hpp
-  - engine/scene/include/eng/scene/SceneI.hpp
-  - engine/scene/include/eng/scene/SceneRequest.hpp
-  - engine/scene/include/eng/scene/SceneContext.hpp
-  - engine/scene/include/eng/scene/SceneStack.hpp
+  - engine/scene/include/sgl/scene/SceneTraits.hpp
+  - engine/scene/include/sgl/scene/SceneI.hpp
+  - engine/scene/include/sgl/scene/SceneRequest.hpp
+  - engine/scene/include/sgl/scene/SceneContext.hpp
+  - engine/scene/include/sgl/scene/SceneStack.hpp
   - engine/scene/src/SceneContext.cpp
   - engine/scene/src/SceneStack.cpp
   - tests/engine/scene/SceneStackTest.cpp
@@ -17,12 +17,12 @@ related_docs:
   - source-layout.md
   - engine-input.md
 keywords: [eng, SceneI, SceneStack, SceneContext, SceneRequest, SceneTraits, PushScene, PopScene, ReplaceScene, RequestPause, QuitApp]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Engine scene stack
 
-`namespace eng` scene layer. Target `eng_scene` is a STATIC library; PUBLIC link `eng_input`. No SFML. Includes are `<eng/scene/X.hpp>`.
+`namespace sgl` scene layer. Target `sgl_scene` is a STATIC library; PUBLIC link `sgl_input`. No SFML. Includes are `<sgl/scene/X.hpp>`.
 
 `RenderQueue` is forward-declared only in this module (`SceneI::render` / `SceneStack::render`). Do not include a render header from scene code.
 

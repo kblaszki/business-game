@@ -3,9 +3,9 @@ title: Pause overlay
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - engine/scene/include/eng/scene/SceneTraits.hpp
-  - engine/scene/include/eng/scene/SceneRequest.hpp
-  - engine/scene/include/eng/scene/SceneStack.hpp
+  - engine/scene/include/sgl/scene/SceneTraits.hpp
+  - engine/scene/include/sgl/scene/SceneRequest.hpp
+  - engine/scene/include/sgl/scene/SceneStack.hpp
   - engine/scene/src/SceneStack.cpp
   - games/arkanoid/app/include/arkanoid/app/PauseScene.hpp
   - games/arkanoid/app/src/PauseScene.cpp
@@ -22,7 +22,7 @@ related_docs:
   - source-layout.md
   - ../../mvp/05-pause.md
 keywords: [pause, overlay, PauseScene, RequestPause, SceneTraits, pausable, FocusLost, SceneStack]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Pause overlay

@@ -1,10 +1,8 @@
 #include <arkanoid/app/HudModel.hpp>
-
-#include <eng/core/Time.hpp>
-
+#include <sgl/core/Time.hpp>
 #include <string>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 HudModel makeHud(const State& state)
@@ -13,7 +11,7 @@ HudModel makeHud(const State& state)
     hud.score = "Score " + std::to_string(state.score);
     hud.lives = "Lives " + std::to_string(state.lives);
 
-    if(state.effects.timed.has_value() && state.effects.remaining > eng::Seconds{})
+    if(state.effects.timed.has_value() && state.effects.remaining > sgl::Seconds{})
     {
         switch(*state.effects.timed)
         {
@@ -46,4 +44,4 @@ HudModel makeHud(const State& state)
     return hud;
 }
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

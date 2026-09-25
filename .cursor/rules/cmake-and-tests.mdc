@@ -10,7 +10,7 @@ alwaysApply: false
 
 Every new implementation `.cpp` must be added to that module’s own `CMakeLists.txt` (`engine/<module>/CMakeLists.txt` or `games/arkanoid/<sim|app>/CMakeLists.txt`). Omitting it means the file never compiles.
 
-Executable is `arkanoid` (`games/arkanoid/main.cpp`); it links `arkanoid_app` and `eng_sfml`. Only `eng_sfml` (and the executable via that link) links SFML. `arkanoid_sim` and `arkanoid_app` stay SFML-free at the include level.
+Executable is `arkanoid` (`games/arkanoid/main.cpp`); it links `arkanoid_app` and `sgl_sfml`. Only `sgl_sfml` (and the executable via that link) links SFML. `arkanoid_sim` and `arkanoid_app` stay SFML-free at the include level.
 
 ## Tests (Debug only)
 

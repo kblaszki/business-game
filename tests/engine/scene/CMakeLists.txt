@@ -3,5 +3,5 @@ add_unit_test(scene_stack_test
         SceneStackTest.cpp
         fakes/SceneSpy.cpp
     DEPENDENCIES
-        eng_scene
+        sgl_scene
 )

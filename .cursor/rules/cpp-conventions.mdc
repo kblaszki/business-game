@@ -8,14 +8,14 @@ alwaysApply: false
 
 - Standard: **C++23**
 - Headers: `#pragma once` (not include guards)
-- Namespaces: `eng` (engine), `arkanoid` (game); engine internals may use `eng::detail` / `eng::sfml`
+- Namespaces: `eng` (engine), `arkanoid` (game); engine internals may use `sgl::detail` / `sgl::sfml`
 - Classes: `CamelCase`; methods/vars: `camelCase`
 - Interfaces: `FooI` suffix (`SceneI`, `RendererI`, `PlatformI`, `ClockI`)
 - One primary type per `.hpp` / `.cpp` pair under the owning module
 
 ## Includes
 
-- Public headers: `#include <eng/<module>/X.hpp>`, `#include <arkanoid/<sim|app>/X.hpp>`
+- Public headers: `#include <sgl/<module>/X.hpp>`, `#include <arkanoid/<sim|app>/X.hpp>`
 - Same directory: quotes — `#include "Local.hpp"`
 - Only `engine/sfml` and `games/arkanoid/main.cpp` may include `<SFML/...>`
 

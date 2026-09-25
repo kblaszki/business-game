@@ -1,9 +1,9 @@
-#include <eng/scene/SceneContext.hpp>
-#include <eng/scene/SceneStack.hpp>
+#include <sgl/scene/SceneContext.hpp>
+#include <sgl/scene/SceneStack.hpp>
 #include <utility>
 #include <variant>
 
-namespace eng
+namespace sgl
 {
 
 namespace
@@ -186,4 +186,4 @@ void SceneStack::applyRequests()
     pauseQueued_ = false;
 }
 
-} // namespace eng
+} // namespace sgl

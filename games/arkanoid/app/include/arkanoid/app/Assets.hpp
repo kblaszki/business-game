@@ -1,11 +1,10 @@
 #pragma once
 
-#include <eng/core/Image.hpp>
-
+#include <sgl/core/Image.hpp>
 #include <span>
 #include <string_view>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 struct AssetKeys
@@ -25,9 +24,9 @@ inline constexpr std::string_view uiFontRelativePath{"fonts/upheavtt.ttf"};
 struct TextureSpec
 {
     std::string_view key;
-    eng::Image (*build)();
+    sgl::Image (*build)();
 };
 
 [[nodiscard]] std::span<const TextureSpec> textureSpecs();
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

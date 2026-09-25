@@ -1,8 +1,8 @@
 #include <algorithm>
-#include <eng/render/RenderQueue.hpp>
+#include <sgl/render/RenderQueue.hpp>
 #include <utility>
 
-namespace eng
+namespace sgl
 {
 
 void RenderQueue::push(Layer layer, float depth, DrawCommand command)
@@ -36,4 +36,4 @@ void RenderQueue::clear()
     needsSort_ = false;
 }
 
-} // namespace eng
+} // namespace sgl

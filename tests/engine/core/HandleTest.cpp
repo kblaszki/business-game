@@ -1,11 +1,11 @@
-#include <eng/core/EntityId.hpp>
-#include <eng/core/Handle.hpp>
 #include <gtest/gtest.h>
+#include <sgl/core/EntityId.hpp>
+#include <sgl/core/Handle.hpp>
 #include <unordered_set>
 
 TEST(HandleTest, OrderingAndEquality)
 {
-    using H = eng::Handle<struct TestTag>;
+    using H = sgl::Handle<struct TestTag>;
 
     const H a{.id = 1};
     const H b{.id = 2};
@@ -19,7 +19,7 @@ TEST(HandleTest, OrderingAndEquality)
 
 TEST(HandleTest, UnorderedSetInsertFind)
 {
-    using H = eng::Handle<struct TestTag>;
+    using H = sgl::Handle<struct TestTag>;
 
     std::unordered_set<H> set;
     const H key{.id = 42};
@@ -31,9 +31,9 @@ TEST(HandleTest, UnorderedSetInsertFind)
 
 TEST(HandleTest, EntityIdEquality)
 {
-    const eng::EntityId a{.index = 1, .generation = 2};
-    const eng::EntityId b{.index = 1, .generation = 2};
-    const eng::EntityId c{.index = 1, .generation = 3};
+    const sgl::EntityId a{.index = 1, .generation = 2};
+    const sgl::EntityId b{.index = 1, .generation = 2};
+    const sgl::EntityId c{.index = 1, .generation = 3};
 
     EXPECT_EQ(a, b);
     EXPECT_NE(a, c);

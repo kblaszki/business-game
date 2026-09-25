@@ -1,7 +1,7 @@
-#include <eng/scene/SceneContext.hpp>
-#include <eng/scene/SceneStack.hpp>
+#include <sgl/scene/SceneContext.hpp>
+#include <sgl/scene/SceneStack.hpp>
 
-namespace eng
+namespace sgl
 {
 
 SceneContext::SceneContext(const InputState& input, SceneStack& stack)
@@ -20,4 +20,4 @@ void SceneContext::request(SceneRequest request)
     stack_.enqueue(std::move(request));
 }
 
-} // namespace eng
+} // namespace sgl

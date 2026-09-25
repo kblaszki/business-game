@@ -3,13 +3,13 @@ title: Engine render queue and projections
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - engine/render/include/eng/render/AssetIds.hpp
-  - engine/render/include/eng/render/DrawCommand.hpp
-  - engine/render/include/eng/render/RenderQueue.hpp
+  - engine/render/include/sgl/render/AssetIds.hpp
+  - engine/render/include/sgl/render/DrawCommand.hpp
+  - engine/render/include/sgl/render/RenderQueue.hpp
   - engine/render/src/RenderQueue.cpp
-  - engine/render/include/eng/render/RendererI.hpp
-  - engine/render/include/eng/render/Projection.hpp
-  - engine/render/include/eng/render/Camera.hpp
+  - engine/render/include/sgl/render/RendererI.hpp
+  - engine/render/include/sgl/render/Projection.hpp
+  - engine/render/include/sgl/render/Camera.hpp
   - tests/mocks/RendererMock.hpp
   - tests/engine/render/RenderQueueTest.cpp
   - tests/engine/render/ProjectionTest.cpp
@@ -17,12 +17,12 @@ related_docs:
   - source-layout.md
   - ../explanation/architecture.md
 keywords: [eng, RenderQueue, RendererI, DrawCommand, SortKey, Layer, Projection, Orthographic, Isometric, Camera]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Engine render queue and projections
 
-CPU-side draw list and 2.5D helpers in `namespace eng`, included as `<eng/render/X.hpp>`. Target `eng_render` is a STATIC library that PUBLIC-links `eng_core`. No SFML dependency.
+CPU-side draw list and 2.5D helpers in `namespace sgl`, included as `<sgl/render/X.hpp>`. Target `sgl_render` is a STATIC library that PUBLIC-links `sgl_core`. No SFML dependency.
 
 ## Asset ids
 

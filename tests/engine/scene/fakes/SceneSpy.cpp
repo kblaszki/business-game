@@ -1,6 +1,6 @@
 #include <engine/scene/fakes/SceneSpy.hpp>
 
-namespace eng
+namespace sgl
 {
 
 void SceneSpy::update(SceneContext& ctx, Seconds dt)
@@ -20,4 +20,4 @@ SceneTraits SceneSpy::traits() const
     return traits_;
 }
 
-} // namespace eng
+} // namespace sgl

@@ -1,11 +1,10 @@
-#include <eng/sfml/SfmlPlatform.hpp>
+#include <sgl/sfml/EventTranslate.hpp>
+#include <sgl/sfml/SfmlPlatform.hpp>
 
-#include <eng/sfml/EventTranslate.hpp>
-
-namespace eng::sfml
+namespace sgl::sfml
 {
 
-SfmlPlatform::SfmlPlatform(eng::Vec2u designSize, std::string title)
+SfmlPlatform::SfmlPlatform(sgl::Vec2u designSize, std::string title)
     : window_{sf::VideoMode{{designSize.x, designSize.y}}, title, sf::Style::Default}
     , assets_{}
     , renderer_{window_, assets_}
@@ -27,7 +26,7 @@ void SfmlPlatform::close()
     window_.close();
 }
 
-std::optional<eng::InputEvent> SfmlPlatform::poll()
+std::optional<sgl::InputEvent> SfmlPlatform::poll()
 {
     while(const std::optional<sf::Event> event = window_.pollEvent())
     {
@@ -47,7 +46,7 @@ std::optional<eng::InputEvent> SfmlPlatform::poll()
             designPosition = window_.mapPixelToCoords(pressed->position);
         }
 
-        if(std::optional<eng::InputEvent> input = translate(*event, designPosition))
+        if(std::optional<sgl::InputEvent> input = translate(*event, designPosition))
         {
             return input;
         }
@@ -55,7 +54,7 @@ std::optional<eng::InputEvent> SfmlPlatform::poll()
     return std::nullopt;
 }
 
-eng::RendererI& SfmlPlatform::renderer()
+sgl::RendererI& SfmlPlatform::renderer()
 {
     return renderer_;
 }
@@ -100,4 +99,4 @@ void SfmlPlatform::applyLetterbox(sf::Vector2u windowSize)
     window_.setView(view_);
 }
 
-} // namespace eng::sfml
+} // namespace sgl::sfml

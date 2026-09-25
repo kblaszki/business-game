@@ -2,7 +2,7 @@ add_unit_test(fixed_step_loop_test
     SOURCES
         FixedStepLoopTest.cpp
     DEPENDENCIES
-        eng_loop
+        sgl_loop
 )
 
 add_unit_test(app_test
@@ -10,5 +10,5 @@ add_unit_test(app_test
         AppTest.cpp
         ${CMAKE_SOURCE_DIR}/tests/engine/scene/fakes/SceneSpy.cpp
     DEPENDENCIES
-        eng_loop
+        sgl_loop
 )

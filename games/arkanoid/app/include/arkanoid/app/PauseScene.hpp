@@ -1,22 +1,22 @@
 #pragma once
 
 #include <arkanoid/app/Scenes.hpp>
-#include <eng/scene/SceneI.hpp>
+#include <sgl/scene/SceneI.hpp>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
-class PauseScene : public eng::SceneI
+class PauseScene : public sgl::SceneI
 {
 public:
     explicit PauseScene(const AppServices& services);
 
-    void update(eng::SceneContext& ctx, eng::Seconds dt) override;
-    void render(eng::RenderQueue& queue) const override;
-    eng::SceneTraits traits() const override;
+    void update(sgl::SceneContext& ctx, sgl::Seconds dt) override;
+    void render(sgl::RenderQueue& queue) const override;
+    sgl::SceneTraits traits() const override;
 
 private:
     AppServices services_;
 };
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

@@ -1,11 +1,10 @@
 #pragma once
 
 #include <arkanoid/sim/State.hpp>
-
 #include <cstddef>
 #include <variant>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 struct BrickDestroyed
@@ -33,4 +32,4 @@ struct PowerUpCaught
 
 using SimEvent = std::variant<BrickDestroyed, LifeLost, StageCleared, GameOver, PowerUpCaught>;
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

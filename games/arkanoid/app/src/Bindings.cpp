@@ -1,29 +1,28 @@
 #include <arkanoid/app/Bindings.hpp>
+#include <sgl/input/Key.hpp>
 
-#include <eng/input/Key.hpp>
-
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 Actions makeActions()
 {
     return Actions{
-        .confirm = eng::ActionId{.id = 1},
-        .cancel = eng::ActionId{.id = 2},
-        .pause = eng::ActionId{.id = 3},
-        .paddle = eng::AxisId{.id = 4},
+        .confirm = sgl::ActionId{.id = 1},
+        .cancel = sgl::ActionId{.id = 2},
+        .pause = sgl::ActionId{.id = 3},
+        .paddle = sgl::AxisId{.id = 4},
     };
 }
 
-eng::ActionMap defaultBindings(const Actions& actions)
+sgl::ActionMap defaultBindings(const Actions& actions)
 {
-    eng::ActionMap map;
-    map.bind(eng::Key::Enter, actions.confirm);
-    map.bind(eng::Key::Escape, actions.pause);
-    map.bind(eng::Key::Backspace, actions.cancel);
-    map.bindAxis(eng::Key::Left, eng::Key::Right, actions.paddle);
-    map.bindAxis(eng::Key::A, eng::Key::D, actions.paddle);
+    sgl::ActionMap map;
+    map.bind(sgl::Key::Enter, actions.confirm);
+    map.bind(sgl::Key::Escape, actions.pause);
+    map.bind(sgl::Key::Backspace, actions.cancel);
+    map.bindAxis(sgl::Key::Left, sgl::Key::Right, actions.paddle);
+    map.bindAxis(sgl::Key::A, sgl::Key::D, actions.paddle);
     return map;
 }
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

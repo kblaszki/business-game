@@ -1,13 +1,13 @@
-#include <eng/sfml/SfmlClock.hpp>
-
 #include <SFML/System/Time.hpp>
 
-namespace eng::sfml
+#include <sgl/sfml/SfmlClock.hpp>
+
+namespace sgl::sfml
 {
 
-eng::Seconds SfmlClock::restart()
+sgl::Seconds SfmlClock::restart()
 {
-    return eng::Seconds{clock_.restart().asSeconds()};
+    return sgl::Seconds{clock_.restart().asSeconds()};
 }
 
-} // namespace eng::sfml
+} // namespace sgl::sfml

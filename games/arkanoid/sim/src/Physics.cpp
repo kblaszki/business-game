@@ -1,20 +1,18 @@
+#include <algorithm>
 #include <arkanoid/sim/Physics.hpp>
 #include <arkanoid/sim/Tuning.hpp>
-
-#include <eng/collision/Circle.hpp>
-#include <eng/collision/Collision.hpp>
-
-#include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <optional>
+#include <sgl/collision/Circle.hpp>
+#include <sgl/collision/Collision.hpp>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 namespace
 {
 
-[[nodiscard]] eng::Vec2f ballCenter(const Ball& ball)
+[[nodiscard]] sgl::Vec2f ballCenter(const Ball& ball)
 {
     return {ball.pos.x + ballRadius, ball.pos.y + ballRadius};
 }
@@ -24,7 +22,7 @@ namespace
     return ball.pos.y >= designHeight;
 }
 
-[[nodiscard]] bool aabbOverlap(eng::Vec2f aPos, eng::Vec2f aSize, eng::Vec2f bPos, eng::Vec2f bSize)
+[[nodiscard]] bool aabbOverlap(sgl::Vec2f aPos, sgl::Vec2f aSize, sgl::Vec2f bPos, sgl::Vec2f bSize)
 {
     return aPos.x < bPos.x + bSize.x && aPos.x + aSize.x > bPos.x && aPos.y < bPos.y + bSize.y
            && aPos.y + aSize.y > bPos.y;
@@ -32,7 +30,7 @@ namespace
 
 [[nodiscard]] bool ballOverlapsPaddle(const Ball& ball, const Paddle& paddle)
 {
-    const eng::Vec2f center = ballCenter(ball);
+    const sgl::Vec2f center = ballCenter(ball);
     const float nearestX = std::clamp(center.x, paddle.x, paddle.x + paddle.width);
     const float nearestY = std::clamp(center.y, paddleY, paddleY + paddleHeight);
     const float dx = center.x - nearestX;
@@ -57,7 +55,7 @@ void expireTimedEffect(State& state)
 {
     if(!state.effects.timed.has_value())
     {
-        state.effects.remaining = eng::Seconds{0.f};
+        state.effects.remaining = sgl::Seconds{0.f};
         return;
     }
 
@@ -79,7 +77,7 @@ void expireTimedEffect(State& state)
     }
 
     state.effects.timed.reset();
-    state.effects.remaining = eng::Seconds{0.f};
+    state.effects.remaining = sgl::Seconds{0.f};
 }
 
 void applyMultiBall(State& state)
@@ -90,9 +88,9 @@ void applyMultiBall(State& state)
     }
 
     const Ball& first = state.balls.front();
-    const eng::Vec2f pos = first.pos;
-    eng::Vec2f leftVel{};
-    eng::Vec2f rightVel{};
+    const sgl::Vec2f pos = first.pos;
+    sgl::Vec2f leftVel{};
+    sgl::Vec2f rightVel{};
     if(first.mode == BallMode::Stuck)
     {
         leftVel = {launchVelocity.x - multiballSpread, launchVelocity.y};
@@ -150,7 +148,7 @@ void bouncePaddle(Ball& ball, const Paddle& paddle)
     ball.pos.y = paddleY - ballDiameter;
 }
 
-void resolveBrickHit(State& state, Ball& ball, std::size_t brickIndex, eng::Vec2f normal, std::vector<SimEvent>& events)
+void resolveBrickHit(State& state, Ball& ball, std::size_t brickIndex, sgl::Vec2f normal, std::vector<SimEvent>& events)
 {
     Brick& brick = state.bricks[brickIndex];
     if(!brick.alive)
@@ -167,15 +165,15 @@ void resolveBrickHit(State& state, Ball& ball, std::size_t brickIndex, eng::Vec2
         state.capsules.push_back(Capsule{.pos = brick.box.pos, .kind = *brick.drop});
     }
 
-    ball.vel = eng::reflect(ball.vel, normal);
+    ball.vel = sgl::reflect(ball.vel, normal);
 }
 
 void integrateLiveBall(State& state, Ball& ball, float dt, std::vector<SimEvent>& events)
 {
-    const eng::Vec2f delta = ball.vel * dt;
-    const eng::Circle circle{.center = ballCenter(ball), .radius = ballRadius};
+    const sgl::Vec2f delta = ball.vel * dt;
+    const sgl::Circle circle{.center = ballCenter(ball), .radius = ballRadius};
 
-    std::optional<eng::Hit> best{};
+    std::optional<sgl::Hit> best{};
     std::size_t bestIndex = 0;
     for(std::size_t i = 0; i < state.bricks.size(); ++i)
     {
@@ -184,7 +182,7 @@ void integrateLiveBall(State& state, Ball& ball, float dt, std::vector<SimEvent>
             continue;
         }
 
-        if(const auto hit = eng::sweep(circle, delta, state.bricks[i].box))
+        if(const auto hit = sgl::sweep(circle, delta, state.bricks[i].box))
         {
             if(!best.has_value() || hit->time < best->time)
             {
@@ -219,7 +217,7 @@ void applyPowerUp(State& state, PowerUpKind kind)
             state.paddle.width = paddleWideWidth;
             clampPaddle(state.paddle);
             state.effects.timed = PowerUpKind::Wide;
-            state.effects.remaining = eng::Seconds{effectDuration};
+            state.effects.remaining = sgl::Seconds{effectDuration};
             break;
         case PowerUpKind::Slow:
             expireTimedEffect(state);
@@ -229,7 +227,7 @@ void applyPowerUp(State& state, PowerUpKind kind)
             }
             state.effects.slowActive = true;
             state.effects.timed = PowerUpKind::Slow;
-            state.effects.remaining = eng::Seconds{effectDuration};
+            state.effects.remaining = sgl::Seconds{effectDuration};
             break;
         case PowerUpKind::ExtraLife:
             ++state.lives;
@@ -240,7 +238,7 @@ void applyPowerUp(State& state, PowerUpKind kind)
     }
 }
 
-std::vector<SimEvent> step(State& state, const SimInput& input, eng::Seconds dt)
+std::vector<SimEvent> step(State& state, const SimInput& input, sgl::Seconds dt)
 {
     std::vector<SimEvent> events;
     if(state.cleared || state.over)
@@ -272,7 +270,7 @@ std::vector<SimEvent> step(State& state, const SimInput& input, eng::Seconds dt)
             }
 
             ball.mode = BallMode::Live;
-            eng::Vec2f vel = launchVelocity;
+            sgl::Vec2f vel = launchVelocity;
             if(state.effects.slowActive)
             {
                 vel = vel * slowFactor;
@@ -306,8 +304,8 @@ std::vector<SimEvent> step(State& state, const SimInput& input, eng::Seconds dt)
         std::size_t i = 0;
         while(i < state.capsules.size())
         {
-            const eng::Vec2f paddlePos{state.paddle.x, paddleY};
-            const eng::Vec2f paddleSize{state.paddle.width, paddleHeight};
+            const sgl::Vec2f paddlePos{state.paddle.x, paddleY};
+            const sgl::Vec2f paddleSize{state.paddle.width, paddleHeight};
             if(aabbOverlap(state.capsules[i].pos, {capsuleWidth, capsuleHeight}, paddlePos, paddleSize))
             {
                 const PowerUpKind kind = state.capsules[i].kind;
@@ -371,4 +369,4 @@ std::vector<SimEvent> step(State& state, const SimInput& input, eng::Seconds dt)
     return events;
 }
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

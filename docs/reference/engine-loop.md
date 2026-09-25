@@ -3,10 +3,10 @@ title: Engine loop
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - engine/loop/include/eng/loop/FixedStepLoop.hpp
-  - engine/loop/include/eng/loop/ClockI.hpp
-  - engine/loop/include/eng/loop/PlatformI.hpp
-  - engine/loop/include/eng/loop/App.hpp
+  - engine/loop/include/sgl/loop/FixedStepLoop.hpp
+  - engine/loop/include/sgl/loop/ClockI.hpp
+  - engine/loop/include/sgl/loop/PlatformI.hpp
+  - engine/loop/include/sgl/loop/App.hpp
   - engine/loop/src/FixedStepLoop.cpp
   - engine/loop/src/App.cpp
   - tests/engine/loop/FixedStepLoopTest.cpp
@@ -20,12 +20,12 @@ related_docs:
   - engine-scene.md
   - engine-render.md
 keywords: [eng, FixedStepLoop, StepResult, ClockI, PlatformI, App, alpha, kTick, runFrames]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Engine loop
 
-Platform-independent fixed-timestep pump in `namespace eng`, included as `<eng/loop/X.hpp>`. Target `eng_loop` is a STATIC library that PUBLIC-links `eng_scene` and `eng_render`. No SFML dependency.
+Platform-independent fixed-timestep pump in `namespace sgl`, included as `<sgl/loop/X.hpp>`. Target `sgl_loop` is a STATIC library that PUBLIC-links `sgl_scene` and `sgl_render`. No SFML dependency.
 
 ## FixedStepLoop
 

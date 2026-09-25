@@ -3,14 +3,14 @@ title: Engine SFML backend
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - engine/sfml/include/eng/sfml/EventTranslate.hpp
-  - engine/sfml/include/eng/sfml/SfmlClock.hpp
+  - engine/sfml/include/sgl/sfml/EventTranslate.hpp
+  - engine/sfml/include/sgl/sfml/SfmlClock.hpp
   - engine/sfml/src/SfmlClock.cpp
-  - engine/sfml/include/eng/sfml/SfmlAssets.hpp
+  - engine/sfml/include/sgl/sfml/SfmlAssets.hpp
   - engine/sfml/src/SfmlAssets.cpp
-  - engine/sfml/include/eng/sfml/SfmlRenderer.hpp
+  - engine/sfml/include/sgl/sfml/SfmlRenderer.hpp
   - engine/sfml/src/SfmlRenderer.cpp
-  - engine/sfml/include/eng/sfml/SfmlPlatform.hpp
+  - engine/sfml/include/sgl/sfml/SfmlPlatform.hpp
   - engine/sfml/src/SfmlPlatform.cpp
   - engine/sfml/CMakeLists.txt
   - tests/engine/sfml/EventTranslateTest.cpp
@@ -21,19 +21,19 @@ related_docs:
   - engine-render.md
   - engine-resources.md
   - engine-input.md
-keywords: [eng, eng_sfml, SfmlPlatform, SfmlRenderer, SfmlAssets, SfmlClock, EventTranslate, letterbox]
-last_reviewed: 2026-09-24
+keywords: [eng, sgl_sfml, SfmlPlatform, SfmlRenderer, SfmlAssets, SfmlClock, EventTranslate, letterbox]
+last_reviewed: 2026-09-25
 ---
 
 # Engine SFML backend
 
-Only SFML-facing engine module (`namespace eng::sfml`). Target `eng_sfml` is a STATIC library that PUBLIC-links `eng_loop` and `eng_resources`, and PRIVATE-links `SFML::Graphics`, `SFML::Window`, and `SFML::System`. Includes are `<eng/sfml/X.hpp>`.
+Only SFML-facing engine module (`namespace sgl::sfml`). Target `sgl_sfml` is a STATIC library that PUBLIC-links `sgl_loop` and `sgl_resources`, and PRIVATE-links `SFML::Graphics`, `SFML::Window`, and `SFML::System`. Includes are `<sgl/sfml/X.hpp>`.
 
 ## EventTranslate
 
 `toKey(sf::Keyboard::Key)` maps the gameplay/UI set; everything else is `Key::Unknown`.
 
-| SFML key | `eng::Key` |
+| SFML key | `sgl::Key` |
 |----------|------------|
 | A, D | A, D |
 | Left, Right, Up, Down | Left, Right, Up, Down |

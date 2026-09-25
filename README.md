@@ -2,7 +2,7 @@
 
 A lab of small C++23 games on a shared [SFML](https://www.sfml-dev.org/) 3.1 engine (2D now, 2.5D-ready). The first title is a three-stage breakout in `games/arkanoid/`: four power-ups, a pause overlay, CMake presets, and windowless unit tests. Later games, such as Tetris and other classics, will sit beside it under `games/`.
 
-The engine lives in `engine/` (`namespace eng`). Prospective notes stay in [`mvp/`](mvp/README.md) (`01`–`09`); what landed is [`mvp/10`](mvp/10-engine-progress.md). The contract is [`docs/explanation/architecture.md`](docs/explanation/architecture.md).
+The engine lives in `engine/` (`namespace sgl`). Prospective notes stay in [`mvp/`](mvp/README.md) (`01`–`09`); what landed is [`mvp/10`](mvp/10-engine-progress.md). The contract is [`docs/explanation/architecture.md`](docs/explanation/architecture.md).
 
 ## Table of Contents
 
@@ -33,7 +33,7 @@ cd sfml-game-lab
 
 | Path | Role |
 |------|------|
-| `engine/` | Engine modules (`eng_core`, input, scene, loop, render, collision, resources, `eng_sfml`) |
+| `engine/` | Engine modules (`sgl_core`, input, scene, loop, render, collision, resources, `sgl_sfml`) |
 | `games/arkanoid/` | Headless sim, scenes, and the `arkanoid` executable |
 | `assets/fonts/` | UI TTF (`ASSET_DIR`) |
 | `tests/engine/`, `tests/arkanoid/` | Debug GoogleTest (no window, except event translation) |

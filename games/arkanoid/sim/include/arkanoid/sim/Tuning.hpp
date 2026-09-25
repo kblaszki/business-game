@@ -1,10 +1,9 @@
 #pragma once
 
-#include <eng/core/Vec2.hpp>
-
 #include <cstdint>
+#include <sgl/core/Vec2.hpp>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 inline constexpr float designWidth{1280.f};
@@ -18,7 +17,7 @@ inline constexpr float paddleSpeed{480.f};
 
 inline constexpr float ballRadius{8.f};
 inline constexpr float ballDiameter{ballRadius * 2.f};
-inline constexpr eng::Vec2f launchVelocity{160.f, -360.f};
+inline constexpr sgl::Vec2f launchVelocity{160.f, -360.f};
 
 inline constexpr float brickWidth{110.f};
 inline constexpr float brickHeight{28.f};
@@ -38,4 +37,4 @@ inline constexpr std::uint32_t startingLives{3};
 inline constexpr std::uint32_t levelColumns{10};
 inline constexpr std::uint32_t levelRows{6};
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

@@ -21,7 +21,7 @@ After each of waves 1–2:
 
 Wave 3 is a leftover-docs audit, not the first time docs are written. Commit that sweep if it changes files.
 
-Locked names stay those in this tree: `eng::*`, `arkanoid::*`, executable `arkanoid`. Prospective spelling in [`mvp/`](../../../mvp/README.md) is notes, not current types.
+Locked names stay those in this tree: `sgl::*`, `sgl::arkanoid::*`, executable `arkanoid`. Prospective spelling in [`mvp/`](../../../mvp/README.md) is notes, not current types.
 
 ## Docs-only: `mvp/` snapshots
 

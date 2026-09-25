@@ -20,12 +20,12 @@ related_docs:
   - source-layout.md
   - ../explanation/architecture.md
 keywords: [arkanoid, sim, State, step, SimInput, SimEvent, makeState, PowerUpKind, StageId, sweep, Wide, MultiBall, Slow, ExtraLife]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Arkanoid sim
 
-Headless breakout rules in `namespace arkanoid`. Static library target `arkanoid_sim` links `PUBLIC` `eng_collision` (which pulls `eng_core`). No SFML. Include as `<arkanoid/sim/X.hpp>`.
+Headless breakout rules in `namespace sgl::arkanoid`. Static library target `arkanoid_sim` links `PUBLIC` `sgl_collision` (which pulls `sgl_core`). No SFML. Include as `<arkanoid/sim/X.hpp>`.
 
 Design space is **1280×720** with **+y down**.
 
@@ -63,7 +63,7 @@ Otherwise, with `SimInput { paddleAxis, launch }` and `dt`:
 
 1. **Paddle** — `x += paddleSpeed * axis * dt`, clamp to `[0, designWidth - width]`.
 2. **Launch** — first Stuck ball becomes Live with `{160,-360}` (×0.6 if `slowActive`).
-3. **Live balls** — `eng::sweep` from current center with `delta = vel * dt` against alive bricks (earliest hit, one brick per ball). On hit: kill, +10 score, `BrickDestroyed`, maybe spawn capsule, `eng::reflect` velocity. Then wall bounce (`x=0`, `x=width-diameter`, `y=0`) and paddle bounce when `vel.y > 0` and overlapping.
+3. **Live balls** — `sgl::sweep` from current center with `delta = vel * dt` against alive bricks (earliest hit, one brick per ball). On hit: kill, +10 score, `BrickDestroyed`, maybe spawn capsule, `sgl::reflect` velocity. Then wall bounce (`x=0`, `x=width-diameter`, `y=0`) and paddle bounce when `vel.y > 0` and overlapping.
 4. **Capsules** — fall at 180 px/s; paddle AABB catch → `applyPowerUp` + `PowerUpCaught`; `pos.y >= 720` erases.
 5. **Effects** — decrement `remaining`; at ≤0 expire (Wide restores width 120 and clamps; Slow divides live velocities by 0.6 once and clears `slowActive`).
 6. **Lives** — if every ball has `pos.y >= 720`: `LifeLost`, decrement lives; if lives remain, one Stuck ball; else `over` + `GameOver`. Partial misses only erase those balls.

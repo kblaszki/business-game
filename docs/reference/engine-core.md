@@ -3,14 +3,14 @@ title: Engine core value types
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - engine/core/include/eng/core/Vec2.hpp
-  - engine/core/include/eng/core/Vec3.hpp
-  - engine/core/include/eng/core/Rect.hpp
-  - engine/core/include/eng/core/Color.hpp
-  - engine/core/include/eng/core/Time.hpp
-  - engine/core/include/eng/core/Handle.hpp
-  - engine/core/include/eng/core/EntityId.hpp
-  - engine/core/include/eng/core/Image.hpp
+  - engine/core/include/sgl/core/Vec2.hpp
+  - engine/core/include/sgl/core/Vec3.hpp
+  - engine/core/include/sgl/core/Rect.hpp
+  - engine/core/include/sgl/core/Color.hpp
+  - engine/core/include/sgl/core/Time.hpp
+  - engine/core/include/sgl/core/Handle.hpp
+  - engine/core/include/sgl/core/EntityId.hpp
+  - engine/core/include/sgl/core/Image.hpp
   - tests/engine/core/VecTest.cpp
   - tests/engine/core/RectTest.cpp
   - tests/engine/core/HandleTest.cpp
@@ -18,12 +18,12 @@ related_code:
 related_docs:
   - source-layout.md
 keywords: [eng, Vec2, Vec3, Vec2f, Vec2u, Vec3f, Rect, Color, Time, Seconds, kTick, Handle, EntityId, Image]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Engine core value types
 
-Header-only POD-style types in `namespace eng`, included as `<eng/core/X.hpp>`. Target `eng_core` is an INTERFACE library; no SFML dependency.
+Header-only POD-style types in `namespace sgl`, included as `<sgl/core/X.hpp>`. Target `sgl_core` is an INTERFACE library; no SFML dependency.
 
 ## Vectors
 

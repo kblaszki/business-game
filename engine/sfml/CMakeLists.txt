@@ -1,18 +1,18 @@
-add_library(eng_sfml STATIC
+add_library(sgl_sfml STATIC
     src/SfmlClock.cpp
     src/SfmlAssets.cpp
     src/SfmlRenderer.cpp
     src/SfmlPlatform.cpp
 )
-target_include_directories(eng_sfml PUBLIC
+target_include_directories(sgl_sfml PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-target_compile_features(eng_sfml PUBLIC cxx_std_23)
-target_compile_options(eng_sfml PRIVATE ${BASE_COMPILE_FLAGS})
-target_link_libraries(eng_sfml
+target_compile_features(sgl_sfml PUBLIC cxx_std_23)
+target_compile_options(sgl_sfml PRIVATE ${BASE_COMPILE_FLAGS})
+target_link_libraries(sgl_sfml
     PUBLIC
-        eng_loop
-        eng_resources
+        sgl_loop
+        sgl_resources
         SFML::Graphics
         SFML::Window
         SFML::System

@@ -5,7 +5,7 @@ alwaysApply: true
 
 # sfml-game-lab
 
-C++23 SFML 3.1 game lab. The engine lives in `engine/`. Phase II locks `namespace sgl` (today the tree still spells `eng` until the rename slice). Games live under `games/`: `sgl::arkanoid` (executable `arkanoid`) and `sgl::tetris` (executable `tetris`). Contract: `docs/explanation/architecture.md`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living).
+C++23 SFML 3.1 game lab. The engine lives in `engine/` (`namespace sgl`). Games live under `games/`: `sgl::arkanoid` (executable `arkanoid`) and, once it lands, `sgl::tetris` (executable `tetris`). Contract: `docs/explanation/architecture.md`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living).
 
 ## Stack
 
@@ -15,14 +15,14 @@ C++23 SFML 3.1 game lab. The engine lives in `engine/`. Phase II locks `namespac
 
 ## Layout
 
-- `engine/core/` — value types (`eng_core`)
-- `engine/input/` — `InputEvent`, `ActionMap`, `InputState` (`eng_input`)
-- `engine/scene/` — `SceneI`, `SceneStack`, `SceneRequest` (`eng_scene`)
-- `engine/loop/` — `FixedStepLoop`, `App`, `PlatformI`, `ClockI` (`eng_loop`)
-- `engine/render/` — `RenderQueue`, `RendererI` (`eng_render`)
-- `engine/collision/` — sweep / reflect (`eng_collision`)
-- `engine/resources/` — `ResourceCache` (`eng_resources`)
-- `engine/sfml/` — SFML adapters (`eng_sfml`); only engine target that links SFML
+- `engine/core/` — value types (`sgl_core`)
+- `engine/input/` — `InputEvent`, `ActionMap`, `InputState` (`sgl_input`)
+- `engine/scene/` — `SceneI`, `SceneStack`, `SceneRequest` (`sgl_scene`)
+- `engine/loop/` — `FixedStepLoop`, `App`, `PlatformI`, `ClockI` (`sgl_loop`)
+- `engine/render/` — `RenderQueue`, `RendererI` (`sgl_render`)
+- `engine/collision/` — sweep / reflect (`sgl_collision`)
+- `engine/resources/` — `ResourceCache` (`sgl_resources`)
+- `engine/sfml/` — SFML adapters (`sgl_sfml`); only engine target that links SFML
 - `games/arkanoid/sim/` — headless breakout (`arkanoid_sim`)
 - `games/arkanoid/app/` — scenes, HUD, assets (`arkanoid_app`)
 - `games/arkanoid/main.cpp` — executable `arkanoid`

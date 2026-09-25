@@ -1,14 +1,14 @@
 #pragma once
 
 #include <cstdint>
-#include <eng/core/Time.hpp>
-#include <eng/scene/SceneContext.hpp>
-#include <eng/scene/SceneI.hpp>
-#include <eng/scene/SceneRequest.hpp>
-#include <eng/scene/SceneTraits.hpp>
 #include <functional>
+#include <sgl/core/Time.hpp>
+#include <sgl/scene/SceneContext.hpp>
+#include <sgl/scene/SceneI.hpp>
+#include <sgl/scene/SceneRequest.hpp>
+#include <sgl/scene/SceneTraits.hpp>
 
-namespace eng
+namespace sgl
 {
 
 class SceneSpy : public SceneI
@@ -24,4 +24,4 @@ public:
     std::move_only_function<void(SceneContext&)> onUpdate{};
 };
 
-} // namespace eng
+} // namespace sgl

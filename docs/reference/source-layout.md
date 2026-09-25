@@ -9,19 +9,19 @@ related_code:
   - cmake/AddUnitTest.cmake
   - engine/CMakeLists.txt
   - engine/core/CMakeLists.txt
-  - engine/core/include/eng/core/Features.hpp
+  - engine/core/include/sgl/core/Features.hpp
   - engine/input/CMakeLists.txt
-  - engine/input/include/eng/input/InputEvent.hpp
+  - engine/input/include/sgl/input/InputEvent.hpp
   - engine/scene/CMakeLists.txt
-  - engine/scene/include/eng/scene/SceneStack.hpp
+  - engine/scene/include/sgl/scene/SceneStack.hpp
   - engine/loop/CMakeLists.txt
-  - engine/loop/include/eng/loop/App.hpp
+  - engine/loop/include/sgl/loop/App.hpp
   - engine/render/CMakeLists.txt
   - engine/collision/CMakeLists.txt
   - engine/resources/CMakeLists.txt
-  - engine/resources/include/eng/resources/ResourceCache.hpp
+  - engine/resources/include/sgl/resources/ResourceCache.hpp
   - engine/sfml/CMakeLists.txt
-  - engine/sfml/include/eng/sfml/SfmlPlatform.hpp
+  - engine/sfml/include/sgl/sfml/SfmlPlatform.hpp
   - games/CMakeLists.txt
   - games/arkanoid/CMakeLists.txt
   - games/arkanoid/main.cpp
@@ -60,50 +60,50 @@ related_docs:
   - ../explanation/architecture.md
   - ../../mvp/10-engine-progress.md
 keywords: [layout, directories, eng, arkanoid, targets, cmake, SceneStack, App, SfmlPlatform]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Source layout reference
 
-Running tree after cutover: `engine/` (`namespace eng`) and `games/arkanoid/` (`namespace arkanoid`, executable `arkanoid`). Contract: [architecture.md](../explanation/architecture.md).
+Running tree after cutover: `engine/` (`namespace sgl`) and `games/arkanoid/` (`namespace sgl::arkanoid`, executable `arkanoid`). Contract: [architecture.md](../explanation/architecture.md).
 
 ## Directories
 
 | Path | Responsibility |
 |------|----------------|
-| `engine/core/` | Header-only value types (`Vec2`, `Rect`, `Handle`, `Image`, …); target `eng_core` |
-| `engine/input/` | `InputEvent`, `ActionMap`, `InputState`; target `eng_input` |
-| `engine/scene/` | `SceneI`, `SceneStack`, `SceneRequest`, `SceneTraits`; target `eng_scene` |
-| `engine/loop/` | `FixedStepLoop`, `App`, `PlatformI`, `ClockI`; target `eng_loop` |
-| `engine/render/` | `RenderQueue`, `DrawCommand`, `Projection`, `RendererI`; target `eng_render` |
-| `engine/collision/` | AABB / circle / sweep helpers; target `eng_collision` |
-| `engine/resources/` | `ResourceCache`, `ResourceError`; target `eng_resources` |
+| `engine/core/` | Header-only value types (`Vec2`, `Rect`, `Handle`, `Image`, …); target `sgl_core` |
+| `engine/input/` | `InputEvent`, `ActionMap`, `InputState`; target `sgl_input` |
+| `engine/scene/` | `SceneI`, `SceneStack`, `SceneRequest`, `SceneTraits`; target `sgl_scene` |
+| `engine/loop/` | `FixedStepLoop`, `App`, `PlatformI`, `ClockI`; target `sgl_loop` |
+| `engine/render/` | `RenderQueue`, `DrawCommand`, `Projection`, `RendererI`; target `sgl_render` |
+| `engine/collision/` | AABB / circle / sweep helpers; target `sgl_collision` |
+| `engine/resources/` | `ResourceCache`, `ResourceError`; target `sgl_resources` |
 | `engine/sfml/` | SFML adapters (`SfmlPlatform`, `EventTranslate`, …); only engine target that links SFML |
 | `games/arkanoid/sim/` | Headless breakout rules (`State`, `step`, levels, power-ups); `arkanoid_sim` |
 | `games/arkanoid/app/` | Scenes, HUD, assets, bindings; `arkanoid_app` |
-| `games/arkanoid/main.cpp` | Wires `SfmlPlatform`, assets, `SceneStack`, `eng::App`; executable `arkanoid` |
+| `games/arkanoid/main.cpp` | Wires `SfmlPlatform`, assets, `SceneStack`, `sgl::App`; executable `arkanoid` |
 | `assets/fonts/` | UI TTF (`ASSET_DIR` → `assets/`) |
 | `tests/engine/` | Per-module engine suites (Debug only) |
 | `tests/arkanoid/` | Sim and app suites (Debug only) |
 | `tests/mocks/` | `ClockMock`, `PlatformMock`, `RendererMock` (engine ports) |
 
-Include layout: `<eng/<module>/X.hpp>`, `<arkanoid/<sim|app>/X.hpp>`. Only `engine/sfml` and `games/arkanoid/main.cpp` may include `<SFML/...>`.
+Include layout: `<sgl/<module>/X.hpp>`, `<arkanoid/<sim|app>/X.hpp>`. Only `engine/sfml` and `games/arkanoid/main.cpp` may include `<SFML/...>`.
 
 ## Build targets
 
 | Target | Kind | Notes |
 |--------|------|-------|
-| `eng_core` | INTERFACE | Headers only |
-| `eng_input` | STATIC | → `eng_core` |
-| `eng_scene` | STATIC | → `eng_input` |
-| `eng_loop` | STATIC | → `eng_scene`, `eng_render` |
-| `eng_render` | STATIC | → `eng_core` |
-| `eng_collision` | STATIC | → `eng_core` |
-| `eng_resources` | INTERFACE | → `eng_core` |
-| `eng_sfml` | STATIC | → `eng_loop`, `eng_resources`; links SFML Graphics/Window/System |
-| `arkanoid_sim` | STATIC | → `eng_collision`; no SFML |
-| `arkanoid_app` | STATIC | → `arkanoid_sim`, `eng_loop`, `eng_resources`; no SFML includes |
-| `arkanoid` | executable | `games/arkanoid/main.cpp` → `arkanoid_app`, `eng_sfml`; `ASSET_DIR` → `assets/` |
+| `sgl_core` | INTERFACE | Headers only |
+| `sgl_input` | STATIC | → `sgl_core` |
+| `sgl_scene` | STATIC | → `sgl_input` |
+| `sgl_loop` | STATIC | → `sgl_scene`, `sgl_render` |
+| `sgl_render` | STATIC | → `sgl_core` |
+| `sgl_collision` | STATIC | → `sgl_core` |
+| `sgl_resources` | INTERFACE | → `sgl_core` |
+| `sgl_sfml` | STATIC | → `sgl_loop`, `sgl_resources`; links SFML Graphics/Window/System |
+| `arkanoid_sim` | STATIC | → `sgl_collision`; no SFML |
+| `arkanoid_app` | STATIC | → `arkanoid_sim`, `sgl_loop`, `sgl_resources`; no SFML includes |
+| `arkanoid` | executable | `games/arkanoid/main.cpp` → `arkanoid_app`, `sgl_sfml`; `ASSET_DIR` → `assets/` |
 
 ## Unit test suites (Debug)
 

@@ -1,18 +1,16 @@
 #include <arkanoid/app/GameplayScene.hpp>
-
 #include <arkanoid/app/SceneRender.hpp>
 #include <arkanoid/app/Theme.hpp>
 #include <arkanoid/sim/Levels.hpp>
 #include <arkanoid/sim/Physics.hpp>
 #include <arkanoid/sim/Tuning.hpp>
-#include <eng/render/DrawCommand.hpp>
-#include <eng/render/RenderQueue.hpp>
-#include <eng/scene/SceneContext.hpp>
-
-#include <vector>
+#include <sgl/render/DrawCommand.hpp>
+#include <sgl/render/RenderQueue.hpp>
+#include <sgl/scene/SceneContext.hpp>
 #include <variant>
+#include <vector>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 GameplayScene::GameplayScene(const AppServices& services, StageId stage)
@@ -40,9 +38,9 @@ void GameplayScene::advanceFrom(StageId cleared)
     }
 }
 
-void GameplayScene::update(eng::SceneContext& ctx, eng::Seconds dt)
+void GameplayScene::update(sgl::SceneContext& ctx, sgl::Seconds dt)
 {
-    const eng::InputState& input = ctx.input();
+    const sgl::InputState& input = ctx.input();
     const Actions& actions = services_.actions;
 
     if(state_.cleared || state_.over)
@@ -54,7 +52,7 @@ void GameplayScene::update(eng::SceneContext& ctx, eng::Seconds dt)
         }
         if(input.action(actions.cancel).pressed)
         {
-            ctx.request(eng::ReplaceScene{mainMenu(services_)});
+            ctx.request(sgl::ReplaceScene{mainMenu(services_)});
         }
         return;
     }
@@ -78,34 +76,37 @@ void GameplayScene::update(eng::SceneContext& ctx, eng::Seconds dt)
 
     if(!state_.cleared && !state_.over && input.action(actions.pause).pressed)
     {
-        ctx.request(eng::RequestPause{});
+        ctx.request(sgl::RequestPause{});
     }
 }
 
-void GameplayScene::render(eng::RenderQueue& queue) const
+void GameplayScene::render(sgl::RenderQueue& queue) const
 {
     renderState(state_, services_.textures, queue);
 
     const HudModel model = hud();
 
-    queue.push(eng::Layer::Hud, 0.f,
-               eng::TextCmd{
+    queue.push(sgl::Layer::Hud,
+               0.f,
+               sgl::TextCmd{
                    .font = services_.font,
                    .text = model.score,
                    .size = 22,
                    .position = hudScorePos,
                    .color = hudText,
                });
-    queue.push(eng::Layer::Hud, 1.f,
-               eng::TextCmd{
+    queue.push(sgl::Layer::Hud,
+               1.f,
+               sgl::TextCmd{
                    .font = services_.font,
                    .text = model.lives,
                    .size = 22,
                    .position = hudLivesPos,
                    .color = hudText,
                });
-    queue.push(eng::Layer::Hud, 2.f,
-               eng::TextCmd{
+    queue.push(sgl::Layer::Hud,
+               2.f,
+               sgl::TextCmd{
                    .font = services_.font,
                    .text = model.effect,
                    .size = 22,
@@ -115,38 +116,41 @@ void GameplayScene::render(eng::RenderQueue& queue) const
 
     if(model.banner.has_value())
     {
-        queue.push(eng::Layer::Overlay, 0.f,
-                   eng::RectCmd{
+        queue.push(sgl::Layer::Overlay,
+                   0.f,
+                   sgl::RectCmd{
                        .rect = {.pos = {320.f, 260.f}, .size = {640.f, 180.f}},
                        .fill = bannerFill,
                    });
-        queue.push(eng::Layer::Overlay, 1.f,
-                   eng::TextCmd{
+        queue.push(sgl::Layer::Overlay,
+                   1.f,
+                   sgl::TextCmd{
                        .font = services_.font,
                        .text = *model.banner,
                        .size = 40,
                        .position = {designWidth * 0.5f, 320.f},
                        .color = bannerTitle,
-                       .anchor = eng::Anchor::Center,
+                       .anchor = sgl::Anchor::Center,
                    });
         if(model.hint.has_value())
         {
-            queue.push(eng::Layer::Overlay, 2.f,
-                       eng::TextCmd{
+            queue.push(sgl::Layer::Overlay,
+                       2.f,
+                       sgl::TextCmd{
                            .font = services_.font,
                            .text = *model.hint,
                            .size = 20,
                            .position = {designWidth * 0.5f, 380.f},
                            .color = bannerHint,
-                           .anchor = eng::Anchor::Center,
+                           .anchor = sgl::Anchor::Center,
                        });
         }
     }
 }
 
-eng::SceneTraits GameplayScene::traits() const
+sgl::SceneTraits GameplayScene::traits() const
 {
-    return eng::SceneTraits{
+    return sgl::SceneTraits{
         .opaque = true,
         .blocksUpdate = true,
         .pausable = !state_.cleared && !state_.over,
@@ -168,4 +172,4 @@ HudModel GameplayScene::hud() const
     return makeHud(state_);
 }
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

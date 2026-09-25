@@ -1,10 +1,10 @@
 #pragma once
 
-#include <eng/render/RenderQueue.hpp>
-#include <eng/render/RendererI.hpp>
 #include <gmock/gmock.h>
+#include <sgl/render/RenderQueue.hpp>
+#include <sgl/render/RendererI.hpp>
 
-namespace eng
+namespace sgl
 {
 
 class RendererMock : public RendererI
@@ -15,4 +15,4 @@ public:
     MOCK_METHOD(void, end, (), (override));
 };
 
-} // namespace eng
+} // namespace sgl

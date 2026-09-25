@@ -2,34 +2,31 @@
 #include <arkanoid/app/GameplayScene.hpp>
 #include <arkanoid/app/MainMenuScene.hpp>
 #include <arkanoid/app/Scenes.hpp>
-
-#include <eng/core/Time.hpp>
-#include <eng/input/InputEvent.hpp>
-#include <eng/input/InputState.hpp>
-#include <eng/input/Key.hpp>
-#include <eng/scene/SceneStack.hpp>
-
 #include <gtest/gtest.h>
-
 #include <memory>
+#include <sgl/core/Time.hpp>
+#include <sgl/input/InputEvent.hpp>
+#include <sgl/input/InputState.hpp>
+#include <sgl/input/Key.hpp>
+#include <sgl/scene/SceneStack.hpp>
 
 namespace
 {
 
 struct Fixture
 {
-    arkanoid::Actions actions = arkanoid::makeActions();
-    arkanoid::TextureIds textures{};
-    eng::FontId font{};
-    arkanoid::AppServices services{actions, textures, font};
-    eng::ActionMap map = arkanoid::defaultBindings(actions);
-    eng::SceneStack stack{arkanoid::pause(services)};
+    sgl::arkanoid::Actions actions = sgl::arkanoid::makeActions();
+    sgl::arkanoid::TextureIds textures{};
+    sgl::FontId font{};
+    sgl::arkanoid::AppServices services{actions, textures, font};
+    sgl::ActionMap map = sgl::arkanoid::defaultBindings(actions);
+    sgl::SceneStack stack{sgl::arkanoid::pause(services)};
 };
 
-eng::InputState inputWith(eng::Key key, const eng::ActionMap& map)
+sgl::InputState inputWith(sgl::Key key, const sgl::ActionMap& map)
 {
-    eng::InputState input;
-    input.apply(eng::KeyDown{.key = key}, map);
+    sgl::InputState input;
+    input.apply(sgl::KeyDown{.key = key}, map);
     return input;
 }
 
@@ -38,21 +35,21 @@ eng::InputState inputWith(eng::Key key, const eng::ActionMap& map)
 TEST(ScenesShould, enterOnMainMenuStartsStage1)
 {
     Fixture f;
-    f.stack.push(arkanoid::mainMenu(f.services)());
+    f.stack.push(sgl::arkanoid::mainMenu(f.services)());
 
-    f.stack.update(inputWith(eng::Key::Enter, f.map), eng::kTick);
+    f.stack.update(inputWith(sgl::Key::Enter, f.map), sgl::kTick);
 
-    auto* play = dynamic_cast<arkanoid::GameplayScene*>(f.stack.top());
+    auto* play = dynamic_cast<sgl::arkanoid::GameplayScene*>(f.stack.top());
     ASSERT_NE(play, nullptr);
-    EXPECT_EQ(play->state().stage, arkanoid::StageId::Stage1);
+    EXPECT_EQ(play->state().stage, sgl::arkanoid::StageId::Stage1);
 }
 
 TEST(ScenesShould, backspaceOnMainMenuQuits)
 {
     Fixture f;
-    f.stack.push(arkanoid::mainMenu(f.services)());
+    f.stack.push(sgl::arkanoid::mainMenu(f.services)());
 
-    f.stack.update(inputWith(eng::Key::Backspace, f.map), eng::kTick);
+    f.stack.update(inputWith(sgl::Key::Backspace, f.map), sgl::kTick);
 
     EXPECT_TRUE(f.stack.quitRequested());
 }
@@ -60,9 +57,9 @@ TEST(ScenesShould, backspaceOnMainMenuQuits)
 TEST(ScenesShould, clearingStage1AdvancesToStage2)
 {
     Fixture f;
-    f.stack.push(arkanoid::gameplay(f.services, arkanoid::StageId::Stage1)());
+    f.stack.push(sgl::arkanoid::gameplay(f.services, sgl::arkanoid::StageId::Stage1)());
 
-    auto* play = dynamic_cast<arkanoid::GameplayScene*>(f.stack.top());
+    auto* play = dynamic_cast<sgl::arkanoid::GameplayScene*>(f.stack.top());
     ASSERT_NE(play, nullptr);
 
     const std::uint32_t score = play->state().score;
@@ -72,18 +69,18 @@ TEST(ScenesShould, clearingStage1AdvancesToStage2)
     }
     play->state().cleared = false;
 
-    f.stack.update(eng::InputState{}, eng::kTick);
+    f.stack.update(sgl::InputState{}, sgl::kTick);
 
-    EXPECT_EQ(play->state().stage, arkanoid::StageId::Stage2);
+    EXPECT_EQ(play->state().stage, sgl::arkanoid::StageId::Stage2);
     EXPECT_EQ(play->state().score, score);
 }
 
 TEST(ScenesShould, clearingStage3ShowsYouWinBanner)
 {
     Fixture f;
-    f.stack.push(arkanoid::gameplay(f.services, arkanoid::StageId::Stage3)());
+    f.stack.push(sgl::arkanoid::gameplay(f.services, sgl::arkanoid::StageId::Stage3)());
 
-    auto* play = dynamic_cast<arkanoid::GameplayScene*>(f.stack.top());
+    auto* play = dynamic_cast<sgl::arkanoid::GameplayScene*>(f.stack.top());
     ASSERT_NE(play, nullptr);
 
     for(auto& brick: play->state().bricks)
@@ -92,9 +89,9 @@ TEST(ScenesShould, clearingStage3ShowsYouWinBanner)
     }
     play->state().cleared = false;
 
-    f.stack.update(eng::InputState{}, eng::kTick);
+    f.stack.update(sgl::InputState{}, sgl::kTick);
 
-    EXPECT_EQ(play->state().stage, arkanoid::StageId::Stage3);
+    EXPECT_EQ(play->state().stage, sgl::arkanoid::StageId::Stage3);
     ASSERT_TRUE(play->hud().banner.has_value());
     EXPECT_EQ(*play->hud().banner, "You win");
 }
@@ -102,9 +99,9 @@ TEST(ScenesShould, clearingStage3ShowsYouWinBanner)
 TEST(ScenesShould, escapeWhilePlayingPushesPause)
 {
     Fixture f;
-    f.stack.push(arkanoid::gameplay(f.services, arkanoid::StageId::Stage1)());
+    f.stack.push(sgl::arkanoid::gameplay(f.services, sgl::arkanoid::StageId::Stage1)());
 
-    f.stack.update(inputWith(eng::Key::Escape, f.map), eng::kTick);
+    f.stack.update(inputWith(sgl::Key::Escape, f.map), sgl::kTick);
 
     EXPECT_EQ(f.stack.size(), 2u);
 }

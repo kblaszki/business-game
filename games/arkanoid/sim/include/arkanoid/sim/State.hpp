@@ -1,16 +1,15 @@
 #pragma once
 
 #include <arkanoid/sim/Tuning.hpp>
-#include <eng/core/Color.hpp>
-#include <eng/core/Rect.hpp>
-#include <eng/core/Time.hpp>
-#include <eng/core/Vec2.hpp>
-
 #include <cstdint>
 #include <optional>
+#include <sgl/core/Color.hpp>
+#include <sgl/core/Rect.hpp>
+#include <sgl/core/Time.hpp>
+#include <sgl/core/Vec2.hpp>
 #include <vector>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 enum class BallMode
@@ -21,8 +20,8 @@ enum class BallMode
 
 struct Ball
 {
-    eng::Vec2f pos{};
-    eng::Vec2f vel{};
+    sgl::Vec2f pos{};
+    sgl::Vec2f vel{};
     BallMode mode{BallMode::Stuck};
 };
 
@@ -43,22 +42,22 @@ enum class PowerUpKind
 
 struct Brick
 {
-    eng::Rect<float> box{};
-    eng::Color tint{};
+    sgl::Rect<float> box{};
+    sgl::Color tint{};
     bool alive{true};
     std::optional<PowerUpKind> drop{};
 };
 
 struct Capsule
 {
-    eng::Vec2f pos{};
+    sgl::Vec2f pos{};
     PowerUpKind kind{};
 };
 
 struct Effects
 {
     std::optional<PowerUpKind> timed{};
-    eng::Seconds remaining{};
+    sgl::Seconds remaining{};
     bool slowActive{false};
 };
 
@@ -83,4 +82,4 @@ struct State
     bool over{false};
 };
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

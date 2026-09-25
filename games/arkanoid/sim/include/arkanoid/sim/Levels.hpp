@@ -1,12 +1,11 @@
 #pragma once
 
 #include <arkanoid/sim/State.hpp>
-#include <eng/core/Color.hpp>
-
 #include <cstdint>
+#include <sgl/core/Color.hpp>
 #include <span>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 struct LevelData
@@ -14,7 +13,7 @@ struct LevelData
     StageId id{};
     std::uint32_t columns{};
     std::uint32_t rows{};
-    std::span<const eng::Color> rowColors{};
+    std::span<const sgl::Color> rowColors{};
     std::span<const std::uint8_t> mask{};
 };
 
@@ -22,4 +21,4 @@ struct LevelData
 
 [[nodiscard]] State makeState(StageId id, std::uint32_t score = 0, std::uint32_t lives = startingLives);
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

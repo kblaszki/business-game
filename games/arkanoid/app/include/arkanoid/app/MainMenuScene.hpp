@@ -1,31 +1,31 @@
 #pragma once
 
 #include <arkanoid/app/Scenes.hpp>
-#include <eng/core/Rect.hpp>
-#include <eng/core/Vec2.hpp>
-#include <eng/scene/SceneI.hpp>
+#include <sgl/core/Rect.hpp>
+#include <sgl/core/Vec2.hpp>
+#include <sgl/scene/SceneI.hpp>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
-class MainMenuScene : public eng::SceneI
+class MainMenuScene : public sgl::SceneI
 {
 public:
     explicit MainMenuScene(const AppServices& services);
 
-    void update(eng::SceneContext& ctx, eng::Seconds dt) override;
-    void render(eng::RenderQueue& queue) const override;
-    eng::SceneTraits traits() const override;
+    void update(sgl::SceneContext& ctx, sgl::Seconds dt) override;
+    void render(sgl::RenderQueue& queue) const override;
+    sgl::SceneTraits traits() const override;
 
 private:
-    [[nodiscard]] bool hitStart(eng::Vec2f point) const;
-    [[nodiscard]] bool hitQuit(eng::Vec2f point) const;
+    [[nodiscard]] bool hitStart(sgl::Vec2f point) const;
+    [[nodiscard]] bool hitQuit(sgl::Vec2f point) const;
 
     AppServices services_;
-    eng::Rect<float> startButton_{};
-    eng::Rect<float> quitButton_{};
+    sgl::Rect<float> startButton_{};
+    sgl::Rect<float> quitButton_{};
     bool startHover_{false};
     bool quitHover_{false};
 };
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

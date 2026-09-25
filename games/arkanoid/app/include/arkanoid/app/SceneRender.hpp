@@ -1,23 +1,22 @@
 #pragma once
 
 #include <arkanoid/sim/State.hpp>
-#include <eng/render/AssetIds.hpp>
-#include <eng/render/RenderQueue.hpp>
-
 #include <array>
+#include <sgl/render/AssetIds.hpp>
+#include <sgl/render/RenderQueue.hpp>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 struct TextureIds
 {
-    eng::TextureId background;
-    eng::TextureId brick;
-    eng::TextureId paddle;
-    eng::TextureId ball;
-    std::array<eng::TextureId, 4> capsule;
+    sgl::TextureId background;
+    sgl::TextureId brick;
+    sgl::TextureId paddle;
+    sgl::TextureId ball;
+    std::array<sgl::TextureId, 4> capsule;
 };
 
-void renderState(const State& state, const TextureIds& textures, eng::RenderQueue& queue);
+void renderState(const State& state, const TextureIds& textures, sgl::RenderQueue& queue);
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid

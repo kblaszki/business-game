@@ -3,11 +3,11 @@ title: Input and events
 diataxis: reference
 audience: [ai, human]
 related_code:
-  - engine/input/include/eng/input/InputEvent.hpp
-  - engine/input/include/eng/input/ActionMap.hpp
-  - engine/input/include/eng/input/InputState.hpp
-  - engine/input/include/eng/input/ActionId.hpp
-  - engine/input/include/eng/input/Key.hpp
+  - engine/input/include/sgl/input/InputEvent.hpp
+  - engine/input/include/sgl/input/ActionMap.hpp
+  - engine/input/include/sgl/input/InputState.hpp
+  - engine/input/include/sgl/input/ActionId.hpp
+  - engine/input/include/sgl/input/Key.hpp
   - engine/input/src/ActionMap.cpp
   - engine/input/src/InputState.cpp
   - games/arkanoid/app/include/arkanoid/app/Bindings.hpp
@@ -23,7 +23,7 @@ related_docs:
   - ../tutorials/getting-started.md
   - ../../mvp/03-events-and-input.md
 keywords: [input, InputEvent, ActionMap, InputState, defaultBindings, confirm, pause, cancel, paddle]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Input and events
@@ -34,15 +34,15 @@ Facts about the running tree. Engine types: [engine-input.md](engine-input.md). 
 
 | Type | Role |
 |------|------|
-| `eng::InputEvent` | Variant: `KeyDown` / `KeyUp`, mouse move/down, `WindowClosed`, `FocusLost` / `FocusGained` |
-| `eng::ActionMap` | Binds keys to `ActionId`s and key pairs to an `AxisId` |
-| `eng::InputState` | Per-frame edges (`pressed` / `released`), holds, axes, pointer, `closeRequested`, `focusLost` |
+| `sgl::InputEvent` | Variant: `KeyDown` / `KeyUp`, mouse move/down, `WindowClosed`, `FocusLost` / `FocusGained` |
+| `sgl::ActionMap` | Binds keys to `ActionId`s and key pairs to an `AxisId` |
+| `sgl::InputState` | Per-frame edges (`pressed` / `released`), holds, axes, pointer, `closeRequested`, `focusLost` |
 
 Scenes read `SceneContext::input()`; they never poll the window and never call `close()`.
 
 ## Arkanoid default bindings
 
-`arkanoid::makeActions()` builds ids 1–4. `arkanoid::defaultBindings` fills the map:
+`sgl::arkanoid::makeActions()` builds ids 1–4. `sgl::arkanoid::defaultBindings` fills the map:
 
 | Physical input | Binding |
 |----------------|---------|

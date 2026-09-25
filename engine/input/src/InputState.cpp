@@ -1,9 +1,9 @@
 #include <algorithm>
-#include <eng/input/InputState.hpp>
+#include <sgl/input/InputState.hpp>
 #include <type_traits>
 #include <variant>
 
-namespace eng
+namespace sgl
 {
 namespace
 {
@@ -178,4 +178,4 @@ const ActionState* InputState::findAction(ActionId id) const
     return &it->second;
 }
 
-} // namespace eng
+} // namespace sgl

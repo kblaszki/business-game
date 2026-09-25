@@ -1,20 +1,20 @@
 #pragma once
 
-#include <eng/input/ActionId.hpp>
-#include <eng/input/ActionMap.hpp>
+#include <sgl/input/ActionId.hpp>
+#include <sgl/input/ActionMap.hpp>
 
-namespace arkanoid
+namespace sgl::arkanoid
 {
 
 struct Actions
 {
-    eng::ActionId confirm{};
-    eng::ActionId cancel{};
-    eng::ActionId pause{};
-    eng::AxisId paddle{};
+    sgl::ActionId confirm{};
+    sgl::ActionId cancel{};
+    sgl::ActionId pause{};
+    sgl::AxisId paddle{};
 };
 
 [[nodiscard]] Actions makeActions();
-[[nodiscard]] eng::ActionMap defaultBindings(const Actions& actions);
+[[nodiscard]] sgl::ActionMap defaultBindings(const Actions& actions);
 
-} // namespace arkanoid
+} // namespace sgl::arkanoid
