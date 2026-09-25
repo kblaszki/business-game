@@ -63,7 +63,14 @@ std::expected<void, SaveError> writeTextFileAtomic(const std::filesystem::path& 
 std::expected<std::filesystem::path, SaveError> userDataDir(std::string_view app)
 {
 #if defined(_WIN32)
+    #if defined(_MSC_VER)
+        #pragma warning(push)
+        #pragma warning(disable : 4996) // getenv; _dupenv_s would split this from the POSIX path
+    #endif
     const char* appData = std::getenv("APPDATA");
+    #if defined(_MSC_VER)
+        #pragma warning(pop)
+    #endif
     if(appData == nullptr || appData[0] == '\0')
     {
         return std::unexpected(SaveError::Io);

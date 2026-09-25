@@ -1,5 +1,6 @@
 #pragma once
 
+#include <bit>
 #include <cstdint>
 
 namespace sgl
@@ -24,7 +25,7 @@ public:
         state_ = oldstate * 6364136223846793005ULL + inc_;
         const auto xorshifted = static_cast<std::uint32_t>(((oldstate >> 18u) ^ oldstate) >> 27u);
         const auto rot = static_cast<std::uint32_t>(oldstate >> 59u);
-        return (xorshifted >> rot) | (xorshifted << ((-rot) & 31u));
+        return std::rotr(xorshifted, static_cast<int>(rot));
     }
 
     // Unbiased via rejection sampling. bound == 0 returns 0.

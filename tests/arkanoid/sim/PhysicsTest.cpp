@@ -293,8 +293,7 @@ TEST(PhysicsTest, exteriorWallsKeepBallInside)
     {
         sgl::arkanoid::State state{};
         state.paddle.x = 580.f;
-        state.balls = {
-            sgl::arkanoid::Ball{.pos = shot.pos, .vel = shot.vel, .mode = sgl::arkanoid::BallMode::Live}};
+        state.balls = {sgl::arkanoid::Ball{.pos = shot.pos, .vel = shot.vel, .mode = sgl::arkanoid::BallMode::Live}};
 
         for(int i = 0; i < 30; ++i)
         {
