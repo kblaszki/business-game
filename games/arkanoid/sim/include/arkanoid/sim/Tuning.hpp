@@ -9,7 +9,7 @@ namespace sgl::arkanoid
 inline constexpr float designWidth{1280.f};
 inline constexpr float designHeight{720.f};
 
-inline constexpr float paddleWidth{120.f};
+inline constexpr float paddleNormalWidth{120.f};
 inline constexpr float paddleHeight{20.f};
 inline constexpr float paddleY{680.f};
 inline constexpr float paddleWideWidth{200.f};

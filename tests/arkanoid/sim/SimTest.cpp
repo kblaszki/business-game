@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <arkanoid/sim/Effects.hpp>
 #include <arkanoid/sim/Events.hpp>
 #include <arkanoid/sim/Levels.hpp>
 #include <arkanoid/sim/Physics.hpp>
@@ -165,11 +166,12 @@ TEST(SimShould, slowThenExpireRestoresSpeed)
     ASSERT_NEAR(state.balls.front().vel.x, 160.f * sgl::arkanoid::slowFactor, 1e-3f);
     ASSERT_NEAR(state.balls.front().vel.y, -360.f * sgl::arkanoid::slowFactor, 1e-3f);
 
-    state.effects.remaining = sgl::kTick;
+    ASSERT_EQ(state.effects.active.size(), 1u);
+    std::get<sgl::arkanoid::Slow>(state.effects.active.front()).remaining = sgl::kTick;
     (void)sgl::arkanoid::step(state, {}, sgl::kTick);
 
     ASSERT_FALSE(state.balls.empty());
-    EXPECT_FALSE(state.effects.slowActive);
+    EXPECT_TRUE(state.effects.active.empty());
     EXPECT_NEAR(state.balls.front().vel.x, 160.f, 1e-3f);
     EXPECT_NEAR(state.balls.front().vel.y, -360.f, 1e-3f);
 }

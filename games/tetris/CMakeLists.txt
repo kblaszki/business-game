@@ -1,2 +1,10 @@
 add_subdirectory(sim)
 add_subdirectory(app)
+
+add_executable(tetris main.cpp)
+target_compile_features(tetris PRIVATE cxx_std_23)
+target_compile_options(tetris PRIVATE ${BASE_COMPILE_FLAGS})
+target_link_libraries(tetris PRIVATE tetris_app sgl_sfml)
+file(TO_CMAKE_PATH "${CMAKE_SOURCE_DIR}/assets" ASSET_DIR_NORM)
+target_compile_definitions(tetris PRIVATE ASSET_DIR="${ASSET_DIR_NORM}")
+add_dependencies(tetris check_boundaries)

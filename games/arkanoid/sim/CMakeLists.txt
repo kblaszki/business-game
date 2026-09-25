@@ -1,4 +1,5 @@
 add_library(arkanoid_sim STATIC
+    src/Effects.cpp
     src/Levels.cpp
     src/Physics.cpp
 )

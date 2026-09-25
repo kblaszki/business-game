@@ -23,6 +23,7 @@ related_docs:
   - reference/arkanoid-sim.md
   - reference/tetris-sim.md
   - reference/arkanoid-app.md
+  - reference/tetris-app.md
   - reference/input-and-events.md
   - reference/pause-overlay.md
   - explanation/roadmap.md
@@ -63,7 +64,7 @@ flowchart TD
 | [tutorials/getting-started.md](tutorials/getting-started.md) | tutorial | setup, toolchain, build, run, msys2 |
 | [how-to/build-and-test.md](how-to/build-and-test.md) | how-to | build, test, ctest, format, presets |
 | [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, eng, arkanoid, targets |
-| [reference/engine-core.md](reference/engine-core.md) | reference | eng, Vec2, Rect, Handle, Image |
+| [reference/engine-core.md](reference/engine-core.md) | reference | sgl, Vec2, Rect, Handle, Image, Overloaded |
 | [reference/engine-audio.md](reference/engine-audio.md) | reference | sgl, AudioI, tone, Pcm, SfmlAudio |
 | [reference/engine-input.md](reference/engine-input.md) | reference | InputEvent, ActionMap, InputState |
 | [reference/engine-scene.md](reference/engine-scene.md) | reference | SceneStack, SceneRequest, pause |
@@ -77,6 +78,7 @@ flowchart TD
 | [reference/arkanoid-sim.md](reference/arkanoid-sim.md) | reference | arkanoid sim, StageId, power-ups |
 | [reference/tetris-sim.md](reference/tetris-sim.md) | reference | tetris sim, Grid, SRS, kicks |
 | [reference/arkanoid-app.md](reference/arkanoid-app.md) | reference | Theme, Assets, HudModel, SceneRender |
+| [reference/tetris-app.md](reference/tetris-app.md) | reference | Theme, Bindings, BoardRender, PlayScene, GameOverScene |
 | [reference/input-and-events.md](reference/input-and-events.md) | reference | InputEvent, ActionMap, defaultBindings |
 | [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScene, RequestPause, FocusLost, pausable |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, stages, power-ups, engine split |

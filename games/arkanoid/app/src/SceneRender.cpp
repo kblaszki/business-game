@@ -37,9 +37,9 @@ void renderState(const State& state, const TextureIds& textures, sgl::RenderQueu
                paddleY,
                sgl::SpriteCmd{
                    .texture = textures.paddle,
-                   .source = {.pos = {0.f, 0.f}, .size = {paddleWidth, paddleHeight}},
+                   .source = {.pos = {0.f, 0.f}, .size = {paddleNormalWidth, paddleHeight}},
                    .position = {state.paddle.x, paddleY},
-                   .scale = {state.paddle.width / paddleWidth, 1.f},
+                   .scale = {state.paddle.width / paddleNormalWidth, 1.f},
                });
 
     for(const Ball& ball: state.balls)

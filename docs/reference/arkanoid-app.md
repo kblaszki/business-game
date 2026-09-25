@@ -67,7 +67,7 @@ Image sizes match the breakout art: background **1280×720** (dark blue with hor
 | Field | Content |
 |-------|---------|
 | `score` / `lives` | `"Score N"` / `"Lives N"` |
-| `effect` | `"Wide"` or `"Slow"` when `effects.timed` is that kind and `remaining > 0`; else empty |
+| `effect` | Space-separated list of every active timed effect with whole seconds remaining, e.g. `"Wide 4 Slow 8"` (floor of `remaining`); empty when none |
 | `banner` | `"You win"` only when `cleared && stage == Stage3`; `"You lose"` when `over`; otherwise nullopt (including cleared Stage1/2) |
 | `hint` | `"Enter - retry   Backspace - menu"` when `banner` is set |
 

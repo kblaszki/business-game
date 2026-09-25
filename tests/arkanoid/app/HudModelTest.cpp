@@ -1,5 +1,6 @@
 #include <arkanoid/app/Bindings.hpp>
 #include <arkanoid/app/HudModel.hpp>
+#include <arkanoid/sim/Effects.hpp>
 #include <arkanoid/sim/State.hpp>
 #include <gtest/gtest.h>
 #include <sgl/core/Time.hpp>
@@ -64,12 +65,22 @@ TEST(HudModelShould, overShowsYouLose)
 TEST(HudModelShould, wideEffectStringWhenTimedRemaining)
 {
     sgl::arkanoid::State state{};
-    state.effects.timed = sgl::arkanoid::PowerUpKind::Wide;
-    state.effects.remaining = sgl::Seconds{4.f};
+    state.effects.active.push_back(sgl::arkanoid::Wide{.remaining = sgl::Seconds{4.f}});
 
     const sgl::arkanoid::HudModel hud = sgl::arkanoid::makeHud(state);
 
-    EXPECT_EQ(hud.effect, "Wide");
+    EXPECT_EQ(hud.effect, "Wide 4");
+}
+
+TEST(HudModelTest, listsAllActiveEffectsWithSeconds)
+{
+    sgl::arkanoid::State state{};
+    state.effects.active.push_back(sgl::arkanoid::Wide{.remaining = sgl::Seconds{4.7f}});
+    state.effects.active.push_back(sgl::arkanoid::Slow{.remaining = sgl::Seconds{8.f}});
+
+    const sgl::arkanoid::HudModel hud = sgl::arkanoid::makeHud(state);
+
+    EXPECT_EQ(hud.effect, "Wide 4 Slow 8");
 }
 
 TEST(HudModelShould, defaultBindingsMapsEnterToConfirm)

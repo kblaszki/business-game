@@ -1,6 +1,10 @@
 #include <arkanoid/app/HudModel.hpp>
+#include <arkanoid/sim/Effects.hpp>
+#include <cmath>
+#include <sgl/core/Overloaded.hpp>
 #include <sgl/core/Time.hpp>
 #include <string>
+#include <variant>
 
 namespace sgl::arkanoid
 {
@@ -11,20 +15,33 @@ HudModel makeHud(const State& state)
     hud.score = "Score " + std::to_string(state.score);
     hud.lives = "Lives " + std::to_string(state.lives);
 
-    if(state.effects.timed.has_value() && state.effects.remaining > sgl::Seconds{})
+    for(const TimedEffect& effect: state.effects.active)
     {
-        switch(*state.effects.timed)
-        {
-            case PowerUpKind::Wide:
-                hud.effect = "Wide";
-                break;
-            case PowerUpKind::Slow:
-                hud.effect = "Slow";
-                break;
-            case PowerUpKind::MultiBall:
-            case PowerUpKind::ExtraLife:
-                break;
-        }
+        std::visit(sgl::Overloaded{
+                       [&](const Wide& wide) {
+                           if(wide.remaining > sgl::Seconds{})
+                           {
+                               if(!hud.effect.empty())
+                               {
+                                   hud.effect.push_back(' ');
+                               }
+                               hud.effect +=
+                                   "Wide " + std::to_string(static_cast<int>(std::floor(wide.remaining.count())));
+                           }
+                       },
+                       [&](const Slow& slow) {
+                           if(slow.remaining > sgl::Seconds{})
+                           {
+                               if(!hud.effect.empty())
+                               {
+                                   hud.effect.push_back(' ');
+                               }
+                               hud.effect +=
+                                   "Slow " + std::to_string(static_cast<int>(std::floor(slow.remaining.count())));
+                           }
+                       },
+                   },
+                   effect);
     }
 
     if(state.cleared && state.stage == StageId::Stage3)

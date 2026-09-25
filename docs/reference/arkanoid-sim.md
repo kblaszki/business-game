@@ -5,15 +5,18 @@ audience: [ai, human]
 related_code:
   - games/arkanoid/sim/include/arkanoid/sim/Tuning.hpp
   - games/arkanoid/sim/include/arkanoid/sim/State.hpp
+  - games/arkanoid/sim/include/arkanoid/sim/Effects.hpp
   - games/arkanoid/sim/include/arkanoid/sim/Events.hpp
   - games/arkanoid/sim/include/arkanoid/sim/Levels.hpp
   - games/arkanoid/sim/include/arkanoid/sim/Physics.hpp
+  - games/arkanoid/sim/src/Effects.cpp
   - games/arkanoid/sim/src/Levels.cpp
   - games/arkanoid/sim/src/Physics.cpp
   - games/arkanoid/sim/CMakeLists.txt
   - tests/arkanoid/sim/SimTest.cpp
   - tests/arkanoid/sim/PhysicsTest.cpp
   - tests/arkanoid/sim/SimPropertyTest.cpp
+  - tests/arkanoid/sim/PowerUpTest.cpp
   - tests/arkanoid/sim/CMakeLists.txt
 related_docs:
   - engine-collision.md
@@ -21,7 +24,7 @@ related_docs:
   - arkanoid-app.md
   - source-layout.md
   - ../explanation/architecture.md
-keywords: [arkanoid, sim, State, step, SimInput, SimEvent, makeState, PowerUpKind, StageId, sweep, TOI, Wide, MultiBall, Slow, ExtraLife, PaddleHit, WallHit, BallLaunched, BallLost]
+keywords: [arkanoid, sim, State, Effects, step, SimInput, SimEvent, makeState, PowerUpKind, StageId, sweep, TOI, Wide, MultiBall, Slow, ExtraLife, PaddleHit, WallHit, BallLaunched, BallLost]
 last_reviewed: 2026-09-25
 ---
 
@@ -35,13 +38,25 @@ Design space is **1280×720** with **+y down**.
 
 | Header | Contents |
 |--------|----------|
-| `Tuning.hpp` | Inline constexpr design size, paddle/ball/brick/capsule sizes and speeds, `ballSpeed` (length of `launchVelocity`), effect duration 8 s, slow factor 0.6, multiball spread 120, score 10, lives 3, grid 10×6 |
-| `State.hpp` | `Ball` / `Paddle` / `Brick` / `Capsule` / `Effects` / `State`; enums `BallMode`, `PowerUpKind`, `StageId` |
+| `Tuning.hpp` | Inline constexpr design size, paddle/ball/brick/capsule sizes and speeds, `paddleNormalWidth` 120 / `paddleWideWidth` 200, `ballSpeed` (length of `launchVelocity`), effect duration 8 s, slow factor 0.6, multiball spread 120, score 10, lives 3, grid 10×6 |
+| `State.hpp` | `Ball` / `Paddle` / `Brick` / `Capsule` / `State`; enums `BallMode`, `PowerUpKind`, `StageId`; includes `Effects.hpp` |
+| `Effects.hpp` | `Wide` / `Slow` (`Seconds remaining`), `TimedEffect` variant, `Effects { vector<TimedEffect> active }`; pure `paddleWidth(effects)`, `ballSpeedMultiplier(effects)` |
 | `Events.hpp` | `BrickDestroyed`, `LifeLost`, `StageCleared`, `GameOver`, `PowerUpCaught`, `PaddleHit`, `WallHit`, `BallLaunched`, `BallLost`; `SimEvent` variant |
 | `Levels.hpp` | `LevelData`, `level(StageId)`, `makeState(StageId)`, `makeState(span<const Brick>)` |
-| `Physics.hpp` | `SimInput`, `step`, `applyPowerUp`, `ballSpeedMultiplier` |
+| `Physics.hpp` | `SimInput`, `step`, `applyPowerUp`, `ballSpeedMultiplier(const State&)` (delegates to Effects) |
 
 `Ball::pos` is the top-left of a 16×16 box (radius 8). Paddle y is fixed at 680.
+
+## Effects
+
+`Effects::active` holds at most one `Wide` and one `Slow`. Catching the same kind again refreshes `remaining` to `effectDuration` (8 s). Wide and Slow stack independently.
+
+| Pure function | Result |
+|---------------|--------|
+| `paddleWidth(effects)` | `paddleWideWidth` if Wide is active, else `paddleNormalWidth` |
+| `ballSpeedMultiplier(effects)` | `slowFactor` (0.6) if Slow is active, else `1` |
+
+Ball speed is always `ballSpeed * ballSpeedMultiplier` via normalization (`setBallSpeed` / launch / bounce). Slow never multiplies then divides velocities. Instant power-ups (MultiBall, ExtraLife) are dispatched with `std::visit` and `sgl::Overloaded`; capsules still store `PowerUpKind`.
 
 ## Levels and donors
 
@@ -73,25 +88,26 @@ Otherwise, with `SimInput { paddleAxis, launch }` and `dt`:
    - **Paddle:** `angle = clamp(hitOffset, -1, 1) * 60°` from vertical; `vel = speed * (sin a, -cos a)`; `PaddleHit`.
    - After every bounce: speed = `ballSpeed * ballSpeedMultiplier(state)`; enforce `|vy| >= speed * sin(15°)`.
 4. **Capsules** — fall at 180 px/s; paddle AABB catch → `applyPowerUp` + `PowerUpCaught`; `pos.y >= 720` erases.
-5. **Effects** — decrement `remaining`; at ≤0 expire (Wide restores width 120 and clamps; Slow divides live velocities by 0.6 once and clears `slowActive`).
+5. **Effects** — decrement each active `remaining`; erase when ≤0. Wide expiry restores `paddleNormalWidth` and clamps; Slow expiry renormalizes live balls to `ballSpeed` (absolute speed, no ÷0.6).
 6. **Lives** — if every ball has `pos.y >= 720`: `LifeLost`, decrement lives; if lives remain, one Stuck ball; else `over` + `GameOver`. If some but not all exit: one `BallLost` per fallen ball, then erase them.
 7. **Clear** — if bricks non-empty and none alive: set `cleared` and emit `StageCleared` once. An empty brick vector does **not** clear.
 
-`ballSpeedMultiplier` returns `slowFactor` while `effects.slowActive`, else `1`. Stuck balls stay glued to the paddle each step. A 1200 px/s ball must still destroy a 28 px brick via sweep (no tunneling miss).
+Stuck balls stay glued to the paddle each step. A 1200 px/s ball must still destroy a 28 px brick via sweep (no tunneling miss).
 
 ## `applyPowerUp`
 
 | Kind | Behavior |
 |------|----------|
-| Wide | Expire previous timed effect; width 200; timer 8 s |
-| Slow | Expire previous; ×0.6 all ball velocities; `slowActive`; timer 8 s |
-| ExtraLife | `lives + 1`, no timer |
-| MultiBall | Two extras at first ball; Stuck → Live with `{160±120,-360}` (scaled if slow); Live → `vel.x±120` same y |
+| Wide | Refresh or add `Wide` timer 8 s; set paddle width from `paddleWidth(effects)` and clamp |
+| Slow | Refresh or add `Slow` timer 8 s; renormalize live balls to `ballSpeed * slowFactor` |
+| ExtraLife | `lives + 1`; does not touch timers |
+| MultiBall | Two extras at first ball; Stuck → Live aimed from `launchVelocity` at current target speed with `x±120`; Live → `vel.x±120` same y |
 
-Wide and Slow share one timer. MultiBall and ExtraLife do not clear it. Expiring Slow must not divide twice (`slowActive` gate).
+Wide and Slow stack. MultiBall and ExtraLife do not clear timed effects.
 
 ## Tests
 
 - `arkanoid_sim_test` — paddle clamp, wall bounce, brick score/events, bottom-face reflect, life loss/restick, StageCleared vs empty bricks, stage brick counts, Wide/ExtraLife, missed capsule, Slow expire restore, multiball count 3, high-speed sweep hit.
 - `arkanoid_physics_test` — paddle side-sweep/depenetration, center/edge paddle angles, constant speed, min vertical angle, brick seams, remaining TOI time, corner normals, `BallLost` vs `LifeLost`, launch/wall/paddle events.
 - `arkanoid_sim_property_test` — 20 `Pcg32` seeds × 10 000 ticks: arena bounds, speed, no deep brick overlap, min vertical angle.
+- `arkanoid_powerup_test` — Wide+Slow stack, recatch refresh, Slow expiry exact speed (50 cycles), Wide expiry width+clamp, MultiBall under Slow, ExtraLife leaves timers alone.

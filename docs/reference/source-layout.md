@@ -10,6 +10,8 @@ related_code:
   - engine/CMakeLists.txt
   - engine/core/CMakeLists.txt
   - engine/core/include/sgl/core/Features.hpp
+  - engine/core/include/sgl/core/Overloaded.hpp
+  - games/arkanoid/sim/include/arkanoid/sim/Effects.hpp
   - engine/input/CMakeLists.txt
   - engine/input/include/sgl/input/InputEvent.hpp
   - engine/scene/CMakeLists.txt
@@ -83,7 +85,7 @@ Running tree after cutover: `engine/` (`namespace sgl`) and `games/arkanoid/` (`
 
 | Path | Responsibility |
 |------|----------------|
-| `engine/core/` | Header-only value types (`Vec2`, `Rect`, `Handle`, `Image`, …); target `sgl_core` |
+| `engine/core/` | Header-only value types (`Vec2`, `Rect`, `Handle`, `Image`, `Pcg32`, `Overloaded`); target `sgl_core` |
 | `engine/input/` | `InputEvent`, `ActionMap`, `InputState`; target `sgl_input` |
 | `engine/scene/` | `SceneI`, `SceneStack`, `SceneRequest`, `SceneTraits`; target `sgl_scene` |
 | `engine/loop/` | `FixedStepLoop`, `App`, `PlatformI`, `ClockI`; target `sgl_loop` |
@@ -94,11 +96,11 @@ Running tree after cutover: `engine/` (`namespace sgl`) and `games/arkanoid/` (`
 | `engine/audio/` | `AudioI`, PCM `tone`, `NullAudio`; target `sgl_audio` |
 | `engine/fx/` | Fixed-capacity particles; target `sgl_fx` |
 | `engine/save/` | High-score table, text format, atomic file write; target `sgl_save` |
-| `games/arkanoid/sim/` | Headless breakout rules (`State`, `step`, levels, power-ups); `arkanoid_sim` |
+| `games/arkanoid/sim/` | Headless breakout (`State`, `step`, levels, `Effects` as timed variants); `arkanoid_sim` |
 | `games/arkanoid/app/` | Scenes, HUD, assets, bindings; `arkanoid_app` |
 | `games/arkanoid/main.cpp` | Wires `SfmlPlatform`, assets, `SceneStack`, `sgl::App`; executable `arkanoid` |
 | `games/tetris/sim/` | Headless Tetris rules (`Bag`, scoring, `TetrisGame`, grid, SRS); `tetris_sim` links `sgl_core` only |
-| `games/tetris/app/` | Scenes for Tetris (`tetris_app`, placeholder) |
+| `games/tetris/app/` | Scenes, HUD, board render, bindings; `tetris_app` |
 | `assets/fonts/` | UI TTF (`ASSET_DIR` → `assets/`) |
 | `tests/engine/` | Per-module engine suites (Debug only) |
 | `tests/arkanoid/` | Sim and app suites (Debug only) |
@@ -125,7 +127,8 @@ Include layout: `<sgl/<module>/X.hpp>`, `<arkanoid/<sim|app>/X.hpp>`, `<tetris/<
 | `arkanoid_app` | STATIC | → `arkanoid_sim`, `sgl_loop`, `sgl_resources`; no SFML includes |
 | `arkanoid` | executable | `games/arkanoid/main.cpp` → `arkanoid_app`, `sgl_sfml`; `ASSET_DIR` → `assets/` |
 | `tetris_sim` | STATIC | → `sgl_core`; bag, scoring, `TetrisGame`, grid, SRS; no SFML |
-| `tetris_app` | INTERFACE | → `tetris_sim`, `sgl_loop`, `sgl_resources`, `sgl_audio`, `sgl_fx`, `sgl_save` |
+| `tetris_app` | STATIC | → `tetris_sim`, `sgl_loop`, `sgl_resources`; no SFML includes |
+| `tetris` | executable | `games/tetris/main.cpp` → `tetris_app`, `sgl_sfml`; `ASSET_DIR` → `assets/` |
 | `format` | custom | clang-format in place (Debug configure) |
 | `tidy` | custom | `run-clang-tidy` on `engine/` and `games/` (Debug configure) |
 
@@ -148,9 +151,10 @@ Registered with `add_unit_test` under `tests/engine/` and `tests/arkanoid/`:
 | `tone_test` | `tests/engine/audio/` |
 | `high_score_table_test`, `save_format_test`, `save_file_test` | `tests/engine/save/` |
 | `event_translate_test`, `sfml_draw_test` | `tests/engine/sfml/` (`event_translate_test` links `SFML::Window`; neither opens a window) |
-| `arkanoid_sim_test`, `arkanoid_physics_test`, `arkanoid_sim_property_test` | `tests/arkanoid/sim/` |
+| `arkanoid_sim_test`, `arkanoid_physics_test`, `arkanoid_sim_property_test`, `arkanoid_powerup_test` | `tests/arkanoid/sim/` |
 | `tetris_grid_test`, `tetris_srs_test`, `tetris_bag_test`, `tetris_scoring_test`, `tetris_game_test`, `tetris_property_test` | `tests/tetris/sim/` |
 | `arkanoid_assets_test`, `arkanoid_hud_test`, `arkanoid_scene_render_test`, `arkanoid_scenes_test` | `tests/arkanoid/app/` |
+| `tetris_input_mapping_test`, `tetris_board_render_test`, `tetris_hud_test`, `tetris_scenes_test` | `tests/tetris/app/` |
 
 All suites are headless except `event_translate_test`, which links SFML Window headers only and still opens no window.
 

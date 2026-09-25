@@ -12,6 +12,7 @@ related_code:
   - engine/core/include/sgl/core/EntityId.hpp
   - engine/core/include/sgl/core/Image.hpp
   - engine/core/include/sgl/core/Random.hpp
+  - engine/core/include/sgl/core/Overloaded.hpp
   - tests/engine/core/VecTest.cpp
   - tests/engine/core/RectTest.cpp
   - tests/engine/core/HandleTest.cpp
@@ -20,7 +21,7 @@ related_code:
 related_docs:
   - source-layout.md
   - engine-fx.md
-keywords: [eng, Vec2, Vec3, Vec2f, Vec2u, Vec3f, Rect, Color, Time, Seconds, kTick, Handle, EntityId, Image, Pcg32, Random]
+keywords: [eng, Vec2, Vec3, Vec2f, Vec2u, Vec3f, Rect, Color, Time, Seconds, kTick, Handle, EntityId, Image, Pcg32, Random, Overloaded]
 last_reviewed: 2026-09-25
 ---
 
@@ -47,6 +48,10 @@ Header-only POD-style types in `namespace sgl`, included as `<sgl/core/X.hpp>`. 
 
 - `Color` — `r`, `g`, `b`, `a` (`a` defaults to 255); constexpr-friendly; defaulted `==`
 - `Seconds` — `std::chrono::duration<float>`; `kTick` is `1/60` seconds
+
+## Visit helper
+
+`Overloaded.hpp` provides `sgl::Overloaded<Ts...>`: inherits each `Ts::operator()` for use with `std::visit` (e.g. power-up and timed-effect dispatch).
 
 ## Handles and entities
 

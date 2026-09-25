@@ -47,10 +47,11 @@ TEST(PhysicsTest, ballNeverOverlapsPaddleAfterSideSweep)
 {
     sgl::arkanoid::State state{};
     state.paddle.x = 400.f;
-    state.paddle.width = sgl::arkanoid::paddleWidth;
-    state.balls = {sgl::arkanoid::Ball{.pos = {400.f + sgl::arkanoid::paddleWidth + 1.f, sgl::arkanoid::paddleY - 4.f},
-                                       .vel = {0.f, 0.f},
-                                       .mode = sgl::arkanoid::BallMode::Live}};
+    state.paddle.width = sgl::arkanoid::paddleNormalWidth;
+    state.balls = {
+        sgl::arkanoid::Ball{.pos = {400.f + sgl::arkanoid::paddleNormalWidth + 1.f, sgl::arkanoid::paddleY - 4.f},
+                            .vel = {0.f, 0.f},
+                            .mode = sgl::arkanoid::BallMode::Live}};
 
     (void)sgl::arkanoid::step(state, {.paddleAxis = 1.f}, sgl::Seconds{0.05f});
 
@@ -62,7 +63,7 @@ TEST(PhysicsTest, paddleMovingIntoRisingBallDepenetrates)
 {
     sgl::arkanoid::State state{};
     state.paddle.x = 500.f;
-    state.paddle.width = sgl::arkanoid::paddleWidth;
+    state.paddle.width = sgl::arkanoid::paddleNormalWidth;
     state.balls = {sgl::arkanoid::Ball{.pos = {500.f - sgl::arkanoid::ballDiameter - 2.f, sgl::arkanoid::paddleY - 6.f},
                                        .vel = {0.f, -200.f},
                                        .mode = sgl::arkanoid::BallMode::Live}};
@@ -78,7 +79,7 @@ TEST(PhysicsTest, centerHitGoesStraightUp)
 {
     sgl::arkanoid::State state{};
     state.paddle.x = 580.f;
-    state.paddle.width = sgl::arkanoid::paddleWidth;
+    state.paddle.width = sgl::arkanoid::paddleNormalWidth;
     const float paddleCenterX = state.paddle.x + state.paddle.width * 0.5f;
     state.balls = {sgl::arkanoid::Ball{
         .pos = {paddleCenterX - sgl::arkanoid::ballRadius, sgl::arkanoid::paddleY - sgl::arkanoid::ballDiameter - 2.f},
@@ -97,7 +98,7 @@ TEST(PhysicsTest, edgeHitUsesMaxAngle)
 {
     sgl::arkanoid::State state{};
     state.paddle.x = 580.f;
-    state.paddle.width = sgl::arkanoid::paddleWidth;
+    state.paddle.width = sgl::arkanoid::paddleNormalWidth;
     // Center aligned with the paddle's right edge so hitOffset == +1.
     state.balls = {sgl::arkanoid::Ball{.pos = {state.paddle.x + state.paddle.width - sgl::arkanoid::ballRadius,
                                                sgl::arkanoid::paddleY - sgl::arkanoid::ballDiameter - 2.f},

@@ -104,6 +104,6 @@ TEST(SceneRenderShould, paddleScaleXMatchesWidthOverBase)
         }
     }
     ASSERT_NE(paddleCmd, nullptr);
-    EXPECT_NEAR(paddleCmd->scale.x, 200.f / sgl::arkanoid::paddleWidth, 1e-5f);
+    EXPECT_NEAR(paddleCmd->scale.x, 200.f / sgl::arkanoid::paddleNormalWidth, 1e-5f);
     EXPECT_FLOAT_EQ(paddleCmd->scale.y, 1.f);
 }

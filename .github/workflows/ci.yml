@@ -88,6 +88,9 @@ jobs:
       - name: Build arkanoid
         run: cmake --build --preset release --target arkanoid
 
+      - name: Build tetris
+        run: cmake --build --preset release --target tetris
+
   asan:
     name: asan
     runs-on: ubuntu-24.04

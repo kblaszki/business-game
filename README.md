@@ -93,6 +93,8 @@ After building, run the executable from the preset output directory:
 
 A 1280×720 window titled "Arkanoid" opens on a Start / Quit menu. Enter starts Stage1. Clearing a stage loads the next one. Escape pauses.
 
+Build and run Tetris the same way with target `tetris` (`./build/debug/bin/tetris` or `tetris.exe` on Windows). A 1280×720 window titled "Tetris" opens on a Start / Quit menu; Enter starts a game (arrows move, Down soft-drops, Space hard-drops, Up/X and Z rotate, C/Shift hold). Escape or P pauses.
+
 ## Running the Tests
 
 Tests are available only for the **debug** preset. See [docs/how-to/build-and-test.md](docs/how-to/build-and-test.md).

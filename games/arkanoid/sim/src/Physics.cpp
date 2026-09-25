@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <arkanoid/sim/Effects.hpp>
 #include <arkanoid/sim/Physics.hpp>
 #include <arkanoid/sim/Tuning.hpp>
 #include <cmath>
@@ -7,6 +8,9 @@
 #include <optional>
 #include <sgl/collision/Circle.hpp>
 #include <sgl/collision/Collision.hpp>
+#include <sgl/core/Overloaded.hpp>
+#include <utility>
+#include <variant>
 #include <vector>
 
 namespace sgl::arkanoid
@@ -35,6 +39,40 @@ struct ObstacleHit
     ObstacleKind kind{};
     std::size_t brickIndex{};
 };
+
+struct WideCapsule
+{
+};
+
+struct SlowCapsule
+{
+};
+
+struct MultiBallCapsule
+{
+};
+
+struct ExtraLifeCapsule
+{
+};
+
+using PowerUp = std::variant<WideCapsule, SlowCapsule, MultiBallCapsule, ExtraLifeCapsule>;
+
+[[nodiscard]] PowerUp powerUpFromKind(PowerUpKind kind)
+{
+    switch(kind)
+    {
+        case PowerUpKind::Wide:
+            return WideCapsule{};
+        case PowerUpKind::Slow:
+            return SlowCapsule{};
+        case PowerUpKind::MultiBall:
+            return MultiBallCapsule{};
+        case PowerUpKind::ExtraLife:
+            return ExtraLifeCapsule{};
+    }
+    std::unreachable();
+}
 
 [[nodiscard]] sgl::Vec2f ballCenter(const Ball& ball)
 {
@@ -75,33 +113,91 @@ void clampPaddle(Paddle& paddle)
     paddle.x = std::clamp(paddle.x, 0.f, maxX);
 }
 
-void expireTimedEffect(State& state)
+void syncPaddleWidth(State& state)
 {
-    if(!state.effects.timed.has_value())
-    {
-        state.effects.remaining = sgl::Seconds{0.f};
-        return;
-    }
+    state.paddle.width = paddleWidth(state.effects);
+    clampPaddle(state.paddle);
+}
 
-    if(*state.effects.timed == PowerUpKind::Wide)
+void enforceMinVertical(Ball& ball, float speed);
+
+void setBallSpeed(Ball& ball, float speed)
+{
+    if(const auto dir = sgl::normalized(ball.vel))
     {
-        state.paddle.width = paddleWidth;
-        clampPaddle(state.paddle);
+        ball.vel = *dir * speed;
     }
-    else if(*state.effects.timed == PowerUpKind::Slow && state.effects.slowActive)
+    else
     {
-        for(auto& ball: state.balls)
+        ball.vel = {0.f, -speed};
+    }
+    enforceMinVertical(ball, speed);
+}
+
+[[nodiscard]] float targetBallSpeed(const State& state)
+{
+    return ballSpeed * ballSpeedMultiplier(state);
+}
+
+void syncLiveBallSpeeds(State& state)
+{
+    const float speed = targetBallSpeed(state);
+    for(auto& ball: state.balls)
+    {
+        if(ball.mode != BallMode::Live || offBottom(ball))
         {
-            if(!offBottom(ball))
-            {
-                ball.vel = ball.vel * (1.f / slowFactor);
-            }
+            continue;
         }
-        state.effects.slowActive = false;
+        setBallSpeed(ball, speed);
+    }
+}
+
+void refreshOrAddTimed(Effects& effects, TimedEffect effect)
+{
+    for(TimedEffect& existing: effects.active)
+    {
+        if(existing.index() == effect.index())
+        {
+            existing = effect;
+            return;
+        }
+    }
+    effects.active.push_back(effect);
+}
+
+void tickTimedEffects(State& state, sgl::Seconds dt)
+{
+    for(TimedEffect& effect: state.effects.active)
+    {
+        std::visit([&](auto& timed) { timed.remaining -= dt; }, effect);
     }
 
-    state.effects.timed.reset();
-    state.effects.remaining = sgl::Seconds{0.f};
+    const bool hadWide = std::any_of(state.effects.active.begin(),
+                                     state.effects.active.end(),
+                                     [](const TimedEffect& e) { return std::holds_alternative<Wide>(e); });
+    const bool hadSlow = std::any_of(state.effects.active.begin(),
+                                     state.effects.active.end(),
+                                     [](const TimedEffect& e) { return std::holds_alternative<Slow>(e); });
+
+    std::erase_if(state.effects.active, [](const TimedEffect& effect) {
+        return std::visit([](const auto& timed) { return timed.remaining.count() <= 0.f; }, effect);
+    });
+
+    const bool hasWide = std::any_of(state.effects.active.begin(),
+                                     state.effects.active.end(),
+                                     [](const TimedEffect& e) { return std::holds_alternative<Wide>(e); });
+    const bool hasSlow = std::any_of(state.effects.active.begin(),
+                                     state.effects.active.end(),
+                                     [](const TimedEffect& e) { return std::holds_alternative<Slow>(e); });
+
+    if(hadWide && !hasWide)
+    {
+        syncPaddleWidth(state);
+    }
+    if(hadSlow && !hasSlow)
+    {
+        syncLiveBallSpeeds(state);
+    }
 }
 
 void applyMultiBall(State& state)
@@ -117,12 +213,17 @@ void applyMultiBall(State& state)
     sgl::Vec2f rightVel{};
     if(first.mode == BallMode::Stuck)
     {
-        leftVel = {launchVelocity.x - multiballSpread, launchVelocity.y};
-        rightVel = {launchVelocity.x + multiballSpread, launchVelocity.y};
-        if(state.effects.slowActive)
+        const float speed = targetBallSpeed(state);
+        if(const auto dir = sgl::normalized(launchVelocity))
         {
-            leftVel = leftVel * slowFactor;
-            rightVel = rightVel * slowFactor;
+            const sgl::Vec2f base = *dir * speed;
+            leftVel = {base.x - multiballSpread, base.y};
+            rightVel = {base.x + multiballSpread, base.y};
+        }
+        else
+        {
+            leftVel = {-multiballSpread, -speed};
+            rightVel = {multiballSpread, -speed};
         }
     }
     else
@@ -133,11 +234,6 @@ void applyMultiBall(State& state)
 
     state.balls.push_back(Ball{.pos = pos, .vel = leftVel, .mode = BallMode::Live});
     state.balls.push_back(Ball{.pos = pos, .vel = rightVel, .mode = BallMode::Live});
-}
-
-[[nodiscard]] float targetBallSpeed(const State& state)
-{
-    return ballSpeed * ballSpeedMultiplier(state);
 }
 
 void enforceMinVertical(Ball& ball, float speed)
@@ -152,19 +248,6 @@ void enforceMinVertical(Ball& ball, float speed)
     const float signX = ball.vel.x < 0.f ? -1.f : 1.f;
     const float vx = std::sqrt(std::max(0.f, speed * speed - minVy * minVy));
     ball.vel = {signX * vx, signY * minVy};
-}
-
-void setBallSpeed(Ball& ball, float speed)
-{
-    if(const auto dir = sgl::normalized(ball.vel))
-    {
-        ball.vel = *dir * speed;
-    }
-    else
-    {
-        ball.vel = {0.f, -speed};
-    }
-    enforceMinVertical(ball, speed);
 }
 
 void applyPaddleBounce(Ball& ball, const Paddle& paddle, float speed)
@@ -360,37 +443,24 @@ void integrateLiveBall(State& state, Ball& ball, float dt, std::vector<SimEvent>
 
 float ballSpeedMultiplier(const State& state)
 {
-    return state.effects.slowActive ? slowFactor : 1.f;
+    return ballSpeedMultiplier(state.effects);
 }
 
 void applyPowerUp(State& state, PowerUpKind kind)
 {
-    switch(kind)
-    {
-        case PowerUpKind::Wide:
-            expireTimedEffect(state);
-            state.paddle.width = paddleWideWidth;
-            clampPaddle(state.paddle);
-            state.effects.timed = PowerUpKind::Wide;
-            state.effects.remaining = sgl::Seconds{effectDuration};
-            break;
-        case PowerUpKind::Slow:
-            expireTimedEffect(state);
-            for(auto& ball: state.balls)
-            {
-                ball.vel = ball.vel * slowFactor;
-            }
-            state.effects.slowActive = true;
-            state.effects.timed = PowerUpKind::Slow;
-            state.effects.remaining = sgl::Seconds{effectDuration};
-            break;
-        case PowerUpKind::ExtraLife:
-            ++state.lives;
-            break;
-        case PowerUpKind::MultiBall:
-            applyMultiBall(state);
-            break;
-    }
+    std::visit(sgl::Overloaded{
+                   [&](WideCapsule) {
+                       refreshOrAddTimed(state.effects, Wide{.remaining = sgl::Seconds{effectDuration}});
+                       syncPaddleWidth(state);
+                   },
+                   [&](SlowCapsule) {
+                       refreshOrAddTimed(state.effects, Slow{.remaining = sgl::Seconds{effectDuration}});
+                       syncLiveBallSpeeds(state);
+                   },
+                   [&](ExtraLifeCapsule) { ++state.lives; },
+                   [&](MultiBallCapsule) { applyMultiBall(state); },
+               },
+               powerUpFromKind(kind));
 }
 
 std::vector<SimEvent> step(State& state, const SimInput& input, sgl::Seconds dt)
@@ -483,14 +553,7 @@ std::vector<SimEvent> step(State& state, const SimInput& input, sgl::Seconds dt)
         }
     }
 
-    if(state.effects.remaining.count() > 0.f)
-    {
-        state.effects.remaining -= dt;
-        if(state.effects.remaining.count() <= 0.f)
-        {
-            expireTimedEffect(state);
-        }
-    }
+    tickTimedEffects(state, dt);
 
     if(!state.balls.empty())
     {

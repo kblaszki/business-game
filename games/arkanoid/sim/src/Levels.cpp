@@ -102,8 +102,8 @@ State makeState(StageId id, std::uint32_t score, std::uint32_t lives)
     state.stage = data.id;
     state.score = score;
     state.lives = lives;
-    state.paddle.x = (designWidth - paddleWidth) * 0.5f;
-    state.paddle.width = paddleWidth;
+    state.paddle.x = (designWidth - paddleNormalWidth) * 0.5f;
+    state.paddle.width = paddleNormalWidth;
 
     const float gridW = static_cast<float>(data.columns) * (brickWidth + brickGap) - brickGap;
     const float originX = (designWidth - gridW) * 0.5f;
@@ -147,8 +147,8 @@ State makeState(std::span<const Brick> bricks, std::uint32_t score, std::uint32_
     state.stage = StageId::Stage1;
     state.score = score;
     state.lives = lives;
-    state.paddle.x = (designWidth - paddleWidth) * 0.5f;
-    state.paddle.width = paddleWidth;
+    state.paddle.x = (designWidth - paddleNormalWidth) * 0.5f;
+    state.paddle.width = paddleNormalWidth;
     state.bricks.assign(bricks.begin(), bricks.end());
 
     Ball ball{};

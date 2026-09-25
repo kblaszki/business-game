@@ -1,11 +1,11 @@
 #pragma once
 
+#include <arkanoid/sim/Effects.hpp>
 #include <arkanoid/sim/Tuning.hpp>
 #include <cstdint>
 #include <optional>
 #include <sgl/core/Color.hpp>
 #include <sgl/core/Rect.hpp>
-#include <sgl/core/Time.hpp>
 #include <sgl/core/Vec2.hpp>
 #include <vector>
 
@@ -28,7 +28,7 @@ struct Ball
 struct Paddle
 {
     float x{};
-    float width{paddleWidth};
+    float width{paddleNormalWidth};
     float speed{};
 };
 
@@ -52,13 +52,6 @@ struct Capsule
 {
     sgl::Vec2f pos{};
     PowerUpKind kind{};
-};
-
-struct Effects
-{
-    std::optional<PowerUpKind> timed{};
-    sgl::Seconds remaining{};
-    bool slowActive{false};
 };
 
 enum class StageId

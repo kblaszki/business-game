@@ -106,7 +106,7 @@ Namespace `sgl`, targets `sgl_*`, games `sgl::arkanoid` and `sgl::tetris`. New m
 - [x] Input edges survive a zero-step frame; multi-key `held` stays down
 - [x] Rounded circle-vs-AABB sweep
 - [x] Arkanoid paddle, speed, and seam fixes
-- [ ] Power-ups as `std::variant` with pure derived values
+- [x] Power-ups as `std::variant` with pure derived values
 - [x] `AudioI`, `sgl_fx`, `sgl_save` (modules). Games do not write the high-score file yet
 - [x] Tetris grid, shapes, SRS, and headless `TetrisGame`
-- [ ] Tetris app and executable `tetris`
+- [x] Tetris app and executable `tetris`

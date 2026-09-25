@@ -75,6 +75,8 @@ cmake --build --preset debug --target arkanoid
 
 A 1280×720 window titled "Arkanoid" opens on a Start / Quit menu. Start or Enter plays Stage1 (arrows or A/D move the paddle, Enter launches). Clearing a stage loads the next; Stage3 is the last. Escape pauses. Backspace on the menu quits. Donor bricks drop Wide, MultiBall, Slow, and ExtraLife capsules.
 
+The lab also ships Tetris. Build with `cmake --build --preset debug --target tetris` and run `./build/debug/bin/tetris` (or `tetris.exe` on Windows). The window is 1280×720 titled "Tetris"; Enter starts from the menu, Escape or P pauses, and game over offers Retry / Menu.
+
 ## Next steps
 
 Everyday commands and tests: [../how-to/build-and-test.md](../how-to/build-and-test.md). Layout: [../reference/source-layout.md](../reference/source-layout.md). Input: [../reference/input-and-events.md](../reference/input-and-events.md). Pause: [../reference/pause-overlay.md](../reference/pause-overlay.md). Sim rules: [../reference/arkanoid-sim.md](../reference/arkanoid-sim.md).
