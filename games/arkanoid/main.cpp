@@ -7,6 +7,10 @@
 #include <sgl/loop/App.hpp>
 #include <sgl/render/RenderQueue.hpp>
 #include <sgl/resources/ResourceError.hpp>
+#include <sgl/save/HighScoreTable.hpp>
+#include <sgl/save/SaveError.hpp>
+#include <sgl/save/SaveFile.hpp>
+#include <sgl/save/SaveFormat.hpp>
 #include <sgl/scene/SceneStack.hpp>
 #include <sgl/sfml/SfmlClock.hpp>
 #include <sgl/sfml/SfmlPlatform.hpp>
@@ -18,6 +22,26 @@ namespace
 {
     std::cerr << sgl::describe(err) << '\n';
     return 1;
+}
+
+[[nodiscard]] sgl::HighScoreTable loadHighScores(const std::filesystem::path& path)
+{
+    const auto text = sgl::readTextFile(path);
+    if(!text)
+    {
+        return sgl::HighScoreTable{sgl::arkanoid::kHighScoreCapacity};
+    }
+
+    const auto table = sgl::parse(*text, sgl::arkanoid::kHighScoreCapacity);
+    if(!table)
+    {
+        if(table.error() == sgl::SaveError::Corrupt)
+        {
+            std::cerr << "Corrupt high-score file; starting empty\n";
+        }
+        return sgl::HighScoreTable{sgl::arkanoid::kHighScoreCapacity};
+    }
+    return *table;
 }
 
 } // namespace
@@ -95,7 +119,19 @@ int main()
 
     const sgl::arkanoid::Actions actions = sgl::arkanoid::makeActions();
     sgl::ActionMap map = sgl::arkanoid::defaultBindings(actions);
-    const sgl::arkanoid::AppServices services{actions, textures, fontId};
+
+    std::filesystem::path scoresPath;
+    if(const auto dir = sgl::userDataDir("sfml-game-lab"))
+    {
+        scoresPath = *dir / "arkanoid.scores";
+    }
+    else
+    {
+        scoresPath = std::filesystem::temp_directory_path() / "arkanoid.scores";
+    }
+    sgl::HighScoreTable highScores = loadHighScores(scoresPath);
+
+    const sgl::arkanoid::AppServices services{actions, textures, fontId, highScores, scoresPath};
 
     sgl::SceneStack stack{sgl::arkanoid::pause(services)};
     stack.push(sgl::arkanoid::mainMenu(services)());

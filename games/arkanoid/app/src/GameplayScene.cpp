@@ -4,9 +4,13 @@
 #include <arkanoid/sim/Levels.hpp>
 #include <arkanoid/sim/Physics.hpp>
 #include <arkanoid/sim/Tuning.hpp>
+#include <filesystem>
 #include <sgl/render/DrawCommand.hpp>
 #include <sgl/render/RenderQueue.hpp>
+#include <sgl/save/SaveFile.hpp>
+#include <sgl/save/SaveFormat.hpp>
 #include <sgl/scene/SceneContext.hpp>
+#include <system_error>
 #include <variant>
 #include <vector>
 
@@ -17,11 +21,6 @@ GameplayScene::GameplayScene(const AppServices& services, StageId stage)
     : services_{services}
     , state_{makeState(stage)}
 {
-}
-
-void GameplayScene::restart()
-{
-    state_ = makeState(state_.stage);
 }
 
 void GameplayScene::advanceFrom(StageId cleared)
@@ -38,24 +37,25 @@ void GameplayScene::advanceFrom(StageId cleared)
     }
 }
 
+void GameplayScene::finishRound(sgl::SceneContext& ctx, Outcome outcome)
+{
+    const std::optional<std::size_t> rank = services_.highScores.insert(state_.score);
+
+    bool saveFailed = false;
+    {
+        std::error_code ec;
+        std::filesystem::create_directories(services_.scoresPath.parent_path(), ec);
+        const auto written = sgl::writeTextFileAtomic(services_.scoresPath, sgl::serialize(services_.highScores));
+        saveFailed = !written.has_value();
+    }
+
+    ctx.request(sgl::PushScene{result(services_, outcome, state_.score, rank, saveFailed)});
+}
+
 void GameplayScene::update(sgl::SceneContext& ctx, sgl::Seconds dt)
 {
     const sgl::InputState& input = ctx.input();
     const Actions& actions = services_.actions;
-
-    if(state_.cleared || state_.over)
-    {
-        if(input.action(actions.confirm).pressed)
-        {
-            restart();
-            return;
-        }
-        if(input.action(actions.cancel).pressed)
-        {
-            ctx.request(sgl::ReplaceScene{mainMenu(services_)});
-        }
-        return;
-    }
 
     const SimInput simInput{
         .paddleAxis = input.axis(actions.paddle),
@@ -71,6 +71,16 @@ void GameplayScene::update(sgl::SceneContext& ctx, sgl::Seconds dt)
             {
                 advanceFrom(cleared->stage);
             }
+            else if(cleared->stage == StageId::Stage3)
+            {
+                finishRound(ctx, Outcome::Won);
+                return;
+            }
+        }
+        if(std::holds_alternative<GameOver>(event))
+        {
+            finishRound(ctx, Outcome::Lost);
+            return;
         }
     }
 
@@ -113,39 +123,6 @@ void GameplayScene::render(sgl::RenderQueue& queue) const
                    .position = hudPowerPos,
                    .color = hudText,
                });
-
-    if(model.banner.has_value())
-    {
-        queue.push(sgl::Layer::Overlay,
-                   0.f,
-                   sgl::RectCmd{
-                       .rect = {.pos = {320.f, 260.f}, .size = {640.f, 180.f}},
-                       .fill = bannerFill,
-                   });
-        queue.push(sgl::Layer::Overlay,
-                   1.f,
-                   sgl::TextCmd{
-                       .font = services_.font,
-                       .text = *model.banner,
-                       .size = 40,
-                       .position = {designWidth * 0.5f, 320.f},
-                       .color = bannerTitle,
-                       .anchor = sgl::Anchor::Center,
-                   });
-        if(model.hint.has_value())
-        {
-            queue.push(sgl::Layer::Overlay,
-                       2.f,
-                       sgl::TextCmd{
-                           .font = services_.font,
-                           .text = *model.hint,
-                           .size = 20,
-                           .position = {designWidth * 0.5f, 380.f},
-                           .color = bannerHint,
-                           .anchor = sgl::Anchor::Center,
-                       });
-        }
-    }
 }
 
 sgl::SceneTraits GameplayScene::traits() const

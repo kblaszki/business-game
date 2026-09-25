@@ -1,18 +1,29 @@
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
+#include <filesystem>
+#include <sgl/audio/AudioI.hpp>
 #include <sgl/render/AssetIds.hpp>
+#include <sgl/save/HighScoreTable.hpp>
 #include <sgl/scene/SceneRequest.hpp>
 #include <tetris/app/Bindings.hpp>
+#include <tetris/app/Sounds.hpp>
 
 namespace sgl::tetris
 {
+
+inline constexpr std::size_t kHighScoreCapacity{5};
 
 struct AppServices
 {
     const Actions& actions;
     sgl::FontId font;
     std::uint64_t seed{};
+    sgl::AudioI& audio;
+    SoundIds sounds{};
+    std::filesystem::path scoresPath{};
+    sgl::HighScoreTable& highScores;
 };
 
 [[nodiscard]] sgl::SceneFactory mainMenu(const AppServices& services);

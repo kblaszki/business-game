@@ -2,6 +2,7 @@
 
 #include <sgl/scene/SceneI.hpp>
 #include <tetris/app/BoardRender.hpp>
+#include <tetris/app/Feedback.hpp>
 #include <tetris/app/HudModel.hpp>
 #include <tetris/app/Scenes.hpp>
 #include <tetris/sim/TetrisGame.hpp>
@@ -21,11 +22,14 @@ public:
     [[nodiscard]] TetrisGame& game();
     [[nodiscard]] const TetrisGame& game() const;
     [[nodiscard]] HudModel hud() const;
+    [[nodiscard]] Feedback& feedback();
+    [[nodiscard]] const Feedback& feedback() const;
 
 private:
     AppServices services_;
     Layout layout_;
     TetrisGame game_;
+    Feedback feedback_;
 };
 
 } // namespace sgl::tetris

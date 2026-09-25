@@ -26,3 +26,11 @@ add_unit_test(arkanoid_scenes_test
     DEPENDENCIES
         arkanoid_app
 )
+
+add_unit_test(arkanoid_result_scene_test
+    SOURCES
+        ResultSceneTest.cpp
+    DEPENDENCIES
+        arkanoid_app
+        sgl_render
+)

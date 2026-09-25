@@ -22,8 +22,8 @@ public:
     [[nodiscard]] HudModel hud() const;
 
 private:
-    void restart();
     void advanceFrom(StageId cleared);
+    void finishRound(sgl::SceneContext& ctx, Outcome outcome);
 
     AppServices services_;
     State state_;

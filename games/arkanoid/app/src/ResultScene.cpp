@@ -1,14 +1,12 @@
+#include <arkanoid/app/ResultScene.hpp>
+#include <arkanoid/app/Theme.hpp>
+#include <arkanoid/sim/Tuning.hpp>
 #include <sgl/render/DrawCommand.hpp>
 #include <sgl/render/RenderQueue.hpp>
-#include <sgl/save/SaveError.hpp>
-#include <sgl/save/SaveFile.hpp>
-#include <sgl/save/SaveFormat.hpp>
 #include <sgl/scene/SceneContext.hpp>
 #include <string>
-#include <tetris/app/GameOverScene.hpp>
-#include <tetris/app/Theme.hpp>
 
-namespace sgl::tetris
+namespace sgl::arkanoid
 {
 namespace
 {
@@ -27,49 +25,49 @@ constexpr float kMenuY{480.f};
 
 } // namespace
 
-GameOverScene::GameOverScene(const AppServices& services, std::uint32_t score)
+ResultScene::ResultScene(
+    const AppServices& services, Outcome outcome, std::uint32_t score, std::optional<std::size_t> rank, bool saveFailed)
     : services_{services}
+    , outcome_{outcome}
     , score_{score}
+    , rank_{rank}
+    , saveFailed_{saveFailed}
     , retryButton_{centeredButton(kRetryY)}
     , menuButton_{centeredButton(kMenuY)}
 {
-    rank_ = services_.highScores.insert(score_);
-    if(rank_.has_value())
-    {
-        const auto written = sgl::writeTextFileAtomic(services_.scoresPath, sgl::serialize(services_.highScores));
-        if(!written)
-        {
-            saveError_ = sgl::describe(written.error());
-        }
-    }
 }
 
-std::uint32_t GameOverScene::score() const noexcept
+Outcome ResultScene::outcome() const noexcept
+{
+    return outcome_;
+}
+
+std::uint32_t ResultScene::score() const noexcept
 {
     return score_;
 }
 
-bool GameOverScene::isNewRecord() const noexcept
+std::optional<std::size_t> ResultScene::rank() const noexcept
 {
-    return rank_.has_value();
+    return rank_;
 }
 
-bool GameOverScene::saveFailed() const noexcept
+bool ResultScene::saveFailed() const noexcept
 {
-    return !saveError_.empty();
+    return saveFailed_;
 }
 
-bool GameOverScene::hitRetry(sgl::Vec2f point) const
+bool ResultScene::hitRetry(sgl::Vec2f point) const
 {
     return retryButton_.contains(point);
 }
 
-bool GameOverScene::hitMenu(sgl::Vec2f point) const
+bool ResultScene::hitMenu(sgl::Vec2f point) const
 {
     return menuButton_.contains(point);
 }
 
-void GameOverScene::update(sgl::SceneContext& ctx, sgl::Seconds)
+void ResultScene::update(sgl::SceneContext& ctx, sgl::Seconds)
 {
     const sgl::InputState& input = ctx.input();
 
@@ -83,7 +81,7 @@ void GameOverScene::update(sgl::SceneContext& ctx, sgl::Seconds)
             if(retryHover_)
             {
                 ctx.request(sgl::PopScene{});
-                ctx.request(sgl::ReplaceScene{play(services_)});
+                ctx.request(sgl::ReplaceScene{gameplay(services_, StageId::Stage1)});
                 return;
             }
             if(menuHover_)
@@ -103,7 +101,7 @@ void GameOverScene::update(sgl::SceneContext& ctx, sgl::Seconds)
     if(input.action(services_.actions.confirm).pressed)
     {
         ctx.request(sgl::PopScene{});
-        ctx.request(sgl::ReplaceScene{play(services_)});
+        ctx.request(sgl::ReplaceScene{gameplay(services_, StageId::Stage1)});
         return;
     }
 
@@ -114,27 +112,29 @@ void GameOverScene::update(sgl::SceneContext& ctx, sgl::Seconds)
     }
 }
 
-void GameOverScene::render(sgl::RenderQueue& queue) const
+void ResultScene::render(sgl::RenderQueue& queue) const
 {
     queue.push(sgl::Layer::Overlay,
                0.f,
                sgl::RectCmd{
                    .rect = {.pos = {0.f, 0.f}, .size = {designWidth, designHeight}},
-                   .fill = overlayDim,
+                   .fill = sgl::Color{0, 0, 0, 150},
                });
     queue.push(sgl::Layer::Overlay,
                1.f,
                sgl::RectCmd{
-                   .rect = {.pos = {340.f, 120.f}, .size = {600.f, 460.f}},
-                   .fill = panelBox,
+                   .rect = {.pos = {340.f, 140.f}, .size = {600.f, 440.f}},
+                   .fill = sgl::Color{24, 28, 48, 230},
                });
+
+    const char* title = outcome_ == Outcome::Won ? "You win" : "You lose";
     queue.push(sgl::Layer::Overlay,
                2.f,
                sgl::TextCmd{
                    .font = services_.font,
-                   .text = "Game Over",
+                   .text = title,
                    .size = 42,
-                   .position = {designWidth * 0.5f, 180.f},
+                   .position = {designWidth * 0.5f, 200.f},
                    .color = titleGold,
                    .anchor = sgl::Anchor::Center,
                });
@@ -144,61 +144,48 @@ void GameOverScene::render(sgl::RenderQueue& queue) const
                    .font = services_.font,
                    .text = "Score " + std::to_string(score_),
                    .size = 28,
-                   .position = {designWidth * 0.5f, 240.f},
+                   .position = {designWidth * 0.5f, 260.f},
                    .color = hudText,
                    .anchor = sgl::Anchor::Center,
                });
 
-    const auto entries = services_.highScores.entries();
-    const std::string bestText = entries.empty() ? "Best --" : ("Best " + std::to_string(entries.front()));
-    queue.push(sgl::Layer::Overlay,
-               4.f,
-               sgl::TextCmd{
-                   .font = services_.font,
-                   .text = bestText,
-                   .size = 24,
-                   .position = {designWidth * 0.5f, 280.f},
-                   .color = hudText,
-                   .anchor = sgl::Anchor::Center,
-               });
-
-    float depth = 5.f;
+    float nextY = 310.f;
     if(rank_.has_value())
     {
         queue.push(sgl::Layer::Overlay,
-                   depth++,
+                   4.f,
                    sgl::TextCmd{
                        .font = services_.font,
                        .text = "New record",
                        .size = 24,
-                       .position = {designWidth * 0.5f, 320.f},
-                       .color = titleGold,
+                       .position = {designWidth * 0.5f, nextY},
+                       .color = bannerTitle,
                        .anchor = sgl::Anchor::Center,
                    });
+        nextY += 40.f;
     }
-
-    if(!saveError_.empty())
+    if(saveFailed_)
     {
         queue.push(sgl::Layer::Overlay,
-                   depth++,
+                   5.f,
                    sgl::TextCmd{
                        .font = services_.font,
-                       .text = std::string{"Save failed: "} + saveError_,
-                       .size = 18,
-                       .position = {designWidth * 0.5f, 350.f},
-                       .color = quitButtonHover,
+                       .text = "Could not save high score",
+                       .size = 20,
+                       .position = {designWidth * 0.5f, nextY},
+                       .color = bannerHint,
                        .anchor = sgl::Anchor::Center,
                    });
     }
 
     queue.push(sgl::Layer::Overlay,
-               depth++,
+               6.f,
                sgl::RectCmd{
                    .rect = retryButton_,
                    .fill = retryHover_ ? startButtonHover : startButton,
                });
     queue.push(sgl::Layer::Overlay,
-               depth++,
+               7.f,
                sgl::TextCmd{
                    .font = services_.font,
                    .text = "Retry",
@@ -210,14 +197,14 @@ void GameOverScene::render(sgl::RenderQueue& queue) const
                });
 
     queue.push(sgl::Layer::Overlay,
-               depth++,
+               8.f,
                sgl::RectCmd{
                    .rect = menuButton_,
                    .fill = menuHover_ ? quitButtonHover : quitButton,
                });
     queue.push(
         sgl::Layer::Overlay,
-        depth,
+        9.f,
         sgl::TextCmd{
             .font = services_.font,
             .text = "Menu",
@@ -228,9 +215,9 @@ void GameOverScene::render(sgl::RenderQueue& queue) const
         });
 }
 
-sgl::SceneTraits GameOverScene::traits() const
+sgl::SceneTraits ResultScene::traits() const
 {
-    return sgl::SceneTraits{.opaque = true, .blocksUpdate = true, .pausable = false};
+    return sgl::SceneTraits{.opaque = false, .blocksUpdate = true, .pausable = false};
 }
 
-} // namespace sgl::tetris
+} // namespace sgl::arkanoid

@@ -1,6 +1,7 @@
 #include <sgl/render/DrawCommand.hpp>
 #include <sgl/render/RenderQueue.hpp>
 #include <sgl/scene/SceneContext.hpp>
+#include <string>
 #include <tetris/app/MainMenuScene.hpp>
 #include <tetris/app/Theme.hpp>
 
@@ -10,9 +11,10 @@ namespace
 {
 
 constexpr sgl::Vec2f kButtonSize{400.f, 72.f};
-constexpr float kStartY{320.f};
-constexpr float kQuitY{420.f};
-constexpr float kTitleY{200.f};
+constexpr float kStartY{340.f};
+constexpr float kQuitY{440.f};
+constexpr float kTitleY{180.f};
+constexpr float kBestY{250.f};
 
 [[nodiscard]] sgl::Rect<float> centeredButton(float y)
 {
@@ -95,14 +97,27 @@ void MainMenuScene::render(sgl::RenderQueue& queue) const
                    .anchor = sgl::Anchor::Center,
                });
 
+    const auto entries = services_.highScores.entries();
+    const std::string bestText = entries.empty() ? "Best --" : ("Best " + std::to_string(entries.front()));
     queue.push(sgl::Layer::Hud,
                1.f,
+               sgl::TextCmd{
+                   .font = services_.font,
+                   .text = bestText,
+                   .size = 24,
+                   .position = {designWidth * 0.5f, kBestY},
+                   .color = hudText,
+                   .anchor = sgl::Anchor::Center,
+               });
+
+    queue.push(sgl::Layer::Hud,
+               2.f,
                sgl::RectCmd{
                    .rect = startButton_,
                    .fill = startHover_ ? startButtonHover : startButton,
                });
     queue.push(sgl::Layer::Hud,
-               2.f,
+               3.f,
                sgl::TextCmd{
                    .font = services_.font,
                    .text = "Start",
@@ -114,14 +129,14 @@ void MainMenuScene::render(sgl::RenderQueue& queue) const
                });
 
     queue.push(sgl::Layer::Hud,
-               3.f,
+               4.f,
                sgl::RectCmd{
                    .rect = quitButton_,
                    .fill = quitHover_ ? quitButtonHover : quitButton,
                });
     queue.push(
         sgl::Layer::Hud,
-        4.f,
+        5.f,
         sgl::TextCmd{
             .font = services_.font,
             .text = "Quit",

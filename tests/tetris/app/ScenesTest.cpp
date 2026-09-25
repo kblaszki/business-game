@@ -1,4 +1,8 @@
+#include <mocks/AudioSpy.hpp>
+
 #include <algorithm>
+#include <chrono>
+#include <filesystem>
 #include <gtest/gtest.h>
 #include <memory>
 #include <sgl/core/Time.hpp>
@@ -6,12 +10,16 @@
 #include <sgl/input/InputState.hpp>
 #include <sgl/input/Key.hpp>
 #include <sgl/input/MouseButton.hpp>
+#include <sgl/save/SaveFile.hpp>
+#include <sgl/save/SaveFormat.hpp>
 #include <sgl/scene/SceneStack.hpp>
+#include <system_error>
 #include <tetris/app/Bindings.hpp>
 #include <tetris/app/GameOverScene.hpp>
 #include <tetris/app/MainMenuScene.hpp>
 #include <tetris/app/PlayScene.hpp>
 #include <tetris/app/Scenes.hpp>
+#include <tetris/app/Sounds.hpp>
 #include <tetris/sim/Grid.hpp>
 #include <tetris/sim/Piece.hpp>
 #include <tetris/sim/Types.hpp>
@@ -20,13 +28,51 @@
 namespace
 {
 
+sgl::tetris::SoundIds testSoundIds()
+{
+    return sgl::tetris::SoundIds{
+        .move = sgl::SoundId{.id = 1},
+        .rotate = sgl::SoundId{.id = 2},
+        .lock = sgl::SoundId{.id = 3},
+        .line1 = sgl::SoundId{.id = 4},
+        .line2 = sgl::SoundId{.id = 5},
+        .line3 = sgl::SoundId{.id = 6},
+        .tetris = sgl::SoundId{.id = 7},
+        .levelUp = sgl::SoundId{.id = 8},
+        .gameOver = sgl::SoundId{.id = 9},
+    };
+}
+
 struct Fixture
 {
+    Fixture()
+        : scoresPath{std::filesystem::temp_directory_path()
+                     / ("tetris_scenes_" + std::to_string(std::chrono::steady_clock::now().time_since_epoch().count())
+                        + ".scores")}
+        , highScores{sgl::tetris::kHighScoreCapacity}
+        , services{actions, font, 1, audio, sounds, scoresPath, highScores}
+        , map{sgl::tetris::defaultBindings(actions)}
+        , stack{sgl::tetris::pause(services)}
+    {
+    }
+
+    ~Fixture()
+    {
+        std::error_code ec;
+        std::filesystem::remove(scoresPath, ec);
+        std::filesystem::remove(std::filesystem::path(scoresPath.native() + std::filesystem::path(".tmp").native()),
+                                ec);
+    }
+
     sgl::tetris::Actions actions = sgl::tetris::makeActions();
     sgl::FontId font{};
-    sgl::tetris::AppServices services{actions, font, 1};
-    sgl::ActionMap map = sgl::tetris::defaultBindings(actions);
-    sgl::SceneStack stack{sgl::tetris::pause(services)};
+    sgl::AudioSpy audio{};
+    sgl::tetris::SoundIds sounds = testSoundIds();
+    std::filesystem::path scoresPath;
+    sgl::HighScoreTable highScores;
+    sgl::tetris::AppServices services;
+    sgl::ActionMap map;
+    sgl::SceneStack stack;
 };
 
 sgl::InputState inputWith(sgl::Key key, const sgl::ActionMap& map)
@@ -164,4 +210,25 @@ TEST(ScenesTest, retryStartsFreshGame)
     EXPECT_EQ(f.stack.size(), 1u);
     EXPECT_EQ(fresh->game().score().points, 0u);
     EXPECT_FALSE(fresh->game().over());
+}
+
+TEST(ScenesTest, gameOverRecordsHighScore)
+{
+    Fixture f;
+    constexpr std::uint32_t score = 2500;
+
+    f.stack.push(sgl::tetris::gameOver(f.services, score)());
+
+    auto* over = dynamic_cast<sgl::tetris::GameOverScene*>(f.stack.top());
+    ASSERT_NE(over, nullptr);
+    EXPECT_TRUE(over->isNewRecord());
+    ASSERT_FALSE(f.highScores.entries().empty());
+    EXPECT_EQ(f.highScores.entries().front(), score);
+
+    const auto text = sgl::readTextFile(f.scoresPath);
+    ASSERT_TRUE(text.has_value()) << sgl::describe(text.error());
+    const auto parsed = sgl::parse(*text, sgl::tetris::kHighScoreCapacity);
+    ASSERT_TRUE(parsed.has_value()) << sgl::describe(parsed.error());
+    ASSERT_FALSE(parsed->entries().empty());
+    EXPECT_EQ(parsed->entries().front(), score);
 }

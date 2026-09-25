@@ -12,6 +12,7 @@ PlayScene::PlayScene(const AppServices& services)
     : services_{services}
     , layout_{defaultLayout()}
     , game_{services.seed}
+    , feedback_{services.audio, services.sounds, sgl::Pcg32{services.seed}}
 {
 }
 
@@ -22,6 +23,7 @@ void PlayScene::update(sgl::SceneContext& ctx, sgl::Seconds dt)
 
     if(game_.over())
     {
+        feedback_.update(dt);
         return;
     }
 
@@ -31,7 +33,9 @@ void PlayScene::update(sgl::SceneContext& ctx, sgl::Seconds dt)
         return;
     }
 
-    game_.step(toTetrisInput(input, actions), dt);
+    const auto events = game_.step(toTetrisInput(input, actions), dt);
+    feedback_.onEvents(events);
+    feedback_.update(dt);
 
     if(game_.over())
     {
@@ -71,6 +75,8 @@ void PlayScene::render(sgl::RenderQueue& queue) const
                    .position = hudLevelPos,
                    .color = hudText,
                });
+
+    feedback_.render(queue);
 }
 
 sgl::SceneTraits PlayScene::traits() const
@@ -91,6 +97,16 @@ const TetrisGame& PlayScene::game() const
 HudModel PlayScene::hud() const
 {
     return makeHud(game_.score());
+}
+
+Feedback& PlayScene::feedback()
+{
+    return feedback_;
+}
+
+const Feedback& PlayScene::feedback() const
+{
+    return feedback_;
 }
 
 } // namespace sgl::tetris

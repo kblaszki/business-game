@@ -11,9 +11,12 @@ related_code:
   - games/arkanoid/app/src/PauseScene.cpp
   - games/arkanoid/app/include/arkanoid/app/GameplayScene.hpp
   - games/arkanoid/app/src/GameplayScene.cpp
+  - games/arkanoid/app/include/arkanoid/app/ResultScene.hpp
+  - games/arkanoid/app/src/ResultScene.cpp
   - games/arkanoid/app/include/arkanoid/app/Scenes.hpp
   - tests/engine/scene/SceneStackTest.cpp
   - tests/arkanoid/app/ScenesTest.cpp
+  - tests/arkanoid/app/ResultSceneTest.cpp
 related_docs:
   - engine-scene.md
   - engine-input.md
@@ -21,7 +24,7 @@ related_docs:
   - arkanoid-app.md
   - source-layout.md
   - ../../mvp/05-pause.md
-keywords: [pause, overlay, PauseScene, RequestPause, SceneTraits, pausable, FocusLost, SceneStack]
+keywords: [pause, overlay, PauseScene, ResultScene, RequestPause, SceneTraits, pausable, FocusLost, SceneStack]
 last_reviewed: 2026-09-25
 ---
 
@@ -39,6 +42,8 @@ Paused state **is** “`PauseScene` is top of `SceneStack`”. It is not a `bool
 | `blocksUpdate` | `true` | Stack stops the update walk; `GameplayScene::update` (and `step`) do not run |
 | `pausable` | `false` | A second pause does not stack |
 
+`ResultScene` uses the same overlay traits (`opaque` false, `blocksUpdate` true, not pausable) for win/lose; see [arkanoid-app.md](arkanoid-app.md).
+
 ## How it is requested
 
 `SceneRequest::RequestPause` is the only path that pushes the pause-overlay factory. `SceneStack::update` enqueues it when:
@@ -47,7 +52,7 @@ Paused state **is** “`PauseScene` is top of `SceneStack`”. It is not a `bool
 - top scene `traits().pausable` is true
 - a pause was not already queued this frame
 
-`GameplayScene` is pausable only while playing (`!cleared && !over`). Menu and pause are not pausable. No-op when the stack is empty or top is not pausable.
+`GameplayScene` is pausable only while playing (`!cleared && !over`). Menu, pause, and result are not pausable. No-op when the stack is empty or top is not pausable.
 
 ## Resume vs quit
 

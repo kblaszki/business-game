@@ -26,3 +26,17 @@ add_unit_test(tetris_scenes_test
     DEPENDENCIES
         tetris_app
 )
+
+add_unit_test(tetris_sounds_test
+    SOURCES
+        SoundsTest.cpp
+    DEPENDENCIES
+        tetris_app
+)
+
+add_unit_test(tetris_feedback_test
+    SOURCES
+        FeedbackTest.cpp
+    DEPENDENCIES
+        tetris_app
+)

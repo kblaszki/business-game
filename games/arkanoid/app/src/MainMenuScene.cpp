@@ -4,6 +4,7 @@
 #include <sgl/render/DrawCommand.hpp>
 #include <sgl/render/RenderQueue.hpp>
 #include <sgl/scene/SceneContext.hpp>
+#include <string>
 
 namespace sgl::arkanoid
 {
@@ -14,6 +15,7 @@ constexpr sgl::Vec2f kButtonSize{400.f, 72.f};
 constexpr float kStartY{320.f};
 constexpr float kQuitY{420.f};
 constexpr float kTitleY{200.f};
+constexpr float kBestY{260.f};
 
 [[nodiscard]] sgl::Rect<float> centeredButton(float y)
 {
@@ -51,16 +53,18 @@ void MainMenuScene::update(sgl::SceneContext& ctx, sgl::Seconds)
         startHover_ = hitStart(*pointer);
         quitHover_ = hitQuit(*pointer);
 
-        // InputState keeps the last pointer from MouseDown/MouseMove; treat a hit as a click.
-        if(startHover_)
+        if(input.pointerPressed())
         {
-            ctx.request(sgl::ReplaceScene{gameplay(services_, StageId::Stage1)});
-            return;
-        }
-        if(quitHover_)
-        {
-            ctx.request(sgl::QuitApp{});
-            return;
+            if(startHover_)
+            {
+                ctx.request(sgl::ReplaceScene{gameplay(services_, StageId::Stage1)});
+                return;
+            }
+            if(quitHover_)
+            {
+                ctx.request(sgl::QuitApp{});
+                return;
+            }
         }
     }
     else
@@ -94,14 +98,27 @@ void MainMenuScene::render(sgl::RenderQueue& queue) const
                    .anchor = sgl::Anchor::Center,
                });
 
+    const auto entries = services_.highScores.entries();
+    const std::uint32_t best = entries.empty() ? 0u : entries.front();
     queue.push(sgl::Layer::Hud,
                1.f,
+               sgl::TextCmd{
+                   .font = services_.font,
+                   .text = "Best " + std::to_string(best),
+                   .size = 24,
+                   .position = {designWidth * 0.5f, kBestY},
+                   .color = hudText,
+                   .anchor = sgl::Anchor::Center,
+               });
+
+    queue.push(sgl::Layer::Hud,
+               2.f,
                sgl::RectCmd{
                    .rect = startButton_,
                    .fill = startHover_ ? startButtonHover : startButton,
                });
     queue.push(sgl::Layer::Hud,
-               2.f,
+               3.f,
                sgl::TextCmd{
                    .font = services_.font,
                    .text = "Start",
@@ -113,14 +130,14 @@ void MainMenuScene::render(sgl::RenderQueue& queue) const
                });
 
     queue.push(sgl::Layer::Hud,
-               3.f,
+               4.f,
                sgl::RectCmd{
                    .rect = quitButton_,
                    .fill = quitHover_ ? quitButtonHover : quitButton,
                });
     queue.push(
         sgl::Layer::Hud,
-        4.f,
+        5.f,
         sgl::TextCmd{
             .font = services_.font,
             .text = "Quit",
