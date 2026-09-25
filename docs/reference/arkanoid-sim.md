@@ -101,7 +101,7 @@ Stuck balls stay glued to the paddle each step. A 1200 px/s ball must still dest
 | Wide | Refresh or add `Wide` timer 8 s; set paddle width from `paddleWidth(effects)` and clamp |
 | Slow | Refresh or add `Slow` timer 8 s; renormalize live balls to `ballSpeed * slowFactor` |
 | ExtraLife | `lives + 1`; does not touch timers |
-| MultiBall | Two extras at first ball; Stuck → Live aimed from `launchVelocity` at current target speed with `x±120`; Live → `vel.x±120` same y |
+| MultiBall | Two extras at the first ball. Direction is `launchVelocity` (if stuck) or the live velocity, with `x±120`, then both are renormalized to the current target speed |
 
 Wide and Slow stack. MultiBall and ExtraLife do not clear timed effects.
 

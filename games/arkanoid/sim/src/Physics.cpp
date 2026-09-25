@@ -232,8 +232,13 @@ void applyMultiBall(State& state)
         rightVel = {first.vel.x + multiballSpread, first.vel.y};
     }
 
-    state.balls.push_back(Ball{.pos = pos, .vel = leftVel, .mode = BallMode::Live});
-    state.balls.push_back(Ball{.pos = pos, .vel = rightVel, .mode = BallMode::Live});
+    const float speed = targetBallSpeed(state);
+    Ball left{.pos = pos, .vel = leftVel, .mode = BallMode::Live};
+    Ball right{.pos = pos, .vel = rightVel, .mode = BallMode::Live};
+    setBallSpeed(left, speed);
+    setBallSpeed(right, speed);
+    state.balls.push_back(left);
+    state.balls.push_back(right);
 }
 
 void enforceMinVertical(Ball& ball, float speed)

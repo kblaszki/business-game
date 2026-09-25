@@ -50,7 +50,7 @@ namespace
 
 TEST(SimPropertyTest, invariantsHoldOverLongRuns)
 {
-    constexpr float minSin = std::sin(15.f * std::numbers::pi_v<float> / 180.f);
+    const float minSin = std::sin(15.f * std::numbers::pi_v<float> / 180.f);
 
     for(std::uint32_t seed = 0; seed < 20; ++seed)
     {

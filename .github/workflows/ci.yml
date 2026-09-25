@@ -167,6 +167,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
+            g++-14 \
             clang \
             clang-tidy \
             libgl1-mesa-dev \
