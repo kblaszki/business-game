@@ -58,6 +58,8 @@ cmake --preset asan && cmake --build --preset asan --target build_ut && ctest --
 cmake --preset coverage && cmake --build --preset coverage --target build_ut && ctest --preset coverage
 ```
 
+`gcovr` is the report only. On Windows it is the system Python package, run as `py -m gcovr` with MinGW `gcov` on `PATH`. Flags and the 90% filter: [build-and-test](../../../docs/how-to/build-and-test.md). The `asan` preset does not link on MSYS2 MinGW (no `libubsan`).
+
 ## Format / tidy
 
 Require a Debug configure (`format` / `tidy` targets; tidy needs `run-clang-tidy`):

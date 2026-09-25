@@ -60,7 +60,9 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-ASan / coverage (Linux GCC recommended):
+ASan (`-fsanitize=address,undefined`) is for Linux GCC/Clang. MinGW in MSYS2 does not ship `libubsan`, so the `asan` preset does not link there. CI runs it on Ubuntu g++-14.
+
+Coverage instrumentation is GCC `--coverage` (preset `coverage`). `gcov` comes with that GCC. `gcovr` is only the report and the 90% line gate; `ctest` does not need it.
 
 ```sh
 cmake --preset asan
@@ -71,8 +73,12 @@ cmake --preset coverage
 cmake --build --preset coverage --target build_ut
 ctest --preset coverage
 gcovr --root . --filter 'engine/.*' --exclude 'engine/sfml/.*' --filter 'games/.*/sim/.*' \
-  --html-details build/coverage/html/index.html --fail-under-line 90 --object-directory build/coverage
+  --exclude-unreachable-branches --exclude-throw-branches \
+  --html-details build/coverage/html/index.html --txt --fail-under-line 90 \
+  --object-directory build/coverage
 ```
+
+On Windows, install `gcovr` with the system Python (`py -m pip install gcovr`), not inside MSYS2. Run it as `py -m gcovr` with the same flags when the `gcovr` command is not on `PATH`. `gcov` on `PATH` must be the MinGW one that built the preset (`C:\msys64\mingw64\bin`). HTML lands in `build/coverage/html/index.html`.
 
 Suites (`tests/engine/`, `tests/arkanoid/`, `tests/tetris/`):
 
