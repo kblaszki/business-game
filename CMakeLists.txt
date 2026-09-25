@@ -121,14 +121,35 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
             endif()
         endif()
 
+        set(SGL_TIDY_SOURCE_ARG)
+        set(SGL_TIDY_FILES)
+        execute_process(
+            COMMAND ${Python3_EXECUTABLE} ${SGL_RUN_CLANG_TIDY} -h
+            OUTPUT_VARIABLE SGL_TIDY_HELP
+            ERROR_VARIABLE SGL_TIDY_HELP_ERR
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_STRIP_TRAILING_WHITESPACE)
+        if("${SGL_TIDY_HELP}${SGL_TIDY_HELP_ERR}" MATCHES "source-filter")
+            set(SGL_TIDY_SOURCE_ARG "-source-filter=${SGL_TIDY_SOURCE_FILTER}")
+        else()
+            file(GLOB_RECURSE SGL_TIDY_FILES CONFIGURE_DEPENDS
+                "${CMAKE_SOURCE_DIR}/engine/*.cpp"
+                "${CMAKE_SOURCE_DIR}/engine/*.cc"
+                "${CMAKE_SOURCE_DIR}/engine/*.cxx"
+                "${CMAKE_SOURCE_DIR}/games/*.cpp"
+                "${CMAKE_SOURCE_DIR}/games/*.cc"
+                "${CMAKE_SOURCE_DIR}/games/*.cxx")
+        endif()
+
         add_custom_target(
             tidy
             COMMAND ${Python3_EXECUTABLE} ${SGL_RUN_CLANG_TIDY}
                 -p ${CMAKE_BINARY_DIR}
                 -quiet
                 "-header-filter=${SGL_TIDY_HEADER_FILTER}"
-                "-source-filter=${SGL_TIDY_SOURCE_FILTER}"
+                ${SGL_TIDY_SOURCE_ARG}
                 ${SGL_TIDY_EXTRA_ARGS}
+                ${SGL_TIDY_FILES}
             WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
             COMMENT "Running clang-tidy on engine/ and games/"
             VERBATIM

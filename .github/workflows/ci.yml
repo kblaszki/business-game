@@ -266,6 +266,7 @@ jobs:
             --html-details build/coverage/html/index.html \
             --txt \
             --fail-under-line 90 \
+            --gcov-executable gcov-14 \
             --object-directory build/coverage
 
       - name: Upload coverage HTML
