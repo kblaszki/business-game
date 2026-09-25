@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <cstdint>
 #include <sgl/core/Time.hpp>
 
@@ -20,9 +21,11 @@ public:
     StepResult advance(Seconds frame) noexcept;
 
 private:
-    Seconds tick;
-    Seconds maxFrame;
-    Seconds accumulator{};
+    using Accumulator = std::chrono::duration<double>;
+
+    Accumulator tick;
+    Accumulator maxFrame;
+    Accumulator accumulator{};
 };
 
 } // namespace sgl

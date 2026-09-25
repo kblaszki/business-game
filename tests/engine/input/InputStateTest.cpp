@@ -145,3 +145,77 @@ TEST(ActionMapTest, OneKeyMapsToSeveralActions)
     EXPECT_EQ(actions[0], kJump);
     EXPECT_EQ(actions[1], kFire);
 }
+
+TEST(InputStateTest, ReleasedEdgeLastsOneFrame)
+{
+    sgl::ActionMap map;
+    map.bind(sgl::Key::Space, kJump);
+
+    sgl::InputState state;
+    state.apply(sgl::KeyDown{.key = sgl::Key::Space}, map);
+    state.beginFrame();
+    state.apply(sgl::KeyUp{.key = sgl::Key::Space}, map);
+
+    const sgl::ActionState released = state.action(kJump);
+    EXPECT_TRUE(released.released);
+    EXPECT_FALSE(released.held);
+    EXPECT_FALSE(released.pressed);
+
+    state.beginFrame();
+    const sgl::ActionState after = state.action(kJump);
+    EXPECT_FALSE(after.released);
+    EXPECT_FALSE(after.held);
+    EXPECT_FALSE(after.pressed);
+}
+
+TEST(InputStateTest, HoldSurvivesReleaseOfOneOfTwoKeys)
+{
+    sgl::ActionMap map;
+    map.bind(sgl::Key::A, kJump);
+    map.bind(sgl::Key::D, kJump);
+
+    sgl::InputState state;
+    state.apply(sgl::KeyDown{.key = sgl::Key::A}, map);
+    state.apply(sgl::KeyDown{.key = sgl::Key::D}, map);
+    state.beginFrame();
+    state.apply(sgl::KeyUp{.key = sgl::Key::A}, map);
+
+    const sgl::ActionState stillHeld = state.action(kJump);
+    EXPECT_TRUE(stillHeld.held);
+    EXPECT_FALSE(stillHeld.released);
+    EXPECT_FALSE(stillHeld.pressed);
+
+    state.beginFrame();
+    state.apply(sgl::KeyUp{.key = sgl::Key::D}, map);
+
+    const sgl::ActionState fullyReleased = state.action(kJump);
+    EXPECT_FALSE(fullyReleased.held);
+    EXPECT_TRUE(fullyReleased.released);
+}
+
+TEST(InputStateTest, PointerPressedEdge)
+{
+    sgl::ActionMap map;
+    sgl::InputState state;
+
+    state.apply(sgl::MouseDown{.button = sgl::MouseButton::Left, .pos = sgl::Vec2f{.x = 1.f, .y = 2.f}}, map);
+    EXPECT_TRUE(state.pointerPressed());
+    EXPECT_FALSE(state.pointerReleased());
+    ASSERT_TRUE(state.pointer().has_value());
+    EXPECT_FLOAT_EQ(state.pointer()->x, 1.f);
+    EXPECT_FLOAT_EQ(state.pointer()->y, 2.f);
+
+    state.beginFrame();
+    EXPECT_FALSE(state.pointerPressed());
+    EXPECT_FALSE(state.pointerReleased());
+
+    state.apply(sgl::MouseUp{.button = sgl::MouseButton::Left, .pos = sgl::Vec2f{.x = 3.f, .y = 4.f}}, map);
+    EXPECT_TRUE(state.pointerReleased());
+    EXPECT_FALSE(state.pointerPressed());
+    ASSERT_TRUE(state.pointer().has_value());
+    EXPECT_FLOAT_EQ(state.pointer()->x, 3.f);
+    EXPECT_FLOAT_EQ(state.pointer()->y, 4.f);
+
+    state.beginFrame();
+    EXPECT_FALSE(state.pointerReleased());
+}

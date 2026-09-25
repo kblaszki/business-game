@@ -10,7 +10,7 @@ C++23 SFML 3.1 game lab. The engine lives in `engine/` (`namespace sgl`). Games 
 ## Stack
 
 - C++23, CMake ≥ 3.20, Ninja presets (`debug` / `release`)
-- SFML 3.1 via FetchContent (`cmake/FetchSFML.cmake`) — Graphics/Window/System only; no manual SFML install
+- SFML 3.1 via FetchContent (`cmake/FetchSFML.cmake`) — Graphics/Window/System/Audio; Network stays off; no manual SFML install
 - GoogleTest 1.18 only in Debug; clang-format / clang-tidy at repo root
 
 ## Layout

@@ -33,6 +33,7 @@ private:
     InputState input;
     FixedStepLoop loop;
     float alpha{};
+    bool edgesConsumed_{};
 };
 
 } // namespace sgl

@@ -153,3 +153,126 @@ TEST(AppShould, storeLastAlphaFromStepResult)
     EXPECT_LT(app.lastAlpha(), 1.f);
     EXPECT_FLOAT_EQ(app.lastAlpha(), 0.5f);
 }
+
+TEST(AppTest, deliverPressedAfterZeroStepFrame)
+{
+    NiceMock<PlatformMock> platform;
+    NiceMock<ClockMock> clock;
+    NiceMock<RendererMock> renderer;
+    RenderQueue queue;
+    SceneStack stack{idlePause()};
+
+    const ActionId jump{1};
+    ActionMap map;
+    map.bind(Key::Space, jump);
+
+    std::vector<bool> pressedPerStep;
+    auto spy = std::make_unique<SceneSpy>();
+    spy->onUpdate = [&](sgl::SceneContext& ctx) { pressedPerStep.push_back(ctx.input().action(jump).pressed); };
+    stack.push(std::move(spy));
+
+    InSequence seq;
+    EXPECT_CALL(platform, isOpen()).WillOnce(Return(true));
+    EXPECT_CALL(platform, poll()).WillOnce(Return(InputEvent{KeyDown{Key::Space}})).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(clock, restart()).WillOnce(Return(Seconds{0.f}));
+    expectRenderPass(platform, renderer);
+
+    EXPECT_CALL(platform, isOpen()).WillOnce(Return(true));
+    EXPECT_CALL(platform, poll()).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(clock, restart()).WillOnce(Return(kTick));
+    expectRenderPass(platform, renderer);
+
+    App{platform, clock, std::move(map), stack, queue}.runFrames(2);
+
+    ASSERT_EQ(pressedPerStep.size(), 1u);
+    EXPECT_TRUE(pressedPerStep[0]);
+}
+
+TEST(AppTest, doNotRepeatPressedAcrossTwoStepFrame)
+{
+    NiceMock<PlatformMock> platform;
+    NiceMock<ClockMock> clock;
+    NiceMock<RendererMock> renderer;
+    RenderQueue queue;
+    SceneStack stack{idlePause()};
+
+    const ActionId jump{1};
+    ActionMap map;
+    map.bind(Key::Space, jump);
+
+    std::vector<bool> pressedPerStep;
+    auto spy = std::make_unique<SceneSpy>();
+    spy->onUpdate = [&](sgl::SceneContext& ctx) { pressedPerStep.push_back(ctx.input().action(jump).pressed); };
+    stack.push(std::move(spy));
+
+    InSequence seq;
+    EXPECT_CALL(platform, isOpen()).WillOnce(Return(true));
+    EXPECT_CALL(platform, poll()).WillOnce(Return(InputEvent{KeyDown{Key::Space}})).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(clock, restart()).WillOnce(Return(kTick + kTick));
+    expectRenderPass(platform, renderer);
+
+    EXPECT_CALL(platform, isOpen()).WillOnce(Return(true));
+    EXPECT_CALL(platform, poll()).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(clock, restart()).WillOnce(Return(kTick));
+    expectRenderPass(platform, renderer);
+
+    App{platform, clock, std::move(map), stack, queue}.runFrames(2);
+
+    ASSERT_EQ(pressedPerStep.size(), 3u);
+    EXPECT_TRUE(pressedPerStep[0]);
+    EXPECT_FALSE(pressedPerStep[1]);
+    EXPECT_FALSE(pressedPerStep[2]);
+}
+
+TEST(AppTest, deliverFocusLostAfterZeroStepFrame)
+{
+    NiceMock<PlatformMock> platform;
+    NiceMock<ClockMock> clock;
+    NiceMock<RendererMock> renderer;
+    RenderQueue queue;
+    SceneStack stack{idlePause()};
+
+    std::vector<bool> focusLostPerStep;
+    auto spy = std::make_unique<SceneSpy>();
+    spy->onUpdate = [&](sgl::SceneContext& ctx) { focusLostPerStep.push_back(ctx.input().focusLost()); };
+    stack.push(std::move(spy));
+
+    InSequence seq;
+    EXPECT_CALL(platform, isOpen()).WillOnce(Return(true));
+    EXPECT_CALL(platform, poll()).WillOnce(Return(InputEvent{sgl::FocusLost{}})).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(clock, restart()).WillOnce(Return(Seconds{0.f}));
+    expectRenderPass(platform, renderer);
+
+    EXPECT_CALL(platform, isOpen()).WillOnce(Return(true));
+    EXPECT_CALL(platform, poll()).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(clock, restart()).WillOnce(Return(kTick));
+    expectRenderPass(platform, renderer);
+
+    App{platform, clock, ActionMap{}, stack, queue}.runFrames(2);
+
+    ASSERT_EQ(focusLostPerStep.size(), 1u);
+    EXPECT_TRUE(focusLostPerStep[0]);
+}
+
+TEST(AppTest, closeWhenStackEmpty)
+{
+    NiceMock<PlatformMock> platform;
+    NiceMock<ClockMock> clock;
+    NiceMock<RendererMock> renderer;
+    RenderQueue queue;
+    SceneStack stack{idlePause()};
+
+    auto spy = std::make_unique<SceneSpy>();
+    spy->onUpdate = [](sgl::SceneContext& ctx) { ctx.request(sgl::PopScene{}); };
+    stack.push(std::move(spy));
+
+    InSequence seq;
+    EXPECT_CALL(platform, isOpen()).WillOnce(Return(true));
+    EXPECT_CALL(platform, poll()).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(clock, restart()).WillOnce(Return(kTick));
+    EXPECT_CALL(platform, close());
+    expectRenderPass(platform, renderer);
+
+    App{platform, clock, ActionMap{}, stack, queue}.runFrames(1);
+    EXPECT_TRUE(stack.empty());
+}

@@ -17,6 +17,13 @@ enum class Key : std::uint8_t
     Right,
     Up,
     Down,
+    W,
+    S,
+    Z,
+    X,
+    C,
+    P,
+    LShift,
     Unknown,
 };
 

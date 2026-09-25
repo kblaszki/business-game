@@ -103,8 +103,10 @@ flowchart LR
 Namespace `sgl`, targets `sgl_*`, games `sgl::arkanoid` and `sgl::tetris`. New modules: `sgl_audio`, `sgl_fx`, `sgl_save`. Simulation randomness is `sgl::Pcg32` only. Timed effects are data. Tetris sim stays headless (grid, SRS, DAS/ARR).
 
 - [x] Rename `eng` → `sgl` (includes, namespaces, targets)
-- [ ] Input edges survive a zero-step frame; multi-key `held` stays down
-- [ ] Rounded circle sweep; Arkanoid paddle, speed, and seam fixes
+- [x] Input edges survive a zero-step frame; multi-key `held` stays down
+- [x] Rounded circle-vs-AABB sweep
+- [ ] Arkanoid paddle, speed, and seam fixes
 - [ ] Power-ups as `std::variant` with pure derived values
-- [ ] `AudioI`, particles, high-score file
-- [ ] `games/tetris` sim, app, and executable `tetris`
+- [x] `AudioI`, `sgl_fx`, `sgl_save` (modules). Games do not write the high-score file yet
+- [x] Tetris grid, shapes, and SRS
+- [ ] `TetrisGame`, Tetris app, and executable `tetris`

@@ -1,1 +1,6 @@
-# Suites land with the audio module.
+add_unit_test(tone_test
+    SOURCES
+        ToneTest.cpp
+    DEPENDENCIES
+        sgl_audio
+)

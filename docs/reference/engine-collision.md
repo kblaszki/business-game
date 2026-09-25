@@ -30,7 +30,7 @@ Coordinate convention matches the legacy game and SFML: **+y points down**.
 | `Circle` | `center` (`Vec2f`) + `radius` |
 | `Aabb` | alias of `Rect<float>` (`pos` + `size`) |
 | `Contact` | static overlap: outward `normal`, penetration `depth` |
-| `Hit` | sweep result: entry `time` in `[0, 1]`, outward axis `normal` |
+| `Hit` | sweep result: entry `time` in `[0, 1]`, outward `normal` |
 
 `sgl::detail::nearlyZero(v, eps = 1e-5f)` is used instead of `==` on floats.
 
@@ -44,9 +44,15 @@ Nearest-point test of the circle center against the AABB.
 
 ## `sweep(circle, delta, box)`
 
-Ray at `circle.center` with direction `delta` against the AABB **expanded by `radius`** (Minkowski sum approximated as an expanded box). **Corners are treated as part of the expanded box**, not as rounded quarter-circles — a known approximation.
+Exact Minkowski sum of the AABB and a disk of `radius` (rounded rectangle):
 
-Returns the earliest entry time in `[0, 1]` with an outward **axis** normal. If already overlapping at `t = 0`, returns time `0` with the `intersect` normal. Miss → `std::nullopt`.
+1. Already overlapping → time `0` with the `intersect` normal.
+2. Zero `delta` and no overlap → `std::nullopt`.
+3. Slab-intersect the ray at `circle.center` with direction `delta` against the AABB **expanded by `radius`**.
+4. If the entry sample lies in a **corner region** (outside the original box on both axes), replace the slab hit with a ray–circle test against the circle of radius `r` centered at that corner. Take the earliest valid root in `[0, 1]`; `normal` is `normalized(contactCenter - corner)`.
+5. Otherwise (face region) keep the slab entry time and its outward **axis** normal.
+
+Miss → `std::nullopt` (including paths that only clip an expanded corner square outside the quarter-circle).
 
 ## `reflect(velocity, normal)`
 

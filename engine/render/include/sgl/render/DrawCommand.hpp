@@ -36,6 +36,7 @@ struct SpriteCmd
     Vec2f position;
     Vec2f scale{1.f, 1.f};
     Color tint{255, 255, 255, 255};
+    float rotationDeg{};
 };
 
 struct RectCmd
@@ -44,6 +45,7 @@ struct RectCmd
     Color fill;
     Color outline{0, 0, 0, 0};
     float outlineThickness{};
+    float rotationDeg{};
 };
 
 enum class Anchor

@@ -32,3 +32,10 @@ add_unit_test(image_test
     DEPENDENCIES
         sgl_core
 )
+
+add_unit_test(random_test
+    SOURCES
+        RandomTest.cpp
+    DEPENDENCIES
+        sgl_core
+)

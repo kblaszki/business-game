@@ -10,14 +10,18 @@ related_docs:
   - how-to/build-and-test.md
   - reference/source-layout.md
   - reference/engine-core.md
+  - reference/engine-audio.md
   - reference/engine-input.md
   - reference/engine-scene.md
   - reference/engine-loop.md
   - reference/engine-render.md
+  - reference/engine-fx.md
   - reference/engine-collision.md
   - reference/engine-resources.md
+  - reference/engine-save.md
   - reference/engine-sfml.md
   - reference/arkanoid-sim.md
+  - reference/tetris-sim.md
   - reference/arkanoid-app.md
   - reference/input-and-events.md
   - reference/pause-overlay.md
@@ -26,7 +30,7 @@ related_docs:
   - ../mvp/README.md
   - ../mvp/10-engine-progress.md
 keywords: [documentation, diataxis, index, map, navigation, docs]
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 ---
 
 # Documentation map
@@ -60,14 +64,18 @@ flowchart TD
 | [how-to/build-and-test.md](how-to/build-and-test.md) | how-to | build, test, ctest, format, presets |
 | [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, eng, arkanoid, targets |
 | [reference/engine-core.md](reference/engine-core.md) | reference | eng, Vec2, Rect, Handle, Image |
+| [reference/engine-audio.md](reference/engine-audio.md) | reference | sgl, AudioI, tone, Pcm, SfmlAudio |
 | [reference/engine-input.md](reference/engine-input.md) | reference | InputEvent, ActionMap, InputState |
 | [reference/engine-scene.md](reference/engine-scene.md) | reference | SceneStack, SceneRequest, pause |
 | [reference/engine-loop.md](reference/engine-loop.md) | reference | FixedStepLoop, App, PlatformI |
 | [reference/engine-render.md](reference/engine-render.md) | reference | RenderQueue, SortKey, Projection |
+| [reference/engine-fx.md](reference/engine-fx.md) | reference | sgl, ParticleSystem, BurstParams, Pcg32 |
 | [reference/engine-collision.md](reference/engine-collision.md) | reference | intersect, sweep, reflect |
 | [reference/engine-resources.md](reference/engine-resources.md) | reference | ResourceCache, ResourceError |
+| [reference/engine-save.md](reference/engine-save.md) | reference | sgl, HighScoreTable, SaveError, userDataDir |
 | [reference/engine-sfml.md](reference/engine-sfml.md) | reference | SfmlPlatform, EventTranslate, letterbox |
 | [reference/arkanoid-sim.md](reference/arkanoid-sim.md) | reference | arkanoid sim, StageId, power-ups |
+| [reference/tetris-sim.md](reference/tetris-sim.md) | reference | tetris sim, Grid, SRS, kicks |
 | [reference/arkanoid-app.md](reference/arkanoid-app.md) | reference | Theme, Assets, HudModel, SceneRender |
 | [reference/input-and-events.md](reference/input-and-events.md) | reference | InputEvent, ActionMap, defaultBindings |
 | [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScene, RequestPause, FocusLost, pausable |

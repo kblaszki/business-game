@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <sgl/input/InputState.hpp>
+#include <sgl/input/MouseButton.hpp>
 #include <type_traits>
 #include <variant>
 
@@ -22,6 +23,8 @@ void InputState::beginFrame()
         entry.second.pressed = false;
         entry.second.released = false;
     }
+    pointerPressed_ = false;
+    pointerReleased_ = false;
     closeRequested_ = false;
     focusLost_ = false;
 }
@@ -46,6 +49,18 @@ void InputState::apply(const InputEvent& event, const ActionMap& map)
             else if constexpr(std::is_same_v<T, MouseDown>)
             {
                 pointer_ = payload.pos;
+                if(payload.button == MouseButton::Left)
+                {
+                    pointerPressed_ = true;
+                }
+            }
+            else if constexpr(std::is_same_v<T, MouseUp>)
+            {
+                pointer_ = payload.pos;
+                if(payload.button == MouseButton::Left)
+                {
+                    pointerReleased_ = true;
+                }
             }
             else if constexpr(std::is_same_v<T, WindowClosed>)
             {
@@ -88,6 +103,16 @@ std::optional<Vec2f> InputState::pointer() const
     return pointer_;
 }
 
+bool InputState::pointerPressed() const
+{
+    return pointerPressed_;
+}
+
+bool InputState::pointerReleased() const
+{
+    return pointerReleased_;
+}
+
 bool InputState::closeRequested() const
 {
     return closeRequested_;
@@ -116,8 +141,20 @@ void InputState::onKeyUp(Key key, const ActionMap& map)
     for(const ActionId actionId: map.actionsFor(key))
     {
         ActionState& state = stateFor(actionId);
-        state.released = true;
-        state.held = false;
+        bool anyHeld = false;
+        for(const Key bound: map.keysFor(actionId))
+        {
+            if(keysHeld_[keyIndex(bound)])
+            {
+                anyHeld = true;
+                break;
+            }
+        }
+        state.held = anyHeld;
+        if(!anyHeld)
+        {
+            state.released = true;
+        }
     }
     recomputeAxes(map);
 }

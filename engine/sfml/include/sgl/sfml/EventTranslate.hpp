@@ -20,6 +20,20 @@ namespace sgl::sfml
             return sgl::Key::A;
         case sf::Keyboard::Key::D:
             return sgl::Key::D;
+        case sf::Keyboard::Key::W:
+            return sgl::Key::W;
+        case sf::Keyboard::Key::S:
+            return sgl::Key::S;
+        case sf::Keyboard::Key::Z:
+            return sgl::Key::Z;
+        case sf::Keyboard::Key::X:
+            return sgl::Key::X;
+        case sf::Keyboard::Key::C:
+            return sgl::Key::C;
+        case sf::Keyboard::Key::P:
+            return sgl::Key::P;
+        case sf::Keyboard::Key::LShift:
+            return sgl::Key::LShift;
         case sf::Keyboard::Key::Left:
             return sgl::Key::Left;
         case sf::Keyboard::Key::Right:
@@ -86,6 +100,15 @@ namespace sgl::sfml
             return std::nullopt;
         }
         return sgl::MouseDown{.button = *button, .pos = {designPosition.x, designPosition.y}};
+    }
+    if(const auto* mouseUp = event.getIf<sf::Event::MouseButtonReleased>())
+    {
+        const std::optional<sgl::MouseButton> button = toMouseButton(mouseUp->button);
+        if(!button)
+        {
+            return std::nullopt;
+        }
+        return sgl::MouseUp{.button = *button, .pos = {designPosition.x, designPosition.y}};
     }
     if(event.is<sf::Event::MouseMoved>())
     {

@@ -34,11 +34,11 @@ Facts about the running tree. Engine types: [engine-input.md](engine-input.md). 
 
 | Type | Role |
 |------|------|
-| `sgl::InputEvent` | Variant: `KeyDown` / `KeyUp`, mouse move/down, `WindowClosed`, `FocusLost` / `FocusGained` |
-| `sgl::ActionMap` | Binds keys to `ActionId`s and key pairs to an `AxisId` |
-| `sgl::InputState` | Per-frame edges (`pressed` / `released`), holds, axes, pointer, `closeRequested`, `focusLost` |
+| `sgl::InputEvent` | Variant: `KeyDown` / `KeyUp`, mouse move/down/up, `WindowClosed`, `FocusLost` / `FocusGained` |
+| `sgl::ActionMap` | Binds keys to `ActionId`s and key pairs to an `AxisId`; `keysFor` lists keys per action |
+| `sgl::InputState` | Per-frame edges (`pressed` / `released`, pointer press/release), holds, axes, pointer, `closeRequested`, `focusLost` |
 
-Scenes read `SceneContext::input()`; they never poll the window and never call `close()`.
+Scenes read `SceneContext::input()`; they never poll the window and never call `close()`. Action `held` stays true while any bound key is down; `released` fires when the last bound key goes up. `App` keeps edges across zero-step frames (see [engine-loop.md](engine-loop.md)).
 
 ## Arkanoid default bindings
 

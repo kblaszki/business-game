@@ -40,3 +40,25 @@ TEST(FixedStepLoopShould, keepAlphaInHalfOpenUnitInterval)
     EXPECT_GE(afterSteps.alpha, 0.f);
     EXPECT_LT(afterSteps.alpha, 1.f);
 }
+
+TEST(FixedStepLoopTest, exactStepCountOverLongRun)
+{
+    FixedStepLoop loop;
+    std::uint32_t totalSteps{0};
+    const Seconds halfTick{1.f / 120.f};
+    for(int i = 0; i < 3600; ++i)
+    {
+        totalSteps += loop.advance(halfTick).steps;
+    }
+    EXPECT_EQ(totalSteps, 1800u);
+}
+
+TEST(FixedStepLoopTest, negativeFrameCountsAsZero)
+{
+    FixedStepLoop loop;
+    loop.advance(kTick);
+    const StepResult result = loop.advance(Seconds{-1.f});
+
+    EXPECT_EQ(result.steps, 0u);
+    EXPECT_FLOAT_EQ(result.alpha, 0.f);
+}

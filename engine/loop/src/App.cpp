@@ -44,7 +44,12 @@ float App::lastAlpha() const
 
 void App::runFrame()
 {
-    input.beginFrame();
+    if(edgesConsumed_)
+    {
+        input.beginFrame();
+    }
+    edgesConsumed_ = false;
+
     while(const std::optional<InputEvent> event = platform.poll())
     {
         input.apply(*event, map);
@@ -63,9 +68,10 @@ void App::runFrame()
             input.beginFrame();
         }
         stack.update(input, kTick);
+        edgesConsumed_ = true;
     }
 
-    if(stack.quitRequested())
+    if(stack.quitRequested() || stack.empty())
     {
         platform.close();
     }

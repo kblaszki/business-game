@@ -3,6 +3,8 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/View.hpp>
 
+#include <memory>
+#include <sgl/audio/AudioI.hpp>
 #include <sgl/core/Vec2.hpp>
 #include <sgl/loop/PlatformI.hpp>
 #include <sgl/sfml/SfmlAssets.hpp>
@@ -12,10 +14,16 @@
 namespace sgl::sfml
 {
 
+class SfmlAudio;
+
 class SfmlPlatform : public sgl::PlatformI
 {
 public:
     SfmlPlatform(sgl::Vec2u designSize, std::string title);
+    ~SfmlPlatform() override;
+
+    SfmlPlatform(const SfmlPlatform&) = delete;
+    SfmlPlatform& operator=(const SfmlPlatform&) = delete;
 
     bool isOpen() const override;
     void close() override;
@@ -25,12 +33,16 @@ public:
     [[nodiscard]] SfmlAssets& assets();
     [[nodiscard]] const SfmlAssets& assets() const;
 
+    [[nodiscard]] sgl::AudioI& audio();
+    [[nodiscard]] const sgl::AudioI& audio() const;
+
 private:
     void applyLetterbox(sf::Vector2u windowSize);
 
-    // window first so assets/renderer die while the GL context still lives.
+    // window, assets, audio, then renderer — GL context and audio device outlive users.
     sf::RenderWindow window_;
     SfmlAssets assets_;
+    std::unique_ptr<SfmlAudio> audio_;
     SfmlRenderer renderer_;
     sgl::Vec2u designSize_{};
     sf::View view_{};

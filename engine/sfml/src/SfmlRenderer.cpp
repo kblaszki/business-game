@@ -1,11 +1,9 @@
-#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-#include <cmath>
 #include <sgl/render/DrawCommand.hpp>
 #include <sgl/render/RenderQueue.hpp>
+#include <sgl/sfml/SfmlDraw.hpp>
 #include <sgl/sfml/SfmlRenderer.hpp>
 #include <type_traits>
 #include <variant>
@@ -54,29 +52,11 @@ void SfmlRenderer::submit(const sgl::RenderQueue& queue)
                         ++skipped_;
                         return;
                     }
-
-                    sf::Sprite sprite{*texture};
-                    const auto left = static_cast<int>(std::lround(cmd.source.pos.x));
-                    const auto top = static_cast<int>(std::lround(cmd.source.pos.y));
-                    const auto width = static_cast<int>(std::lround(cmd.source.size.x));
-                    const auto height = static_cast<int>(std::lround(cmd.source.size.y));
-                    sprite.setTextureRect(sf::IntRect({left, top}, {width, height}));
-                    sprite.setPosition({cmd.position.x, cmd.position.y});
-                    sprite.setScale({cmd.scale.x, cmd.scale.y});
-                    sprite.setColor(toSfColor(cmd.tint));
-                    target_.draw(sprite);
+                    target_.draw(toSprite(cmd, *texture));
                 }
                 else if constexpr(std::is_same_v<T, sgl::RectCmd>)
                 {
-                    sf::RectangleShape shape{{cmd.rect.size.x, cmd.rect.size.y}};
-                    shape.setPosition({cmd.rect.pos.x, cmd.rect.pos.y});
-                    shape.setFillColor(toSfColor(cmd.fill));
-                    if(cmd.outlineThickness != 0.f)
-                    {
-                        shape.setOutlineThickness(cmd.outlineThickness);
-                        shape.setOutlineColor(toSfColor(cmd.outline));
-                    }
-                    target_.draw(shape);
+                    target_.draw(toShape(cmd));
                 }
                 else if constexpr(std::is_same_v<T, sgl::TextCmd>)
                 {

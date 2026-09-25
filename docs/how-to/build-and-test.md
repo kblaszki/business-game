@@ -5,6 +5,7 @@ audience: [ai, human]
 related_code:
   - CMakePresets.json
   - CMakeLists.txt
+  - cmake/FetchSFML.cmake
   - tests/CMakeLists.txt
   - tests/engine/core/CMakeLists.txt
   - tests/arkanoid/sim/CMakeLists.txt
@@ -13,13 +14,14 @@ related_code:
 related_docs:
   - ../tutorials/getting-started.md
   - ../reference/source-layout.md
-keywords: [build, test, ctest, format, presets, build_ut, debug, release, arkanoid]
-last_reviewed: 2026-09-24
+  - ../reference/engine-audio.md
+keywords: [build, test, ctest, format, presets, build_ut, debug, release, arkanoid, SFML, Audio]
+last_reviewed: 2026-09-25
 ---
 
 # Build, test, and format
 
-Prerequisite: toolchain installed (see [getting-started](../tutorials/getting-started.md)). The project is C++23; GoogleTest 1.18 is fetched only for the Debug preset. Ubuntu CI uses g++-14.
+Prerequisite: toolchain installed (see [getting-started](../tutorials/getting-started.md)). The project is C++23; GoogleTest 1.18 is fetched only for the Debug preset. Ubuntu CI uses g++-14. CMake FetchContent pulls SFML 3.1 with **Audio** enabled (`SFML_BUILD_AUDIO ON`; Network stays OFF) — no manual SFML install.
 
 ## Configure
 
@@ -47,7 +49,7 @@ ctest --preset debug
 
 Suites (`tests/engine/`, `tests/arkanoid/`):
 
-- Engine: `features_test`, `vec_test`, `rect_test`, `handle_test`, `image_test`, `input_state_test`, `scene_stack_test`, `fixed_step_loop_test`, `app_test`, `render_queue_test`, `projection_test`, `collision_test`, `resource_cache_test`, `event_translate_test`
+- Engine: `features_test`, `vec_test`, `rect_test`, `handle_test`, `image_test`, `input_state_test`, `scene_stack_test`, `fixed_step_loop_test`, `app_test`, `render_queue_test`, `projection_test`, `collision_test`, `resource_cache_test`, `tone_test`, `event_translate_test`
 - Arkanoid: `arkanoid_sim_test`, `arkanoid_assets_test`, `arkanoid_hud_test`, `arkanoid_scene_render_test`, `arkanoid_scenes_test`
 
 `build_ut` builds every suite registered with `add_unit_test(...)` (`cmake/AddUnitTest.cmake`).

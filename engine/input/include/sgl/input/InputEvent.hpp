@@ -29,6 +29,12 @@ struct MouseDown
     Vec2f pos{};
 };
 
+struct MouseUp
+{
+    MouseButton button{};
+    Vec2f pos{};
+};
+
 struct WindowClosed
 {
 };
@@ -41,6 +47,6 @@ struct FocusGained
 {
 };
 
-using InputEvent = std::variant<KeyDown, KeyUp, MouseMove, MouseDown, WindowClosed, FocusLost, FocusGained>;
+using InputEvent = std::variant<KeyDown, KeyUp, MouseMove, MouseDown, MouseUp, WindowClosed, FocusLost, FocusGained>;
 
 } // namespace sgl

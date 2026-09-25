@@ -22,6 +22,8 @@ public:
     [[nodiscard]] ActionState action(ActionId id) const;
     [[nodiscard]] float axis(AxisId id) const;
     [[nodiscard]] std::optional<Vec2f> pointer() const;
+    [[nodiscard]] bool pointerPressed() const;
+    [[nodiscard]] bool pointerReleased() const;
     [[nodiscard]] bool closeRequested() const;
     [[nodiscard]] bool focusLost() const;
 
@@ -40,6 +42,8 @@ private:
     std::vector<std::pair<AxisId, float>> axes_;
     bool keysHeld_[keyCount]{};
     std::optional<Vec2f> pointer_;
+    bool pointerPressed_{};
+    bool pointerReleased_{};
     bool closeRequested_{};
     bool focusLost_{};
 };

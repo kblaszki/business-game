@@ -1,22 +1,28 @@
+#include <cmath>
 #include <sgl/loop/FixedStepLoop.hpp>
 
 namespace sgl
 {
 
 FixedStepLoop::FixedStepLoop(Seconds tick, Seconds maxFrame)
-    : tick{tick}
-    , maxFrame{maxFrame}
+    : tick{1.0 / std::round(1.0 / static_cast<double>(tick.count()))}
+    , maxFrame{static_cast<double>(maxFrame.count())}
 {
 }
 
 StepResult FixedStepLoop::advance(Seconds frame) noexcept
 {
-    if(frame > maxFrame)
+    Accumulator delta{static_cast<double>(frame.count())};
+    if(delta.count() < 0.0)
     {
-        frame = maxFrame;
+        delta = Accumulator{0.0};
+    }
+    if(delta > maxFrame)
+    {
+        delta = maxFrame;
     }
 
-    accumulator += frame;
+    accumulator += delta;
 
     std::uint32_t steps{0};
     while(accumulator >= tick)
@@ -25,7 +31,13 @@ StepResult FixedStepLoop::advance(Seconds frame) noexcept
         ++steps;
     }
 
-    return StepResult{steps, accumulator / tick};
+    // Float Seconds promote with noise relative to the exact tick; drop tiny leftovers.
+    if(accumulator.count() < tick.count() * 1e-6)
+    {
+        accumulator = Accumulator{0.0};
+    }
+
+    return StepResult{steps, static_cast<float>(accumulator / tick)};
 }
 
 } // namespace sgl

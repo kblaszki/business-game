@@ -23,6 +23,7 @@ public:
     void bindAxis(Key negative, Key positive, AxisId axis);
 
     [[nodiscard]] std::span<const ActionId> actionsFor(Key key) const;
+    [[nodiscard]] std::vector<Key> keysFor(ActionId action) const;
     [[nodiscard]] std::span<const AxisBind> axes() const;
 
 private:

@@ -10,6 +10,9 @@ related_code:
   - engine/sfml/src/SfmlAssets.cpp
   - engine/sfml/include/sgl/sfml/SfmlRenderer.hpp
   - engine/sfml/src/SfmlRenderer.cpp
+  - engine/sfml/include/sgl/sfml/SfmlDraw.hpp
+  - engine/sfml/include/sgl/sfml/SfmlAudio.hpp
+  - engine/sfml/src/SfmlAudio.cpp
   - engine/sfml/include/sgl/sfml/SfmlPlatform.hpp
   - engine/sfml/src/SfmlPlatform.cpp
   - engine/sfml/CMakeLists.txt
@@ -27,7 +30,7 @@ last_reviewed: 2026-09-25
 
 # Engine SFML backend
 
-Only SFML-facing engine module (`namespace sgl::sfml`). Target `sgl_sfml` is a STATIC library that PUBLIC-links `sgl_loop` and `sgl_resources`, and PRIVATE-links `SFML::Graphics`, `SFML::Window`, and `SFML::System`. Includes are `<sgl/sfml/X.hpp>`.
+Only SFML-facing engine module (`namespace sgl::sfml`). Target `sgl_sfml` is a STATIC library that PUBLIC-links `sgl_loop` and `sgl_resources`, and PRIVATE-links `SFML::Graphics`, `SFML::Window`, `SFML::System`, and `SFML::Audio`. `SfmlAudio` implements `AudioI` (16 voices). Includes are `<sgl/sfml/X.hpp>`.
 
 ## EventTranslate
 
@@ -35,9 +38,9 @@ Only SFML-facing engine module (`namespace sgl::sfml`). Target `sgl_sfml` is a S
 
 | SFML key | `sgl::Key` |
 |----------|------------|
-| A, D | A, D |
+| A, D, W, S, Z, X, C, P | A, D, W, S, Z, X, C, P |
 | Left, Right, Up, Down | Left, Right, Up, Down |
-| Enter, Escape, Backspace, Space | Enter, Escape, Backspace, Space |
+| Enter, Escape, Backspace, Space, LShift | Enter, Escape, Backspace, Space, LShift |
 | any other | Unknown |
 
 `translate(event, designPosition)` → `std::optional<InputEvent>`:
@@ -48,6 +51,7 @@ Only SFML-facing engine module (`namespace sgl::sfml`). Target `sgl_sfml` is a S
 | `FocusLost` / `FocusGained` | `FocusLost` / `FocusGained` |
 | `KeyPressed` / `KeyReleased` | `KeyDown` / `KeyUp` via `toKey` |
 | `MouseButtonPressed` | `MouseDown` at `designPosition` (caller maps pixels) |
+| `MouseButtonReleased` | `MouseUp` at `designPosition` |
 | `MouseMoved` | `MouseMove` at `designPosition` |
 | other | `nullopt` |
 
@@ -70,7 +74,7 @@ GPU caches over `ResourceCache`:
 `SfmlRenderer(sf::RenderTarget&, const SfmlAssets&)` implements `RendererI`:
 
 - `begin()` — clear target; reset `skippedCommands()`
-- `submit` — walk `queue.sorted()`, `std::visit` `SpriteCmd` / `RectCmd` / `TextCmd`; missing texture (or font) skips and increments the counter; `Anchor::Center` origins text at local-bounds center
+- `submit` — walk `queue.sorted()`, `std::visit` `SpriteCmd` / `RectCmd` / `TextCmd`; missing texture (or font) skips and increments the counter; `Anchor::Center` origins text at local-bounds center. `SfmlDraw.hpp` builds the sprite and the rectangle with origin at the center and position at top-left plus half the size, so `rotationDeg` turns around the center of the unrotated bounds. `rotationDeg == 0` draws as before.
 - `end()` — `display()` only when the target is an `sf::RenderWindow`
 
 ## SfmlPlatform

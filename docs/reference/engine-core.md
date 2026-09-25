@@ -11,13 +11,16 @@ related_code:
   - engine/core/include/sgl/core/Handle.hpp
   - engine/core/include/sgl/core/EntityId.hpp
   - engine/core/include/sgl/core/Image.hpp
+  - engine/core/include/sgl/core/Random.hpp
   - tests/engine/core/VecTest.cpp
   - tests/engine/core/RectTest.cpp
   - tests/engine/core/HandleTest.cpp
   - tests/engine/core/ImageTest.cpp
+  - tests/engine/core/RandomTest.cpp
 related_docs:
   - source-layout.md
-keywords: [eng, Vec2, Vec3, Vec2f, Vec2u, Vec3f, Rect, Color, Time, Seconds, kTick, Handle, EntityId, Image]
+  - engine-fx.md
+keywords: [eng, Vec2, Vec3, Vec2f, Vec2u, Vec3f, Rect, Color, Time, Seconds, kTick, Handle, EntityId, Image, Pcg32, Random]
 last_reviewed: 2026-09-25
 ---
 
@@ -59,3 +62,15 @@ CPU pixel buffer: `width`, `height`, `std::vector<Color> pixels`.
 - `set(x, y, c)` — `false` out of range; otherwise writes and returns `true`
 
 Row-major indexing: `y * width + x`.
+
+## Random (`Pcg32`)
+
+`Pcg32` is PCG-XSH-RR 64/32 (`Random.hpp`). Construct with `Pcg32(seed, stream = 1)`.
+
+| Method | Behavior |
+|--------|----------|
+| `nextU32()` | next 32-bit value |
+| `uniformBelow(bound)` | unbiased in `[0, bound)` via rejection; `bound == 0` returns `0` |
+| `uniformFloat(lo, hi)` | float in `[lo, hi)` from `nextU32` (no `<random>` distributions) |
+
+Simulation and fx code use `sgl::Pcg32` only — not `std::uniform_*_distribution` / `std::shuffle` (ABI differs across libstdc++ and MSVC).

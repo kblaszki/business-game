@@ -90,14 +90,14 @@ Running tree after cutover: `engine/` (`namespace sgl`) and `games/arkanoid/` (`
 | `engine/render/` | `RenderQueue`, `DrawCommand`, `Projection`, `RendererI`; target `sgl_render` |
 | `engine/collision/` | AABB / circle / sweep helpers; target `sgl_collision` |
 | `engine/resources/` | `ResourceCache`, `ResourceError`; target `sgl_resources` |
-| `engine/sfml/` | SFML adapters (`SfmlPlatform`, `EventTranslate`, …); only engine target that links SFML |
-| `engine/audio/` | `AudioI`, PCM `tone`; target `sgl_audio` (placeholder until the module lands) |
-| `engine/fx/` | Fixed-capacity particles; target `sgl_fx` (placeholder) |
-| `engine/save/` | High-score table and atomic text files; target `sgl_save` (placeholder) |
+| `engine/sfml/` | SFML adapters (`SfmlPlatform`, `SfmlAudio`, `EventTranslate`, …); only engine target that links SFML |
+| `engine/audio/` | `AudioI`, PCM `tone`, `NullAudio`; target `sgl_audio` |
+| `engine/fx/` | Fixed-capacity particles; target `sgl_fx` |
+| `engine/save/` | High-score table, text format, atomic file write; target `sgl_save` |
 | `games/arkanoid/sim/` | Headless breakout rules (`State`, `step`, levels, power-ups); `arkanoid_sim` |
 | `games/arkanoid/app/` | Scenes, HUD, assets, bindings; `arkanoid_app` |
 | `games/arkanoid/main.cpp` | Wires `SfmlPlatform`, assets, `SceneStack`, `sgl::App`; executable `arkanoid` |
-| `games/tetris/sim/` | Headless Tetris (`tetris_sim`, placeholder until the sim lands); links `sgl_core` only |
+| `games/tetris/sim/` | Headless grid, shapes, and SRS (`tetris_sim`); links `sgl_core` only |
 | `games/tetris/app/` | Scenes for Tetris (`tetris_app`, placeholder) |
 | `assets/fonts/` | UI TTF (`ASSET_DIR` → `assets/`) |
 | `tests/engine/` | Per-module engine suites (Debug only) |
@@ -117,14 +117,14 @@ Include layout: `<sgl/<module>/X.hpp>`, `<arkanoid/<sim|app>/X.hpp>`, `<tetris/<
 | `sgl_render` | STATIC | → `sgl_core` |
 | `sgl_collision` | STATIC | → `sgl_core` |
 | `sgl_resources` | INTERFACE | → `sgl_core` |
-| `sgl_audio` | INTERFACE | → `sgl_core`; placeholder |
-| `sgl_fx` | INTERFACE | → `sgl_core`, `sgl_render`; placeholder |
-| `sgl_save` | INTERFACE | → `sgl_core`; placeholder |
-| `sgl_sfml` | STATIC | → `sgl_loop`, `sgl_resources`; links SFML Graphics/Window/System |
+| `sgl_audio` | STATIC | → `sgl_core`; no SFML |
+| `sgl_fx` | STATIC | → `sgl_core`, `sgl_render` |
+| `sgl_save` | STATIC | → `sgl_core`; no SFML |
+| `sgl_sfml` | STATIC | → `sgl_loop`, `sgl_resources`; links SFML Graphics/Window/System/Audio |
 | `arkanoid_sim` | STATIC | → `sgl_collision`; no SFML |
 | `arkanoid_app` | STATIC | → `arkanoid_sim`, `sgl_loop`, `sgl_resources`; no SFML includes |
 | `arkanoid` | executable | `games/arkanoid/main.cpp` → `arkanoid_app`, `sgl_sfml`; `ASSET_DIR` → `assets/` |
-| `tetris_sim` | INTERFACE | → `sgl_core`; placeholder, no SFML |
+| `tetris_sim` | STATIC | → `sgl_core`; grid, shapes, SRS; no SFML |
 | `tetris_app` | INTERFACE | → `tetris_sim`, `sgl_loop`, `sgl_resources`, `sgl_audio`, `sgl_fx`, `sgl_save` |
 
 ## Unit test suites (Debug)
@@ -133,15 +133,19 @@ Registered with `add_unit_test` under `tests/engine/` and `tests/arkanoid/`:
 
 | Suite | Leaf |
 |-------|------|
-| `features_test`, `vec_test`, `rect_test`, `handle_test`, `image_test` | `tests/engine/core/` |
+| `features_test`, `vec_test`, `rect_test`, `handle_test`, `image_test`, `random_test` | `tests/engine/core/` |
 | `input_state_test` | `tests/engine/input/` |
 | `scene_stack_test` | `tests/engine/scene/` |
 | `fixed_step_loop_test`, `app_test` | `tests/engine/loop/` |
 | `render_queue_test`, `projection_test` | `tests/engine/render/` |
 | `collision_test` | `tests/engine/collision/` |
 | `resource_cache_test` | `tests/engine/resources/` |
-| `event_translate_test` | `tests/engine/sfml/` (links `SFML::Window`; does not open a window) |
+| `particle_system_test` | `tests/engine/fx/` |
+| `tone_test` | `tests/engine/audio/` |
+| `high_score_table_test`, `save_format_test`, `save_file_test` | `tests/engine/save/` |
+| `event_translate_test`, `sfml_draw_test` | `tests/engine/sfml/` (`event_translate_test` links `SFML::Window`; neither opens a window) |
 | `arkanoid_sim_test` | `tests/arkanoid/sim/` |
+| `tetris_grid_test`, `tetris_srs_test` | `tests/tetris/sim/` |
 | `arkanoid_assets_test`, `arkanoid_hud_test`, `arkanoid_scene_render_test`, `arkanoid_scenes_test` | `tests/arkanoid/app/` |
 
 All suites are headless except `event_translate_test`, which links SFML Window headers only and still opens no window.

@@ -1,4 +1,5 @@
 #include <sgl/sfml/EventTranslate.hpp>
+#include <sgl/sfml/SfmlAudio.hpp>
 #include <sgl/sfml/SfmlPlatform.hpp>
 
 namespace sgl::sfml
@@ -7,6 +8,7 @@ namespace sgl::sfml
 SfmlPlatform::SfmlPlatform(sgl::Vec2u designSize, std::string title)
     : window_{sf::VideoMode{{designSize.x, designSize.y}}, title, sf::Style::Default}
     , assets_{}
+    , audio_{std::make_unique<SfmlAudio>()}
     , renderer_{window_, assets_}
     , designSize_{designSize}
     , view_{sf::FloatRect{{0.f, 0.f}, {static_cast<float>(designSize.x), static_cast<float>(designSize.y)}}}
@@ -15,6 +17,8 @@ SfmlPlatform::SfmlPlatform(sgl::Vec2u designSize, std::string title)
     window_.setFramerateLimit(60);
     window_.setView(view_);
 }
+
+SfmlPlatform::~SfmlPlatform() = default;
 
 bool SfmlPlatform::isOpen() const
 {
@@ -67,6 +71,16 @@ SfmlAssets& SfmlPlatform::assets()
 const SfmlAssets& SfmlPlatform::assets() const
 {
     return assets_;
+}
+
+sgl::AudioI& SfmlPlatform::audio()
+{
+    return *audio_;
+}
+
+const sgl::AudioI& SfmlPlatform::audio() const
+{
+    return *audio_;
 }
 
 void SfmlPlatform::applyLetterbox(sf::Vector2u windowSize)

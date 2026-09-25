@@ -29,10 +29,11 @@ Platform-independent fixed-timestep pump in `namespace sgl`, included as `<sgl/l
 
 ## FixedStepLoop
 
-`FixedStepLoop(Seconds tick = kTick, Seconds maxFrame = Seconds{0.25f})` accumulates frame deltas and returns `StepResult{steps, alpha}`.
+`FixedStepLoop(Seconds tick = kTick, Seconds maxFrame = Seconds{0.25f})` accumulates frame deltas in `std::chrono::duration<double>` and returns `StepResult{steps, alpha}`. The stored tick is reconstructed as `1/round(1/tick)` so common rates (60 Hz) stay exact in double despite `Seconds` being `duration<float>`.
 
+- A negative `frame` is treated as zero before clamping.
 - Incoming `frame` is clamped to `maxFrame` before accumulating (a 0.5 s hitch yields at most 15 steps at 60 Hz).
-- `alpha` is leftover / tick, in `[0, 1)`.
+- `alpha` is leftover / tick, in `[0, 1)`; leftovers smaller than `1e-6` of a tick are dropped.
 
 ## Ports
 
@@ -47,11 +48,13 @@ GMock doubles live at `tests/mocks/ClockMock.hpp`, `tests/mocks/PlatformMock.hpp
 
 Each `runFrame`:
 
-1. `input.beginFrame()` then drain `platform.poll()` into `input.apply(event, map)`
+1. Clear input edges via `input.beginFrame()` only when the previous frame ran at least one update step (`edgesConsumed_`); then drain `platform.poll()` into `input.apply(event, map)`
 2. `input.closeRequested()` → `platform.close()`
-3. `loop.advance(clock.restart())`; for each step call `stack.update(input, kTick)`, calling `input.beginFrame()` after the first step so action edges are seen once
-4. `stack.quitRequested()` → `platform.close()`
+3. `loop.advance(clock.restart())`; for each step call `stack.update(input, kTick)`, calling `input.beginFrame()` after the first step so action edges are seen once; mark edges consumed when any step ran
+4. `stack.quitRequested()` or empty stack → `platform.close()`
 5. `queue.clear()`; `stack.render(queue)`; `renderer.begin()` / `submit(queue)` / `end()`
 6. store `alpha` for `lastAlpha()`
+
+`pressed` / `released` / `focusLost` (and pointer edges) therefore survive a zero-step frame and remain visible on the first update of the next frame that actually steps.
 
 `run()` loops while `platform.isOpen()`. `runFrames(n)` runs up to `n` frames, checking `isOpen` at the start of each.

@@ -1,6 +1,11 @@
-add_library(sgl_audio INTERFACE)
-target_include_directories(sgl_audio INTERFACE
+add_library(sgl_audio STATIC
+    src/AudioI.cpp
+    src/NullAudio.cpp
+    src/Tone.cpp
+)
+target_include_directories(sgl_audio PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-target_compile_features(sgl_audio INTERFACE cxx_std_23)
-target_link_libraries(sgl_audio INTERFACE sgl_core)
+target_compile_features(sgl_audio PUBLIC cxx_std_23)
+target_compile_options(sgl_audio PRIVATE ${BASE_COMPILE_FLAGS})
+target_link_libraries(sgl_audio PUBLIC sgl_core)
