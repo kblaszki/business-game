@@ -258,6 +258,69 @@ TEST(PhysicsTest, losingLastBallCostsLife)
         events, [](const sgl::arkanoid::SimEvent& e) { return std::holds_alternative<sgl::arkanoid::BallLost>(e); }));
 }
 
+TEST(PhysicsTest, exteriorWallsKeepBallInside)
+{
+    struct Shot
+    {
+        sgl::Vec2f pos;
+        sgl::Vec2f vel;
+        int expectVelX; // -1, 0 (unchecked), or +1
+        int expectVelY;
+    };
+
+    const float speed = sgl::arkanoid::ballSpeed;
+    const Shot shots[]{
+        // Left, right, and top faces, including a center already inside the right wall.
+        {.pos = {1.f, 360.f}, .vel = {-speed, 40.f}, .expectVelX = 1, .expectVelY = 0},
+        {.pos = {sgl::arkanoid::designWidth - sgl::arkanoid::ballDiameter - 1.f, 360.f},
+         .vel = {speed, 40.f},
+         .expectVelX = -1,
+         .expectVelY = 0},
+        {.pos = {sgl::arkanoid::designWidth - sgl::arkanoid::ballRadius, 360.f},
+         .vel = {speed, 0.f},
+         .expectVelX = -1,
+         .expectVelY = 0},
+        {.pos = {640.f, 1.f}, .vel = {40.f, -speed}, .expectVelX = 0, .expectVelY = 1},
+        // Top corners.
+        {.pos = {1.f, 1.f}, .vel = {-speed, -speed}, .expectVelX = 1, .expectVelY = 1},
+        {.pos = {sgl::arkanoid::designWidth - sgl::arkanoid::ballDiameter - 1.f, 1.f},
+         .vel = {speed, -speed},
+         .expectVelX = -1,
+         .expectVelY = 1},
+    };
+
+    for(const Shot& shot: shots)
+    {
+        sgl::arkanoid::State state{};
+        state.paddle.x = 580.f;
+        state.balls = {
+            sgl::arkanoid::Ball{.pos = shot.pos, .vel = shot.vel, .mode = sgl::arkanoid::BallMode::Live}};
+
+        for(int i = 0; i < 30; ++i)
+        {
+            (void)sgl::arkanoid::step(state, {}, sgl::kTick);
+        }
+
+        ASSERT_EQ(state.balls.size(), 1u);
+        const sgl::arkanoid::Ball& ball = state.balls.front();
+        EXPECT_GE(ball.pos.x, 0.f);
+        EXPECT_LE(ball.pos.x + sgl::arkanoid::ballDiameter, sgl::arkanoid::designWidth);
+        EXPECT_GE(ball.pos.y, 0.f);
+        if(shot.expectVelX > 0)
+        {
+            EXPECT_GT(ball.vel.x, 0.f);
+        }
+        else if(shot.expectVelX < 0)
+        {
+            EXPECT_LT(ball.vel.x, 0.f);
+        }
+        if(shot.expectVelY > 0)
+        {
+            EXPECT_GT(ball.vel.y, 0.f);
+        }
+    }
+}
+
 TEST(PhysicsTest, eventsForPaddleWallLaunch)
 {
     sgl::arkanoid::State state = sgl::arkanoid::makeState(sgl::arkanoid::StageId::Stage1);

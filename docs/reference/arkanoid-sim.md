@@ -80,11 +80,11 @@ When `cleared` or `over`, `step` returns an empty event list and moves nothing.
 
 Otherwise, with `SimInput { paddleAxis, launch }` and `dt`:
 
-1. **Paddle** — `x += paddleSpeed * axis * dt`, clamp to `[0, designWidth - width]`. Then stick Stuck balls; **depenetrate** any Live ball overlapping the paddle (center above paddle midline → place on top; else push sideways in the paddle move direction).
+1. **Paddle** — `x += paddleSpeed * axis * dt`, clamp to `[0, designWidth - width]`. Then stick Stuck balls; **depenetrate** any Live ball overlapping the paddle (center above paddle midline → place on top; else push sideways in the paddle move direction). A sideways push is clamped so the ball sprite stays inside `[0, designWidth]`.
 2. **Launch** — first Stuck ball becomes Live with direction of `launchVelocity` scaled to `ballSpeed * ballSpeedMultiplier(state)`; emit `BallLaunched`.
 3. **Live balls (TOI)** — per ball, `remaining = 1`, up to 4 iterations. Candidates via `sgl::sweep`: alive bricks, three exterior wall AABBs (left/right/top), paddle AABB. Move to earliest `t`, resolve, continue with `remaining *= (1 - t)`.
    - **Brick seam:** all alive bricks with `|t - tBest| < 1e-4` die together (+10 and `BrickDestroyed` each, maybe capsule). Reflect once with the normalized sum of their normals (fallback: best normal). Renormalize speed.
-   - **Wall:** `sgl::reflect`, renormalize, `WallHit`.
+   - **Wall:** reflect off every exterior wall the circle still overlaps (or the sweep normal when it only touches), push the center out by the overlap plus 0.01, renormalize, `WallHit`. A zero-time contact still separates before the TOI loop stops.
    - **Paddle:** `angle = clamp(hitOffset, -1, 1) * 60°` from vertical; `vel = speed * (sin a, -cos a)`; `PaddleHit`.
    - After every bounce: speed = `ballSpeed * ballSpeedMultiplier(state)`; enforce `|vy| >= speed * sin(15°)`.
 4. **Capsules** — fall at 180 px/s; paddle AABB catch → `applyPowerUp` + `PowerUpCaught`; `pos.y >= 720` erases.
@@ -108,6 +108,6 @@ Wide and Slow stack. MultiBall and ExtraLife do not clear timed effects.
 ## Tests
 
 - `arkanoid_sim_test` — paddle clamp, wall bounce, brick score/events, bottom-face reflect, life loss/restick, StageCleared vs empty bricks, stage brick counts, Wide/ExtraLife, missed capsule, Slow expire restore, multiball count 3, high-speed sweep hit.
-- `arkanoid_physics_test` — paddle side-sweep/depenetration, center/edge paddle angles, constant speed, min vertical angle, brick seams, remaining TOI time, corner normals, `BallLost` vs `LifeLost`, launch/wall/paddle events.
+- `arkanoid_physics_test` — paddle side-sweep/depenetration, center/edge paddle angles, constant speed, min vertical angle, brick seams, remaining TOI time, corner normals, exterior walls (faces and top corners, including a ball already inside the right wall), `BallLost` vs `LifeLost`, launch/wall/paddle events.
 - `arkanoid_sim_property_test` — 20 `Pcg32` seeds × 10 000 ticks: arena bounds, speed, no deep brick overlap, min vertical angle.
 - `arkanoid_powerup_test` — Wide+Slow stack, recatch refresh, Slow expiry exact speed (50 cycles), Wide expiry width+clamp, MultiBall under Slow, ExtraLife leaves timers alone.

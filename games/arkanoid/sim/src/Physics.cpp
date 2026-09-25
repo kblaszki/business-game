@@ -283,6 +283,7 @@ void depenetrateBallFromPaddle(Ball& ball, const Paddle& paddle)
     {
         ball.pos.x = paddle.x - ballDiameter - separation;
     }
+    ball.pos.x = std::clamp(ball.pos.x, 0.f, designWidth - ballDiameter);
 }
 
 [[nodiscard]] sgl::Aabb leftWallBox()
@@ -303,6 +304,31 @@ void depenetrateBallFromPaddle(Ball& ball, const Paddle& paddle)
 [[nodiscard]] sgl::Aabb paddleBox(const Paddle& paddle)
 {
     return {{paddle.x, paddleY}, {paddle.width, paddleHeight}};
+}
+
+void bounceOutOfWalls(Ball& ball, sgl::Vec2f hitNormal, float speed)
+{
+    constexpr float separation = 0.01f;
+    bool overlapped = false;
+    const sgl::Aabb walls[]{leftWallBox(), rightWallBox(), topWallBox()};
+    for(const sgl::Aabb& wall: walls)
+    {
+        const sgl::Circle circle{.center = ballCenter(ball), .radius = ballRadius};
+        const auto contact = sgl::intersect(circle, wall);
+        if(!contact || contact->depth <= 0.f)
+        {
+            continue;
+        }
+        overlapped = true;
+        ball.vel = sgl::reflect(ball.vel, contact->normal);
+        ball.pos = ball.pos + contact->normal * (contact->depth + separation);
+    }
+    if(!overlapped)
+    {
+        ball.vel = sgl::reflect(ball.vel, hitNormal);
+        ball.pos = ball.pos + hitNormal * separation;
+    }
+    setBallSpeed(ball, speed);
 }
 
 void considerHit(
@@ -421,8 +447,7 @@ void integrateLiveBall(State& state, Ball& ball, float dt, std::vector<SimEvent>
                 resolveBrickHits(state, ball, best->time, best->normal, circle, delta, speed, events);
                 break;
             case ObstacleKind::Wall:
-                ball.vel = sgl::reflect(ball.vel, best->normal);
-                setBallSpeed(ball, speed);
+                bounceOutOfWalls(ball, best->normal, speed);
                 events.push_back(WallHit{});
                 break;
             case ObstacleKind::Paddle:
