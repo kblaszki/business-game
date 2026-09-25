@@ -61,7 +61,7 @@ int main()
         {sgl::arkanoid::AssetKeys::brick, &textures.brick},
         {sgl::arkanoid::AssetKeys::paddle, &textures.paddle},
         {sgl::arkanoid::AssetKeys::ball, &textures.ball},
-        {sgl::arkanoid::AssetKeys::capsuleWide, &textures.capsule[0]},
+        {sgl::arkanoid::AssetKeys::capsuleWide, textures.capsule.data()},
         {sgl::arkanoid::AssetKeys::capsuleMulti, &textures.capsule[1]},
         {sgl::arkanoid::AssetKeys::capsuleSlow, &textures.capsule[2]},
         {sgl::arkanoid::AssetKeys::capsuleExtra, &textures.capsule[3]},

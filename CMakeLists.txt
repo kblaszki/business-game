@@ -87,6 +87,8 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
         set(SGL_TIDY_EXTRA_ARGS "-extra-arg=-Wno-unknown-warning-option")
         # clang-tidy needs explicit libstdc++ paths when the compile DB was produced by GCC.
         if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            # libstdc++ hides std::expected from Clang unless GCC's impl macro is set.
+            list(APPEND SGL_TIDY_EXTRA_ARGS "-extra-arg=-D__cpp_impl_three_way_comparison=201907L")
             execute_process(
                 COMMAND ${CMAKE_CXX_COMPILER} -print-file-name=include
                 OUTPUT_VARIABLE SGL_GCC_INCLUDE

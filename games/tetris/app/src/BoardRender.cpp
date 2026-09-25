@@ -104,11 +104,12 @@ void renderBoard(const TetrisGame& game, const Layout& layout, sgl::RenderQueue&
     {
         for(int x = 0; x < Grid::kWidth; ++x)
         {
-            if(!row[static_cast<std::size_t>(x)].has_value())
+            const auto& cell = row[static_cast<std::size_t>(x)];
+            if(!cell.has_value())
             {
                 continue;
             }
-            const PieceType type = *row[static_cast<std::size_t>(x)];
+            const PieceType type = *cell;
             const Coord c{x, rowIndex};
             queue.push(sgl::Layer::World,
                        static_cast<float>(rowIndex),
@@ -122,9 +123,10 @@ void renderBoard(const TetrisGame& game, const Layout& layout, sgl::RenderQueue&
     {
         drawCells(cells(*ghost), ghost->type, layout, sgl::Layer::Actors, 0.f, true, queue);
     }
-    if(game.active().has_value())
+    if(const std::optional<Piece> activePiece = game.active())
     {
-        drawCells(cells(*game.active()), game.active()->type, layout, sgl::Layer::Actors, 100.f, false, queue);
+        const Piece& active = *activePiece;
+        drawCells(cells(active), active.type, layout, sgl::Layer::Actors, 100.f, false, queue);
     }
 
     queue.push(sgl::Layer::Hud,
@@ -133,9 +135,10 @@ void renderBoard(const TetrisGame& game, const Layout& layout, sgl::RenderQueue&
                    .rect = {.pos = {layout.holdOrigin.x - 8.f, layout.holdOrigin.y - 8.f}, .size = {120.f, 120.f}},
                    .fill = panelFill,
                });
-    if(game.held().has_value())
+    if(const std::optional<PieceType> held = game.held())
     {
-        drawPieceType(*game.held(), layout.holdOrigin, layout.previewCell, sgl::Layer::Hud, 1.f, queue);
+        const PieceType type = *held;
+        drawPieceType(type, layout.holdOrigin, layout.previewCell, sgl::Layer::Hud, 1.f, queue);
     }
 
     queue.push(sgl::Layer::Hud,
