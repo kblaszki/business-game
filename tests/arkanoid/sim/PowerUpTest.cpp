@@ -121,8 +121,8 @@ TEST(PowerUpTest, multiBallDuringSlowKeepsSlowSpeed)
     ASSERT_EQ(state.balls.size(), 3u);
     EXPECT_FLOAT_EQ(sgl::arkanoid::ballSpeedMultiplier(state.effects), sgl::arkanoid::slowFactor);
     EXPECT_FLOAT_EQ(speedOf(state.balls.front()), expected);
-    EXPECT_FLOAT_EQ(state.balls[1].vel.y, state.balls[0].vel.y);
-    EXPECT_FLOAT_EQ(state.balls[2].vel.y, state.balls[0].vel.y);
+    EXPECT_FLOAT_EQ(speedOf(state.balls[1]), expected);
+    EXPECT_FLOAT_EQ(speedOf(state.balls[2]), expected);
 }
 
 TEST(PowerUpTest, extraLifeDoesNotTouchTimers)

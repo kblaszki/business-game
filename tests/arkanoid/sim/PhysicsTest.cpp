@@ -149,7 +149,7 @@ TEST(PhysicsTest, minimumVerticalAngleEnforced)
 
     ASSERT_EQ(state.balls.size(), 1u);
     const float speed = speedOf(state.balls.front());
-    const float minSin = std::sin(15.f * std::numbers::pi_v<float> / 180.f);
+    float minSin = std::sin(15.f * std::numbers::pi_v<float> / 180.f);
     EXPECT_GE(std::abs(state.balls.front().vel.y) / speed, minSin - 1e-4f);
 }
 

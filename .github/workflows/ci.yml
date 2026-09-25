@@ -150,8 +150,8 @@ jobs:
 
     env:
       CMAKE_CXX_COMPILER_LAUNCHER: ccache
-      CC: clang
-      CXX: clang++
+      CC: gcc-14
+      CXX: g++-14
 
     steps:
       - name: Checkout
