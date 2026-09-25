@@ -21,4 +21,7 @@ struct LevelData
 
 [[nodiscard]] State makeState(StageId id, std::uint32_t score = 0, std::uint32_t lives = startingLives);
 
+[[nodiscard]] State
+makeState(std::span<const Brick> bricks, std::uint32_t score = 0, std::uint32_t lives = startingLives);
+
 } // namespace sgl::arkanoid

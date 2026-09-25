@@ -34,6 +34,7 @@ TEST(SimShould, bounceBallOffLeftWall)
 {
     sgl::arkanoid::State state = sgl::arkanoid::makeState(sgl::arkanoid::StageId::Stage1);
     state.bricks.clear();
+    // Near-horizontal inbound: after wall bounce, min vertical angle is enforced (old zero-vy loop was a bug).
     state.balls = {
         sgl::arkanoid::Ball{.pos = {2.f, 300.f}, .vel = {-240.f, 0.f}, .mode = sgl::arkanoid::BallMode::Live}};
 
@@ -42,6 +43,7 @@ TEST(SimShould, bounceBallOffLeftWall)
     ASSERT_FALSE(state.balls.empty());
     EXPECT_GE(state.balls.front().pos.x, 0.f);
     EXPECT_GT(state.balls.front().vel.x, 0.f);
+    EXPECT_NE(state.balls.front().vel.y, 0.f);
 }
 
 TEST(SimShould, breakBrickRaisesScoreAndBrickDestroyed)

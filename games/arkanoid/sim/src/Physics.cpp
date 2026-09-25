@@ -3,14 +3,38 @@
 #include <arkanoid/sim/Tuning.hpp>
 #include <cmath>
 #include <cstddef>
+#include <numbers>
 #include <optional>
 #include <sgl/collision/Circle.hpp>
 #include <sgl/collision/Collision.hpp>
+#include <vector>
 
 namespace sgl::arkanoid
 {
 namespace
 {
+
+constexpr float paddleMaxBounceAngle = 60.f * std::numbers::pi_v<float> / 180.f;
+constexpr float minVerticalAngle = 15.f * std::numbers::pi_v<float> / 180.f;
+constexpr float wallThickness = 64.f;
+constexpr float seamEpsilon = 1e-4f;
+constexpr float toiEpsilon = 1e-6f;
+constexpr int maxToiIterations = 4;
+
+enum class ObstacleKind
+{
+    Brick,
+    Wall,
+    Paddle
+};
+
+struct ObstacleHit
+{
+    float time{};
+    sgl::Vec2f normal{};
+    ObstacleKind kind{};
+    std::size_t brickIndex{};
+};
 
 [[nodiscard]] sgl::Vec2f ballCenter(const Ball& ball)
 {
@@ -111,102 +135,233 @@ void applyMultiBall(State& state)
     state.balls.push_back(Ball{.pos = pos, .vel = rightVel, .mode = BallMode::Live});
 }
 
-void bounceWalls(Ball& ball)
+[[nodiscard]] float targetBallSpeed(const State& state)
 {
-    if(ball.pos.x <= 0.f)
-    {
-        ball.pos.x = 0.f;
-        ball.vel.x = std::abs(ball.vel.x);
-    }
-    if(ball.pos.x + ballDiameter >= designWidth)
-    {
-        ball.pos.x = designWidth - ballDiameter;
-        ball.vel.x = -std::abs(ball.vel.x);
-    }
-    if(ball.pos.y <= 0.f)
-    {
-        ball.pos.y = 0.f;
-        ball.vel.y = std::abs(ball.vel.y);
-    }
+    return ballSpeed * ballSpeedMultiplier(state);
 }
 
-void bouncePaddle(Ball& ball, const Paddle& paddle)
+void enforceMinVertical(Ball& ball, float speed)
 {
-    if(ball.vel.y <= 0.f)
-    {
-        return;
-    }
-    if(!ballOverlapsPaddle(ball, paddle))
+    const float minVy = speed * std::sin(minVerticalAngle);
+    if(std::abs(ball.vel.y) >= minVy)
     {
         return;
     }
 
-    ball.vel.y = -std::abs(ball.vel.y);
+    const float signY = ball.vel.y < 0.f ? -1.f : 1.f;
+    const float signX = ball.vel.x < 0.f ? -1.f : 1.f;
+    const float vx = std::sqrt(std::max(0.f, speed * speed - minVy * minVy));
+    ball.vel = {signX * vx, signY * minVy};
+}
+
+void setBallSpeed(Ball& ball, float speed)
+{
+    if(const auto dir = sgl::normalized(ball.vel))
+    {
+        ball.vel = *dir * speed;
+    }
+    else
+    {
+        ball.vel = {0.f, -speed};
+    }
+    enforceMinVertical(ball, speed);
+}
+
+void applyPaddleBounce(Ball& ball, const Paddle& paddle, float speed)
+{
     const float paddleCenterX = paddle.x + paddle.width * 0.5f;
-    const float hitOffset = (ballCenter(ball).x - paddleCenterX) / (paddle.width * 0.5f);
-    ball.vel.x += hitOffset * 120.f;
-    ball.pos.y = paddleY - ballDiameter;
+    float hitOffset = (ballCenter(ball).x - paddleCenterX) / (paddle.width * 0.5f);
+    hitOffset = std::clamp(hitOffset, -1.f, 1.f);
+    const float angle = hitOffset * paddleMaxBounceAngle;
+    ball.vel = {speed * std::sin(angle), -speed * std::cos(angle)};
+    enforceMinVertical(ball, speed);
 }
 
-void resolveBrickHit(State& state, Ball& ball, std::size_t brickIndex, sgl::Vec2f normal, std::vector<SimEvent>& events)
+void depenetrateBallFromPaddle(Ball& ball, const Paddle& paddle)
 {
-    Brick& brick = state.bricks[brickIndex];
-    if(!brick.alive)
+    if(ball.mode != BallMode::Live || !ballOverlapsPaddle(ball, paddle))
     {
         return;
     }
 
-    brick.alive = false;
-    state.score += scorePerBrick;
-    events.push_back(BrickDestroyed{.index = brickIndex});
-
-    if(brick.drop.has_value())
+    constexpr float separation = 0.01f;
+    const float paddleCenterY = paddleY + paddleHeight * 0.5f;
+    if(ballCenter(ball).y <= paddleCenterY)
     {
-        state.capsules.push_back(Capsule{.pos = brick.box.pos, .kind = *brick.drop});
+        ball.pos.y = paddleY - ballDiameter - separation;
+        return;
     }
 
-    ball.vel = sgl::reflect(ball.vel, normal);
+    if(paddle.speed >= 0.f)
+    {
+        ball.pos.x = paddle.x + paddle.width + separation;
+    }
+    else
+    {
+        ball.pos.x = paddle.x - ballDiameter - separation;
+    }
 }
 
-void integrateLiveBall(State& state, Ball& ball, float dt, std::vector<SimEvent>& events)
+[[nodiscard]] sgl::Aabb leftWallBox()
 {
-    const sgl::Vec2f delta = ball.vel * dt;
-    const sgl::Circle circle{.center = ballCenter(ball), .radius = ballRadius};
+    return {{-wallThickness, -wallThickness}, {wallThickness, designHeight + 2.f * wallThickness}};
+}
 
-    std::optional<sgl::Hit> best{};
-    std::size_t bestIndex = 0;
+[[nodiscard]] sgl::Aabb rightWallBox()
+{
+    return {{designWidth, -wallThickness}, {wallThickness, designHeight + 2.f * wallThickness}};
+}
+
+[[nodiscard]] sgl::Aabb topWallBox()
+{
+    return {{-wallThickness, -wallThickness}, {designWidth + 2.f * wallThickness, wallThickness}};
+}
+
+[[nodiscard]] sgl::Aabb paddleBox(const Paddle& paddle)
+{
+    return {{paddle.x, paddleY}, {paddle.width, paddleHeight}};
+}
+
+void considerHit(
+    std::optional<ObstacleHit>& best, float time, sgl::Vec2f normal, ObstacleKind kind, std::size_t brickIndex = 0)
+{
+    if(time < 0.f || time > 1.f)
+    {
+        return;
+    }
+    if(!best.has_value() || time < best->time)
+    {
+        best = ObstacleHit{.time = time, .normal = normal, .kind = kind, .brickIndex = brickIndex};
+    }
+}
+
+void resolveBrickHits(State& state,
+                      Ball& ball,
+                      float tBest,
+                      sgl::Vec2f bestNormal,
+                      const sgl::Circle& circle,
+                      sgl::Vec2f delta,
+                      float speed,
+                      std::vector<SimEvent>& events)
+{
+    sgl::Vec2f normalSum{};
+    bool any = false;
     for(std::size_t i = 0; i < state.bricks.size(); ++i)
     {
         if(!state.bricks[i].alive)
         {
             continue;
         }
-
-        if(const auto hit = sgl::sweep(circle, delta, state.bricks[i].box))
+        const auto hit = sgl::sweep(circle, delta, state.bricks[i].box);
+        if(!hit || std::abs(hit->time - tBest) >= seamEpsilon)
         {
-            if(!best.has_value() || hit->time < best->time)
+            continue;
+        }
+
+        Brick& brick = state.bricks[i];
+        brick.alive = false;
+        state.score += scorePerBrick;
+        events.push_back(BrickDestroyed{.index = i});
+        if(brick.drop.has_value())
+        {
+            state.capsules.push_back(Capsule{.pos = brick.box.pos, .kind = *brick.drop});
+        }
+        normalSum = normalSum + hit->normal;
+        any = true;
+    }
+
+    if(!any)
+    {
+        return;
+    }
+
+    sgl::Vec2f normal = bestNormal;
+    if(const auto sumDir = sgl::normalized(normalSum))
+    {
+        normal = *sumDir;
+    }
+    ball.vel = sgl::reflect(ball.vel, normal);
+    setBallSpeed(ball, speed);
+}
+
+void integrateLiveBall(State& state, Ball& ball, float dt, std::vector<SimEvent>& events)
+{
+    float remaining = 1.f;
+    for(int iter = 0; iter < maxToiIterations && remaining > toiEpsilon; ++iter)
+    {
+        const float speed = targetBallSpeed(state);
+        const sgl::Vec2f delta = ball.vel * (dt * remaining);
+        const sgl::Circle circle{.center = ballCenter(ball), .radius = ballRadius};
+
+        std::optional<ObstacleHit> best{};
+        for(std::size_t i = 0; i < state.bricks.size(); ++i)
+        {
+            if(!state.bricks[i].alive)
             {
-                best = hit;
-                bestIndex = i;
+                continue;
+            }
+            if(const auto hit = sgl::sweep(circle, delta, state.bricks[i].box))
+            {
+                considerHit(best, hit->time, hit->normal, ObstacleKind::Brick, i);
             }
         }
-    }
 
-    if(best.has_value())
-    {
+        if(const auto hit = sgl::sweep(circle, delta, leftWallBox()))
+        {
+            considerHit(best, hit->time, hit->normal, ObstacleKind::Wall);
+        }
+        if(const auto hit = sgl::sweep(circle, delta, rightWallBox()))
+        {
+            considerHit(best, hit->time, hit->normal, ObstacleKind::Wall);
+        }
+        if(const auto hit = sgl::sweep(circle, delta, topWallBox()))
+        {
+            considerHit(best, hit->time, hit->normal, ObstacleKind::Wall);
+        }
+        if(const auto hit = sgl::sweep(circle, delta, paddleBox(state.paddle)))
+        {
+            considerHit(best, hit->time, hit->normal, ObstacleKind::Paddle);
+        }
+
+        if(!best.has_value())
+        {
+            ball.pos = ball.pos + delta;
+            break;
+        }
+
         ball.pos = ball.pos + delta * best->time;
-        resolveBrickHit(state, ball, bestIndex, best->normal, events);
-    }
-    else
-    {
-        ball.pos = ball.pos + delta;
-    }
+        remaining *= (1.f - best->time);
 
-    bounceWalls(ball);
-    bouncePaddle(ball, state.paddle);
+        switch(best->kind)
+        {
+            case ObstacleKind::Brick:
+                resolveBrickHits(state, ball, best->time, best->normal, circle, delta, speed, events);
+                break;
+            case ObstacleKind::Wall:
+                ball.vel = sgl::reflect(ball.vel, best->normal);
+                setBallSpeed(ball, speed);
+                events.push_back(WallHit{});
+                break;
+            case ObstacleKind::Paddle:
+                applyPaddleBounce(ball, state.paddle, speed);
+                events.push_back(PaddleHit{});
+                break;
+        }
+
+        if(best->time <= toiEpsilon && remaining >= 1.f - toiEpsilon)
+        {
+            // Stuck in contact with zero progress — stop to avoid infinite TOI loops.
+            break;
+        }
+    }
 }
 
 } // namespace
+
+float ballSpeedMultiplier(const State& state)
+{
+    return state.effects.slowActive ? slowFactor : 1.f;
+}
 
 void applyPowerUp(State& state, PowerUpKind kind)
 {
@@ -258,6 +413,10 @@ std::vector<SimEvent> step(State& state, const SimInput& input, sgl::Seconds dt)
         {
             stickBallToPaddle(ball, state.paddle);
         }
+        else
+        {
+            depenetrateBallFromPaddle(ball, state.paddle);
+        }
     }
 
     if(input.launch)
@@ -270,12 +429,16 @@ std::vector<SimEvent> step(State& state, const SimInput& input, sgl::Seconds dt)
             }
 
             ball.mode = BallMode::Live;
-            sgl::Vec2f vel = launchVelocity;
-            if(state.effects.slowActive)
+            if(const auto dir = sgl::normalized(launchVelocity))
             {
-                vel = vel * slowFactor;
+                ball.vel = *dir * targetBallSpeed(state);
             }
-            ball.vel = vel;
+            else
+            {
+                ball.vel = {0.f, -targetBallSpeed(state)};
+            }
+            enforceMinVertical(ball, targetBallSpeed(state));
+            events.push_back(BallLaunched{});
             break;
         }
     }
@@ -331,8 +494,9 @@ std::vector<SimEvent> step(State& state, const SimInput& input, sgl::Seconds dt)
 
     if(!state.balls.empty())
     {
-        const bool allFallen = std::all_of(state.balls.begin(), state.balls.end(), offBottom);
-        if(allFallen)
+        const std::size_t fallen =
+            static_cast<std::size_t>(std::count_if(state.balls.begin(), state.balls.end(), offBottom));
+        if(fallen == state.balls.size())
         {
             events.push_back(LifeLost{});
             if(state.lives > 0)
@@ -353,8 +517,12 @@ std::vector<SimEvent> step(State& state, const SimInput& input, sgl::Seconds dt)
                 events.push_back(GameOver{});
             }
         }
-        else
+        else if(fallen > 0)
         {
+            for(std::size_t i = 0; i < fallen; ++i)
+            {
+                events.push_back(BallLost{});
+            }
             std::erase_if(state.balls, offBottom);
         }
     }

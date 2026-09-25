@@ -18,6 +18,7 @@ inline constexpr float paddleSpeed{480.f};
 inline constexpr float ballRadius{8.f};
 inline constexpr float ballDiameter{ballRadius * 2.f};
 inline constexpr sgl::Vec2f launchVelocity{160.f, -360.f};
+inline constexpr float ballSpeed{393.9540715160134f}; // length of launchVelocity
 
 inline constexpr float brickWidth{110.f};
 inline constexpr float brickHeight{28.f};

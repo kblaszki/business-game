@@ -1,6 +1,9 @@
 add_library(tetris_sim STATIC
     src/Grid.cpp
     src/Piece.cpp
+    src/Bag.cpp
+    src/Scoring.cpp
+    src/TetrisGame.cpp
 )
 target_include_directories(tetris_sim PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include

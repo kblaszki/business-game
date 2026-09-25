@@ -141,4 +141,20 @@ State makeState(StageId id, std::uint32_t score, std::uint32_t lives)
     return state;
 }
 
+State makeState(std::span<const Brick> bricks, std::uint32_t score, std::uint32_t lives)
+{
+    State state{};
+    state.stage = StageId::Stage1;
+    state.score = score;
+    state.lives = lives;
+    state.paddle.x = (designWidth - paddleWidth) * 0.5f;
+    state.paddle.width = paddleWidth;
+    state.bricks.assign(bricks.begin(), bricks.end());
+
+    Ball ball{};
+    stickBallToPaddle(ball, state.paddle);
+    state.balls.push_back(ball);
+    return state;
+}
+
 } // namespace sgl::arkanoid

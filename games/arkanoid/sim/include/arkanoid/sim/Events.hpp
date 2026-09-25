@@ -30,6 +30,30 @@ struct PowerUpCaught
     PowerUpKind kind{};
 };
 
-using SimEvent = std::variant<BrickDestroyed, LifeLost, StageCleared, GameOver, PowerUpCaught>;
+struct PaddleHit
+{
+};
+
+struct WallHit
+{
+};
+
+struct BallLaunched
+{
+};
+
+struct BallLost
+{
+};
+
+using SimEvent = std::variant<BrickDestroyed,
+                              LifeLost,
+                              StageCleared,
+                              GameOver,
+                              PowerUpCaught,
+                              PaddleHit,
+                              WallHit,
+                              BallLaunched,
+                              BallLost>;
 
 } // namespace sgl::arkanoid

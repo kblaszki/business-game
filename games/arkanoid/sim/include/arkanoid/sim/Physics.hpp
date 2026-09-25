@@ -18,4 +18,6 @@ struct SimInput
 
 void applyPowerUp(State& state, PowerUpKind kind);
 
+[[nodiscard]] float ballSpeedMultiplier(const State& state);
+
 } // namespace sgl::arkanoid
