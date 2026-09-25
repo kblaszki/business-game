@@ -4,9 +4,6 @@
 #include <gtest/gtest.h>
 #include <sgl/render/DrawCommand.hpp>
 #include <sgl/render/RenderQueue.hpp>
-#include <vector>
-
-using ::testing::_;
 
 namespace
 {
@@ -63,6 +60,23 @@ TEST(RenderQueueTest, StableOnEqualSortKeys)
     EXPECT_EQ(sorted[3].key.layer, sgl::Layer::Actors);
 }
 
+TEST(RenderQueueTest, identicalKeysKeepPushOrder)
+{
+    sgl::RenderQueue queue;
+    queue.push(sgl::Layer::World, 1.f, makeRect({1, 0, 0, 255}));
+    queue.push(sgl::Layer::World, 1.f, makeRect({2, 0, 0, 255}));
+    queue.push(sgl::Layer::World, 1.f, makeRect({3, 0, 0, 255}));
+
+    const auto sorted = queue.sorted();
+    ASSERT_EQ(sorted.size(), 3u);
+    EXPECT_EQ(std::get<sgl::RectCmd>(sorted[0].command).fill.r, 1);
+    EXPECT_EQ(std::get<sgl::RectCmd>(sorted[1].command).fill.r, 2);
+    EXPECT_EQ(std::get<sgl::RectCmd>(sorted[2].command).fill.r, 3);
+    EXPECT_EQ(sorted[0].key.seq, 0u);
+    EXPECT_EQ(sorted[1].key.seq, 1u);
+    EXPECT_EQ(sorted[2].key.seq, 2u);
+}
+
 TEST(RenderQueueTest, ClearResetsSeq)
 {
     sgl::RenderQueue queue;
@@ -78,18 +92,4 @@ TEST(RenderQueueTest, ClearResetsSeq)
     const auto sorted = queue.sorted();
     ASSERT_EQ(sorted.size(), 1u);
     EXPECT_EQ(sorted[0].key.seq, 0u);
-}
-
-TEST(RenderQueueTest, RendererMockBeginSubmitEnd)
-{
-    sgl::RendererMock renderer;
-    sgl::RenderQueue queue;
-
-    EXPECT_CALL(renderer, begin()).Times(1);
-    EXPECT_CALL(renderer, submit(_)).Times(1);
-    EXPECT_CALL(renderer, end()).Times(1);
-
-    renderer.begin();
-    renderer.submit(queue);
-    renderer.end();
 }

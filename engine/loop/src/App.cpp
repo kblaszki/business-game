@@ -1,3 +1,4 @@
+#include <sgl/core/Features.hpp>
 #include <sgl/core/Time.hpp>
 #include <sgl/loop/App.hpp>
 #include <sgl/render/RenderQueue.hpp>

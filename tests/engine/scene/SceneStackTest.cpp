@@ -3,6 +3,7 @@
 #include <memory>
 #include <sgl/core/Time.hpp>
 #include <sgl/input/InputState.hpp>
+#include <sgl/render/RenderQueue.hpp>
 #include <sgl/scene/SceneStack.hpp>
 
 namespace
@@ -35,6 +36,38 @@ sgl::InputState makeInput(bool focusLost = false)
         input.apply(sgl::FocusLost{}, map);
     }
     return input;
+}
+
+class RenderCountingScene : public sgl::SceneI
+{
+public:
+    void update(sgl::SceneContext&, sgl::Seconds) override
+    {
+        ++updateCount;
+    }
+
+    void render(sgl::RenderQueue&) const override
+    {
+        ++renderCount;
+    }
+
+    [[nodiscard]] sgl::SceneTraits traits() const override
+    {
+        return traits_;
+    }
+
+    sgl::SceneTraits traits_{};
+    std::uint32_t updateCount{};
+    mutable std::uint32_t renderCount{};
+};
+
+RenderCountingScene& pushRenderSpy(sgl::SceneStack& stack, sgl::SceneTraits traits)
+{
+    auto scene = std::make_unique<RenderCountingScene>();
+    scene->traits_ = traits;
+    RenderCountingScene& ref = *scene;
+    stack.push(std::move(scene));
+    return ref;
 }
 
 } // namespace
@@ -117,18 +150,82 @@ TEST(SceneStackShould, pushPauseOverlayOnFocusLost)
     EXPECT_EQ(stack.size(), 2u);
 }
 
-TEST(SceneStackShould, reportSizeAndEmpty)
+TEST(SceneStackShould, applyDeferredPush)
+{
+    sgl::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneSpy& top = pushSpy(stack);
+
+    top.onUpdate = [](sgl::SceneContext& ctx) {
+        ctx.request(sgl::PushScene{[] { return std::make_unique<sgl::SceneSpy>(); }});
+    };
+
+    EXPECT_EQ(stack.size(), 1u);
+    stack.update(makeInput(), sgl::kTick);
+    EXPECT_EQ(stack.size(), 2u);
+}
+
+TEST(SceneStackShould, renderFromTopmostOpaqueUpward)
+{
+    sgl::SceneStack stack{pauseOverlayFactory()};
+    RenderCountingScene& below = pushRenderSpy(stack, {.opaque = true, .blocksUpdate = false, .pausable = false});
+    RenderCountingScene& mid = pushRenderSpy(stack, {.opaque = true, .blocksUpdate = false, .pausable = false});
+    RenderCountingScene& top = pushRenderSpy(stack, {.opaque = false, .blocksUpdate = false, .pausable = false});
+
+    sgl::RenderQueue queue;
+    stack.render(queue);
+
+    EXPECT_EQ(below.renderCount, 0u);
+    EXPECT_EQ(mid.renderCount, 1u);
+    EXPECT_EQ(top.renderCount, 1u);
+}
+
+TEST(SceneStackShould, updateOnEmptyStackIsNoOp)
 {
     sgl::SceneStack stack{pauseOverlayFactory()};
     EXPECT_TRUE(stack.empty());
-    EXPECT_EQ(stack.size(), 0u);
+    stack.update(makeInput(), sgl::kTick);
+    EXPECT_TRUE(stack.empty());
+    EXPECT_FALSE(stack.quitRequested());
+}
 
-    pushSpy(stack);
-    EXPECT_FALSE(stack.empty());
-    EXPECT_EQ(stack.size(), 1u);
+TEST(SceneStackShould, ignoreRequestsFromSceneBelowBlocker)
+{
+    sgl::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneSpy& below = pushSpy(stack, {.opaque = true, .blocksUpdate = false, .pausable = false});
+    sgl::SceneSpy& blocker = pushSpy(stack, {.opaque = false, .blocksUpdate = true, .pausable = false});
 
-    pushSpy(stack);
+    below.onUpdate = [](sgl::SceneContext& ctx) {
+        ctx.request(sgl::PushScene{[] { return std::make_unique<sgl::SceneSpy>(); }});
+    };
+
+    stack.update(makeInput(), sgl::kTick);
+
+    EXPECT_EQ(blocker.updateCount, 1u);
+    EXPECT_EQ(below.updateCount, 0u);
     EXPECT_EQ(stack.size(), 2u);
+}
+
+TEST(SceneStackShould, resumeAfterPausePop)
+{
+    sgl::SceneStack stack{pauseOverlayFactory()};
+    sgl::SceneSpy& gameplay = pushSpy(stack, {.opaque = true, .blocksUpdate = true, .pausable = true});
+    gameplay.onUpdate = [](sgl::SceneContext& ctx) { ctx.request(sgl::RequestPause{}); };
+
+    stack.update(makeInput(), sgl::kTick);
+    ASSERT_EQ(stack.size(), 2u);
+    EXPECT_EQ(gameplay.updateCount, 1u);
+
+    sgl::SceneSpy* overlay = dynamic_cast<sgl::SceneSpy*>(stack.top());
+    ASSERT_NE(overlay, nullptr);
+    overlay->onUpdate = [](sgl::SceneContext& ctx) { ctx.request(sgl::PopScene{}); };
+
+    stack.update(makeInput(), sgl::kTick);
+    EXPECT_EQ(stack.size(), 1u);
+    EXPECT_EQ(stack.top(), &gameplay);
+
+    gameplay.onUpdate = {};
+    stack.update(makeInput(), sgl::kTick);
+    EXPECT_EQ(gameplay.updateCount, 2u);
 }
 
 TEST(SceneStackShould, stopUpdateWalkAtFirstBlockingScene)

@@ -87,3 +87,178 @@ jobs:
 
       - name: Build arkanoid
         run: cmake --build --preset release --target arkanoid
+
+  asan:
+    name: asan
+    runs-on: ubuntu-24.04
+
+    env:
+      CMAKE_CXX_COMPILER_LAUNCHER: ccache
+      CC: gcc-14
+      CXX: g++-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Get CMake and Ninja
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            g++-14 \
+            libgl1-mesa-dev \
+            libudev-dev \
+            libxrandr-dev \
+            libxcursor-dev \
+            libxi-dev \
+            libx11-dev \
+            libfreetype6-dev \
+            libharfbuzz-dev \
+            ninja-build \
+            ccache
+
+      - name: Setup CCache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: asan-ubuntu-24.04
+
+      - name: Configure asan
+        run: cmake --preset asan
+
+      - name: Build tests
+        run: cmake --build --preset asan --target build_ut
+
+      - name: Run tests
+        run: ctest --preset asan --output-on-failure
+
+  tidy:
+    name: tidy
+    runs-on: ubuntu-24.04
+
+    env:
+      CMAKE_CXX_COMPILER_LAUNCHER: ccache
+      CC: clang
+      CXX: clang++
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Get CMake and Ninja
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang \
+            clang-tidy \
+            libgl1-mesa-dev \
+            libudev-dev \
+            libxrandr-dev \
+            libxcursor-dev \
+            libxi-dev \
+            libx11-dev \
+            libfreetype6-dev \
+            libharfbuzz-dev \
+            ninja-build \
+            ccache
+
+      - name: Setup CCache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: tidy-ubuntu-24.04
+
+      - name: Configure Debug
+        run: cmake --preset debug
+
+      - name: Build compile database consumers
+        run: cmake --build --preset debug --target build_ut
+
+      - name: Run clang-tidy
+        run: cmake --build --preset debug --target tidy
+
+  coverage:
+    name: coverage
+    runs-on: ubuntu-24.04
+
+    env:
+      CMAKE_CXX_COMPILER_LAUNCHER: ccache
+      CC: gcc-14
+      CXX: g++-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Get CMake and Ninja
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: latest
+          ninjaVersion: latest
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            g++-14 \
+            libgl1-mesa-dev \
+            libudev-dev \
+            libxrandr-dev \
+            libxcursor-dev \
+            libxi-dev \
+            libx11-dev \
+            libfreetype6-dev \
+            libharfbuzz-dev \
+            ninja-build \
+            ccache \
+            python3-pip
+          if ! command -v gcovr >/dev/null 2>&1; then
+            pip3 install --user gcovr
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          fi
+
+      - name: Setup CCache
+        uses: hendrikmuhs/ccache-action@v1
+        with:
+          key: coverage-ubuntu-24.04
+
+      - name: Configure coverage
+        run: cmake --preset coverage
+
+      - name: Build tests
+        run: cmake --build --preset coverage --target build_ut
+
+      - name: Run tests
+        run: ctest --preset coverage --output-on-failure
+
+      - name: Report coverage
+        run: |
+          mkdir -p build/coverage/html
+          gcovr \
+            --root . \
+            --filter 'engine/.*' \
+            --exclude 'engine/sfml/.*' \
+            --filter 'games/.*/sim/.*' \
+            --exclude-unreachable-branches \
+            --exclude-throw-branches \
+            --html-details build/coverage/html/index.html \
+            --txt \
+            --fail-under-line 90 \
+            --object-directory build/coverage
+
+      - name: Upload coverage HTML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: build/coverage/html

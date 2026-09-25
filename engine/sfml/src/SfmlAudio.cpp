@@ -45,7 +45,13 @@ void SfmlAudio::play(sgl::SoundId id, float volume)
     std::size_t slot = kVoiceCount;
     for(std::size_t i = 0; i < kVoiceCount; ++i)
     {
-        if(!voices_[i].has_value() || voices_[i]->getStatus() == sf::SoundSource::Status::Stopped)
+        std::optional<sf::Sound>& voice = voices_[i];
+        if(!voice.has_value())
+        {
+            slot = i;
+            break;
+        }
+        if(voice.value().getStatus() == sf::SoundSource::Status::Stopped)
         {
             slot = i;
             break;
@@ -66,9 +72,9 @@ void SfmlAudio::play(sgl::SoundId id, float volume)
         }
     }
 
-    voices_[slot].emplace(*buffer);
-    voices_[slot]->setVolume(sfVolume);
-    voices_[slot]->play();
+    sf::Sound& voice = voices_[slot].emplace(*buffer);
+    voice.setVolume(sfVolume);
+    voice.play();
     voiceStarted_[slot] = ++startCounter_;
 }
 

@@ -276,3 +276,24 @@ TEST(AppTest, closeWhenStackEmpty)
     App{platform, clock, ActionMap{}, stack, queue}.runFrames(1);
     EXPECT_TRUE(stack.empty());
 }
+
+TEST(AppTest, rendersBeginSubmitEndInOrder)
+{
+    NiceMock<PlatformMock> platform;
+    NiceMock<ClockMock> clock;
+    RendererMock renderer;
+    RenderQueue queue;
+    SceneStack stack{idlePause()};
+    stack.push(std::make_unique<SceneSpy>());
+
+    InSequence seq;
+    EXPECT_CALL(platform, isOpen()).WillOnce(Return(true));
+    EXPECT_CALL(platform, poll()).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(clock, restart()).WillOnce(Return(Seconds{0.f}));
+    EXPECT_CALL(platform, renderer()).WillOnce(ReturnRef(renderer));
+    EXPECT_CALL(renderer, begin()).Times(1);
+    EXPECT_CALL(renderer, submit(_)).Times(1);
+    EXPECT_CALL(renderer, end()).Times(1);
+
+    App{platform, clock, ActionMap{}, stack, queue}.runFrames(1);
+}

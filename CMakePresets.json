@@ -12,7 +12,7 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "YES"
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
     },
     {
@@ -20,7 +20,8 @@
       "inherits": "default",
       "description": "Configure for Debug build",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
     },
     {
@@ -29,6 +30,22 @@
       "description": "Configure for Release build",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "asan",
+      "inherits": "debug",
+      "description": "Debug with AddressSanitizer and UBSan (GCC/Clang)",
+      "cacheVariables": {
+        "SGL_ENABLE_ASAN": "ON"
+      }
+    },
+    {
+      "name": "coverage",
+      "inherits": "debug",
+      "description": "Debug with GCC coverage instrumentation",
+      "cacheVariables": {
+        "SGL_ENABLE_COVERAGE": "ON"
       }
     }
   ],
@@ -47,6 +64,16 @@
       "name": "release",
       "configurePreset": "release",
       "description": "Build with Release configuration"
+    },
+    {
+      "name": "asan",
+      "configurePreset": "asan",
+      "description": "Build with ASan/UBSan"
+    },
+    {
+      "name": "coverage",
+      "configurePreset": "coverage",
+      "description": "Build with coverage instrumentation"
     }
   ],
   "testPresets": [
@@ -56,7 +83,20 @@
       "execution": {
         "timeout": 30
       }
+    },
+    {
+      "name": "asan",
+      "configurePreset": "asan",
+      "execution": {
+        "timeout": 60
+      }
+    },
+    {
+      "name": "coverage",
+      "configurePreset": "coverage",
+      "execution": {
+        "timeout": 60
+      }
     }
   ]
 }
-  

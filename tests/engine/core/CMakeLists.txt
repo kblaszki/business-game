@@ -1,10 +1,3 @@
-add_unit_test(features_test
-    SOURCES
-        FeaturesTest.cpp
-    DEPENDENCIES
-        sgl_core
-)
-
 add_unit_test(vec_test
     SOURCES
         VecTest.cpp

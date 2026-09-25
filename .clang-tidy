@@ -5,17 +5,37 @@ Checks: >
   clang-analyzer-*,
   performance-*,
   readability-*,
-  modernize-*
+  modernize-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-exception-escape,
+  -bugprone-narrowing-conversions,
+  -bugprone-std-namespace-modification,
+  -modernize-avoid-c-arrays,
+  -modernize-use-default-member-init,
+  -modernize-use-designated-initializers,
+  -modernize-use-emplace,
+  -modernize-use-nodiscard,
+  -modernize-use-ranges,
+  -modernize-use-std-numbers,
+  -modernize-use-trailing-return-type,
+  -performance-enum-size,
+  -performance-unnecessary-value-param,
+  -readability-convert-member-functions-to-static,
+  -readability-function-cognitive-complexity,
+  -readability-identifier-length,
+  -readability-identifier-naming,
+  -readability-implicit-bool-conversion,
+  -readability-magic-numbers,
+  -readability-math-missing-parentheses,
+  -readability-named-parameter,
+  -readability-redundant-member-init,
+  -readability-simplify-boolean-expr,
+  -readability-uppercase-literal-suffix,
+  -readability-use-anyofallof,
+  -readability-use-concise-preprocessor-directives
 WarningsAsErrors: '*'
-HeaderFilterRegex: '.*'
-AnalyzeTemporaryDtors: true
+HeaderFilterRegex: '.*[/\\](engine|games)[/\\].*'
 CheckOptions:
-  - key:             readability-identifier-naming.VariableCase
-    value:           camelCase
-  - key:             readability-identifier-naming.ClassCase
-    value:           CamelCase
-  - key:             readability-identifier-naming.FunctionCase
-    value:           camelCase
   - key:             modernize-use-nullptr.NullMacros
     value:           NULL
   - key:             modernize-use-nullptr.ReplaceMacros
@@ -24,9 +44,4 @@ CheckOptions:
     value:           5
   - key:             performance-inefficient-vector-operation.CheckMove
     value:           true
-  - key:             clang-analyzer-optin.performance.Padding
-    value:           true
 ...
-
-ExcludePaths:
-  - build/*

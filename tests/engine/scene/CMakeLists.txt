@@ -4,4 +4,5 @@ add_unit_test(scene_stack_test
         fakes/SceneSpy.cpp
     DEPENDENCIES
         sgl_scene
+        sgl_render
 )

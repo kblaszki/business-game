@@ -8,7 +8,7 @@ namespace sgl::arkanoid
 namespace
 {
 
-constexpr std::size_t kCells = levelColumns * levelRows;
+constexpr std::size_t kCells = static_cast<std::size_t>(levelColumns) * static_cast<std::size_t>(levelRows);
 
 constexpr sgl::Color stageColors[levelRows]{
     {220, 70, 80},

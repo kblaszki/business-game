@@ -126,6 +126,10 @@ Include layout: `<sgl/<module>/X.hpp>`, `<arkanoid/<sim|app>/X.hpp>`, `<tetris/<
 | `arkanoid` | executable | `games/arkanoid/main.cpp` → `arkanoid_app`, `sgl_sfml`; `ASSET_DIR` → `assets/` |
 | `tetris_sim` | STATIC | → `sgl_core`; grid, shapes, SRS; no SFML |
 | `tetris_app` | INTERFACE | → `tetris_sim`, `sgl_loop`, `sgl_resources`, `sgl_audio`, `sgl_fx`, `sgl_save` |
+| `format` | custom | clang-format in place (Debug configure) |
+| `tidy` | custom | `run-clang-tidy` on `engine/` and `games/` (Debug configure) |
+
+Configure presets: `debug`, `release`, `asan` (`SGL_ENABLE_ASAN` on GCC/Clang), `coverage` (`SGL_ENABLE_COVERAGE` on GCC). Details: [build-and-test](../how-to/build-and-test.md).
 
 ## Unit test suites (Debug)
 
@@ -133,7 +137,7 @@ Registered with `add_unit_test` under `tests/engine/` and `tests/arkanoid/`:
 
 | Suite | Leaf |
 |-------|------|
-| `features_test`, `vec_test`, `rect_test`, `handle_test`, `image_test`, `random_test` | `tests/engine/core/` |
+| `vec_test`, `rect_test`, `handle_test`, `image_test`, `random_test` | `tests/engine/core/` |
 | `input_state_test` | `tests/engine/input/` |
 | `scene_stack_test` | `tests/engine/scene/` |
 | `fixed_step_loop_test`, `app_test` | `tests/engine/loop/` |

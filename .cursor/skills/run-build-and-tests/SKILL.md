@@ -12,8 +12,8 @@ Source of truth: [docs/how-to/build-and-test.md](../../../docs/how-to/build-and-
 ## Prerequisites
 
 - CMake ≥ 3.20, Ninja, C++23 compiler
-- SFML 3.1 Graphics/Window/System only, fetched by CMake (no manual install)
-- GoogleTest 1.18 is fetched only for the Debug preset
+- SFML 3.1 Graphics/Window/System/Audio, fetched by CMake (no manual install)
+- GoogleTest 1.18 is fetched only for Debug-family presets (`debug`, `asan`, `coverage`)
 
 ## Configure
 
@@ -21,9 +21,12 @@ Source of truth: [docs/how-to/build-and-test.md](../../../docs/how-to/build-and-
 cmake --preset debug
 # or
 cmake --preset release
+# or (GCC/Clang)
+cmake --preset asan
+cmake --preset coverage
 ```
 
-Outputs go to `build/debug/` or `build/release/`.
+Outputs go to `build/debug/`, `build/release/`, `build/asan/`, or `build/coverage/`.
 
 ## Build game
 
@@ -38,7 +41,7 @@ Run from the binary directory:
 - Windows: `build/debug/bin/arkanoid.exe` or `build/release/bin/arkanoid.exe`
 - Linux/macOS: `build/debug/bin/arkanoid` or `build/release/bin/arkanoid`
 
-## Tests (Debug only)
+## Tests (Debug-family only)
 
 Unit tests and GTest are configured only when `CMAKE_BUILD_TYPE` is Debug:
 
@@ -48,12 +51,20 @@ cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-## Format
+ASan (GCC/Clang) and coverage (GCC):
 
-Requires a Debug configure (creates the `format` target):
+```sh
+cmake --preset asan && cmake --build --preset asan --target build_ut && ctest --preset asan
+cmake --preset coverage && cmake --build --preset coverage --target build_ut && ctest --preset coverage
+```
+
+## Format / tidy
+
+Require a Debug configure (`format` / `tidy` targets; tidy needs `run-clang-tidy`):
 
 ```sh
 cmake --build --preset debug --target format
+cmake --build --preset debug --target tidy
 ```
 
 ## Typical verify loop after code changes
@@ -62,3 +73,4 @@ cmake --build --preset debug --target format
 2. Build `arkanoid` and/or `build_ut`
 3. Run `ctest --preset debug`
 4. Optionally run `format` before commit
+5. On Linux CI-like checks: `asan`, `tidy`, and `coverage` (see [build-and-test](../../../docs/how-to/build-and-test.md))
