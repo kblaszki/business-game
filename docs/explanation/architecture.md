@@ -8,40 +8,40 @@ related_docs:
   - roadmap.md
   - ../reference/source-layout.md
   - ../../mvp/10-engine-progress.md
-keywords: [architecture, ADR, namespace, eng, arkanoid, ECS, 2.5D, boundaries]
-last_reviewed: 2026-09-24
+keywords: [architecture, ADR, namespace, sgl, arkanoid, tetris, ECS, 2.5D, boundaries, audio]
+last_reviewed: 2026-09-25
 ---
 
 # Engine architecture decisions
 
-Locked contract for the engine split in **sfml-game-lab**. The running tree is `engine/` and `games/arkanoid/`; further games are siblings under `games/<title>/`. This page is the source of truth for boundaries and names.
+Locked contract for **sfml-game-lab**. The running tree is `engine/` plus games under `games/<title>/`. This page is the source of truth for boundaries and names. Phase II renames the engine namespace from `eng` to `sgl`; until that rename lands, the tree still spells `eng`.
 
 ## Layout and names
 
 | Decision | Choice |
 |----------|--------|
 | Engine root | `engine/` |
-| First game | `games/arkanoid/` |
-| Engine namespace | `eng` |
-| SFML backend | `eng::sfml` |
-| Engine internals | `eng::detail` |
-| Game namespace | `arkanoid` |
-| Includes | `<eng/<module>/X.hpp>`, `<arkanoid/<sim\|app>/X.hpp>` |
-| Interfaces | Suffix `FooI` (`SceneI`, `RendererI`, `PlatformI`, `ClockI`) |
+| Engine namespace | `sgl` (no nested `sgl::eng`; the directory already separates the engine) |
+| SFML backend | `sgl::sfml` |
+| Engine internals | `sgl::detail` |
+| Games | `sgl::arkanoid`, `sgl::tetris` |
+| Includes | `<sgl/<module>/X.hpp>`, `<arkanoid/<sim\|app>/X.hpp>`, `<tetris/<sim\|app>/X.hpp>` |
+| Interfaces | Suffix `FooI` (`SceneI`, `RendererI`, `PlatformI`, `ClockI`, `AudioI`) |
 
-Modules are directories, not nested namespaces. Do not write `eng::render::RenderQueue`.
+Modules are directories, not nested namespaces. Do not write `sgl::render::RenderQueue`.
 
 ## Targets
 
-`eng_core` (headers), `eng_input`, `eng_scene`, `eng_loop`, `eng_render`, `eng_collision`, `eng_resources`, `eng_sfml` (the only engine target that links SFML), `arkanoid_sim`, `arkanoid_app`, executable `arkanoid`.
+`sgl_core` (headers), `sgl_input`, `sgl_scene`, `sgl_loop`, `sgl_render`, `sgl_collision`, `sgl_resources`, `sgl_audio`, `sgl_fx`, `sgl_save`, `sgl_sfml` (the only engine target that links SFML), `arkanoid_sim`, `arkanoid_app`, executable `arkanoid`, `tetris_sim`, `tetris_app`, executable `tetris`.
 
-Link direction: input and collision and resources and render depend on core; scene depends on input; loop depends on scene and render; sfml depends on loop and resources; `arkanoid_sim` depends on collision; `arkanoid_app` depends on sim, loop, and resources; the executable links `arkanoid_app` and `eng_sfml`.
+Link direction: input, collision, resources, and render depend on core; scene depends on input; loop depends on scene and render; audio and save depend on core; fx depends on core and render; sfml depends on loop, resources, and audio; `arkanoid_sim` depends on collision; `tetris_sim` depends on core only; each app depends on its sim, loop, and resources, and on audio, fx, and save once those features land; each executable links its app and `sgl_sfml`.
 
 ## Boundaries
 
-- Only `engine/sfml` and `games/arkanoid/main.cpp` may include `<SFML/...>`.
-- `engine/**` never includes `arkanoid/**`.
-- `arkanoid/sim` includes only `eng/core` and `eng/collision`. Input is `SimInput`; output is `std::vector<SimEvent>`.
+- Only `engine/sfml` and `games/<game>/main.cpp` may include `<SFML/...>`.
+- `engine/**` never includes a game header.
+- `arkanoid/sim` includes only `sgl/core` and `sgl/collision`. Input is `SimInput`; output is `std::vector<SimEvent>`.
+- `tetris/sim` includes only `sgl/core`.
 - Each module owns its `CMakeLists.txt`. Parallel agents do not edit a shared sources list.
 
 ## Simulation vs presentation
@@ -60,6 +60,28 @@ No entity-component registry in this refactor. Entities are plain structs in vec
 
 Allowed: `std::expected`, `std::optional`, `std::variant`, `std::span`, ranges and views, concepts, `std::move_only_function`, `std::to_underlying`, `<=>`, `constexpr`.
 
-Forbidden: `std::mdspan`, `std::print`, exceptions for control flow, raw `new`/`delete`, function-local static GPU resources.
+Forbidden: `std::mdspan`, `std::print`, exceptions for control flow, raw `new`/`delete`, function-local static GPU or audio resources.
 
 CI uses GCC 14 and MSVC so `std::expected` and `std::move_only_function` are available.
+
+## Phase II
+
+### Input edges
+
+`pressed`, `released`, and `focusLost` survive a frame that runs zero fixed steps. `App` clears them at the start of the next frame only after a frame that ran at least one scene update. Within a multi-step frame they are visible on the first step only. `held` for an action stays true while any bound key is down.
+
+### Randomness
+
+Simulation and particle code use `sgl::Pcg32` only. `std::uniform_int_distribution`, `std::shuffle`, `rand`, and wall-clock time are forbidden there, because libstdc++ and MSVC disagree on the standard distributions.
+
+### Effects
+
+Timed effects are data (`std::variant` values with a remaining duration). Derived quantities (paddle width, ball speed) are pure functions of that data. Code does not mutate a value and later undo it.
+
+### Audio, particles, scores
+
+`AudioI::play` is the port. `sgl_audio` stays free of SFML and builds PCM with `tone`. `sgl_sfml` implements the port and links `SFML::Audio`. `sgl_fx` is a fixed-capacity particle system. `sgl_save` stores a descending high-score table and writes it with a temp file plus rename.
+
+### Tetris
+
+`games/tetris/sim` owns the 10×40 grid (20 visible rows), SRS kicks, the 7-bag, gravity, lock delay, hold, and DAS/ARR in simulation time. `games/tetris/app` maps `InputState` to `TetrisInput` and draws with `DrawCommand`. The executable is `tetris`.

@@ -1,7 +1,7 @@
 ---
 title: Engine implementation progress
 status: living
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 related_docs:
   - README.md
   - 09-rollout.md
@@ -55,6 +55,7 @@ Check a box only after that slice is on `main`. Paths are what landed, not a pro
 |---|-------|--------|-------------|
 | 0–10 | Pre-cutover breakout under former `src/` | **superseded** | removed at cutover; historical notes below |
 | 11 | Engine split | **done** | see Slice 11 |
+| 12 | Phase II: `sgl`, Arkanoid fixes, Tetris | **in progress** | contract in [`architecture.md`](../docs/explanation/architecture.md); boxes below stay open until the code lands |
 
 Three stages and four power-ups live in `arkanoid_sim` / `arkanoid_app`. `01`–`09` stay prospective design notes.
 
@@ -96,3 +97,14 @@ flowchart LR
 | [`docs/reference/source-layout.md`](../docs/reference/source-layout.md) | Targets and suites |
 | [`docs/reference/arkanoid-sim.md`](../docs/reference/arkanoid-sim.md) | Sim rules |
 | [`docs/reference/arkanoid-app.md`](../docs/reference/arkanoid-app.md) | Scenes and HUD |
+
+### Slice 12 — Phase II (locked, not landed)
+
+Namespace `sgl`, targets `sgl_*`, games `sgl::arkanoid` and `sgl::tetris`. New modules: `sgl_audio`, `sgl_fx`, `sgl_save`. Simulation randomness is `sgl::Pcg32` only. Timed effects are data. Tetris sim stays headless (grid, SRS, DAS/ARR).
+
+- [ ] Rename `eng` → `sgl` (includes, namespaces, targets)
+- [ ] Input edges survive a zero-step frame; multi-key `held` stays down
+- [ ] Rounded circle sweep; Arkanoid paddle, speed, and seam fixes
+- [ ] Power-ups as `std::variant` with pure derived values
+- [ ] `AudioI`, particles, high-score file
+- [ ] `games/tetris` sim, app, and executable `tetris`

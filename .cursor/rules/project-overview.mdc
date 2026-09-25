@@ -5,7 +5,7 @@ alwaysApply: true
 
 # sfml-game-lab
 
-C++23 SFML 3.1 game lab. The engine lives in `engine/` (`namespace eng`). Games live under `games/`; the first is `games/arkanoid/` (`namespace arkanoid`, executable `arkanoid`). Contract: `docs/explanation/architecture.md`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living).
+C++23 SFML 3.1 game lab. The engine lives in `engine/`. Phase II locks `namespace sgl` (today the tree still spells `eng` until the rename slice). Games live under `games/`: `sgl::arkanoid` (executable `arkanoid`) and `sgl::tetris` (executable `tetris`). Contract: `docs/explanation/architecture.md`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living).
 
 ## Stack
 
