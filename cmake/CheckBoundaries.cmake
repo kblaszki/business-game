@@ -2,8 +2,8 @@
 #
 # Fails if:
 # 1) any file under engine/ except engine/sfml includes SFML
-# 2) any file under games/ except games/arkanoid/main.cpp includes <SFML/
-# 3) any file under engine/ contains "arkanoid/"
+# 2) any file under games/ except games/<game>/main.cpp includes <SFML/
+# 3) any file under engine/ includes a game header <name/> for a directory under games/
 
 if(NOT DEFINED SOURCE_DIR)
     message(FATAL_ERROR "CheckBoundaries: SOURCE_DIR must be set")
@@ -33,6 +33,15 @@ file(GLOB_RECURSE GAMES_FILES
 
 set(_violations "")
 
+file(GLOB _game_entries LIST_DIRECTORIES true "${SOURCE_DIR}/games/*")
+set(_game_names "")
+foreach(_entry IN LISTS _game_entries)
+    if(IS_DIRECTORY "${_entry}")
+        get_filename_component(_game_name "${_entry}" NAME)
+        list(APPEND _game_names "${_game_name}")
+    endif()
+endforeach()
+
 foreach(_file IN LISTS ENGINE_FILES)
     file(TO_CMAKE_PATH "${_file}" _norm)
     string(FIND "${_norm}" "/engine/sfml/" _sfml_pos)
@@ -43,11 +52,13 @@ foreach(_file IN LISTS ENGINE_FILES)
 
     file(READ "${_file}" _contents)
 
-    string(FIND "${_contents}" "arkanoid/" _ark_pos)
-    if(NOT _ark_pos EQUAL -1)
-        list(APPEND _violations
-            "engine must not reference arkanoid/: ${_file}")
-    endif()
+    foreach(_game_name IN LISTS _game_names)
+        string(FIND "${_contents}" "#include <${_game_name}/" _game_inc)
+        if(NOT _game_inc EQUAL -1)
+            list(APPEND _violations
+                "engine must not include game headers <${_game_name}/>: ${_file}")
+        endif()
+    endforeach()
 
     if(NOT _in_sfml)
         string(FIND "${_contents}" "#include <SFML/" _inc_angle)
@@ -61,8 +72,14 @@ endforeach()
 
 foreach(_file IN LISTS GAMES_FILES)
     file(TO_CMAKE_PATH "${_file}" _norm)
-    string(FIND "${_norm}" "/games/arkanoid/main.cpp" _main_pos)
-    if(NOT _main_pos EQUAL -1)
+    set(_is_game_main FALSE)
+    foreach(_game_name IN LISTS _game_names)
+        string(FIND "${_norm}" "/games/${_game_name}/main.cpp" _main_pos)
+        if(NOT _main_pos EQUAL -1)
+            set(_is_game_main TRUE)
+        endif()
+    endforeach()
+    if(_is_game_main)
         continue()
     endif()
 
@@ -70,7 +87,7 @@ foreach(_file IN LISTS GAMES_FILES)
     string(FIND "${_contents}" "#include <SFML/" _inc_angle)
     if(NOT _inc_angle EQUAL -1)
         list(APPEND _violations
-            "games (except arkanoid/main.cpp) must not include <SFML/: ${_file}")
+            "games (except <game>/main.cpp) must not include <SFML/: ${_file}")
     endif()
 endforeach()
 

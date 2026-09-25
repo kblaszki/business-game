@@ -22,7 +22,14 @@ related_code:
   - engine/resources/include/sgl/resources/ResourceCache.hpp
   - engine/sfml/CMakeLists.txt
   - engine/sfml/include/sgl/sfml/SfmlPlatform.hpp
+  - engine/audio/CMakeLists.txt
+  - engine/fx/CMakeLists.txt
+  - engine/save/CMakeLists.txt
   - games/CMakeLists.txt
+  - games/tetris/CMakeLists.txt
+  - games/tetris/sim/CMakeLists.txt
+  - games/tetris/app/CMakeLists.txt
+  - cmake/CheckBoundaries.cmake
   - games/arkanoid/CMakeLists.txt
   - games/arkanoid/main.cpp
   - games/arkanoid/sim/CMakeLists.txt
@@ -39,6 +46,11 @@ related_code:
   - tests/engine/sfml/CMakeLists.txt
   - tests/arkanoid/sim/CMakeLists.txt
   - tests/arkanoid/app/CMakeLists.txt
+  - tests/engine/audio/CMakeLists.txt
+  - tests/engine/fx/CMakeLists.txt
+  - tests/engine/save/CMakeLists.txt
+  - tests/tetris/sim/CMakeLists.txt
+  - tests/tetris/app/CMakeLists.txt
   - tests/mocks/ClockMock.hpp
   - tests/mocks/PlatformMock.hpp
   - tests/mocks/RendererMock.hpp
@@ -59,7 +71,7 @@ related_docs:
   - ../how-to/build-and-test.md
   - ../explanation/architecture.md
   - ../../mvp/10-engine-progress.md
-keywords: [layout, directories, eng, arkanoid, targets, cmake, SceneStack, App, SfmlPlatform]
+keywords: [layout, directories, sgl, arkanoid, tetris, targets, cmake, SceneStack, App, SfmlPlatform]
 last_reviewed: 2026-09-25
 ---
 
@@ -79,15 +91,20 @@ Running tree after cutover: `engine/` (`namespace sgl`) and `games/arkanoid/` (`
 | `engine/collision/` | AABB / circle / sweep helpers; target `sgl_collision` |
 | `engine/resources/` | `ResourceCache`, `ResourceError`; target `sgl_resources` |
 | `engine/sfml/` | SFML adapters (`SfmlPlatform`, `EventTranslate`, …); only engine target that links SFML |
+| `engine/audio/` | `AudioI`, PCM `tone`; target `sgl_audio` (placeholder until the module lands) |
+| `engine/fx/` | Fixed-capacity particles; target `sgl_fx` (placeholder) |
+| `engine/save/` | High-score table and atomic text files; target `sgl_save` (placeholder) |
 | `games/arkanoid/sim/` | Headless breakout rules (`State`, `step`, levels, power-ups); `arkanoid_sim` |
 | `games/arkanoid/app/` | Scenes, HUD, assets, bindings; `arkanoid_app` |
 | `games/arkanoid/main.cpp` | Wires `SfmlPlatform`, assets, `SceneStack`, `sgl::App`; executable `arkanoid` |
+| `games/tetris/sim/` | Headless Tetris (`tetris_sim`, placeholder until the sim lands); links `sgl_core` only |
+| `games/tetris/app/` | Scenes for Tetris (`tetris_app`, placeholder) |
 | `assets/fonts/` | UI TTF (`ASSET_DIR` → `assets/`) |
 | `tests/engine/` | Per-module engine suites (Debug only) |
 | `tests/arkanoid/` | Sim and app suites (Debug only) |
 | `tests/mocks/` | `ClockMock`, `PlatformMock`, `RendererMock` (engine ports) |
 
-Include layout: `<sgl/<module>/X.hpp>`, `<arkanoid/<sim|app>/X.hpp>`. Only `engine/sfml` and `games/arkanoid/main.cpp` may include `<SFML/...>`.
+Include layout: `<sgl/<module>/X.hpp>`, `<arkanoid/<sim|app>/X.hpp>`, `<tetris/<sim|app>/X.hpp>`. Only `engine/sfml` and `games/<game>/main.cpp` may include `<SFML/...>`. The engine never includes a game header.
 
 ## Build targets
 
@@ -100,10 +117,15 @@ Include layout: `<sgl/<module>/X.hpp>`, `<arkanoid/<sim|app>/X.hpp>`. Only `engi
 | `sgl_render` | STATIC | → `sgl_core` |
 | `sgl_collision` | STATIC | → `sgl_core` |
 | `sgl_resources` | INTERFACE | → `sgl_core` |
+| `sgl_audio` | INTERFACE | → `sgl_core`; placeholder |
+| `sgl_fx` | INTERFACE | → `sgl_core`, `sgl_render`; placeholder |
+| `sgl_save` | INTERFACE | → `sgl_core`; placeholder |
 | `sgl_sfml` | STATIC | → `sgl_loop`, `sgl_resources`; links SFML Graphics/Window/System |
 | `arkanoid_sim` | STATIC | → `sgl_collision`; no SFML |
 | `arkanoid_app` | STATIC | → `arkanoid_sim`, `sgl_loop`, `sgl_resources`; no SFML includes |
 | `arkanoid` | executable | `games/arkanoid/main.cpp` → `arkanoid_app`, `sgl_sfml`; `ASSET_DIR` → `assets/` |
+| `tetris_sim` | INTERFACE | → `sgl_core`; placeholder, no SFML |
+| `tetris_app` | INTERFACE | → `tetris_sim`, `sgl_loop`, `sgl_resources`, `sgl_audio`, `sgl_fx`, `sgl_save` |
 
 ## Unit test suites (Debug)
 
