@@ -34,7 +34,7 @@ Modules are directories, not nested namespaces. Do not write `sgl::render::Rende
 
 `sgl_core` (headers), `sgl_input`, `sgl_scene`, `sgl_loop`, `sgl_render`, `sgl_collision`, `sgl_resources`, `sgl_audio`, `sgl_fx`, `sgl_save`, `sgl_sfml` (the only engine target that links SFML), `arkanoid_sim`, `arkanoid_app`, executable `arkanoid`, `tetris_sim`, `tetris_app`, executable `tetris`.
 
-Link direction: input, collision, resources, and render depend on core; scene depends on input; loop depends on scene and render; audio and save depend on core; fx depends on core and render; sfml depends on loop, resources, and audio; `arkanoid_sim` depends on collision; `tetris_sim` depends on core only; each app depends on its sim, loop, and resources, and on audio, fx, and save once those features land; each executable links its app and `sgl_sfml`.
+Link direction: input, collision, resources, and render depend on core; scene depends on input; loop depends on scene and render; audio and save depend on core; fx depends on core and render; sfml depends on loop, resources, and audio; `arkanoid_sim` depends on collision; `tetris_sim` depends on core only; each app depends on its sim, loop, resources, audio, fx, and save; each executable links its app and `sgl_sfml`.
 
 ## Boundaries
 
@@ -84,4 +84,4 @@ Timed effects are data (`std::variant` values with a remaining duration). Derive
 
 ### Tetris
 
-`games/tetris/sim` owns the 10×40 grid (20 visible rows), SRS kicks, the 7-bag, gravity, lock delay, hold, and DAS/ARR in simulation time. `games/tetris/app` maps `InputState` to `TetrisInput` and draws with `DrawCommand`. The executable is `tetris`.
+`games/tetris/sim` owns the 10×40 grid (20 visible rows), SRS kicks, the 7-bag, gravity, lock delay, hold, and DAS/ARR in simulation time. `games/tetris/app` maps `InputState` to `TetrisInput`, draws with `DrawCommand`, plays events through `AudioI`, and writes `tetris.scores`. The executable is `tetris`.

@@ -98,7 +98,7 @@ flowchart LR
 | [`docs/reference/arkanoid-sim.md`](../docs/reference/arkanoid-sim.md) | Sim rules |
 | [`docs/reference/arkanoid-app.md`](../docs/reference/arkanoid-app.md) | Scenes and HUD |
 
-### Slice 12 — Phase II (locked, not landed)
+### Slice 12 — Phase II (landed)
 
 Namespace `sgl`, targets `sgl_*`, games `sgl::arkanoid` and `sgl::tetris`. New modules: `sgl_audio`, `sgl_fx`, `sgl_save`. Simulation randomness is `sgl::Pcg32` only. Timed effects are data. Tetris sim stays headless (grid, SRS, DAS/ARR).
 
@@ -113,3 +113,4 @@ Namespace `sgl`, targets `sgl_*`, games `sgl::arkanoid` and `sgl::tetris`. New m
 - [x] Arkanoid result overlay and `arkanoid.scores` (capacity 5)
 - [x] Tetris sounds, particles, and `tetris.scores` (capacity 5)
 - [x] Arkanoid sounds and brick particles
+- [x] How-to for a new game: `docs/how-to/add-a-game.md`

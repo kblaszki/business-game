@@ -8,6 +8,7 @@ related_code:
 related_docs:
   - tutorials/getting-started.md
   - how-to/build-and-test.md
+  - how-to/add-a-game.md
   - reference/source-layout.md
   - reference/engine-core.md
   - reference/engine-audio.md
@@ -63,7 +64,8 @@ flowchart TD
 |----------|------|----------|
 | [tutorials/getting-started.md](tutorials/getting-started.md) | tutorial | setup, toolchain, build, run, msys2 |
 | [how-to/build-and-test.md](how-to/build-and-test.md) | how-to | build, test, ctest, format, presets |
-| [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, eng, arkanoid, targets |
+| [how-to/add-a-game.md](how-to/add-a-game.md) | how-to | game, tetris, cmake, check_boundaries, sim, app |
+| [reference/source-layout.md](reference/source-layout.md) | reference | layout, directories, sgl, arkanoid, tetris, targets |
 | [reference/engine-core.md](reference/engine-core.md) | reference | sgl, Vec2, Rect, Handle, Image, Overloaded |
 | [reference/engine-audio.md](reference/engine-audio.md) | reference | sgl, AudioI, tone, Pcm, SfmlAudio |
 | [reference/engine-input.md](reference/engine-input.md) | reference | InputEvent, ActionMap, InputState |
@@ -82,11 +84,11 @@ flowchart TD
 | [reference/input-and-events.md](reference/input-and-events.md) | reference | InputEvent, ActionMap, defaultBindings |
 | [reference/pause-overlay.md](reference/pause-overlay.md) | reference | PauseScene, RequestPause, FocusLost, pausable |
 | [explanation/roadmap.md](explanation/roadmap.md) | explanation | roadmap, stages, power-ups, engine split |
-| [explanation/architecture.md](explanation/architecture.md) | explanation | ADR, eng, arkanoid, boundaries, ECS |
+| [explanation/architecture.md](explanation/architecture.md) | explanation | ADR, sgl, arkanoid, tetris, boundaries, ECS |
 | [../mvp/README.md](../mvp/README.md) | design notes (not Diátaxis) | prospective engine plan |
-| [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | slices, eng modules, arkanoid |
+| [../mvp/10-engine-progress.md](../mvp/10-engine-progress.md) | living tracker (not Diátaxis) | slices, sgl modules, arkanoid, tetris |
 
-`mvp/01`–`09` are prospective. Living engine progress is [`mvp/10-engine-progress.md`](../mvp/10-engine-progress.md). Current facts live in the Diátaxis pages above; prefer `engine/` and `games/arkanoid/` over chapter prose if they disagree.
+`mvp/01`–`09` are prospective. Living engine progress is [`mvp/10-engine-progress.md`](../mvp/10-engine-progress.md). Current facts live in the Diátaxis pages above; prefer `engine/` and `games/` over chapter prose if they disagree.
 
 ## Maintenance
 

@@ -5,11 +5,11 @@ alwaysApply: true
 
 # sfml-game-lab
 
-C++23 SFML 3.1 game lab. The engine lives in `engine/` (`namespace sgl`). Games live under `games/`: `sgl::arkanoid` (executable `arkanoid`) and, once it lands, `sgl::tetris` (executable `tetris`). Contract: `docs/explanation/architecture.md`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living).
+C++23 SFML 3.1 game lab. The engine lives in `engine/` (`namespace sgl`). Games live under `games/`: `sgl::arkanoid` (executable `arkanoid`) and `sgl::tetris` (executable `tetris`). Contract: `docs/explanation/architecture.md`. Longer-term notes live in `mvp/` (`01`–`09` prospect, `10` living).
 
 ## Stack
 
-- C++23, CMake ≥ 3.20, Ninja presets (`debug` / `release`)
+- C++23, CMake ≥ 3.20, Ninja presets (`debug` / `release` / `asan` / `coverage`)
 - SFML 3.1 via FetchContent (`cmake/FetchSFML.cmake`) — Graphics/Window/System/Audio; Network stays off; no manual SFML install
 - GoogleTest 1.18 only in Debug; clang-format / clang-tidy at repo root
 
@@ -22,31 +22,38 @@ C++23 SFML 3.1 game lab. The engine lives in `engine/` (`namespace sgl`). Games 
 - `engine/render/` — `RenderQueue`, `RendererI` (`sgl_render`)
 - `engine/collision/` — sweep / reflect (`sgl_collision`)
 - `engine/resources/` — `ResourceCache` (`sgl_resources`)
+- `engine/audio/` — `AudioI`, PCM `tone` (`sgl_audio`)
+- `engine/fx/` — fixed-capacity particles (`sgl_fx`)
+- `engine/save/` — high-score table and atomic text write (`sgl_save`)
 - `engine/sfml/` — SFML adapters (`sgl_sfml`); only engine target that links SFML
 - `games/arkanoid/sim/` — headless breakout (`arkanoid_sim`)
-- `games/arkanoid/app/` — scenes, HUD, assets (`arkanoid_app`)
+- `games/arkanoid/app/` — scenes, HUD, sounds, high scores (`arkanoid_app`)
 - `games/arkanoid/main.cpp` — executable `arkanoid`
+- `games/tetris/sim/` — headless Tetris (`tetris_sim`, links `sgl_core` only)
+- `games/tetris/app/` — scenes, board, sounds, high scores (`tetris_app`)
+- `games/tetris/main.cpp` — executable `tetris`
 - `assets/fonts/` — UI TTF (`ASSET_DIR`). Not `engine/resources/` (that module is the cache)
-- `tests/engine/`, `tests/arkanoid/` — GoogleTest suites (Debug only)
-- `tests/mocks/` — `ClockMock`, `PlatformMock`, `RendererMock`
+- `tests/engine/`, `tests/arkanoid/`, `tests/tetris/` — GoogleTest suites (Debug only)
+- `tests/mocks/` — `ClockMock`, `PlatformMock`, `RendererMock`, `AudioSpy`
 
 ## Build / test
 
 ```sh
 cmake --preset debug
 cmake --build --preset debug --target arkanoid
+cmake --build --preset debug --target tetris
 cmake --build --preset debug --target build_ut
 ctest --preset debug
 ```
 
-Binary: `build/<preset>/bin/arkanoid` (`.exe` on Windows).
+Binaries: `build/<preset>/bin/arkanoid` and `build/<preset>/bin/tetris` (`.exe` on Windows).
 
 ## Agent pitfalls
 
-- New `.cpp` files belong in that module’s own `CMakeLists.txt` (`engine/<module>/` or `games/arkanoid/<sim|app>/`)
-- Only `engine/sfml` and `games/arkanoid/main.cpp` may include SFML; `arkanoid/sim` stays headless
+- New `.cpp` files belong in that module’s own `CMakeLists.txt` (`engine/<module>/` or `games/<game>/<sim|app>/`)
+- Only `engine/sfml` and `games/<game>/main.cpp` may include SFML; `arkanoid/sim` and `tetris/sim` stay headless
 - Tests are headless except `event_translate_test`, which links `SFML::Window` and does not open a window
-- Interfaces use the `FooI` suffix (`SceneI`, `RendererI`, `PlatformI`, `ClockI`)
+- Interfaces use the `FooI` suffix (`SceneI`, `RendererI`, `PlatformI`, `ClockI`, `AudioI`)
 - Scenes must not `close()` the platform; quit is `QuitApp` / `closeRequested`
 - Pause is `RequestPause` when top is `pausable`; overlay is `PauseScene` (`opaque` false)
 - Menu cancel is `QuitApp`; overlay cancel is resume (`PopScene`)

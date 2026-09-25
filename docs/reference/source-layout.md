@@ -66,13 +66,18 @@ related_docs:
   - engine-render.md
   - engine-collision.md
   - engine-resources.md
+  - engine-audio.md
+  - engine-fx.md
+  - engine-save.md
   - engine-sfml.md
   - arkanoid-sim.md
   - arkanoid-app.md
+  - tetris-sim.md
   - tetris-app.md
   - input-and-events.md
   - pause-overlay.md
   - ../how-to/build-and-test.md
+  - ../how-to/add-a-game.md
   - ../explanation/architecture.md
   - ../../mvp/10-engine-progress.md
 keywords: [layout, directories, sgl, arkanoid, tetris, targets, cmake, SceneStack, App, SfmlPlatform]

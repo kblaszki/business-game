@@ -32,14 +32,14 @@ Outputs go to `build/debug/`, `build/release/`, `build/asan/`, or `build/coverag
 
 ```sh
 cmake --build --preset debug --target arkanoid
-# or
-cmake --build --preset release --target arkanoid
+cmake --build --preset debug --target tetris
+# or the same targets with --preset release
 ```
 
 Run from the binary directory:
 
-- Windows: `build/debug/bin/arkanoid.exe` or `build/release/bin/arkanoid.exe`
-- Linux/macOS: `build/debug/bin/arkanoid` or `build/release/bin/arkanoid`
+- Windows: `build/debug/bin/arkanoid.exe`, `build/debug/bin/tetris.exe` (same names under `build/release/bin/`)
+- Linux/macOS: `build/debug/bin/arkanoid`, `build/debug/bin/tetris` (same names under `build/release/bin/`)
 
 ## Tests (Debug-family only)
 

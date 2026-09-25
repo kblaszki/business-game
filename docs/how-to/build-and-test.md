@@ -10,13 +10,15 @@ related_code:
   - tests/engine/core/CMakeLists.txt
   - tests/arkanoid/sim/CMakeLists.txt
   - tests/arkanoid/app/CMakeLists.txt
+  - tests/tetris/sim/CMakeLists.txt
+  - tests/tetris/app/CMakeLists.txt
   - .github/workflows/ci.yml
   - .clang-tidy
 related_docs:
   - ../tutorials/getting-started.md
   - ../reference/source-layout.md
   - ../reference/engine-audio.md
-keywords: [build, test, ctest, format, presets, build_ut, debug, release, asan, coverage, tidy, arkanoid, SFML, Audio]
+keywords: [build, test, ctest, format, presets, build_ut, debug, release, asan, coverage, tidy, arkanoid, tetris, SFML, Audio]
 last_reviewed: 2026-09-25
 ---
 
@@ -39,13 +41,14 @@ cmake --preset debug      # or: release, asan, coverage
 
 Outputs go to `build/<preset>/`.
 
-## Build the game
+## Build a game
 
 ```sh
 cmake --build --preset debug --target arkanoid
+cmake --build --preset debug --target tetris
 ```
 
-Binary: `build/<preset>/bin/arkanoid` (`.exe` on Windows).
+Binaries: `build/<preset>/bin/arkanoid` and `build/<preset>/bin/tetris` (`.exe` on Windows).
 
 ## Run tests (Debug-family only)
 
@@ -74,8 +77,8 @@ gcovr --root . --filter 'engine/.*' --exclude 'engine/sfml/.*' --filter 'games/.
 Suites (`tests/engine/`, `tests/arkanoid/`, `tests/tetris/`):
 
 - Engine: `vec_test`, `rect_test`, `handle_test`, `image_test`, `random_test`, `input_state_test`, `scene_stack_test`, `fixed_step_loop_test`, `app_test`, `render_queue_test`, `projection_test`, `collision_test`, `resource_cache_test`, `tone_test`, `particle_system_test`, save suites, `event_translate_test`, …
-- Arkanoid: `arkanoid_sim_test`, `arkanoid_assets_test`, `arkanoid_hud_test`, `arkanoid_scene_render_test`, `arkanoid_scenes_test`
-- Tetris: `tetris_grid_test`, `tetris_srs_test`
+- Arkanoid: `arkanoid_sim_test`, `arkanoid_physics_test`, `arkanoid_sim_property_test`, `arkanoid_powerup_test`, `arkanoid_assets_test`, `arkanoid_hud_test`, `arkanoid_scene_render_test`, `arkanoid_scenes_test`, `arkanoid_result_scene_test`, `arkanoid_sounds_test`, `arkanoid_feedback_test`
+- Tetris: `tetris_grid_test`, `tetris_srs_test`, `tetris_bag_test`, `tetris_scoring_test`, `tetris_game_test`, `tetris_property_test`, `tetris_input_mapping_test`, `tetris_board_render_test`, `tetris_hud_test`, `tetris_scenes_test`, `tetris_sounds_test`, `tetris_feedback_test`
 
 `build_ut` builds every suite registered with `add_unit_test(...)` (`cmake/AddUnitTest.cmake`).
 
@@ -92,7 +95,7 @@ cmake --build --preset debug --target tidy
 
 GitHub Actions (`.github/workflows/ci.yml`):
 
-- `build` — Debug `build_ut` + `ctest`, then Release `arkanoid`, on `ubuntu-24.04` (g++-14) and `windows-2022` (MSVC)
+- `build` — Debug `build_ut` + `ctest`, then Release `arkanoid` and `tetris`, on `ubuntu-24.04` (g++-14) and `windows-2022` (MSVC)
 - `asan` — Linux g++-14, preset `asan`, `build_ut` + `ctest`
 - `tidy` — Linux clang + blocking `tidy` target over `engine/` and `games/`
 - `coverage` — Linux g++-14, preset `coverage`, gcovr with `--fail-under-line 90` filtered to `engine/` (excluding `engine/sfml`) and `games/*/sim`; HTML artifact uploaded

@@ -1,9 +1,9 @@
 ---
 name: add-entity
 description: >-
-  Adds a new type under engine/ or games/arkanoid/, wires it into that module's
+  Adds a new type under engine/ or games/<name>/, wires it into that module's
   CMakeLists, and covers it with a windowless test. Use when creating a library
-  type in eng or arkanoid.
+  type in sgl, sgl::arkanoid, or sgl::tetris.
 ---
 
 # Add a type to an engine or game module
@@ -15,13 +15,13 @@ Source of truth: [docs/reference/source-layout.md](../../../docs/reference/sourc
 ```
 - [ ] Create Header.hpp / Name.cpp under the owning module
 - [ ] Add Name.cpp to that module’s CMakeLists.txt
-- [ ] Add or extend a test under tests/engine/<module>/ or tests/arkanoid/<sim|app>/
+- [ ] Add or extend a test under tests/engine/<module>/ or tests/<name>/<sim|app>/
 - [ ] Register the test with add_unit_test if it is a new suite
 ```
 
 ## Steps
 
-1. **Header** — `#pragma once`, `namespace sgl` or `arkanoid`, one primary type, CamelCase:
+1. **Header** — `#pragma once`, `namespace sgl` or `sgl::<name>`, one primary type, CamelCase:
 
 ```cpp
 #pragma once
@@ -38,7 +38,7 @@ public:
 } // namespace sgl
 ```
 
-2. **Implementation** — keep sim and most app code SFML-free. Only `engine/sfml` and `games/arkanoid/main.cpp` may include SFML.
+2. **Implementation** — keep sim and most app code SFML-free. Only `engine/sfml` and `games/<name>/main.cpp` may include SFML. A new title follows [add-a-game](../../../docs/how-to/add-a-game.md).
 
 3. **CMake** — append `Name.cpp` to the owning module’s `CMakeLists.txt`. Without this, the file never builds.
 
